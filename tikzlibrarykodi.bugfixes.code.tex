@@ -1,0 +1,83 @@
+% tikzlibrarykodi.bugfixes.code.tex
+%
+% Copyright 2015 by Paolo Brasolin <paolo.brasolin@gmail.com>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+% ######################################################################## SOF #
+
+% =================================================== \pgfpathcurvebetweentime =
+% Original fix by Mark Wibrow, see http://tex.stackexchange.com/a/271024/82186
+
+\begingroup
+
+\catcode`\@=11
+
+\def\pgf@@pathcurvebetweentime#1#2#3#4#5#6{%
+  \pgfmathparse{#1}%
+  \let\pgf@time@s=\pgfmathresult%
+  \pgfmathparse{#2}%
+  \let\pgf@time@t=\pgfmathresult%
+  \ifdim\pgf@time@s pt>\pgf@time@t pt\relax%
+    \pgfmathsetmacro\pgf@time@s{1-#1}%
+    \pgfmathsetmacro\pgf@time@t{1-#2}%
+    \pgf@@@pathcurvebetweentime{#6}{#5}{#4}{#3}%
+  \else%
+    \pgf@@@pathcurvebetweentime{#3}{#4}{#5}{#6}%
+  \fi%
+}
+\def\pgf@@@pathcurvebetweentime#1#2#3#4{%
+\begingroup%
+  % Get the curve Q from curve P for time 0 to t
+  \pgfextract@process\Pa{#1}%
+  \pgfextract@process\Pb{#2}%
+  \pgfextract@process\Pc{#3}%
+  \pgfextract@process\Pd{#4}%
+  % Qa = Pa
+  \pgfextract@process\Qa{\Pa}%
+  % Qb = Pa + t*(Pb-Pa).
+  \pgfextract@process\Qb{%
+    \pgfpointadd{\Pa}{\pgfpointscale{\pgf@time@t}{\pgfpointdiff{\Pa}{\Pb}}}%
+  }%
+  % Qc = Qb + t*((Pb + t*(Pc-Pb)) - Qb)
+  \pgfextract@process\Qc{%
+    \pgfpointadd{\Qb}{\pgfpointscale{\pgf@time@t}{\pgfpointdiff{\Qb}{\pgfpointadd{\Pb}{\pgfpointscale{\pgf@time@t}{\pgfpointdiff{\Pb}{\Pc}}}}}}%
+  }%
+  % Qd = (1-t)^3*Pa + 3*t(1-t)^2*Pb + 3*t^2(1-t)*Pc + t^3*Pd.
+  \pgfextract@process\Qd{\pgfpointcurveattime{\pgf@time@t}{\Pa}{\Pb}{\Pc}{\Pd}}% 
+  %
+  % Now get the curve R from the reversed curve Q for time 0 to 1-s/t
+  \pgfmathdivide@{\pgf@time@s}{\pgf@time@t}%
+  \pgfmathadd@{-\pgfmathresult}{1.0}%
+  \let\pgf@time@s=\pgfmathresult%
+  % Rd = Qd
+  \pgfextract@process\Rd{\Qd}%
+  % Rc = Qd + s*(Qc-Qd).
+  \pgfextract@process\Rc{%
+    \pgfpointadd{\Qd}{\pgfpointscale{\pgf@time@s}{\pgfpointdiff{\Qd}{\Qc}}}%
+  }%
+  % Rb = Rc + s*((Qc + s*(Qb-Qc)) - Rc)
+  \pgfextract@process\Rb{%
+    \pgfpointadd{\Rc}{\pgfpointscale{\pgf@time@s}{\pgfpointdiff{\Rc}{\pgfpointadd{\Qc}{\pgfpointscale{\pgf@time@s}{\pgfpointdiff{\Qc}{\Qb}}}}}}%
+  }%
+  % Ra = (1-s)^3*Qd + 3*s(1-s)^2*Qc + 3*s^2(1-s)*Qb + s^3*Qa.
+  \pgfextract@process\Ra{\pgfpointcurveattime{\pgf@time@s}{\Qd}{\Qc}{\Qb}{\Qa}}% 
+  \ifpgf@ignoremoveto\else\pgfpathmoveto{\Ra}\fi%
+  \pgfpathcurveto{\Rb}{\Rc}{\Rd}%
+\endgroup%
+}
+
+\endgroup
+
+% ######################################################################## EOF #

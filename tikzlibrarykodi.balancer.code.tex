@@ -1,0 +1,73 @@
+% tikzlibrarykodi.balancer.code.tex
+%
+% Copyright 2015 by Paolo Brasolin <paolo.brasolin@gmail.com>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+% ######################################################################## SOF #
+
+% There macros are the primitives to handle length partitioning.
+% Rigid lengths are either a dimension or a number representing a fraction
+% of the Total.  Loose lengths are starred numbers that proportionally fill
+% the rest.  So, a specification like
+%     0|0.1|*|*3|1cm    with Total=10cm
+% would ultimately be parsed as
+%     0cm|1cm|2cm|6cm|1cm
+% These macros here parse just single numbers, but standard gobbling procedure
+% can easily generalize the parsing to a string like the example.
+
+%\def\kDChopParse#1|#2|#3\GO%
+%  {\kDBalancerInit\pgfdecoratedpathlength
+%   \kDBalancerTally#1\to One\GO
+%   \kDBalancerTally#2\to Two\GO
+%   \kDBalancerTally#3\to Thr\GO
+%   \expandafter\kDBalancerGauge\One\to Fst\GO
+%   \expandafter\kDBalancerGauge\Thr\to Lst\GO
+%   \pgfmathsetmacro\start{\Fst}
+%   \pgfmathsetmacro\stop{1-\Lst}}
+
+%\pgfqkeys{/kD/balancer}{
+%}
+
+% Basic initialization
+\def\kDBalancerInit#1%
+  {\def\kDBalancerLoose{0}%
+   \def\kDBalancerRigid{0}%
+   \def\kDBalancerTotal{#1}}
+
+% First we tally the totals
+\def\kDBalancerTallyLoose*#1\to#2\GO%
+  {\ifx\relax#1\relax\pgfmathparse{1}\else\pgfmathparse{#1}\fi%
+   \expandafter\edef\csname#2\endcsname{*\pgfmathresult}%
+   \pgfmathsetmacro\kDBalancerLoose{\kDBalancerLoose+\pgfmathresult}}
+\def\kDBalancerTallyRigid#1\to#2\GO%
+  {\ifx\relax#1\relax\pgfmathparse{0}\else\pgfmathparse{#1}\fi%
+   \ifpgfmathunitsdeclared\pgfmathdivide{#1}{\kDBalancerTotal}\fi%
+   \expandafter\pgfmathsetmacro\csname#2\endcsname{\pgfmathresult}%
+   \pgfmathsetlengthmacro\kDBalancerRigid{\kDBalancerRigid+\pgfmathresult}}
+\kDDefStarred kDBalancerTally%
+  \with\kDBalancerTallyLoose%
+   \and\kDBalancerTallyRigid\GO
+
+% Then we can produce the actual lengths
+\def\kDBalancerGaugeLoose*#1\to#2\GO%
+  {\expandafter\pgfmathsetmacro\csname#2\endcsname%
+     {#1*(1-\kDBalancerRigid)/\kDBalancerLoose}}
+\def\kDBalancerGaugeRigid#1\to#2\GO%
+  {\expandafter\pgfmathsetmacro\csname#2\endcsname{#1}}
+\kDDefStarred kDBalancerGauge%
+  \with\kDBalancerGaugeLoose%
+   \and\kDBalancerGaugeRigid\GO
+
+% ######################################################################## EOF #
