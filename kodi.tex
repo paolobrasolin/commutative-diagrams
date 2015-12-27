@@ -1,4 +1,4 @@
-% manual.tex
+% kodi.tex
 %
 % Copyright 2015 by Paolo Brasolin <paolo.brasolin@gmail.com>
 %
@@ -56,14 +56,18 @@
 % ==============================================================================
 
 \setuplayout
-  [grid=yes,
-   backspace=0.125\paperwidth,width=middle,
-   topspace=0.088\paperheight,height=middle,
-   header=0bp,footer=0bp]
-\setuphead[title][alternative=margin,align=flushright,page=no]
-\setuppagenumbering[location=]
-\setuptyping[option=TEX,style=tx]
-\setupframed[width=broad,align=middle,frame=off]
+  [%grid=yes,
+   backspace=0.125\paperwidth, width=middle,
+   topspace=0.088\paperheight, height=middle,
+   header=0bp, footer=0bp]
+%\setuphead[title][alternative=margin,align=flushright,page=no]
+%\setuppagenumbering[location=]
+%\setuptyping[option=TEX,style=tx]
+%\setupframed[width=broad,align=middle,frame=off]
+
+\setupalign[hz, hanging, nothyphenated]
+
+
 
 \def\DoExample#1#2{%
   \title{#1}
@@ -157,16 +161,57 @@
 \stopcommutativediagram
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%\showframe
+%\showgrid
 
+\setupbodyfont[16pt]
 
 % ####################################################################### TEXT #
 
 \starttext
 
-\DoExample{Snake Lemma}{snake_lemma}
-\DoExample{K4 associahedron}{k4_associahedron}
-\DoExample{Pullback}{pullback}
-\DoExample{Chain}{chain}
+\startfrontmatter
+
+\startstandardmakeup[align=center]
+  {\bf\switchtobodyfont[64pt] koDi} \blank[small]
+  \color[red]{\bf Unreleased version}
+  %\date[d=27,m=12,y=2015][year,-,mm,-,dd]
+  \vfil {\scc enchiridion} \vfil
+\stopstandardmakeup
+
+\startstandardmakeup%[page=empty,style=small]
+  \setupnarrower[middle=35.5bp]
+  \startnarrower[middle]
+    \parfillskip=0pt
+    {\bf koDi} is a TikZ library that blah blah
+    \blank[big]
+    This is a wakka wakka blah blah
+    \blank[big]
+    I am wobbly wibbly timey wimey
+    \blank[small]
+    \wordright{\it Paolo al-Imkānī Brasolin}
+  \stopnarrower
+\stopstandardmakeup
+
+\stopfrontmatter
+
+\startbodymatter
+
+\chapter{Environments}
+\chapter{Objects}
+\chapter{Arrows}
+\chapter{Layouts}
+
+%\DoExample{Snake Lemma}{snake_lemma}
+%\DoExample{K4 associahedron}{k4_associahedron}
+%\DoExample{Pullback}{pullback}
+%\DoExample{Chain}{chain}
+
+\stopbodymatter
+
+\startbackmatter
+
+\stopbackmatter
 
 \stoptext
 
