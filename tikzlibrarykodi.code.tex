@@ -25,7 +25,7 @@
 \usetikzlibrary[decorations.markings]
 \usetikzlibrary[arrows.meta]
 
-\usetikzlibrary[kodi.bugfixes]
+%\usetikzlibrary[kodi.bugfixes]
 \usetikzlibrary[kodi.helpers]
 %\usetikzlibrary[kodi.balancer]
 \usetikzlibrary[kodi.cleanser]
@@ -34,13 +34,13 @@
 % ========================================================== *TeX* ENVIROMENTS =
 
 % (La)TeX
-\def\kodi{\tikzpicture}
+\def\kodi{\tikzpicture[]}
 \def\endkodi{\endtikzpicture}
 \let\commutativediagram\kodi
 \let\endcommutativediagram\endkodi
 
 % ConTeXt
-\def\startkodi{\starttikzpicture}
+\def\startkodi{\starttikzpicture[]}
 \def\stopkodi{\stoptikzpicture}
 \let\startcommutativediagram\startkodi
 \let\stopcommutativediagram\stopkodi
