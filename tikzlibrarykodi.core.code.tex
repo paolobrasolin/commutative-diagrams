@@ -20,13 +20,14 @@
 % ================================================================= FOUNDATION =
 
 \pgfqkeys{/kD}{
-  % wraps node contents in inline math markers
-  node math contents/.style={
+  % wrap node contents with inline math markers
+  math node contents/.style={
     /tikz/node contents={$#1$},
   },
   % fallback as parameter to given key after searching for key in /tikz 
   fallback to/.code 2 args={%
     \let\searchname=\pgfkeyscurrentname%
+    \message{SEARCH \searchname}
     \pgfkeysalso{
       /tikz/\searchname/.try=#1,
       #2/.retry/.expand once=\searchname,
@@ -34,11 +35,11 @@
   },
   % keys to hold kD styles sorted by kind
   objects/.unknown/.style={
-    /kD/fallback to={#1}{/kD/node math contents},
+    /kD/fallback to={#1}{/kD/math node contents},
   },
   arrows/.search also=/tikz,
   labels/.unknown/.style={
-    /kD/fallback to={#1}{/kD/node math contents},
+    /kD/fallback to={#1}{/kD/math node contents},
   },
   lattices/.search also=/tikz,
   % keys to hold each currently manipulated object
@@ -160,7 +161,7 @@
 
 \def\kDContentShortcut#1{%
   \pgfkeysalso{
-    /kD/node math contents/.expand once={\kDPeelDoubleQuotes#1},
+    /kD/math node contents/.expand once={\kDPeelDoubleQuotes#1},
   }%
 }
 
@@ -299,20 +300,67 @@
 \def\kDDoLatticeWithoutOptions%
   {\kDDoLatticeWithOptions[]}
 
+
+
+\catcode`@=11 %\makeatletter
+
+\tikzset{matrix of node keys/.code={
+    \pgfkeysalso{
+        matrix,%
+        cells={anchor=base},%
+        execute at begin cell=\matrix@ofnodekeys@start@cell,
+        execute at empty cell=\tikz@lib@matrix@empty@cell
+    }
+}}
+
+\bgroup
+\catcode`&=\active
+\gdef\monk@nil{\thisshouldnthappen monk nil unique expansion text}
+\gdef\matrix@ofnodekeys@slsl{
+    \pgfutil@ifnextchar\monk@nil
+        {\expandafter\pgfmatrixendrow\pgfutil@gobble}
+        {\pgfmatrixendrow}
+}
+\gdef\matrix@ofnodekeys@start@cell{
+    \let\\\matrix@ofnodekeys@slsl
+    \pgfutil@ifnextchar\relax{}{\matrix@ofnodekeys@start@cell@}
+}
+\gdef\matrix@ofnodekeys@start@cell@#1\\{
+    \pgfutil@ifnextchar\monk@nil
+        {\matrix@ofnodekeys@start@cell@@ #1\\}
+        {\matrix@ofnodekeys@start@cell@@ #1&\monk@nil\\\monk@nil}
+}
+\gdef\matrix@ofnodekeys@start@cell@@#1&{
+  \message{XXXXXXXXXXXXX\tikzmatrixname}
+  \node [/kD/parse/object={#1}, /kD/render/object,
+  alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn];
+  \pgfutil@ifnextchar\monk@nil{\pgfutil@gobble}{&}
+}
+\egroup  
+\catcode`@=12 %\makeatother
+
+
+
+
+
+
+
 \def\kDDoLatticeWithOptions[#1]%
-  {\matrix [/kD/parse/lattice={#1}, /kD/render/lattice] }
+  {\matrix [matrix of node keys, /kD/parse/lattice={#1}, /kD/render/lattice] }
 
 % ============================================================ EXTERNAL MACROS =
 % Mid level macros are bundled up into high level macros for the final user.
 
-\kDCSDef{obj}{\kDDoObject}
-
-\kDCSDefOptional mor\with%
-  \kDDoMorphismChainWithOptions\and%
-  \kDDoMorphismChainWithoutOptions\GO
-
-\kDCSDefOptional lay\with%
-  \kDDoLatticeWithOptions\and%
-  \kDDoLatticeWithoutOptions\GO
+\tikzset{
+  kodi/.code={
+    \kDCSDef{obj}{\kDDoObject}
+    \kDCSDefOptional mor\with%
+      \kDDoMorphismChainWithOptions\and%
+      \kDDoMorphismChainWithoutOptions\GO
+    \kDCSDefOptional lay\with%
+      \kDDoLatticeWithOptions\and%
+      \kDDoLatticeWithoutOptions\GO
+  },
+}
 
 % ######################################################################## EOF #

@@ -164,11 +164,11 @@
 \end{document}
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\usemodule[tikz]
-%\usetikzlibrary[calc]
-%\usetikzlibrary[positioning]
-
-%\usetikzlibrary[kodi]
+\unexpanded\def\openout{\immediate\normalopenout}
+\usemodule[tikz]
+\usetikzlibrary[calc]
+\usetikzlibrary[positioning]
+\usetikzlibrary[kodi]
 
 % ==============================================================================
 
@@ -314,7 +314,8 @@ Here are minimal working examples of the {\tt kodi} environment for the main dia
   {\startframedtext\typebuffer[mwe-latex]\stopframedtext}{\LaTeX}
  \stopcombination} 
 
-Externalization (\LaTeX) and stuff:
+A useful {\sc TikZ} feature exclusive to \LaTeX\ is externalization.
+A small expedient is necessary to use it with {\cs koDi}:
 
 \blank
 
@@ -333,46 +334,34 @@ Externalization (\LaTeX) and stuff:
 
 % ==============================================================================
 
-\def\mandatory%
-{\framed[background=color,backgroundcolor=yellow,backgroundcorner=round,radius=3pt,location=low,frame=off]}
-\def\optional%
-{\framed[background=color,backgroundcolor=cyan,backgroundcorner=round,radius=3pt,location=low,frame=off]}
-\def\repetition%
-{\framed[background=color,backgroundcolor=orange,backgroundcorner=round,radius=3pt,location=low,frame=off]}
+\defineframed[syntaxbox][
+  background=color,
+  backgroundcorner=round,
+  radius=3pt,
+  frame=off,
+  location=low]
 
-\setupinmargin[outer][style=]
+\setupinmargin[outer][
+  style=slanted]
 
+\def\mandatory {\syntaxbox[backgroundcolor=yellow]}
+\def\optional  {\syntaxbox[backgroundcolor=cyan]}
+\def\repetition{\syntaxbox[backgroundcolor=orange]}
 
-\chapter{Objects}
+\chapter{Objects and Morphisms}
 
-{\tt\backslash obj\mandatory{\{object\}};}
-\par
+{\sc koDi} defines two basic macros: one to draw objects and one to draw morphisms.
+We now look at the syntax of their parameters described with fancy coloured blocks.
 
-\blank
+\inouter{Blocks can be \mandatory{mandatory}, \optional{optional} or \repetition{repeated}.}
+
+{\tt\backslash obj\mandatory{object};}
 
 {\tt\backslash mor%
-\optional{[\{morphism\}]}%
-\mandatory{\{name\}}\repetition{\textvisiblespace
-\{morphism\}%
-\textvisiblespace\{name\}}%
-;
-}
-\inouter{Something that might be also quite long too.
-A seconda delle necessità si può far di tutto nella vita.}
-\blank
-\par
+ \optional{[morphism]}%
+ \mandatory{\{name\}}%
+ \repetition{\textvisiblespace\{morphism\}\textvisiblespace\{name\}};}
 
-\blank
-
-\par
-{\tt
-\{morphism\} = \optional{\{labels\}:}\{arrow\}
-}
-
-\par
-{\tt
-\{labels\} = \{label\} \| \repetition{[label]}
-}
 
 \chapter{Arrows}
 \chapter{Layouts}

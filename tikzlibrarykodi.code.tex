@@ -24,6 +24,7 @@
 \usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary[decorations.markings]
 \usetikzlibrary[arrows.meta]
+\usetikzlibrary[matrix]
 
 %\usetikzlibrary[kodi.bugfixes]
 \usetikzlibrary[kodi.helpers]
@@ -34,13 +35,13 @@
 % ========================================================== *TeX* ENVIROMENTS =
 
 % (La)TeX
-\def\kodi{\tikzpicture[]}
+\def\kodi{\tikzpicture[kodi]}
 \def\endkodi{\endtikzpicture}
 \let\commutativediagram\kodi
 \let\endcommutativediagram\endkodi
 
 % ConTeXt
-\def\startkodi{\starttikzpicture[]}
+\def\startkodi{\starttikzpicture[kodi]}
 \def\stopkodi{\stoptikzpicture}
 \let\startcommutativediagram\startkodi
 \let\stopcommutativediagram\stopkodi
