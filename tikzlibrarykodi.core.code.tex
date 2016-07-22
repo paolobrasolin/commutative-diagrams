@@ -1,6 +1,6 @@
 % tikzlibrarykodi.core.code.tex
 %
-% Copyright 2015 by Paolo Brasolin <paolo.brasolin@gmail.com>
+% Copyright 2016 by Paolo Brasolin <paolo.brasolin@gmail.com>
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -11,160 +11,158 @@
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-% ######################################################################## SOF #
 
 % ================================================================= FOUNDATION =
 
 \pgfqkeys{/kD}{
-  % wrap node contents with inline math markers
-  math node contents/.style={
-    /tikz/node contents={$#1$},
-  },
-  % fallback as parameter to given key after searching for key in /tikz 
-  fallback to/.code 2 args={%
-    \let\searchname=\pgfkeyscurrentname%
-    \message{SEARCH \searchname}
-    \pgfkeysalso{
-      /tikz/\searchname/.try=#1,
-      #2/.retry/.expand once=\searchname,
-    }%
-  },
-  % keys to hold kD styles sorted by kind
-  objects/.unknown/.style={
-    /kD/fallback to={#1}{/kD/math node contents},
-  },
-  arrows/.search also=/tikz,
-  labels/.unknown/.style={
-    /kD/fallback to={#1}{/kD/math node contents},
-  },
-  lattices/.search also=/tikz,
-  % keys to hold each currently manipulated object
-  current object/.style={},
-  current arrow/.style={},
-  current label/.style={},
-  current lattice/.style={},
-  current chain/every arrow/.style={},
-  current chain/every label/.style={},
-  % universal styles
-  every object/.style={
-    self naming node,
-  },
-  every arrow/.style={},
-  every label/.style={
-    self naming node,
-    /tikz/auto,
-    /tikz/inner sep=0.5ex,
-    /tikz/font=\everymath\expandafter{\the\everymath\scriptstyle},
-  },
-  every lattice/.style={
-    monk,
-  },
-  % basic arrow styles
-  /kD/arrows/.cd,
-    crossing over/clearance/.initial=0.5ex,
-    crossing over/color/.initial=white,
-    crossing over/.style={
-      preaction={
-        -,
-        draw=\pgfkeysvalueof{/kD/arrows/crossing over/color},
-        line width=\pgfkeysvalueof{/kD/arrows/crossing over/clearance},
-      },
+    % wrap node contents with inline math markers
+    math node contents/.style={
+        /tikz/node contents={$#1$},
     },
-    shift/.style={
-      transform canvas={
-        shift={($(\tikztostart)!#1!-90:(\tikztotarget)-(\tikztostart)$)},
-      },
+    % fallback as parameter to given key after searching for key in /tikz
+    fallback to/.code 2 args={%
+        \let\searchname=\pgfkeyscurrentname%
+        \message{SEARCH \searchname}
+        \pgfkeysalso{
+        /tikz/\searchname/.try=#1,
+        #2/.retry/.expand once=\searchname,
+        }%
     },
-    slide/.style={
-      transform canvas={
-        shift={($(\tikztostart)!#1!0:(\tikztotarget)-(\tikztostart)$)},
-      },
+    % keys to hold kD styles sorted by kind
+    objects/.unknown/.style={
+        /kD/fallback to={#1}{/kD/math node contents},
     },
-  % basic label styles
-  /kD/labels/.cd,
-    mid/.style={
-      fill=white,
-      shape=circle,
-      anchor=center,
+    arrows/.search also=/tikz,
+    labels/.unknown/.style={
+        /kD/fallback to={#1}{/kD/math node contents},
     },
-  % basic lattice styles
-  /kD/lattices/.cd,
-    rectangular/.style 2 args={
-      column sep={#1,between origins},
-      row sep={#2,between origins},
+    lattices/.search also=/tikz,
+    % keys to hold each currently manipulated object
+    current object/.style={},
+    current arrow/.style={},
+    current label/.style={},
+    current lattice/.style={},
+    current chain/every arrow/.style={},
+    current chain/every label/.style={},
+    % universal styles
+    every object/.style={
+        self naming node,
     },
-    square/.style={
-      rectangular={#1}{#1},
+    every arrow/.style={},
+    every label/.style={
+        self naming node,
+        /tikz/auto,
+        /tikz/inner sep=0.5ex,
+        /tikz/font=\everymath\expandafter{\the\everymath\scriptstyle},
     },
-    golden/.style={
-      rectangular={1.618*#1}{#1},
+    every lattice/.style={
+        monk,
     },
-    comb/.style={
-      rectangular={sqrt(4/3)*#1}{#1},
-      /tikz/every odd row/.append style={
-        xshift=tan(30)*#1,
-      },
-    },
-    comb/.default=4em,
-    square/.default=4em,
-    golden/.default=4em,
-  % arrow styles shortcuts
-  /kD/arrows/.cd,
-    l>/.style={
-      ->,
-      bend right,
-    },
-    r>/.style={
-      ->,
-      bend left,
-    },
-    ÷/.style={
-      crossing over,
-    },
-    ÷>/.style={
-      ->,
-      ÷,
-    },
-  % label styles shortcuts
-  /kD/labels/.cd,
-    </.style={
-      near start,
-    },
-    >/.style={
-      near end,
-    },
+    % basic arrow styles
+    /kD/arrows/.cd,
+        crossing over/clearance/.initial=0.5ex,
+        crossing over/color/.initial=white,
+        crossing over/.style={
+        preaction={
+            -,
+            draw=\pgfkeysvalueof{/kD/arrows/crossing over/color},
+            line width=\pgfkeysvalueof{/kD/arrows/crossing over/clearance},
+        },
+        },
+        shift/.style={
+        transform canvas={
+            shift={($(\tikztostart)!#1!-90:(\tikztotarget)-(\tikztostart)$)},
+        },
+        },
+        slide/.style={
+        transform canvas={
+            shift={($(\tikztostart)!#1!0:(\tikztotarget)-(\tikztostart)$)},
+        },
+        },
+    % basic label styles
+    /kD/labels/.cd,
+        mid/.style={
+        fill=white,
+        shape=circle,
+        anchor=center,
+        },
+    % basic lattice styles
+    /kD/lattices/.cd,
+        rectangular/.style 2 args={
+        column sep={#1,between origins},
+        row sep={#2,between origins},
+        },
+        square/.style={
+        rectangular={#1}{#1},
+        },
+        golden/.style={
+        rectangular={1.618*#1}{#1},
+        },
+        comb/.style={
+        rectangular={sqrt(4/3)*#1}{#1},
+        /tikz/every odd row/.append style={
+            xshift=tan(30)*#1,
+        },
+        },
+        comb/.default=4em,
+        square/.default=4em,
+        golden/.default=4em,
+    % arrow styles shortcuts
+    /kD/arrows/.cd,
+        l>/.style={
+            ->,
+            bend right,
+        },
+        r>/.style={
+            ->,
+            bend left,
+        },
+        ÷/.style={
+            crossing over,
+        },
+        ÷>/.style={
+            ->,
+            ÷,
+        },
+    % label styles shortcuts
+    /kD/labels/.cd,
+        </.style={
+            near start,
+        },
+        >/.style={
+            near end,
+        },
 }
 
 % ======================================================== FIRST CHAR HANDLERS =
 % a pair of shortcuts for node naming and math content
 
 \pgfqkeys{/handlers}{
-  first char syntax=true,
-  first char syntax/.cd,
-    the character (/.initial=\kDNamingShortcut,
-    the character "/.initial=\kDContentShortcut,
+    first char syntax=true,
+    first char syntax/.cd,
+        the character (/.initial=\kDNamingShortcut,
+        the character "/.initial=\kDContentShortcut,
 }
 
 \def\kDPeelRoundParentheses(#1){#1}
 
 \def\kDNamingShortcut#1{%
-  \pgfkeysalso{
-    % TODO: do alias iff name is empty
-    /tikz/name/.expand once={\kDPeelRoundParentheses#1},
-    /tikz/alias/.expand once={\kDPeelRoundParentheses#1},
-  }%
+    \pgfkeysalso{
+        % TODO: do alias iff name is empty
+        /tikz/name/.expand once={\kDPeelRoundParentheses#1},
+        /tikz/alias/.expand once={\kDPeelRoundParentheses#1},
+    }%
 }
 
 \def\kDPeelDoubleQuotes"#1"{#1}
 
 \def\kDContentShortcut#1{%
-  \pgfkeysalso{
-    /kD/math node contents/.expand once={\kDPeelDoubleQuotes#1},
-  }%
+    \pgfkeysalso{
+        /kD/math node contents/.expand once={\kDPeelDoubleQuotes#1},
+    }%
 }
 
 % ==================================================================== PARSING =
@@ -244,9 +242,9 @@
 %   \pgfmathsetmacro\start{\Fst}
 %   \pgfmathsetmacro\stop{1-\Lst}}
 %
-%\tikzset{/kD/arrows/chop/.style={ 
-%  decoration={ 
-%    show path construction, 
+%\tikzset{/kD/arrows/chop/.style={
+%  decoration={
+%    show path construction,
 %    curveto code={
 %      \kDFullExpandAfter\kDChopParse{#1}\GO
 %      \pgfpathcurvebetweentime{\start}{\stop}
@@ -302,55 +300,14 @@
 \def\kDDoLatticeWithoutOptions%
   {\kDDoLatticeWithOptions[]}
 
-
-
-\catcode`@=11 %\makeatletter
-
-\tikzset{matrix of node keys/.code={
-    \pgfkeysalso{
-        matrix,%
-        cells={anchor=base},%
-        execute at begin cell=\matrix@ofnodekeys@start@cell,
-        execute at empty cell=\tikz@lib@matrix@empty@cell
-    }
-}}
-
-\bgroup
-\catcode`&=\active
-\gdef\monk@nil{\thisshouldnthappen monk nil unique expansion text}
-\gdef\matrix@ofnodekeys@slsl{
-    \pgfutil@ifnextchar\monk@nil
-        {\expandafter\pgfmatrixendrow\pgfutil@gobble}
-        {\pgfmatrixendrow}
-}
-\gdef\matrix@ofnodekeys@start@cell{
-    \let\\\matrix@ofnodekeys@slsl
-    \pgfutil@ifnextchar\relax{}{\matrix@ofnodekeys@start@cell@}
-}
-\gdef\matrix@ofnodekeys@start@cell@#1\\{
-    \pgfutil@ifnextchar\monk@nil
-        {\matrix@ofnodekeys@start@cell@@ #1\\}
-        {\matrix@ofnodekeys@start@cell@@ #1&\monk@nil\\\monk@nil}
-}
-\gdef\matrix@ofnodekeys@start@cell@@#1&{
-  \message{XXXXXXXXXXXXX\tikzmatrixname}
-  \node [/kD/parse/object={#1}, /kD/render/object,
-  alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn];
-  \pgfutil@ifnextchar\monk@nil{\pgfutil@gobble}{&}
-}
-\egroup  
-\catcode`@=12 %\makeatother
-
-
-
-
-
-
-
 \def\kDDoLatticeWithOptions[#1]%
   {\matrix [/kD/parse/lattice={#1}, /kD/render/lattice] }
 
-% ============================================================ EXTERNAL MACROS =
+
+
+
+%=====[ FRONT END ]=============================================================
+
 % Mid level macros are bundled up into high level macros for the final user.
 
 \tikzset{

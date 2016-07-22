@@ -1,7 +1,21 @@
-%\input tikz
-%\usetikzlibrary{matrix}
+% tikzlibrarykodi.matrix.code.tex
+%
+% Copyright 2016 by Paolo Brasolin <paolo.brasolin@gmail.com>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-\catcode`@=11 %\makeatletter
+%\catcode`@=11 %\makeatletter
 
 \tikzset{
     monk/.style={
@@ -62,17 +76,4 @@
 \def\kDMatrixEmptyCell%
     {\kDMatrixParseNodeWithOptions||\kDRelax}
 
-\catcode`@=12 %\makeatother
-
-%\tikzpicture
-%\matrix [matrix of node keys] (M) {
-%    a & c & \\
-%    d &  & f \\
-%    & h & i \\
-%};
-%
-%\draw (M-1-1) -- (M-3-3) -- (c);
-%
-%\endtikzpicture
-%
-%\bye
+%\catcode`@=12 %\makeatother

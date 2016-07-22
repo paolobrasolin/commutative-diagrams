@@ -1,20 +1,25 @@
 \input tikz
 \usetikzlibrary{kodi}
-\usetikzlibrary{matrix}
+%\usetikzlibrary{matrix}
 
 \kodi
 
-\tikzset{
-  stuff/.cd,
-}
+\obj "\sum x";
 
-\lay[comb] {
-    a & |[red]| b &  \\
-    c & d & \sum f \\
-    c & d &  \\
-};
+%\lay[comb] {
+%    a & |[red]| b &  \\
+%    \int c & d & \sum f \\
+%    c & |(nope)| d &  \\
+%};
 
-\mor a -> {sum f};
+%\lay {
+%    a & |[red]| b &  \\
+%    c & d & \sum f \\
+%    c & d &  \\
+%};
+
+%\mor a -> {sum f};
+%\mor nope -> c;
 
 \endkodi
 

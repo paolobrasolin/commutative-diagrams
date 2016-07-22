@@ -52,7 +52,7 @@
 % Again, it's just a matter of wiring a simple sircuit.
 \pgfqkeys{/tikz/self naming node}{.style={
   /tikz/node contents/.forward to=/cleanser/input,
-  /cleanser/output/.forward to=/tikz/name,},}
+  /cleanser/output/.forward to=/tikz/alias,},} % TODO: is alias the correct choice here instead of name?
 
 % No more TikZ code is needed.  What follows s just the Plain TeX sanitizer.
 
@@ -60,8 +60,8 @@
   {\kDCSDef{#3}{#2}}
 
 \def\kDMeaningOf#1\into#2\GO%
-  {\def\foo{#1}\edef\bar{\meaning\foo}%
-   \expandafter\kDMeanCut\bar\into#2\GO}
+  {\def\kDFoo{#1}\edef\kDBar{\meaning\kDFoo}%
+   \expandafter\kDMeanCut\kDBar\into#2\GO}
 
 \def\kDSanitize#1\into#2\GO%
   {\kDMeaningOf#1 \into Meaning\GO% I put an extra space for easy parsing
