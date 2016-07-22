@@ -1,0 +1,21 @@
+\input tikz
+\usetikzlibrary{kodi}
+\usetikzlibrary{matrix}
+
+\kodi
+
+\tikzset{
+  stuff/.cd,
+}
+
+\lay[comb] {
+    a & |[red]| b &  \\
+    c & d & \sum f \\
+    c & d &  \\
+};
+
+\mor a -> {sum f};
+
+\endkodi
+
+\bye

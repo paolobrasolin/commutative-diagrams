@@ -47,90 +47,90 @@
 
 % ##############################################################################
 
-%\startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\startcommutativediagram
-%
-%\def\coker{{\rm coker}\,}
-%
-%\lay[golden]{
-%             & \obj "\ker a";   & \obj "\ker b";   & \obj "\ker c";   & \\
-%             & \obj A;          & \obj B;          & \obj C;          & \obj 0; \\
-%\obj 0,(0'); & \obj A';         & \obj B';         & \obj C';         & \\
-%             & \obj "\coker a"; & \obj "\coker b"; & \obj "\coker c"; & \\
-%};
-%
-%\mor {ker a} -> {ker b} -> {ker c};
-%\mor A f:-> B g:-> C -> 0;
-%\mor 0' -> A' f':-> B' g':-> C';
-%\mor {coker a} -> {coker b} -> {coker c};
-%
-%\mor {ker a} -> A <,a:-> A' -> {coker a};
-%\mor {ker b} -> B <,b:-> B' -> {coker b};
-%\mor {ker c} -> C <,c:-> C' -> {coker c};
-%
-%\coordinate (tail) at ($(ker b)!2.4!(ker c)$);
-%\coordinate (head) at ($(coker b)!2.4!(coker a)$);
-%\coordinate (belly) at ($(tail)!0.51!(head)$);
-%\draw[/kD/arrows/.cd,÷>,rounded corners]
-%  (ker c) -- (tail) -- (tail|-belly) -- (head|-belly) -- (head) -- (coker a);
-%
-%\stopcommutativediagram
-%\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\startcommutativediagram
 
-%\startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\startcommutativediagram
-%
-%\def\id{{\mathbf 1}}
-%\catcode`ı=\active \letı\id
-%\catcode`×=\active \let×\otimes
-%
-%\foreach [count=\n] \o in
-%    {((w×x)×y)×x,
-%     (w×(x×y))×x,
-%     w×((x×y)×x),
-%     w×(x×(y×x)),
-%     (w×x)×(y×x)}
-%  \obj at=({72*\n:9em}),(\n),"\o";
-%
-%\mor 1 a_{w,x,y}×ı_z:-> 2
-%         a_{w,x×y,z}:-> 3
-%       ı_w×a_{x,y,z}:-> 4;
-%\mor *   a_{w×x,y,z}:-> 5
-%         a_{w,x,y×z}:-> *;
-%
-%\stopcommutativediagram
-%\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\coker{{\rm coker}\,}
 
-%\startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\startcommutativediagram
-%
-%\lay[comb]{
-%  \obj (P),A\times_ZB; & \obj B; \\
-%  \obj A;              & \obj Z; \\
-%};
-%
-%\obj at=($(Z)!2!(P)$),Q;
-%
-%\mor[swap] P p_1:-> A f:-> Z;
-%\mor       * P_2:-> B g:-> *;
-%\mor[swap] Q q_1:l> A;
-%\mor       * q_2:r> B;
-%\mor[mid:dashed] * u:-> P;
-%
-%\stopcommutativediagram
-%\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lay[golden]{
+             & \obj "\ker a";   & \obj "\ker b";   & \obj "\ker c";   & \\
+             & \obj A;          & \obj B;          & \obj C;          & \obj 0; \\
+\obj 0,(0'); & \obj A';         & \obj B';         & \obj C';         & \\
+             & \obj "\coker a"; & \obj "\coker b"; & \obj "\coker c"; & \\
+};
 
-%\startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\startcommutativediagram[/cleanser/expand=full]
-%
-%\foreach [count=\m] \a in {A,B,C}
-%  \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
-%    \obj at=({5em*\n,-3em*\m}),\a_{\i};
-%
-%\mor C_{n+1} >-> B_{n-1};
-%
-%\stopcommutativediagram
-%\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mor {ker a} -> {ker b} -> {ker c};
+\mor A f:-> B g:-> C -> 0;
+\mor 0' -> A' f':-> B' g':-> C';
+\mor {coker a} -> {coker b} -> {coker c};
+
+\mor {ker a} -> A <,a:-> A' -> {coker a};
+\mor {ker b} -> B <,b:-> B' -> {coker b};
+\mor {ker c} -> C <,c:-> C' -> {coker c};
+
+\coordinate (tail) at ($(ker b)!2.4!(ker c)$);
+\coordinate (head) at ($(coker b)!2.4!(coker a)$);
+\coordinate (belly) at ($(tail)!0.51!(head)$);
+\draw[/kD/arrows/.cd,÷>,rounded corners]
+  (ker c) -- (tail) -- (tail|-belly) -- (head|-belly) -- (head) -- (coker a);
+
+\stopcommutativediagram
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\startcommutativediagram
+
+\def\id{{\mathbf 1}}
+\catcode`ı=\active \letı\id
+\catcode`×=\active \let×\otimes
+
+\foreach [count=\n] \o in
+    {((w×x)×y)×x,
+     (w×(x×y))×x,
+     w×((x×y)×x),
+     w×(x×(y×x)),
+     (w×x)×(y×x)}
+  \obj at=({72*\n:9em}),(\n),"\o";
+
+\mor 1 a_{w,x,y}×ı_z:-> 2
+         a_{w,x×y,z}:-> 3
+       ı_w×a_{x,y,z}:-> 4;
+\mor *   a_{w×x,y,z}:-> 5
+         a_{w,x,y×z}:-> *;
+
+\stopcommutativediagram
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\startcommutativediagram
+
+\lay[comb]{
+  \obj (P),A\times_ZB; & \obj B; \\
+  \obj A;              & \obj Z; \\
+};
+
+\obj at=($(Z)!2!(P)$),Q;
+
+\mor[swap] P p_1:-> A f:-> Z;
+\mor       * P_2:-> B g:-> *;
+\mor[swap] Q q_1:l> A;
+\mor       * q_2:r> B;
+\mor[mid:dashed] * u:-> P;
+
+\stopcommutativediagram
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\startcommutativediagram[/cleanser/expand=full]
+
+\foreach [count=\m] \a in {A,B,C}
+  \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
+    \obj at=({5em*\n,-3em*\m}),\a_{\i};
+
+\mor C_{n+1} >-> B_{n-1};
+
+\stopcommutativediagram
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[mwe-tex]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input tikz
@@ -366,10 +366,10 @@ We now look at the syntax of their parameters described with fancy coloured bloc
 \chapter{Arrows}
 \chapter{Layouts}
 
-%\DoExample{Snake Lemma}{snake_lemma}
-%\DoExample{K4 associahedron}{k4_associahedron}
-%\DoExample{Pullback}{pullback}
-%\DoExample{Chain}{chain}
+\DoExample{Snake Lemma}{snake_lemma}
+\DoExample{K4 associahedron}{k4_associahedron}
+\DoExample{Pullback}{pullback}
+\DoExample{Chain}{chain}
 
 \stopbodymatter
 

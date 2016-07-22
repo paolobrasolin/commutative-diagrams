@@ -60,7 +60,9 @@
     /tikz/inner sep=0.5ex,
     /tikz/font=\everymath\expandafter{\the\everymath\scriptstyle},
   },
-  every lattice/.style={},
+  every lattice/.style={
+    monk,
+  },
   % basic arrow styles
   /kD/arrows/.cd,
     crossing over/clearance/.initial=0.5ex,
@@ -103,7 +105,7 @@
     },
     comb/.style={
       rectangular={sqrt(4/3)*#1}{#1},
-      every odd row/.style={
+      /tikz/every odd row/.append style={
         xshift=tan(30)*#1,
       },
     },
@@ -346,7 +348,7 @@
 
 
 \def\kDDoLatticeWithOptions[#1]%
-  {\matrix [matrix of node keys, /kD/parse/lattice={#1}, /kD/render/lattice] }
+  {\matrix [/kD/parse/lattice={#1}, /kD/render/lattice] }
 
 % ============================================================ EXTERNAL MACROS =
 % Mid level macros are bundled up into high level macros for the final user.

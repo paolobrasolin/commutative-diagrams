@@ -1,0 +1,78 @@
+%\input tikz
+%\usetikzlibrary{matrix}
+
+\catcode`@=11 %\makeatletter
+
+\tikzset{
+    monk/.style={
+        matrix,
+        cells={anchor=base},
+        execute at begin cell=\kDMatrixBeginCell,
+        execute at empty cell=\kDMatrixEmptyCell,
+        nodes={
+%            node contents/.forward to=/tikz/alias,
+            self naming node,
+            name=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
+            execute at begin node=$,
+            execute at end node=$,
+        },
+    },
+}
+
+% TODO: recheck the following
+\def\kDMatrixNil{\relax}
+% If this is made a no-op then bugs emerge:
+%     1. empty cell at line end on last line crashes everything
+%     2. empty cell at line end on other lines gets duplicated
+% I am not 100% aware of why, so this feels like a dirty hack.
+
+\def\kDMatrixNewLine{
+    \pgfutil@ifnextchar\kDMatrixNil
+        {\expandafter\pgfmatrixendrow\pgfutil@gobble}
+        {\pgfmatrixendrow}
+}
+
+\def\kDMatrixBeginCell{
+    \let\\\kDMatrixNewLine
+    \pgfutil@ifnextchar\relax{}{\kDMatrixDoRow}
+}
+
+\bgroup
+\catcode`&=\active
+
+\gdef\kDMatrixDoRow#1\\{
+    \pgfutil@ifnextchar\kDMatrixNil
+        {\kDMatrixDoCell #1\\}
+        {\kDMatrixDoCell #1&\kDMatrixNil\\\kDMatrixNil}
+}
+
+\gdef\kDMatrixDoCell#1&{
+  \kDMatrixParseNodeMaybeOptions#1\kDRelax
+  \pgfutil@ifnextchar\kDMatrixNil{\pgfutil@gobble}{&}
+}
+
+\egroup
+
+\def\kDMatrixParseNodeMaybeOptions%
+    {\pgfutil@ifnextchar|{\kDMatrixParseNodeWithOptions}{\kDMatrixParseNodeWithOptions||}}
+
+\def\kDMatrixParseNodeWithOptions|#1|#2\kDRelax%
+    {\node#1[node contents={#2}];}
+
+\def\kDMatrixEmptyCell%
+    {\kDMatrixParseNodeWithOptions||\kDRelax}
+
+\catcode`@=12 %\makeatother
+
+%\tikzpicture
+%\matrix [matrix of node keys] (M) {
+%    a & c & \\
+%    d &  & f \\
+%    & h & i \\
+%};
+%
+%\draw (M-1-1) -- (M-3-3) -- (c);
+%
+%\endtikzpicture
+%
+%\bye
