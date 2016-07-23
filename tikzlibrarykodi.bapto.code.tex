@@ -1,0 +1,133 @@
+% tikzlibrarykodi.bapto.code.tex
+%
+% Copyright 2016 by Paolo Brasolin <paolo.brasolin@gmail.com>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+%=====[ the plan ]==============================================================
+
+% The bapto mechanism is the following composition of procedures
+% wired together mostly using TikZ keys as pseudo-callbacks:
+
+%  ,--- node contents ~~~~~~~~~~~bapto~~~~~~~~~~~> name <--,
+%  0                                                       4
+%  '--> input --1-> process --2-> output --3-> dispatch ---'
+
+%=====[ TiKz magic ]============================================================
+
+% First of all, a gizmo to handle optional console output is defined.
+
+\newif\ifbaptoisverbose
+\pgfqkeys{/bapto}{
+    verbose/.is if=baptoisverbose,
+    verbose=true,
+    log/.code={
+        \ifbaptoisverbose
+            \let~\space
+            \newlinechar=`\^
+            \message{kD.bapto ~~~~~~ > #1^}
+        \fi
+    },
+}
+
+% (0) gets wired using the "self naming" key on a node.
+
+\pgfqkeys{/tikz}{
+    self naming/.style={
+        /tikz/node contents/.forward to=/bapto/input,
+    },
+}
+
+% Three possible pre-processing input expansion behaviours are defined.
+% These correspond to three mutually exclusive different wirings for (1).
+% By default the no-expansion route is wired.
+
+\pgfqkeys{/bapto/expand}{.is choice,
+    once/.style={/bapto/input/.style={/bapto/process/.expand once={##1}}},
+    full/.style={/bapto/input/.style={/bapto/process/.expanded={##1}}},
+    none/.style={/bapto/input/.style={/bapto/process={##1}}},
+    none,
+}
+
+% This (2) wires in the beating heart of the mechanism,
+% i.e. the Plain TeX sanitizer.
+
+\pgfqkeys{/bapto/process}{.code={
+    % TODO: this obviously need a cleanup
+    \kDSanitize#1\into tmp\GO
+    \pgfkeysalso{/bapto/log={{\Meaning} ==> (\tmp)}}
+    \pgfkeysalso{/bapto/output/.expand once=\tmp}
+},}
+
+
+% This is (3). Trivial but necessary for ease of development.
+
+\pgfqkeys{/bapto}{
+    output/.forward to=/bapto/dispatcher,
+}
+
+% Finally we define an handler for the dispatcher behaviour
+% and then the dispatcher itself.
+
+\newif\ifbaptooverwrites
+\pgfqkeys{/bapto}{
+    overwrite/.is if=baptooverwrites,
+    overwrite=false,
+    dispatcher/.code={
+        \ifx\tikz@fig@name\empty
+            \pgfqkeys{/tikz}{name=#1}
+        \else
+            \ifbaptooverwrites
+                \pgfqkeys{/tikz}{name=#1}
+            \fi
+        \fi
+    },
+}
+
+%=====[ TeX magic ]=============================================================
+
+% No more TikZ code is needed.  What follows is just the Plain TeX sanitizer.
+
+\def\kDMeanCut#1:->#2\into#3\GO%
+  {\kDCSDef{#3}{#2}}
+
+\def\kDMeaningOf#1\into#2\GO%
+  {\def\kDFoo{#1}\edef\kDBar{\meaning\kDFoo}%
+   \expandafter\kDMeanCut\kDBar\into#2\GO}
+
+\def\kDSanitize#1\into#2\GO%
+  {\kDMeaningOf#1 \into Meaning\GO% I put an extra space for easy parsing
+   \expandafter\edef\csname#2\endcsname% and catch it as the empty exception
+     {\ifx\Meaning\space\else\expandafter\kDSieveString\Meaning\GO\fi}}
+
+% TODO: maybe a switch to preserve/erase spaces would be useful here
+\def\kDSieveString#1 #2\GO%
+  {\kDSieveWord#1\GO\ifx\relax#2\else\space\kDSieveString#2\GO\fi}
+
+\def\kDSieveWord#1#2\GO%
+  {\kDSieveCharacter#1\GO\ifx\relax#2\else\kDSieveWord#2\GO\fi}
+
+% Spaces after number to avoid stray \relax
+\def\kDSieveCharacter#1\GO%
+  {\ifnum`#1=36 \else% $ dollar
+   \ifnum`#1=40 \else% ( left round brace
+   \ifnum`#1=41 \else% ) right round brace
+   \ifnum`#1=44 \else% , comma
+   \ifnum`#1=46 \else% . dot
+   \ifnum`#1=58 \else% : colon
+   \ifnum`#1=92 \else% \ backslash
+   #1\fi\fi\fi\fi\fi\fi\fi}
+% TODO: think of all the dangerous characters cross-format-wise
+
+%=====[ EOF ]===================================================================

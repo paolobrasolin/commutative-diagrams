@@ -25,7 +25,7 @@
     % fallback as parameter to given key after searching for key in /tikz
     fallback to/.code 2 args={%
         \let\searchname=\pgfkeyscurrentname%
-        \message{SEARCH \searchname}
+%        \message{SEARCH \searchname}
         \pgfkeysalso{
         /tikz/\searchname/.try=#1,
         #2/.retry/.expand once=\searchname,
@@ -49,11 +49,11 @@
     current chain/every label/.style={},
     % universal styles
     every object/.style={
-        self naming node,
+        self naming,
     },
     every arrow/.style={},
     every label/.style={
-        self naming node,
+        self naming,
         /tikz/auto,
         /tikz/inner sep=0.5ex,
         /tikz/font=\everymath\expandafter{\the\everymath\scriptstyle},
