@@ -29,6 +29,11 @@
   full/.style={/cleanser/input/.style={/cleanser/process/.expanded={##1}}},
   none,} % default behaviour
 
+\newif\ifcleanseroverwrites
+\pgfqkeys{/cleanser}{
+  overwrite/.is if=cleanseroverwrites,
+  overwrite=false,} % default behaviour
+
 % Then we wire (2) using the Plain TeX sanitizer and the TikZ gizmo to handle
 % console output that we're defining later.
 \pgfqkeys{/cleanser/process}{.code={
@@ -46,13 +51,24 @@
       \let~\space
       \newlinechar=`\^
       \message{kD.cleanser ~~~ > #1^}
-    \fi},}
+    \fi},
+  /cleanser/output/.forward to=/cleanser/dispatcher,
+  dispatcher/.code={
+    \ifx\tikz@fig@name\empty
+      \pgfqkeys{/tikz}{name=#1}
+    \else
+      \ifcleanseroverwrites
+        \pgfqkeys{/tikz}{name=#1}
+      \fi
+    \fi
+  },
+}
 
 % Here is the main reason for all this: a style to make a node self-naming.
 % Again, it's just a matter of wiring a simple sircuit.
 \pgfqkeys{/tikz/self naming node}{.style={
   /tikz/node contents/.forward to=/cleanser/input,
-  /cleanser/output/.forward to=/tikz/alias,},} % TODO: is alias the correct choice here instead of name?
+},}
 
 % No more TikZ code is needed.  What follows s just the Plain TeX sanitizer.
 

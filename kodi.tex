@@ -50,13 +50,13 @@
 \startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \startcommutativediagram
 
-\def\coker{{\rm coker}\,}
+\unexpanded\def\coker{{\rm coker}\,}
 
 \lay[golden]{
-             & \obj "\ker a";   & \obj "\ker b";   & \obj "\ker c";   & \\
-             & \obj A;          & \obj B;          & \obj C;          & \obj 0; \\
-\obj 0,(0'); & \obj A';         & \obj B';         & \obj C';         & \\
-             & \obj "\coker a"; & \obj "\coker b"; & \obj "\coker c"; & \\
+         &  \ker a   & \ker b   & \ker c  & {}  \\
+         & A        & B        & C        & 0 \\
+|(0')| 0 & A'       & B'       & C'       & {}  \\
+         & \coker a & \coker b & \coker c & {}  \\
 };
 
 \mor {ker a} -> {ker b} -> {ker c};
@@ -208,11 +208,11 @@
 
 
 
-%\def\DoExample#1#2{%
-%  \title{#1}
-%  \framed{\begingroup\getbuffer[example-#2]\endgroup}
-%  {\tfxx\typebuffer[example-#2]}
-%}
+\def\DoExample#1#2{%
+  \title{#1}
+  \framed{\begingroup\getbuffer[example-#2]\endgroup}
+  {\tfxx\typebuffer[example-#2]}
+}
 
 %\showframe
 %\showgrid
@@ -367,9 +367,9 @@ We now look at the syntax of their parameters described with fancy coloured bloc
 \chapter{Layouts}
 
 \DoExample{Snake Lemma}{snake_lemma}
-\DoExample{K4 associahedron}{k4_associahedron}
-\DoExample{Pullback}{pullback}
-\DoExample{Chain}{chain}
+%\DoExample{K4 associahedron}{k4_associahedron}
+%\DoExample{Pullback}{pullback}
+%\DoExample{Chain}{chain}
 
 \stopbodymatter
 

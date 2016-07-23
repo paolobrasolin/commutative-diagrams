@@ -1,0 +1,13 @@
+\usemodule[tikz]
+\usetikzlibrary{matrix}
+
+
+\starttext
+\starttikzpicture
+\catcode`\|=12
+\matrix[matrix of nodes]{
+  a & |[red]| b \\
+  c & d \\
+};
+\stoptikzpicture
+\stoptext

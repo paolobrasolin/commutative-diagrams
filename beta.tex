@@ -4,7 +4,20 @@
 
 \kodi
 
-\obj "\sum x";
+
+\lay[golden]{
+         & ker a   & ker b   & ker c   &  \\
+         & z       & B       & C       & 0 \\
+|(0')| 0 & A'      & B'      & C'      &  \\
+         & coker a & coker b & coker c &  \\
+};
+
+\draw (C) -- (0);
+\draw (0') -- (A');
+%\draw (B) edge[bend left] (Z);
+
+
+%\obj "\sum x";
 
 %\lay[comb] {
 %    a & |[red]| b &  \\
@@ -12,14 +25,28 @@
 %    c & |(nope)| d &  \\
 %};
 
-%\lay {
-%    a & |[red]| b &  \\
+%\lay[comb] {
+%    a & b &\\
 %    c & d & \sum f \\
-%    c & d &  \\
+%    c & d &\\
 %};
 
 %\mor a -> {sum f};
 %\mor nope -> c;
+
+%\node (a) {a};
+%\node at (10,0) (b) {b};
+
+%\mor a [<,"\sum f"][h][>,g]:-> b;
+
+%\path
+%    (a)
+%    edge [red]
+%    node (z) [auto, near end] {a}
+%    node (w) [auto, near start] {lel}
+%    (b);
+%
+%\draw (z) -- (w);
 
 \endkodi
 

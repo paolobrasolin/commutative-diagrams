@@ -152,6 +152,7 @@
 \def\kDNamingShortcut#1{%
     \pgfkeysalso{
         % TODO: do alias iff name is empty
+        % TODO REDUX: actually this might be the best way. this name/alias stuff is subtle
         /tikz/name/.expand once={\kDPeelRoundParentheses#1},
         /tikz/alias/.expand once={\kDPeelRoundParentheses#1},
     }%
@@ -312,6 +313,7 @@
 
 \tikzset{
   kodi/.code={
+    \catcode`\|=12% ConTeXt fix
     \kDCSDef{obj}{\kDDoObject}
     \kDCSDefOptional mor\with%
       \kDDoMorphismChainWithOptions\and%
