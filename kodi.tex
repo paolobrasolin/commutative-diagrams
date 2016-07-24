@@ -53,7 +53,7 @@
 \unexpanded\def\coker{{\rm coker}\,}
 
 \lay[golden]{
-         &  \ker a   & \ker b   & \ker c  & {}  \\
+         & \ker a   & \ker b   & \ker c   & {}  \\
          & A        & B        & C        & 0 \\
 |(0')| 0 & A'       & B'       & C'       & {}  \\
          & \coker a & \coker b & \coker c & {}  \\
@@ -105,11 +105,11 @@
 \startcommutativediagram
 
 \lay[comb]{
-  \obj (P),A\times_ZB; & \obj B; \\
-  \obj A;              & \obj Z; \\
+  |(P)| A \times_Z B & B \\
+        A            & Z \\
 };
 
-\obj at=($(Z)!2!(P)$),Q;
+\obj at=($(Z)!2!(P)$), Q;
 
 \mor[swap] P p_1:-> A f:-> Z;
 \mor       * P_2:-> B g:-> *;
@@ -367,9 +367,9 @@ We now look at the syntax of their parameters described with fancy coloured bloc
 \chapter{Layouts}
 
 \DoExample{Snake Lemma}{snake_lemma}
-%\DoExample{K4 associahedron}{k4_associahedron}
-%\DoExample{Pullback}{pullback}
-%\DoExample{Chain}{chain}
+\DoExample{K4 associahedron}{k4_associahedron}
+\DoExample{Pullback}{pullback}
+\DoExample{Chain}{chain}
 
 \stopbodymatter
 

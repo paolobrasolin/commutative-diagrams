@@ -100,34 +100,38 @@
 % No more TikZ code is needed.  What follows is just the Plain TeX sanitizer.
 
 \def\kDMeanCut#1:->#2\into#3\GO%
-  {\kDCSDef{#3}{#2}}
+    {\kDCSDef{#3}{#2}}
 
-\def\kDMeaningOf#1\into#2\GO%
-  {\def\kDFoo{#1}\edef\kDBar{\meaning\kDFoo}%
-   \expandafter\kDMeanCut\kDBar\into#2\GO}
+\def\kDMeaningOf#1\into#2\GO{%
+    \def\kDFoo{#1}%
+    \edef\kDBar{\meaning\kDFoo}%
+    \expandafter\kDMeanCut\kDBar\into#2\GO%
+}
 
-\def\kDSanitize#1\into#2\GO%
-  {\kDMeaningOf#1 \into Meaning\GO% I put an extra space for easy parsing
-   \expandafter\edef\csname#2\endcsname% and catch it as the empty exception
-     {\ifx\Meaning\space\else\expandafter\kDSieveString\Meaning\GO\fi}}
+\def\kDSanitize#1\into#2\GO{%
+    \kDMeaningOf#1 \into Meaning\GO% I put an extra space for easy parsing
+    \expandafter\edef\csname#2\endcsname% and catch it as the empty exception:
+        {\ifx\Meaning\space\else\expandafter\kDSieveString\Meaning\GO\fi}%
+}
 
-% TODO: maybe a switch to preserve/erase spaces would be useful here
+% MEMO: the \space is the only whitespace going to output (between words)
 \def\kDSieveString#1 #2\GO%
-  {\kDSieveWord#1\GO\ifx\relax#2\else\space\kDSieveString#2\GO\fi}
+    {\kDSieveWord#1\GO\ifx\relax#2\else\space\kDSieveString#2\GO\fi}
 
 \def\kDSieveWord#1#2\GO%
-  {\kDSieveCharacter#1\GO\ifx\relax#2\else\kDSieveWord#2\GO\fi}
+    {\kDSieveCharacter#1\GO\ifx\relax#2\else\kDSieveWord#2\GO\fi}
 
 % Spaces after number to avoid stray \relax
-\def\kDSieveCharacter#1\GO%
-  {\ifnum`#1=36 \else% $ dollar
-   \ifnum`#1=40 \else% ( left round brace
-   \ifnum`#1=41 \else% ) right round brace
-   \ifnum`#1=44 \else% , comma
-   \ifnum`#1=46 \else% . dot
-   \ifnum`#1=58 \else% : colon
-   \ifnum`#1=92 \else% \ backslash
-   #1\fi\fi\fi\fi\fi\fi\fi}
-% TODO: think of all the dangerous characters cross-format-wise
+% TODO: rethink of all the dangerous characters cross-format-wise
+\def\kDSieveCharacter#1\GO{%
+    \ifnum`#1=36 \else% $ dollar
+    \ifnum`#1=40 \else% ( left round brace
+    \ifnum`#1=41 \else% ) right round brace
+    \ifnum`#1=44 \else% , comma
+    \ifnum`#1=46 \else% . dot
+    \ifnum`#1=58 \else% : colon
+    \ifnum`#1=92 \else% \ backslash
+    #1\fi\fi\fi\fi\fi\fi\fi%
+}
 
 %=====[ EOF ]===================================================================
