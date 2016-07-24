@@ -15,21 +15,26 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-%\catcode`@=11 %\makeatletter
+\catcode`@ = 11
 
 \tikzset{
+    math/.style={
+        execute at begin node=$,
+        execute at end node=$,
+    },
     monk/.style={
         matrix,
         cells={anchor=base},
         execute at begin cell=\kDMatrixBeginCell,
         execute at empty cell=\kDMatrixEmptyCell,
         nodes={
-%            node contents/.forward to=/tikz/alias,
             self naming,
-%            name=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
-            execute at begin node=$,
-            execute at end node=$,
+            math,
         },
+    },
+    %: MEMO: this *cannot* be put along with global node styles (because order of execution)
+    matrix coordinates alias/.style={
+        alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
     },
 }
 
@@ -70,10 +75,14 @@
 \def\kDMatrixParseNodeMaybeOptions%
     {\pgfutil@ifnextchar|{\kDMatrixParseNodeWithOptions}{\kDMatrixParseNodeWithOptions||}}
 
+% TODO: here the ordering of naming/aliasing procedures is crucial and subtle
+%       maybe write a nota about that someday, ok? ok.
 \def\kDMatrixParseNodeWithOptions|#1|#2\kDRelax%
-    {\node#1[node contents={#2}];}
+    {\node#1[node contents={#2},matrix coordinates alias];}
 
 \def\kDMatrixEmptyCell%
     {\kDMatrixParseNodeWithOptions||\kDRelax}
 
-%\catcode`@=12 %\makeatother
+\catcode`@ = 12
+
+%=====[ EOF ]===================================================================

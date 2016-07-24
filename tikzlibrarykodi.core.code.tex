@@ -153,8 +153,9 @@
     \pgfkeysalso{
         % TODO: do alias iff name is empty
         % TODO REDUX: actually this might be the best way. this name/alias stuff is subtle
+        % TODO: ok, I think it's ok now. just some testing has to be done
         /tikz/name/.expand once={\kDPeelRoundParentheses#1},
-        /tikz/alias/.expand once={\kDPeelRoundParentheses#1},
+%        /tikz/alias/.expand once={\kDPeelRoundParentheses#1},
     }%
 }
 
