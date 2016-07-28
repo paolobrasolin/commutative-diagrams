@@ -1,6 +1,6 @@
 % tikzlibrarykodi.code.tex
 %
-% Copyright 2015 by Paolo Brasolin <paolo.brasolin@gmail.com>
+% Copyright 2016 by Paolo Brasolin <paolo.brasolin@gmail.com>
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -15,9 +15,7 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-% ######################################################################## SOF #
-
-% ================================================ DEPENDENCIES AND COMPONENTS =
+%=====[ dependendies and components ]===========================================
 
 \usetikzlibrary[calc]
 \usetikzlibrary[decorations.pathreplacing]
@@ -26,16 +24,16 @@
 \usetikzlibrary[arrows.meta]
 \usetikzlibrary[matrix]
 
-%\usetikzlibrary[kodi.bugfixes]
-\usetikzlibrary[kodi.helpers]
-%\usetikzlibrary[kodi.balancer]
+%\usetikzlibrary[kodi.velthio]
+\usetikzlibrary[kodi.voitho]
+%\usetikzlibrary[kodi.zygizo]
 \usetikzlibrary[kodi.bapto]
-\usetikzlibrary[kodi.matrix]
-\usetikzlibrary[kodi.core]
+\usetikzlibrary[kodi.theto]
+\usetikzlibrary[kodi.pyrinas]
 
-% ========================================================== *TeX* ENVIROMENTS =
+%=====[ *TeX* environments ]====================================================
 
-% (La)TeX
+% (Xe/Lua)(La)TeX
 \def\kodi{\tikzpicture[kodi]}
 \def\endkodi{\endtikzpicture}
 \let\commutativediagram\kodi
@@ -47,4 +45,4 @@
 \let\startcommutativediagram\startkodi
 \let\stopcommutativediagram\stopkodi
 
-% ######################################################################## EOF #
+%=====[ EOF ]===================================================================

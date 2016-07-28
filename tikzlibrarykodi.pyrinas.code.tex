@@ -27,8 +27,8 @@
         \let\searchname=\pgfkeyscurrentname%
 %        \message{SEARCH \searchname}
         \pgfkeysalso{
-        /tikz/\searchname/.try=#1,
-        #2/.retry/.expand once=\searchname,
+            /tikz/\searchname/.try=#1,
+            #2/.retry/.expand once=\searchname,
         }%
     },
     % keys to hold kD styles sorted by kind
@@ -85,27 +85,27 @@
     % basic label styles
     /kD/labels/.cd,
         mid/.style={
-        fill=white,
-        shape=circle,
-        anchor=center,
+            fill=white,
+            shape=circle,
+            anchor=center,
         },
     % basic lattice styles
     /kD/lattices/.cd,
         rectangular/.style 2 args={
-        column sep={#1,between origins},
-        row sep={#2,between origins},
+            column sep={#1,between origins},
+            row sep={#2,between origins},
         },
         square/.style={
-        rectangular={#1}{#1},
+            rectangular={#1}{#1},
         },
         golden/.style={
-        rectangular={1.618*#1}{#1},
+            rectangular={1.618*#1}{#1},
         },
         comb/.style={
-        rectangular={sqrt(4/3)*#1}{#1},
-        /tikz/every odd row/.append style={
-            xshift=tan(30)*#1,
-        },
+            rectangular={sqrt(4/3)*#1}{#1},
+            /tikz/every odd row/.append style={
+                xshift=tan(30)*#1,
+            },
         },
         comb/.default=4em,
         square/.default=4em,
