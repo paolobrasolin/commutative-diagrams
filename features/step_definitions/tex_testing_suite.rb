@@ -6,16 +6,16 @@ Given(/^I(?:'m| am) compiling with "([^\"]*)"$/) do |format|
   @compiler = TeXWorld::Compiler.new(format)
 end
 
-When(/^I use the "([^\"]*)" module$/) do |name|
-  # self.document.appenduse_module(name)
-end
-
 When(/^the body is$/) do |code|
   @document.body = code
 end
 
 When(/^I use the "([^\"]*)" package$/) do |name|
   @document.append_to_preamble("\\usepackage{#{name}}\n")
+end
+
+When(/^I use the "([^\"]*)" module$/) do |name|
+  @document.append_to_preamble("\\usemodule[#{name}]\n")
 end
 
 # When(/^I use the "([^\"]*)" package with options:$/) do |name, options|
@@ -25,10 +25,6 @@ end
 When(/^I use the "([^\"]*)" TikZ library$/) do |name|
   @document.append_to_preamble("\\usetikzlibrary{#{name}}\n")
 end
-
-# When(/^I use the "([^\"]*)" TikZ library$/) do |name|
-  # use_tikz_library(name)
-# end
 
 Then(/^compilation (succeeds|fails)$/) do |outcome|
   path = '.tex-test'

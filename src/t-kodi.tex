@@ -1,8 +1,8 @@
 \writestatus{loading}{ConTeXt User Module / koDi}
 \startmodule [kodi]
 \usemodule[tikz]
-\unprotect
 \input tikzlibrarykodi.code.tex
-\protect
+\def\startkodi{\starttikzpicture[kodi]}
+\def\stopkodi{\stoptikzpicture}
 \stopmodule
 \endinput
