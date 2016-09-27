@@ -1,4 +1,4 @@
-# features/foobar.feature
+# features/tex_testing_suite.feature
 Feature: TeX testing suite
 
   Scenario Outline: compiling the MWEs

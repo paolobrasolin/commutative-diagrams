@@ -1,9 +1,11 @@
-koDi -- kommutative Diagramme
-=============================
+ koDi:  kommutative Diagramme
+==============================
 
-koDi is a TikZ library.  Its purpose is
-making commutative diagrams utterly easy
-to design, revise and tweak.
-  This software is distributed under
-the GNU General Public License, version
-3 or later.
+  koDi is a TikZ library.  Its
+purpose is  making commutative
+diagrams   utterly   easy   to
+design, revise and tweak.
+
+  This software is distributed
+under the LaTeX Project Public
+License, version 1.3 or later.
