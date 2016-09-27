@@ -66,3 +66,15 @@ require 'rake/clean'
 CLEAN.include 'dist/pkg', 'dist/tds'
 CLOBBER.include 'dist'
 
+
+require 'erb'
+
+desc 'Build step'
+task :build do
+  @src = 'src'
+  @dst = 'build'
+  source_template = File.read("#{@src}/HEADER.erb")
+  @contents = File.read("#{@src}/kodi.sty")
+  renderer = ERB.new(source_template)
+  puts renderer.result()
+end

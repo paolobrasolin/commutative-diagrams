@@ -7,5 +7,4 @@ end
 
 group :dev do
   gem 'rake'
-  gem 'github_changelog_generator'
 end
