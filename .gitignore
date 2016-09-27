@@ -1,7 +1,29 @@
-# *TeX*
+!.gitignore
+
+#===[ *TeX* ]===================================================================
+
 *.log
 *.pdf
 *.pgf
 *.tuc
-# Vim
+
+#===[ vim ]=====================================================================
+
 *.swp
+*~
+
+#===[ ruby ]====================================================================
+
+# /InstalledFiles
+# /pkg/
+# /spec/reports/
+# /spec/examples.txt
+# /test/tmp/
+# /test/version_tmp/
+# /tmp/
+
+# Used by dotenv library to load environment variables.
+# .env
+
+# build/
+Gemfile.lock

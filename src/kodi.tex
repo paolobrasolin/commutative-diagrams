@@ -64,15 +64,17 @@
 \mor 0' -> A' f':-> B' g':-> C';
 \mor {coker a} -> {coker b} -> {coker c};
 
-\mor {ker a} -> A <,a:-> A' -> {coker a};
-\mor {ker b} -> B <,b:-> B' -> {coker b};
-\mor {ker c} -> C <,c:-> C' -> {coker c};
+\startscope[/kD/every label/.append style={near start}]
+    \mor {ker a} -> A a:-> A' -> {coker a};
+    \mor {ker b} -> B b:-> B' -> {coker b};
+    \mor {ker c} -> C c:-> C' -> {coker c};
+\stopscope
 
-\coordinate (tail) at ($(ker b)!2.4!(ker c)$);
-\coordinate (head) at ($(coker b)!2.4!(coker a)$);
-\coordinate (belly) at ($(tail)!0.51!(head)$);
+\coordinate (tail) at ($(ker b)!9/4!(ker c)$);
+\coordinate (head) at ($(coker b)!9/4!(coker a)$);
+\coordinate (belly) at ($(B)!9/16!(B')$);
 \draw[/kD/arrows/.cd,÷>,rounded corners]
-  (ker c) -- (tail) -- (tail|-belly) -- (head|-belly) -- (head) -- (coker a);
+  (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
 
 \stopcommutativediagram
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -109,7 +111,7 @@
         A            & Z \\
 };
 
-\obj at=($(Z)!2!(P)$), Q;
+\obj at=($(Z)!2!(P)$), "Q";
 
 \mor[swap] P p_1:-> A f:-> Z;
 \mor       * P_2:-> B g:-> *;
@@ -328,7 +330,7 @@ A small expedient is necessary to use it with {\cs koDi}:
 \begin{document}
 \begin{tikzpicture}[kodi]
 % -> insert diagram here
-\end{beginpicture}
+\end{tikzpicture}
 \end{document}
 \stoptyping
 
