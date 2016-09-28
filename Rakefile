@@ -94,4 +94,5 @@ task :uninstall do
   rm_rf "#{basedir}/doc/generic/kodi"
   rm_rf "#{basedir}/tex/generic/kodi"
   rm_rf "#{basedir}/tex/latex/kodi"
+  rm_rf "#{basedir}/tex/context/third"
 end
