@@ -8,7 +8,7 @@
 </head>
 <body>
 <script type="text/javascript">
-$.post( "https://texrhobot.herokuapp.com/svg", {"body": "Hello world!"})
+$.post( "https://texrhobot.herokuapp.com/svg", {"document": "Hello world!"})
   .done(function(data) {
     var svg = $(data).find("svg");
     svg.appendTo('body');
