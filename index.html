@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+  <title>Fetch it!</title>
+</head>
+<body>
+<script type="text/javascript">
+$.post( "http://localhost:5000/svg", {"body": "Hello world!"})
+  .done(function(data) {
+    var svg = $(data).find("svg");
+    svg.appendTo('body');
+  })
+  .fail(function(err) {
+    console.log( err );
+  });
+</script>
+</body>
+</html>
