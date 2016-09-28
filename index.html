@@ -43,8 +43,8 @@ Hello world.\par
 $('#compile').click(function() {
   console.log("wut");
 $.post( 
-    "http://0.0.0.0:5000/svg",
-    //"https://texrhobot.herokuapp.com/svg",
+    // "http://0.0.0.0:5000/svg",
+    "https://texrhobot.herokuapp.com/svg",
     {"document": editor.getValue()})
   .done(function(data) {
     var svg = $(data).find("svg");
