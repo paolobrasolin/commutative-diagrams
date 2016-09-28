@@ -34,14 +34,13 @@ Hello world.\par
     editor.setTheme("ace/theme/chrome");
     editor.getSession().setMode("ace/mode/latex");
     editor.setOptions({
-      readOnly: true,
       fontSize: 30
     });
 </script>
 
 <script type="text/javascript">
 $('#compile').click(function() {
-  console.log("wut");
+$('#display').html("Loading..");
 $.post( 
     // "http://0.0.0.0:5000/svg",
     "https://texrhobot.herokuapp.com/svg",
