@@ -6,54 +6,75 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
   <title>Fetch it!</title>
 <style type="text/css">
-    #editor { 
+    #editor, #display { 
         position: absolute;
         top: 50%;
         right: 0;
         bottom: 0;
         left: 0;
         height: 50%;
+        width: 50%;
     }
-    svg {
-      height:100%;
-      width:100%;
+    #editor {
+      left: 50%;
     }
+    #display {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      right: 50%;
+    }
+    svg {}
 
 </style>
 </head>
 <body>
+
   <button id="compile">Compile!</button>
+
   <div id="display"></div>
-  <div id="editor">
-Hello world.\par
-\LaTeX\ shoud be working \emph{fine}.
-  </div>
+
+<div id="editor">Hello world.\par
+\LaTeX\ shoud be working \emph{fine}.</div>
+
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/chrome");
     editor.getSession().setMode("ace/mode/latex");
     editor.setOptions({
-      fontSize: 30
+      fontSize: 20
     });
 </script>
 
 <script type="text/javascript">
+
 $('#compile').click(function() {
-$('#display').html("Loading..");
-$.post( 
-    // "http://0.0.0.0:5000/svg",
-    "https://texrhobot.herokuapp.com/svg",
-    {"document": editor.getValue()})
-  .done(function(data) {
+
+  $('#display').html("Compiling..");
+
+  var longWaitTimerId = setTimeout(function () {
+    $('#display').html("Server asleep. Waking up the poor thing.");
+  }, 1500);
+
+  $.ajax({
+    method: 'POST',
+    url: 'https://texrhobot.herokuapp.com/svg',
+    // url: 'http://0.0.0.0:5000/svg',
+    data: {
+      "document": editor.getValue()
+    }
+  }).done(function(data) {
+    clearTimeout(longWaitTimerId);
     var svg = $(data).find("svg");
     $('#display').html(svg);
-  })
-  .fail(function(err) {
+  }).fail(function(err) {
     console.log( err );
   });
-});
 
+
+});
 
 </script>
 </body>
