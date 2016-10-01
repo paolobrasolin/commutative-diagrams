@@ -1,0 +1,19 @@
+name: &name kodi
+version: &version v0.0.0
+status: maintained
+author: &author Paolo Brasolin
+email: &email paolo.brasolin@gmail.com
+
+ctanupload:
+  CONTRIBUTION: *name
+  VERSION: *version
+  NAME: *author
+  EMAIL: *email
+  SUMMARY:
+  DIRECTORY: /graphics/pgf/contrib/kodi
+  DONOTANNOUNCE:
+  ANNOUNCE:
+  NOTES:
+  LICENSE: free
+  FREEVERSION: lppl
+  FILE: dist/kodi.zip

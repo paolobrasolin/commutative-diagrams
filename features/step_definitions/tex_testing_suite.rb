@@ -40,3 +40,21 @@ Then(/^compilation (succeeds|fails)$/) do |outcome|
     expect(succeeded).to be false
   end
 end
+
+After do |scenario|
+  _stdout, _stderr, status = Open3.capture3(
+    'dvipng', 'test.dvi', '-o', 'test.png', chdir: '.tex-test'
+  )
+
+  embed('.tex-test/test.png','image/png','WUTWUT')
+end
+
+
+
+
+
+
+
+
+
+

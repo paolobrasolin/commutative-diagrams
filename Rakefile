@@ -5,14 +5,19 @@ require 'open3'
 
 require 'erb'
 
+require 'yaml'
+
+@meta = YAML.load(File.read('metadata.yaml'))
+
 desc 'Prepare PKG'
 task :pkg do
   mkdir_p 'dist/pkg/kodi'
-  cp('src/README', 'dist/pkg/kodi/README')
+  cp('README', 'dist/pkg/kodi/README')
   source_files = FileList['src/*.sty', 'src/*.tex']
-  source_template = File.read('src/HEADER.erb')
-  source_renderer = ERB.new(source_template)
+  source_template = File.read('HEADER.erb')
+  source_renderer = ERB.new(source_template, 0, '<>')
   source_files.each do |filename|
+    @filename = File.basename(filename)
     @source = File.read(filename)
     target_filename = "dist/pkg/kodi/#{File.basename(filename)}"
     puts "render #{filename} to #{target_filename}"
@@ -22,11 +27,16 @@ end
 
 desc 'Prepare TDS'
 task :tds => :pkg do
-  copy_with_path("dist/pkg/kodi/tikzlibrary#{@name}*", "dist/tds/tex/generic/#{@name}")
-  copy_with_path("dist/pkg/kodi/#{@name}.sty", "dist/tds/tex/latex/#{@name}")
-  copy_with_path("dist/pkg/kodi/#{@name}.*", "dist/tds/doc/generic/#{@name}")
-  copy_with_path("dist/pkg/kodi/t-#{@name}.tex", "dist/tds/tex/context/third/#{@name}")
-  copy_with_path("dist/pkg/kodi/README.md", "dist/tds/doc/generic/#{@name}/README.md")
+  # universal TikZ library
+  copy_with_path('dist/pkg/kodi/tikzlibrarykodi*', 'dist/tds/tex/generic/kodi/')
+  # LaTeX package
+  copy_with_path('dist/pkg/kodi/kodi.sty', 'dist/tds/tex/latex/kodi/')
+  # ConTeXt module
+  copy_with_path('dist/pkg/kodi/t-kodi.tex', 'dist/tds/tex/context/third/kodi/')
+  # documentation
+  copy_with_path('dist/pkg/kodi/kodi.tex', 'dist/tds/doc/generic/kodi/')
+  copy_with_path('dist/pkg/kodi/kodi.pdf', 'dist/tds/doc/generic/kodi/')
+  copy_with_path('dist/pkg/kodi/README.md', 'dist/tds/doc/generic/kodi/')
 end
 
 desc 'Compress'
@@ -42,21 +52,6 @@ end
 desc 'Build'
 task :build => [:pkg, :tds, :compress]
 
-@ctan = {
-  'CONTRIBUTION' => 'kodi',
-  'VERSION' => 'v0.0.0',
-  'NAME' => 'Paolo Brasolin',
-  'EMAIL' => 'paolo.brasolin@gmail.com',
-  'SUMMARY' => '--',
-  'DIRECTORY' => '/macros/generic/contrib/kodi',
-  'DONOTANNOUNCE' => '',
-  'ANNOUNCE' => '',
-  'NOTES' => '',
-  'LICENSE' => 'free',
-  'FREEVERSION' => '',
-  'FILE' => ''
-}
-
 def copy_with_path(mask, path)
   mkdir_p(path)
   cp_r(Dir[mask], path)
@@ -69,7 +64,7 @@ end
 
 desc 'Upload'
 task :ctanupload do
-  puts Open3.capture3(@ctan, 'ctanupload')
+  # puts Open3.capture3(@meta['ctan'], 'ctanupload')
 end
 
 require 'cucumber/rake/task'
