@@ -4,7 +4,7 @@ rvm:
 before_script:
   - ./script/tl
   - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
-  - tlmgr install standalone pgf
+  - tlmgr install standalone pgf xcolor
   - tlmgr install oberdiek # atbegshi
   - tlmgr install ms # everyshi
   - tlmgr install graphics # graphicx
