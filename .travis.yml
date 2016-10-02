@@ -5,6 +5,7 @@ before_script:
   - ./script/tl
   - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
   - tlmgr install standalone pgf
+  - tlmgr install context
   - bundle install
 script: 
   - bundle exec rake install
