@@ -6,6 +6,7 @@ before_script:
   - sudo apt-get install texlive
   - bundle install
 script: 
+  - bundle exec rake install
   - bundle exec rake features
 branches:
   only:
