@@ -7,6 +7,7 @@ before_script:
   - tlmgr install standalone pgf
   - tlmgr install oberdiek # atbegshi
   - tlmgr install ms # everyshi
+  - tlmgr install graphics # graphicx
   - tlmgr install latex-bin
   - tlmgr install context
   - bundle install
