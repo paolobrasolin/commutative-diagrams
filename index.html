@@ -78,6 +78,10 @@ $('#compile').click(function() {
   }).done(function(data) {
     clearTimeout(longWaitTimerId);
     var svg = $(data).find("svg");
+    var exHeight = parseFloat(svg.attr('height'))/parseFloat("4.30554pt")+"ex";
+    var exWidth = parseFloat(svg.attr('width'))/parseFloat("4.30554pt")+"ex";
+    svg.attr('height', exHeight);
+    svg.attr('width', exWidth);
     $('#display').html(svg);
   }).fail(function(err) {
     console.log( err );

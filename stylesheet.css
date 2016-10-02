@@ -31,7 +31,7 @@ p {
 }
 
 #display {
-  margin: 20px;
+  margin: 40px;
   min-height: 100px;
   display: flex;
   justify-content: center;
@@ -65,5 +65,9 @@ header .title .d {
   margin-left: -0.1667em;
   margin-right: -0.125em;
   font-size: 1em;
+}
+
+svg {
+  overflow: visible;
 }
 
