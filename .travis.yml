@@ -2,8 +2,7 @@ language: ruby
 rvm:
 - 2.1.2
 before_script:
-  - sudo apt-get -qq update
-  - sudo apt-get install texlive-full
+  - ./script/tl
   - bundle install
 script: 
   - bundle exec rake install
