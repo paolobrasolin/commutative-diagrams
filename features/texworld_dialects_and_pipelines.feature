@@ -1,11 +1,10 @@
 # features/texworld_dialects_and_pipelines.feature
-Feature: basic dialects and pipelines
+Feature: TeXWorld dialects and pipelines
 
   Scenario Outline: compiling the MWEs
     Given I have a "<dialect>" document
     And I am compiling through "<pipeline>"
     Then compilation succeeds
-    And I want a screenshot
 
   Examples:
     | dialect | pipeline |

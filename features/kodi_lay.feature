@@ -22,4 +22,3 @@ Feature: koDi grid layouting
     };
     """
     Then compilation succeeds
-    And I want a screenshot
