@@ -4,6 +4,9 @@ rvm:
 before_script:
   - sudo apt-get -qq update
   - sudo apt-get install texlive
+  - sudo apt-get install texlive-latex-extra
+  - sudo apt-get install texlive-pictures
+  - sudo apt-get install context
   - bundle install
 script: 
   - bundle exec rake install
