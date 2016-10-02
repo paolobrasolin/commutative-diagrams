@@ -1,20 +1,17 @@
-# features/tex_testing_suite.feature
-Feature: TeX testing suite
+# features/texworld_dialects_and_pipelines.feature
+Feature: basic dialects and pipelines
 
   Scenario Outline: compiling the MWEs
     Given I have a "<dialect>" document
     And I am compiling through "<pipeline>"
-    And the body is
-    """
-    Hello world.
-    """
     Then compilation succeeds
+    And I want a screenshot
 
   Examples:
     | dialect | pipeline |
     | tex     | tex      |
     | latex   | latex    |
-    # | context | context  |
+    | context | context  |
 
   Scenario Outline: compiling the MnWEs
     Given I have a "<dialect>" document
@@ -29,4 +26,4 @@ Feature: TeX testing suite
     | dialect | pipeline |
     | tex     | tex      |
     | latex   | latex    |
-    # | context | context  |
+    | context | context  |

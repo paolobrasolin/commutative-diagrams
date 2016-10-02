@@ -27,16 +27,17 @@ end
 
 desc 'Prepare TDS'
 task :tds => :pkg do
-  # universal TikZ library
-  copy_with_path('dist/pkg/kodi/tikzlibrarykodi*', 'dist/tds/tex/generic/kodi/')
-  # LaTeX package
-  copy_with_path('dist/pkg/kodi/kodi.sty', 'dist/tds/tex/latex/kodi/')
-  # ConTeXt module
-  copy_with_path('dist/pkg/kodi/t-kodi.tex', 'dist/tds/tex/context/third/kodi/')
-  # documentation
-  copy_with_path('dist/pkg/kodi/kodi.tex', 'dist/tds/doc/generic/kodi/')
-  copy_with_path('dist/pkg/kodi/kodi.pdf', 'dist/tds/doc/generic/kodi/')
-  copy_with_path('dist/pkg/kodi/README.md', 'dist/tds/doc/generic/kodi/')
+  {
+    'kodi.tex'         => 'tex/plain/kodi/',         # TeX include
+    'kodi.sty'         => 'tex/latex/kodi/',         # LaTeX package
+    't-kodi.tex'       => 'tex/context/third/kodi/', # ConTeXt module
+    'tikzlibrarykodi*' => 'tex/generic/kodi/',       # common TikZ library
+    'kodi-doc.tex'     => 'doc/generic/kodi/',       # documentation
+    'kodi-doc.pdf'     => 'doc/generic/kodi/',       #  "
+    'README.md'        => 'doc/generic/kodi/'        #  "
+  }.each do |source_files, target_dir|
+    copy_with_path("dist/pkg/kodi/#{source_files}", "dist/tds/#{target_dir}")
+  end
 end
 
 desc 'Compress'
@@ -90,8 +91,13 @@ end
 desc 'Uninstall locally'
 task :uninstall do
   basedir = `kpsexpand '$TEXMFHOME'`.chomp
-  rm_rf "#{basedir}/doc/generic/kodi"
-  rm_rf "#{basedir}/tex/generic/kodi"
-  rm_rf "#{basedir}/tex/latex/kodi"
-  rm_rf "#{basedir}/tex/context/third"
+  [
+    'tex/plain/kodi/',         # TeX include
+    'tex/latex/kodi/',         # LaTeX package
+    'tex/context/third/kodi/', # ConTeXt module
+    'tex/generic/kodi/',       # common TikZ library
+    'doc/generic/kodi/'        # documentation
+  ].each do |subfolder|
+    rm_rf "#{basedir}/#{subfolder}"
+  end
 end

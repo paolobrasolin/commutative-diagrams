@@ -8,12 +8,31 @@ latex:
     - latex
     - <%= jobname %>.tex
 
+pdflatex:
+  - &pdflatex
+    - pdflatex
+    - <%= jobname %>.tex
+
 xelatex:
   - *latex
 
+context:
+  - &context
+    - context
+    - <%= jobname %>.tex
+
 dvipng:
   - &dvipng
-    - dvipng
+    - convert
+    - -density
+    - "300"
     - <%= jobname %>.dvi
-    - -o
+    - <%= jobname %>.png
+
+pdfpng:
+  - &pdfpng
+    - convert
+    - -density
+    - "300"
+    - <%= jobname %>.pdf
     - <%= jobname %>.png

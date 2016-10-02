@@ -1,11 +1,11 @@
-# features/kodi_latex.feature
+# features/kodi_works_with_latex.feature
 Feature: koDi works with LaTeX
 
-  Background: trying to compile a MWE
+  Background: compiling an MWE
     Given I have a "latex" document
-    And I am compiling with "latex"
+    And I am compiling through "latex"
 
-  Scenario: using koDi as a library
+  Scenario: using koDi as a TikZ library
     Given I use the "tikz" package
     And I use the "kodi" TikZ library
     And the body is
@@ -15,7 +15,7 @@ Feature: koDi works with LaTeX
     """
     Then compilation succeeds
 
-  Scenario: using koDi as a package
+  Scenario: using koDi as a LaTeX package
     Given I use the "kodi" package
     And the body is
     """
