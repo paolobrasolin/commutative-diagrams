@@ -55,10 +55,10 @@ Then(/^compilation (succeeds|fails)$/) do |outcome|
 end
 
 Then(/^I want a screenshot$/) do
-  @job.pipeline.load('dvipng') if File.file?(".tex-test/#{@job.jobname}.dvi")
-  @job.pipeline.load('pdfpng') if File.file?(".tex-test/#{@job.jobname}.pdf")
-  @job.run
-  embed(".tex-test/#{@job.jobname}.png", 'image/png', @job.jobname)
+  # @job.pipeline.load('dvipng') if File.file?(".tex-test/#{@job.jobname}.dvi")
+  # @job.pipeline.load('pdfpng') if File.file?(".tex-test/#{@job.jobname}.pdf")
+  # @job.run
+  # embed(".tex-test/#{@job.jobname}.png", 'image/png', @job.jobname)
 end
 
 After do |scenario|
