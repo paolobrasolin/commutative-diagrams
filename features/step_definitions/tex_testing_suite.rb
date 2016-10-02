@@ -1,5 +1,6 @@
 Before do |scenario|
   @job = TeXWorld::Job.new
+  FileUtils.mkdir_p '.tex-test'
 end
 
 Given(/^I have a "([^\"]*)" document$/) do |dialect|
