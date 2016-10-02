@@ -2,10 +2,12 @@ language: ruby
 rvm:
 - 2.1.2
 before_script:
+  - sudo apt-get -qq update
+  - sudo apt-get install texlive
   - bundle install
 script: 
   - bundle exec rake features
 branches:
   only:
   - master
-sudo: false
+# sudo: false
