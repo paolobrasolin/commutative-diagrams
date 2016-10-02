@@ -4,8 +4,8 @@ rvm:
 before_script:
   - ./script/tl
   - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
-  - tlmgr install standalone pgf
-  - tlmgr install context
+  - tlmgr install standalone pgf oberdiek
+  - tlmgr install pdftex latex context
   - bundle install
 script: 
   - bundle exec rake install
