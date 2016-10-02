@@ -46,6 +46,7 @@ end
 Then(/^compilation (succeeds|fails)$/) do |outcome|
   # FileUtils.rm_f Dir.glob("#{path}/*")
   succeeded = @job.run
+  puts File.read(".tex-test/#{@job.jobname}.log") unless succeeded
   case outcome
   when 'succeeds'
     expect(succeeded).to be true
