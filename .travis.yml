@@ -3,6 +3,8 @@ rvm:
 - 2.1.2
 before_script:
   - ./script/tl
+  - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
+  - tlmgr install standalone pgf
   - bundle install
 script: 
   - bundle exec rake install
