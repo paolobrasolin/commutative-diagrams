@@ -1,0 +1,19 @@
+tex:
+  - &tex
+    - tex
+    - <%= jobname %>.tex
+
+latex:
+  - &latex
+    - latex
+    - <%= jobname %>.tex
+
+xelatex:
+  - *latex
+
+dvipng:
+  - &dvipng
+    - dvipng
+    - <%= jobname %>.dvi
+    - -o
+    - <%= jobname %>.png

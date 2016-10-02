@@ -73,6 +73,10 @@ Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "features --format pretty"
 end
 
+Cucumber::Rake::Task.new(:report) do |t|
+  t.cucumber_opts = "features --format html --out report.html"
+end
+
 require 'rake/clean'
 CLEAN.include 'dist/pkg', 'dist/tds'
 CLOBBER.include 'dist'

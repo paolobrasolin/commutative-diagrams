@@ -1,21 +1,25 @@
-Given(/^I have a "([^\"]*)" document$/) do |dialect|
-  @document = TeXWorld::Document.new(dialect)
+Before do |scenario|
+  @job = TeXWorld::Job.new
 end
 
-Given(/^I(?:'m| am) compiling with "([^\"]*)"$/) do |format|
-  @compiler = TeXWorld::Compiler.new(format)
+Given(/^I have a "([^\"]*)" document$/) do |dialect|
+  @job.document.load_dialect(dialect)
+end
+
+Given(/^I(?:'m| am) compiling through "([^\"]*)"$/) do |pipeline|
+  @job.pipeline.load(pipeline)
 end
 
 When(/^the body is$/) do |code|
-  @document.body = code
+  @job.document.content['body'] = code
 end
 
 When(/^I use the "([^\"]*)" package$/) do |name|
-  @document.append_to_preamble("\\usepackage{#{name}}\n")
+  @job.document.append_to_preamble("\\usepackage{#{name}}\n")
 end
 
 When(/^I use the "([^\"]*)" module$/) do |name|
-  @document.append_to_preamble("\\usemodule[#{name}]\n")
+  @job.document.append_to_preamble("\\usemodule[#{name}]\n")
 end
 
 # When(/^I use the "([^\"]*)" package with options:$/) do |name, options|
@@ -23,16 +27,12 @@ end
 # end
 
 When(/^I use the "([^\"]*)" TikZ library$/) do |name|
-  @document.append_to_preamble("\\usetikzlibrary{#{name}}\n")
+  @job.document.append_to_preamble("\\usetikzlibrary{#{name}}\n")
 end
 
 Then(/^compilation (succeeds|fails)$/) do |outcome|
-  path = '.tex-test'
-  filename = 'test.tex'
-  FileUtils.mkdir_p path
-  FileUtils.rm_f Dir.glob("#{path}/*")
-  @document.write_to_file(path, filename)
-  succeeded = @compiler.compile(path, filename)
+  # FileUtils.rm_f Dir.glob("#{path}/*")
+  succeeded = @job.run
   case outcome
   when 'succeeds'
     expect(succeeded).to be true
@@ -42,19 +42,7 @@ Then(/^compilation (succeeds|fails)$/) do |outcome|
 end
 
 After do |scenario|
-  _stdout, _stderr, status = Open3.capture3(
-    'dvipng', 'test.dvi', '-o', 'test.png', chdir: '.tex-test'
-  )
-
-  embed('.tex-test/test.png','image/png','WUTWUT')
+  @job.pipeline.load('dvipng')
+  @job.run
+  embed(".tex-test/#{@job.jobname}.png", 'image/png', @job.jobname)
 end
-
-
-
-
-
-
-
-
-
-

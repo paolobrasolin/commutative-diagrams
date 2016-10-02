@@ -1,75 +1,102 @@
 require 'open3'
+require 'erb'
 
 #
 module TeXWorld
   #
+  class Job
+    attr_accessor :document
+    attr_accessor :pipeline
+    attr_accessor :jobname
+
+    def jobname
+      hash
+    end
+
+    def hash
+      Digest::MD5.hexdigest(@document.content.to_yaml)
+    end
+
+    def initialize
+      @document = TeXWorld::Document.new
+      @pipeline = TeXWorld::Pipeline.new
+    end
+
+    def run
+      @document.write(".tex-test/#{hash}.tex")
+      @pipeline.run(binding)
+    end
+  end
+
+  #
   class Document
     attr_accessor :dialect
-    attr_accessor :preamble
-    attr_accessor :body
+    attr_accessor :content
 
-    def initialize(dialect = 'latex')
-      @dialect = dialect
-      @preamble = {
-        'tex' => '',
-        'latex' => '\documentclass{article}',
-        'context' => ''
-      }[dialect]
-      @body = 'Hello world.'
-      @body_delimiters = {
-        'tex' => {
-          open: '',
-          close: '\bye'
-        },
-        'latex' => {
-          open: '\begin{document}',
-          close: '\end{document}'
-        },
-        'context' => {
-          open: '\starttext',
-          close: '\stoptext'
-        },
-      }[dialect]
+    def initialize(
+      dialect = 'latex',
+      source = 'features/support/dialects.yaml'
+    )
+      @source = source
+      load_dialect(dialect)
+    end
+
+    def load_dialect(dialect, source = @source)
+      @content = YAML.load_file(source)[dialect]
     end
 
     def append_to_preamble(code)
-      @preamble <<= code
+      @content['preamble'] <<= code
     end
 
     def append_to_body(code)
-      @body <<= code
+      @content['body'] <<= code
     end
 
-    def write_to_file(path, filename)
-      File.open("#{path}/#{filename}", 'w') do |file|
+    def wrap_body(before, after)
+      @content['head'].concat(before)
+      @content['tail'].prepend(after)
+    end
+
+    def write(filename)
+      File.open(filename, 'w') do |file|
         file.write <<TEXCODE
-#{@preamble}
-#{@body_delimiters[:open]}
-#{@body}
-#{@body_delimiters[:close]}
+#{@content['preamble']}
+#{@content['head']}
+#{@content['body']}
+#{@content['tail']}
 TEXCODE
       end
     end
   end
 
   #
-  class Compiler
-    attr_accessor :compiler
+  class Pipeline
+    attr_accessor :directives
 
-    def initialize(compiler)
-      @compiler = compiler
+    def initialize(
+      pipeline = 'latex',
+      source = 'features/support/pipelines.yaml'
+    )
+      @source = source
+      load(pipeline)
     end
 
-    def compile(path, filename)
-      _stdout, _stderr, status = Open3.capture3(
-        compiler, filename, chdir: path
-      )
-      status.success?
+    def load(pipeline, source = @source)
+      @directives = YAML.load_file(source)[pipeline]
+    end
+
+    def run(binding)
+      instructions = @directives.map do |d|
+        d.map! { |f| ERB.new(f).result(binding) }
+      end
+      instructions.map do |i|
+        _stdout, _stderr, status = Open3.capture3(*i, chdir: '.tex-test')
+        return false unless status.success?
+      end
+      true
     end
   end
-
-  attr_accessor :document
-  attr_accessor :engine
 end
 
 World(TeXWorld)
