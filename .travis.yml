@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+- 2.1.2
+before_script:
+  - bundle install
+script: 
+  - bundle exec rake features
+branches:
+  only:
+  - master
+sudo: false
