@@ -40,16 +40,16 @@
 
 \lay[comb]{
   |(P)| A \times_Z B & B \\
-        A            & Z \\
-};
-
-\obj at=($(Z)!2!(P)$), "Q";
+        A            & Z \\ };
 
 \mor[swap] P p_1:-> A f:-> Z;
 \mor       * P_2:-> B g:-> *;
-\mor[swap] Q q_1:l> A;
-\mor       * q_2:r> B;
-\mor[mid:dashed] * u:-> P;
+
+\obj at=($(Z)!2!(P)$), "Q";
+
+\mor[bend right, swap] Q q_1:-> A;
+\mor[bend left]        * q_2:-> B;
+\mor[mid:dashed]       *   u:-> P;
 
 \end{kodi}</div>
 
