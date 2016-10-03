@@ -6,6 +6,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"></script>
     <title>koDi</title>
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="stylesheet.css">
@@ -25,10 +26,15 @@
   </div>
 </header>
 
+<div id="display">
+  <div class="diagram"></div>
+  <div class="loader">
+    <div class="loader-throbber"></div>
+    <div class="loader-message"></div>
+  </div>
+</div>
 
-<div id="display"></div>
-
-<button id="compile">Compile!</button>
+<button id="compile" class="hvr-bubble-bottom">Compile!</button>
 
 <div id="editor">\begin{kodi}
 
@@ -49,23 +55,42 @@
 
 <script type="text/javascript">
 
+function getNaturalWidth(obj, text){
+    var clone = obj.clone();
+    clone.css("visibility","hidden").css('width', 'auto').html(text);
+    $('body').append(clone);
+    var width = clone.css('width');
+    clone.remove();
+    return width;
+}
+
+
 $('p').hyphenate('en-gb');
 
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/chrome");
 editor.getSession().setMode("ace/mode/latex");
 editor.setOptions({
-  fontSize: 20,
+  fontSize: 16,
   maxLines: 20,
   minLines: 5
+});
+editor.on('change', function() {
+  $('#compile')
+    .attr('disabled', false)
+    .html("Compile!");
 });
 
 $('#compile').click(function() {
 
-  $('#display').html("Compiling..");
+  $('#display').transition({ 'min-height': '6em' });
+  $('.diagram').transition({ opacity: 0 });
+  $('.loader').transition({ opacity: 1 });
+  $('#compile').attr('disabled', true);
+  $('#compile').html("Compiling&hellip;");
 
   var longWaitTimerId = setTimeout(function () {
-    $('#display').html("Server asleep. Waking up the poor thing.");
+    $('.loader-message').html("Server asleep. Waking up the poor thing.");
   }, 1500);
 
   $.ajax({
@@ -82,7 +107,17 @@ $('#compile').click(function() {
     var exWidth = parseFloat(svg.attr('width'))/parseFloat("4.30554pt")+"ex";
     svg.attr('height', exHeight);
     svg.attr('width', exWidth);
-    $('#display').html(svg);
+
+    $('.diagram')
+      .transition({ height: exHeight, duration: 150 })
+      .html(svg)
+      .transition({ opacity: 1 },  150, 'snap' );
+    $('.loader').transition({ opacity: 0 });
+
+    $('#compile')
+      .html("Tweak the code!");
+
+
   }).fail(function(err) {
     console.log( err );
   });
