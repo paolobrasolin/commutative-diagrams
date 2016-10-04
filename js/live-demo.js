@@ -43,7 +43,7 @@ $('#compile').click(function() {
 
   $.ajax({
     method: 'POST',
-    url: 'https://texrhobot.herokuapp.com/svg',
+    url: 'https://texrhobot.herokuapp.com/crank',
     // url: 'http://0.0.0.0:5000/svg',
     data: {
       "document": editor.getValue()
