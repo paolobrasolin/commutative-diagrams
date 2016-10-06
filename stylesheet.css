@@ -19,13 +19,30 @@ p {
 }
 
 #display {
-  min-height: 0em;
+  height: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   right: 50%;
 }
 
+#diagram-wrapper,
+#logger-wrapper,
+#loader-wrapper {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+#logger-wrapper {
+  width:70vw;
+  box-sizing: border-box;
+  border: 2px dotted red;
+}
+
+#logger {
+  color: darkred;
+}
 
 header {
   display: flex;
@@ -46,7 +63,6 @@ header .title .d {
 */
 }
 
-
 .tex sub {
   text-transform: uppercase;
   position: relative;
@@ -57,14 +73,11 @@ header .title .d {
   font-size: 1em;
 }
 
-svg {
+#diagram svg {
   overflow: visible;
 }
 
-
-
-
-.loader-throbber {
+#loader-throbber {
   margin: .5em auto;
   position: relative;
   border: 1ex solid #CCC;
@@ -80,22 +93,10 @@ svg {
   100% { transform: rotate(360deg); }
 }
 
-.loader {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-}
-
-.loader-message {
+#loader-message {
   height: 0;
   overflow: visible;
 }
-
-.diagram {
-  height: 0;
-}
-
-
 
 #compile {
   color: white;
@@ -113,4 +114,3 @@ svg {
 #compile[disabled] {
   background-color: #AAA;
 }
-
