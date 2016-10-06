@@ -31,11 +31,14 @@ p {
 #loader-wrapper {
   position: absolute;
   opacity: 0;
+/*
   z-index: -1;
+*/
 }
 
 #logger-wrapper {
-  width:70vw;
+  width: 70vw;
+  max-width: 40em;
   box-sizing: border-box;
   border: 2px dotted red;
 }
