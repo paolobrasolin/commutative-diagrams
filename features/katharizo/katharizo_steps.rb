@@ -8,11 +8,6 @@ Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   expect(dump[field]).to eq(value)
 end
-
-Given(/^dump "([^\"]*)"$/) do |it|
-  puts it
-end
-
 Given(/^I detokenize "([^\"]*)"$/) do |code|
   @job.document.append_to_body <<CODE
 \\kDDetokenize{#{code}}\\kDInto DETOKENIZED\\kDRelax
@@ -22,8 +17,6 @@ Given(/^I detokenize "([^\"]*)"$/) do |code|
 \\closeout\\file
 CODE
 end
-
-
 
 Given(/^I sanitize "([^\"]*)"$/) do |code|
   @job.document.append_to_body <<CODE

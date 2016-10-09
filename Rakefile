@@ -101,3 +101,6 @@ task :uninstall do
     rm_rf "#{basedir}/#{subfolder}"
   end
 end
+
+desc 'Reinstall locally'
+task :reinstall => [:uninstall, :install]

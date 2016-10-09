@@ -1,7 +1,7 @@
-# features/katharizo/kDDetokenize.feature
+# features/katharizo/kDSanitize.feature
 Feature: katharizo's kDSanitize macro
 
-  Background: compiling an MWE
+  Background: testing on TeX
     Given I have a "tex" document
     And I am compiling through "tex"
     And I input the "tikz" file

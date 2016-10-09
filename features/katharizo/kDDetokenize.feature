@@ -33,31 +33,3 @@ Feature: katharizo's kDDetokenize macro
     | "\X\Y"   | "\X \Y " |
     | "\X \Y"  | "\X \Y " |
     | "\X  \Y" | "\X \Y " |
-
-
-
-
-  # Scenario Outline: using koDi as a TikZ library
-    # Given I input the "tikz" file
-    # And I use the "kodi.katharizo" TikZ library
-    # And the body is
-    # """
-    # \def\EXPANDEDONCE{FULLYEXPANDED}
-    # \def\UNEXPANDED{\EXPANDEDONCE}
-    # \pgfqkeys{/katharizo}{
-      # expand={<expand>},
-      # input={\UNEXPANDED{}}
-    # }
-    # \newwrite\file
-    # \immediate\openout\file=\jobname.yml
-    # \immediate\write\file{output: '\kDKatharizoOutput'}
-    # \closeout\file
-    # """
-    # Then compilation succeeds
-    # And the dumped "output" is "<output>"
-# 
-  # Examples:
-    # | expand | output        |
-    # | none   | NOTEXPANDED   |
-    # | once   | EXPANDEDONCE  |
-    # | full   | FULLYEXPANDED |

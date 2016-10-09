@@ -19,8 +19,6 @@
   },
 }
 
-\usetikzlibrary{kodi.voitho}
-
 %===[ TikZ magic ]==============================================================
 
 \pgfqkeys{/katharizo/input}{
@@ -32,8 +30,7 @@
   once/.style={/katharizo/expander/.style={/katharizo/expanded/.expand once={##1}}},
   full/.style={/katharizo/expander/.style={/katharizo/expanded/.expanded={##1}}},
   none/.style={/katharizo/expander/.style={/katharizo/expanded={##1}}},
-  % by default no macro expansion is done
-  none,
+  none, % default is no expansion
 }
 
 \pgfqkeys{/katharizo/expanded}{
@@ -42,8 +39,6 @@
 }
 
 \pgfqkeys{/katharizo/sanitizer}{.code={%
-  % \kDDetokenize{#1}\kDInto kDKatharizoDetokenized\kDRelax%
-  % \expandafter\kDSanitize\kDKatharizoDetokenized\kDInto kDKatharizoSanitized\kDRelax%
   \kDSanitize{#1}\kDInto kDKatharizoSanitized\kDRelax%
   \pgfkeysalso{/katharizo/sanitized/.expanded=\kDKatharizoSanitized}%
   % logging routine:
@@ -86,7 +81,7 @@
 \def\kDSanitizeWord#1#2\kDRelax%
     {\kDSanitizeCharacter#1\kDRelax\ifx\relax#2\else\kDSanitizeWord#2\kDRelax\fi}
 
-% Spaces after number to avoid stray \relax
+% MEMO: Spaces after number to avoid stray \relax
 % TODO: rethink of all the dangerous characters cross-format-wise
 \def\kDSanitizeCharacter#1\kDRelax{%
     \ifnum`#1=36 \else% $ dollar

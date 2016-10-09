@@ -11,59 +11,26 @@
 
 % First of all, a gizmo to handle optional console output is defined.
 
-\newif\ifbaptoisverbose
-\pgfqkeys{/bapto}{
-    verbose/.is if=baptoisverbose,
-    verbose=true,
-    log/.code={
-        \ifbaptoisverbose
-            \let~\space
-            \newlinechar=`\^
-            \message{kD.bapto ~~~~~~ > #1^}
-        \fi
-    },
-}
+% \newif\ifbaptoisverbose
+% \pgfqkeys{/bapto}{
+    % verbose/.is if=baptoisverbose,
+    % verbose=true,
+    % log/.code={
+        % \ifbaptoisverbose
+            % \let~\space
+            % \newlinechar=`\^
+            % \message{kD.bapto ~~~~~~ > #1^}
+        % \fi
+    % },
+% }
 
 % (0) gets wired using the "self naming" key on a node.
 
 \pgfqkeys{/tikz}{
-    % self naming/.style={
-        % /tikz/node contents/.forward to=/bapto/input,
-        % /bapto/output/.forward to=/bapto/dispatcher,
-    % },
-}
-
-\pgfqkeys{/bapto}{
-    input/.store in=\kDBaptoInput,
-    input/.forward to=/bapto/expander,
-}
-
-% Three possible pre-processing input expansion behaviours are defined.
-% These correspond to three mutually exclusive different wirings for (1).
-% By default the no-expansion route is wired.
-
-\pgfqkeys{/bapto/expand}{.is choice,
-    once/.style={/bapto/expander/.style={/bapto/sanitizer/.expand once={##1}}},
-    full/.style={/bapto/expander/.style={/bapto/sanitizer/.expanded={##1}}},
-    none/.style={/bapto/expander/.style={/bapto/sanitizer={##1}}},
-    none,
-}
-
-% This (2) wires in the beating heart of the mechanism,
-% i.e. the Plain TeX sanitizer.
-
-\pgfqkeys{/bapto/sanitizer}{.code={
-    % TODO: this obviously need a cleanup
-    \kDSanitize#1\into tmp\GO
-    \pgfkeysalso{/bapto/log={{\Meaning} ==> (\tmp)}}
-    \pgfkeysalso{/bapto/output/.expand once=\tmp}
-},}
-
-
-% This is (3). Trivial but necessary for ease of development.
-
-\pgfqkeys{/bapto}{
-    output/.store in=\kDBaptoOutput,
+    self naming/.style={
+        /tikz/node contents/.forward to=/katharizo/input,
+        /katharizo/output/.forward to=/bapto/dispatcher,
+    },
 }
 
 % Finally we define an handler for the dispatcher behaviour
@@ -71,54 +38,15 @@
 
 \newif\ifbaptooverwrites
 \pgfqkeys{/bapto}{
-    % overwrite/.is if=baptooverwrites,
-    % overwrite=false,
-    % dispatcher/.code={
-        % \ifx\tikz@fig@name\empty
-            % \pgfqkeys{/tikz}{name=#1}
-        % \else
-            % \ifbaptooverwrites
-                % \pgfqkeys{/tikz}{name=#1}
-            % \fi
-        % \fi
-    % },
-}
-
-%=====[ TeX magic ]=============================================================
-
-% No more TikZ code is needed.  What follows is just the TeX sanitizer.
-
-\def\kDMeanCut#1:->#2\into#3\GO%
-    {\kDCSDef{#3}{#2}}
-
-\def\kDMeaningOf#1\into#2\GO{%
-    \def\kDFoo{#1}%
-    \edef\kDBar{\meaning\kDFoo}%
-    \expandafter\kDMeanCut\kDBar\into#2\GO%
-}
-
-\def\kDSanitize#1\into#2\GO{%
-    \kDMeaningOf#1 \into Meaning\GO% I put an extra space for easy parsing
-    \expandafter\edef\csname#2\endcsname% and catch it as the empty exception:
-        {\ifx\Meaning\space\else\expandafter\kDSieveString\Meaning\GO\fi}%
-}
-
-% MEMO: the \space is the only whitespace going to output (between words)
-\def\kDSieveString#1 #2\GO%
-    {\kDSieveWord#1\GO\ifx\relax#2\else\space\kDSieveString#2\GO\fi}
-
-\def\kDSieveWord#1#2\GO%
-    {\kDSieveCharacter#1\GO\ifx\relax#2\else\kDSieveWord#2\GO\fi}
-
-% Spaces after number to avoid stray \relax
-% TODO: rethink of all the dangerous characters cross-format-wise
-\def\kDSieveCharacter#1\GO{%
-    \ifnum`#1=36 \else% $ dollar
-    \ifnum`#1=40 \else% ( left round brace
-    \ifnum`#1=41 \else% ) right round brace
-    \ifnum`#1=44 \else% , comma
-    \ifnum`#1=46 \else% . dot
-    \ifnum`#1=58 \else% : colon
-    \ifnum`#1=92 \else% \ backslash
-    #1\fi\fi\fi\fi\fi\fi\fi%
+    overwrite/.is if=baptooverwrites,
+    overwrite=false,
+    dispatcher/.code={
+        \ifx\tikz@fig@name\empty
+            \pgfqkeys{/tikz}{name=#1}
+        \else
+            \ifbaptooverwrites
+                \pgfqkeys{/tikz}{name=#1}
+            \fi
+        \fi
+    },
 }
