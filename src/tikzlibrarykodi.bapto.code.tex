@@ -27,9 +27,15 @@
 % (0) gets wired using the "self naming" key on a node.
 
 \pgfqkeys{/tikz}{
-    self naming/.style={
-        /tikz/node contents/.forward to=/bapto/input,
-    },
+    % self naming/.style={
+        % /tikz/node contents/.forward to=/bapto/input,
+        % /bapto/output/.forward to=/bapto/dispatcher,
+    % },
+}
+
+\pgfqkeys{/bapto}{
+    input/.store in=\kDBaptoInput,
+    input/.forward to=/bapto/expander,
 }
 
 % Three possible pre-processing input expansion behaviours are defined.
@@ -37,16 +43,16 @@
 % By default the no-expansion route is wired.
 
 \pgfqkeys{/bapto/expand}{.is choice,
-    once/.style={/bapto/input/.style={/bapto/process/.expand once={##1}}},
-    full/.style={/bapto/input/.style={/bapto/process/.expanded={##1}}},
-    none/.style={/bapto/input/.style={/bapto/process={##1}}},
+    once/.style={/bapto/expander/.style={/bapto/sanitizer/.expand once={##1}}},
+    full/.style={/bapto/expander/.style={/bapto/sanitizer/.expanded={##1}}},
+    none/.style={/bapto/expander/.style={/bapto/sanitizer={##1}}},
     none,
 }
 
 % This (2) wires in the beating heart of the mechanism,
 % i.e. the Plain TeX sanitizer.
 
-\pgfqkeys{/bapto/process}{.code={
+\pgfqkeys{/bapto/sanitizer}{.code={
     % TODO: this obviously need a cleanup
     \kDSanitize#1\into tmp\GO
     \pgfkeysalso{/bapto/log={{\Meaning} ==> (\tmp)}}
@@ -57,7 +63,7 @@
 % This is (3). Trivial but necessary for ease of development.
 
 \pgfqkeys{/bapto}{
-    output/.forward to=/bapto/dispatcher,
+    output/.store in=\kDBaptoOutput,
 }
 
 % Finally we define an handler for the dispatcher behaviour
@@ -65,22 +71,22 @@
 
 \newif\ifbaptooverwrites
 \pgfqkeys{/bapto}{
-    overwrite/.is if=baptooverwrites,
-    overwrite=false,
-    dispatcher/.code={
-        \ifx\tikz@fig@name\empty
-            \pgfqkeys{/tikz}{name=#1}
-        \else
-            \ifbaptooverwrites
-                \pgfqkeys{/tikz}{name=#1}
-            \fi
-        \fi
-    },
+    % overwrite/.is if=baptooverwrites,
+    % overwrite=false,
+    % dispatcher/.code={
+        % \ifx\tikz@fig@name\empty
+            % \pgfqkeys{/tikz}{name=#1}
+        % \else
+            % \ifbaptooverwrites
+                % \pgfqkeys{/tikz}{name=#1}
+            % \fi
+        % \fi
+    % },
 }
 
 %=====[ TeX magic ]=============================================================
 
-% No more TikZ code is needed.  What follows is just the Plain TeX sanitizer.
+% No more TikZ code is needed.  What follows is just the TeX sanitizer.
 
 \def\kDMeanCut#1:->#2\into#3\GO%
     {\kDCSDef{#3}{#2}}

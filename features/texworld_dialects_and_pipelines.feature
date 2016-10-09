@@ -10,7 +10,7 @@ Feature: TeXWorld dialects and pipelines
     | dialect | pipeline |
     | tex     | tex      |
     | latex   | latex    |
-    | context | context  |
+    # | context | context  |
 
   Scenario Outline: compiling the MnWEs
     Given I have a "<dialect>" document
@@ -25,4 +25,4 @@ Feature: TeXWorld dialects and pipelines
     | dialect | pipeline |
     | tex     | tex      |
     | latex   | latex    |
-    | context | context  |
+    # | context | context  |

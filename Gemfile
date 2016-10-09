@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-group :test do
+group :development do
+  gem 'rake'
   gem 'cucumber'
   gem 'rspec'
-end
-
-group :dev do
-  gem 'rake'
+  gem 'guard'
+  gem 'guard-cucumber'
 end

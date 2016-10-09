@@ -1,0 +1,100 @@
+%===[ What is this? ]===========================================================
+
+% καθαρίζω • (katharízo)
+%   1. clean, wash
+%   2. peel, descale
+%   3. (slang) kill
+
+% The catharsis process has four stages realized by wiring TikZ keys:
+%   input  --(expander)->  expanded  --(sanitizer)->  sanitized  -->  output
+
+% \newif\ifkatharizoisverbose
+\pgfqkeys{/kD}{
+  % verbose/.is if=katharizoisverbose,
+  % verbose=true,
+  log/.code 2 args={
+    \let~\space
+    \newlinechar=`\^
+    \message{kD.#1~>~#2^}
+  },
+}
+
+\usetikzlibrary{kodi.voitho}
+
+%===[ TikZ magic ]==============================================================
+
+\pgfqkeys{/katharizo/input}{
+  .store in=\kDKatharizoInput,
+  .forward to=/katharizo/expander,
+}
+
+\pgfqkeys{/katharizo/expand}{.is choice,
+  once/.style={/katharizo/expander/.style={/katharizo/expanded/.expand once={##1}}},
+  full/.style={/katharizo/expander/.style={/katharizo/expanded/.expanded={##1}}},
+  none/.style={/katharizo/expander/.style={/katharizo/expanded={##1}}},
+  % by default no macro expansion is done
+  none,
+}
+
+\pgfqkeys{/katharizo/expanded}{
+  .store in=\kDKatharizoExpanded,
+  .forward to=/katharizo/sanitizer,
+}
+
+\pgfqkeys{/katharizo/sanitizer}{.code={%
+  % \kDDetokenize{#1}\kDInto kDKatharizoDetokenized\kDRelax%
+  % \expandafter\kDSanitize\kDKatharizoDetokenized\kDInto kDKatharizoSanitized\kDRelax%
+  \kDSanitize{#1}\kDInto kDKatharizoSanitized\kDRelax%
+  \pgfkeysalso{/katharizo/sanitized/.expanded=\kDKatharizoSanitized}%
+  % logging routine:
+  \expandafter\kDDetokenize\kDKatharizoInput\kDInto kDKatharizoDetokenizedInput\kDRelax%
+  \pgfkeysalso{/kD/log={katharizo~~~~~~~}%
+    {{\kDKatharizoDetokenizedInput} -> (\kDKatharizoSanitized)}}%
+}}
+
+\pgfqkeys{/katharizo/sanitized}{
+  % .store in=\kDKatharizoSanitized,
+  .forward to=/katharizo/output,
+}
+
+\pgfqkeys{/katharizo/output}{
+  .store in=\kDKatharizoOutput,
+}
+
+%===[ TeX is hell <3 ]==========================================================
+
+\def\kDDetokenize#1\kDInto#2\kDRelax{%
+  \def\kDFoo{#1}%
+  \edef\kDBar{\meaning\kDFoo}%
+  \def\kDAct##1:->##2\kDRelax{##2}%
+  \expandafter\edef\csname#2\endcsname{\expandafter\kDAct\kDBar\kDRelax}%
+}
+
+\def\kDSanitize#1\kDInto#2\kDRelax{%
+  \kDDetokenize#1\kDInto kDKatharizoDetokenized\kDRelax%
+  \edef\kDKatharizoDetokenizedTerminated{\kDKatharizoDetokenized\space}%
+  \expandafter\edef\csname#2\endcsname%
+    {\expandafter\kDSanitizeString\kDKatharizoDetokenizedTerminated\kDRelax}%
+}
+
+\def\kDSanitizeString#1 #2\kDRelax%
+    {%\message{"#1"+"#2"}%
+\ifx\relax#1\else\kDSanitizeWord#1\kDRelax\fi%
+\ifx\relax#1\else\if#2\space\else\ifx\relax#2\else\space\fi\fi\fi%
+\ifx\relax#2\else\kDSanitizeString#2\kDRelax\fi}
+
+\def\kDSanitizeWord#1#2\kDRelax%
+    {\kDSanitizeCharacter#1\kDRelax\ifx\relax#2\else\kDSanitizeWord#2\kDRelax\fi}
+
+% Spaces after number to avoid stray \relax
+% TODO: rethink of all the dangerous characters cross-format-wise
+\def\kDSanitizeCharacter#1\kDRelax{%
+    \ifnum`#1=36 \else% $ dollar
+    \ifnum`#1=40 \else% ( left round brace
+    \ifnum`#1=41 \else% ) right round brace
+    \ifnum`#1=44 \else% , comma
+    \ifnum`#1=46 \else% . dot
+    \ifnum`#1=58 \else% : colon
+    \ifnum`#1=92 \else% \ backslash
+    #1\fi\fi\fi\fi\fi\fi\fi%
+}
