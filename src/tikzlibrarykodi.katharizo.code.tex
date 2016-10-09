@@ -75,21 +75,33 @@
 \def\kDSanitizeString#1 #2\kDRelax%
     {%\message{"#1"+"#2"}%
 \ifx\relax#1\else\kDSanitizeWord#1\kDRelax\fi%
-\ifx\relax#1\else\if#2\space\else\ifx\relax#2\else\space\fi\fi\fi%
+\ifx\relax#1\else\if#2\space\else\ifx\relax#2\else%
+\pgfkeysvalueof{/katharizo/replacements/space}\fi\fi\fi%
 \ifx\relax#2\else\kDSanitizeString#2\kDRelax\fi}
 
 \def\kDSanitizeWord#1#2\kDRelax%
     {\kDSanitizeCharacter#1\kDRelax\ifx\relax#2\else\kDSanitizeWord#2\kDRelax\fi}
 
+\pgfqkeys{/katharizo/replacements}{.cd,
+  space/.initial=\space,
+  dollar/.initial={},
+  left round brace/.initial={},
+  right round brace/.initial={},
+  comma/.initial={},
+  full stop/.initial={},
+  colon/.initial={},
+  backslash/.initial={}
+}
+
 % MEMO: Spaces after number to avoid stray \relax
 % TODO: rethink of all the dangerous characters cross-format-wise
 \def\kDSanitizeCharacter#1\kDRelax{%
-    \ifnum`#1=36 \else% $ dollar
-    \ifnum`#1=40 \else% ( left round brace
-    \ifnum`#1=41 \else% ) right round brace
-    \ifnum`#1=44 \else% , comma
-    \ifnum`#1=46 \else% . dot
-    \ifnum`#1=58 \else% : colon
-    \ifnum`#1=92 \else% \ backslash
+    \ifnum`#1=36 \pgfkeysvalueof{/katharizo/replacements/dollar}\else%
+    \ifnum`#1=40 \pgfkeysvalueof{/katharizo/replacements/left round brace}\else%
+    \ifnum`#1=41 \pgfkeysvalueof{/katharizo/replacements/right round brace}\else%
+    \ifnum`#1=44 \pgfkeysvalueof{/katharizo/replacements/comma}\else%
+    \ifnum`#1=46 \pgfkeysvalueof{/katharizo/replacements/full stop}\else%
+    \ifnum`#1=58 \pgfkeysvalueof{/katharizo/replacements/colon}\else%
+    \ifnum`#1=92 \pgfkeysvalueof{/katharizo/replacements/backslash}\else%
     #1\fi\fi\fi\fi\fi\fi\fi%
 }
