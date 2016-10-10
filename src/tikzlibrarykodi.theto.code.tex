@@ -21,8 +21,8 @@
         execute at begin cell=\kDMatrixBeginCell,
         execute at empty cell=\kDMatrixEmptyCell,
         nodes={
-            self naming,
-            math,
+            % self naming,
+            % math,
         },
     },
     %: MEMO: this *cannot* be put along with global node styles (because order of execution)
@@ -39,23 +39,23 @@
 % I am not 100% aware of why, so this feels like a dirty hack.
 
 \def\kDMatrixNewLine{
-    \pgfutil@ifnextchar\kDMatrixNil
-        {\expandafter\pgfmatrixendrow\pgfutil@gobble}
-        {\pgfmatrixendrow}
+  \pgfutil@ifnextchar\kDMatrixNil
+    {\expandafter\pgfmatrixendrow\pgfutil@gobble}
+    {\pgfmatrixendrow}
 }
 
 \def\kDMatrixBeginCell{
-    \let\\\kDMatrixNewLine
-    \pgfutil@ifnextchar\relax{}{\kDMatrixDoRow}
+  \let\\\kDMatrixNewLine
+  \pgfutil@ifnextchar\relax{}{\kDMatrixDoRow}
 }
 
 \bgroup
 \catcode`&=\active
 
 \gdef\kDMatrixDoRow#1\\{
-    \pgfutil@ifnextchar\kDMatrixNil
-        {\kDMatrixDoCell #1\\}
-        {\kDMatrixDoCell #1&\kDMatrixNil\\\kDMatrixNil}
+  \pgfutil@ifnextchar\kDMatrixNil
+    {\kDMatrixDoCell #1\\}
+    {\kDMatrixDoCell #1&\kDMatrixNil\\\kDMatrixNil}
 }
 
 \gdef\kDMatrixDoCell#1&{
@@ -66,14 +66,14 @@
 \egroup
 
 \def\kDMatrixParseNodeMaybeOptions%
-    {\pgfutil@ifnextchar|{\kDMatrixParseNodeWithOptions}{\kDMatrixParseNodeWithOptions||}}
+  {\pgfutil@ifnextchar|{\kDMatrixParseNodeWithOptions}{\kDMatrixParseNodeWithOptions||}}
 
 % TODO: here the ordering of naming/aliasing procedures is crucial and subtle
 %       maybe write a nota about that someday, ok? ok.
 \def\kDMatrixParseNodeWithOptions|#1|#2\kDRelax%
-    {\node#1[node contents={#2},matrix coordinates alias];}
+  {\node#1[node contents={#2},matrix coordinates alias];}
 
 \def\kDMatrixEmptyCell%
-    {\kDMatrixParseNodeWithOptions||\kDRelax}
+  {\kDMatrixParseNodeWithOptions||\kDRelax}
 
 \catcode`@ = 12
