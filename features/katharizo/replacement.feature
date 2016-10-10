@@ -9,10 +9,7 @@ Feature: katharizo's replacement control
     And I want a debugging dump
 
   Scenario Outline: using default replacements
-    Given the body is
-    """
-    \pgfqkeys{/katharizo}{input=<input>}
-    """
+    Given I code \pgfqkeys{/katharizo}{input=<input>}
     And I dump "\kDKatharizoOutput" as "output"
     Then compilation succeeds
     And the dumped "output" is <output>

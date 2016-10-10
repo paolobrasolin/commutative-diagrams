@@ -7,11 +7,10 @@ Feature: bapto's self naming nodes
     And I input the "tikz" file
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.bapto" TikZ library
-    And I want a debugging dump
 
-  Scenario Outline: hurr durr
-    Given I create a self naming node containing "<contents>"
-    And I require a node labeled "<label>" to exist
+  Scenario Outline: using a self naming node
+    Given I code \tikz\node[self naming, node contents=<contents>];
+    And I expect a node labeled "<label>" to exist
     Then compilation succeeds
 
   Examples:

@@ -1,5 +1,5 @@
 # features/bapto/overwrite.feature
-Feature: bapto's overwriting settings
+Feature: bapto's overwrite setting
 
   Background: testing bapto on plain TeX
     Given I have a "tex" document
@@ -20,7 +20,7 @@ Feature: bapto's overwriting settings
     And I expect a node labeled "foo" to <name label>
     And I expect a node labeled "bar" to <self label>
     Then compilation succeeds
-  
+
   Examples:
     | overwrite | name label | self label |
     | false     | exist      | not exist  |
