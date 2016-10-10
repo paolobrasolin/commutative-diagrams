@@ -1,15 +1,14 @@
-%=====[ the plan ]==============================================================
+%===[ What is this? ]===========================================================
 
-% The bapto mechanism is the following composition of procedures
-% wired together mostly using TikZ keys as pseudo-callbacks:
+% βάπτω • (báptō)
+%   1. I dip, submerge
+%   2. I dye, colour
+%   3. I baptise
 
-%  ,--- node contents ~~~~~~~~~~~bapto~~~~~~~~~~~> name <--,
-%  0                                                       4
-%  '--> input --1-> process --2-> output --3-> dispatch ---'
+% The baptism process has four stages realized by wiring TikZ keys:
+%   node contents  --->  [katharizo]  --(dispatcher)->  name/alias
 
-%=====[ TiKz magic ]============================================================
-
-% First of all, a gizmo to handle optional console output is defined.
+%===[ TikZ magic ]==============================================================
 
 % \newif\ifbaptoisverbose
 % \pgfqkeys{/bapto}{
@@ -24,8 +23,6 @@
     % },
 % }
 
-% (0) gets wired using the "self naming" key on a node.
-
 \pgfqkeys{/tikz}{
     self naming/.style={
         /tikz/node contents/.forward to=/katharizo/input,
@@ -33,20 +30,10 @@
     },
 }
 
-% Finally we define an handler for the dispatcher behaviour
-% and then the dispatcher itself.
-
-\newif\ifbaptooverwrites
-\pgfqkeys{/bapto}{
-    overwrite/.is if=baptooverwrites,
-    overwrite=false,
-    dispatcher/.code={
-        \ifx\tikz@fig@name\empty
-            \pgfqkeys{/tikz}{name=#1}
-        \else
-            \ifbaptooverwrites
-                \pgfqkeys{/tikz}{name=#1}
-            \fi
-        \fi
-    },
+\pgfqkeys{/bapto/overwrite}{.is choice,
+  false/.style={/bapto/dispatcher/.code=
+    {\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
+  alias/.style={/bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
+  true/.style= {/bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
+  false, % default is no overwriting and no aliasing
 }

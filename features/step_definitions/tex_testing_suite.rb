@@ -23,6 +23,10 @@ When(/^I input the "([^\"]*)" file$/) do |name|
   @job.document.append_to_preamble("\\input #{name}\n")
 end
 
+When(/^I code ([^\"]*)$/) do |code|
+  @job.document.append_to_body("#{code}\n")
+end
+
 When(/^I use the "([^\"]*)" package$/) do |name|
   @job.document.append_to_preamble("\\usepackage{#{name}}\n")
 end
@@ -64,3 +68,29 @@ end
 
 After do |scenario|
 end
+
+
+
+
+
+
+Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
+  @job.document.append_to_body <<CODE
+\\immediate\\write\\file{#{field}: '#{macro}'}
+CODE
+end
+
+Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
+  dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
+  expect(dump[field]).to eq(value)
+end
+
+Given(/^I want a debugging dump$/) do
+  @job.document.wrap_body <<'OPEN', <<'CLOSE'
+\newwrite\file
+\immediate\openout\file=\jobname.yml
+OPEN
+\closeout\file
+CLOSE
+end
+

@@ -1,12 +1,5 @@
-require 'yaml'
-
 Transform(/^'(.*)'$/) do |quoted_string|
   quoted_string
-end
-
-Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
-  dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
-  expect(dump[field]).to eq(value)
 end
 
 Given(/^I detokenize "([^\"]*)"$/) do |code|
@@ -29,24 +22,8 @@ Given(/^I sanitize "([^\"]*)"$/) do |code|
 CODE
 end
 
-# Given(/^I sanitize "([^\"]*)"$/) do |code|
-  # @job.document.append_to_body <<CODE
-# \\pgfqkeys{/katharizo}{input={#{code}}}
-# CODE
-# end
-
-Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
+Given(/^I input "([^\"]*)" to katharizo$/) do |code|
   @job.document.append_to_body <<CODE
-\\immediate\\write\\file{#{field}: '#{macro}'}
+\\pgfqkeys{/katharizo}{input={#{}}}
 CODE
 end
-
-Given(/^I want a debugging dump$/) do
-  @job.document.wrap_body <<'OPEN', <<'CLOSE'
-\newwrite\file
-\immediate\openout\file=\jobname.yml
-OPEN
-\closeout\file
-CLOSE
-end
-
