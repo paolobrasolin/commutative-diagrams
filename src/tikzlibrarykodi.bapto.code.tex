@@ -5,23 +5,10 @@
 %   2. I dye, colour
 %   3. I baptise
 
-% The baptism process has four stages realized by wiring TikZ keys:
+% The baptism process has three stages realized by wiring TikZ keys:
 %   node contents  --->  [katharizo]  --(dispatcher)->  name/alias
 
 %===[ TikZ magic ]==============================================================
-
-% \newif\ifbaptoisverbose
-% \pgfqkeys{/bapto}{
-    % verbose/.is if=baptoisverbose,
-    % verbose=true,
-    % log/.code={
-        % \ifbaptoisverbose
-            % \let~\space
-            % \newlinechar=`\^
-            % \message{kD.bapto ~~~~~~ > #1^}
-        % \fi
-    % },
-% }
 
 \pgfqkeys{/tikz}{
     self naming/.style={
