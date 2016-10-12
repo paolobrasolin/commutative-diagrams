@@ -9,30 +9,27 @@
 % for TiKz matrices of nodes.
 
 \tikzset{
-    math/.style={
-        execute at begin node=$,
-        execute at end node=$,
-    },
-    monk/.style={
-        matrix,
-        cells={anchor=base},
-        execute at begin cell=\kDThetoBeginCell,
-        execute at end cell=\kDThetoCloseCell,
-        execute at empty cell=\kDThetoEmptyCell,
-        nodes={
-            self naming,
-            math,
-        },
-    },
-    %: MEMO: this *cannot* be put along with global node styles (because order of execution)
-    matrix coordinates alias/.style={
-        alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
-    },
+  theto/.style={
+    matrix,
+    cells={anchor=base},
+    execute at empty cell=\kDThetoEmptyCell,
+    execute at begin cell=\kDThetoBeginCell,
+    execute at end cell=\kDThetoCloseCell,
+    % nodes={
+      % self naming,
+      % execute at begin node=$,
+      % execute at end node=$,
+    % },
+  },
+  %: MEMO: this *cannot* be put along with global node styles (because order of execution)
+  matrix coordinates alias/.style={
+    alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
+  },
 }
 
 \newtoks\kDThetoTokBuf
 \newtoks\kDThetoTokFub
-\newtoks\kDThetoCurTok
+\newtoks\kDThetoTokCur
 \newtoks\kDThetoTokOpt
 
 \catcode`@ = 11
@@ -52,8 +49,8 @@
   {\edef\kDThetoPrependAct{\noexpand#2={\the#1\the#2}}\kDThetoPrependAct}
 
 \def\kDThetoBog#1{
-  \kDThetoCurTok={#1}
-  \kDThetoPrependTok\kDThetoCurTok\kDThetoTokFub
+  \kDThetoTokCur={#1}
+  \kDThetoPrependTok\kDThetoTokCur\kDThetoTokFub
   \kDThetoMaybeBog
 }
 
@@ -66,8 +63,8 @@
   {\pgfutil@ifnextchar\nobog{\pgfutil@gobble}{\kDThetoGob}}
 
 \def\kDThetoGob#1{
-  \kDThetoCurTok={#1}
-  \kDThetoPrependTok\kDThetoCurTok\kDThetoTokBuf
+  \kDThetoTokCur={#1}
+  \kDThetoPrependTok\kDThetoTokCur\kDThetoTokBuf
   \kDThetoMaybeGob
 }
 
