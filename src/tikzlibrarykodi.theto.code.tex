@@ -8,8 +8,6 @@
 % This module implements an alternative parsing mechanism
 % for TiKz matrices of nodes.
 
-\catcode`@ = 11
-
 \tikzset{
     math/.style={
         execute at begin node=$,
@@ -18,11 +16,12 @@
     monk/.style={
         matrix,
         cells={anchor=base},
-        execute at begin cell=\kDMatrixBeginCell,
-        execute at empty cell=\kDMatrixEmptyCell,
+        execute at begin cell=\kDThetoBeginCell,
+        execute at end cell=\kDThetoCloseCell,
+        execute at empty cell=\kDThetoEmptyCell,
         nodes={
-            % self naming,
-            % math,
+            self naming,
+            math,
         },
     },
     %: MEMO: this *cannot* be put along with global node styles (because order of execution)
@@ -31,49 +30,63 @@
     },
 }
 
-% TODO: recheck the following
-\def\kDMatrixNil{\relax}
-% If this is made a no-op then bugs emerge:
-%     1. empty cell at line end on last line crashes everything
-%     2. empty cell at line end on other lines gets duplicated
-% I am not 100% aware of why, so this feels like a dirty hack.
+\newtoks\kDThetoTokBuf
+\newtoks\kDThetoTokFub
+\newtoks\kDThetoCurTok
+\newtoks\kDThetoTokOpt
 
-\def\kDMatrixNewLine{
-  \pgfutil@ifnextchar\kDMatrixNil
-    {\expandafter\pgfmatrixendrow\pgfutil@gobble}
-    {\pgfmatrixendrow}
-}
+\catcode`@ = 11
 
-\def\kDMatrixBeginCell{
-  \let\\\kDMatrixNewLine
-  \pgfutil@ifnextchar\relax{}{\kDMatrixDoRow}
-}
+\def\kDThetoBeginCell%
+  {\pgfutil@ifnextchar|{\kDThetoFetchOptions}{\kDThetoFetchOptions||}}
 
-\bgroup
-\catcode`&=\active
+\def\kDThetoFetchOptions|#1|%
+  {\kDThetoTokOpt={#1}\kDThetoTokFub={}\kDThetoTokBuf={}\kDThetoMaybeBog}
 
-\gdef\kDMatrixDoRow#1\\{
-  \pgfutil@ifnextchar\kDMatrixNil
-    {\kDMatrixDoCell #1\\}
-    {\kDMatrixDoCell #1&\kDMatrixNil\\\kDMatrixNil}
-}
-
-\gdef\kDMatrixDoCell#1&{
-  \kDMatrixParseNodeMaybeOptions#1\kDRelax
-  \pgfutil@ifnextchar\kDMatrixNil{\pgfutil@gobble}{&}
-}
-
+\bgroup\catcode`&=\active
+\gdef\kDThetoMaybeBog%
+  {\pgfutil@ifnextchar&{\kDThetoFinishCell}{\pgfutil@ifnextchar\\{\kDThetoFinishCell}{\catcode`\ =13\kDThetoBog}}}
 \egroup
 
-\def\kDMatrixParseNodeMaybeOptions%
-  {\pgfutil@ifnextchar|{\kDMatrixParseNodeWithOptions}{\kDMatrixParseNodeWithOptions||}}
+\def\kDThetoPrependTok#1#2%
+  {\edef\kDThetoPrependAct{\noexpand#2={\the#1\the#2}}\kDThetoPrependAct}
 
-% TODO: here the ordering of naming/aliasing procedures is crucial and subtle
-%       maybe write a nota about that someday, ok? ok.
-\def\kDMatrixParseNodeWithOptions|#1|#2\kDRelax%
-  {\node#1[node contents={#2},matrix coordinates alias];}
+\def\kDThetoBog#1{
+  \kDThetoCurTok={#1}
+  \kDThetoPrependTok\kDThetoCurTok\kDThetoTokFub
+  \kDThetoMaybeBog
+}
 
-\def\kDMatrixEmptyCell%
-  {\kDMatrixParseNodeWithOptions||\kDRelax}
+\bgroup\catcode`\ =13%
+\gdef\kDThetoGobSpace%
+{\pgfutil@ifnextchar {\expandafter\kDThetoGobSpace\pgfutil@gobble}{\kDThetoMaybeGob}}%
+\egroup
+
+\def\kDThetoMaybeGob%
+  {\pgfutil@ifnextchar\nobog{\pgfutil@gobble}{\kDThetoGob}}
+
+\def\kDThetoGob#1{
+  \kDThetoCurTok={#1}
+  \kDThetoPrependTok\kDThetoCurTok\kDThetoTokBuf
+  \kDThetoMaybeGob
+}
+
+\def\kDThetoFinishCell{\catcode`\ =10
+  \edef\fubs{\the\kDThetoTokFub}
+  \expandafter\kDThetoGobSpace\fubs\nobog
+}
+
+\def\kDThetoCloseCell{
+  \edef\kDThetoNode{
+    \noexpand\node
+      \the\kDThetoTokOpt
+      [node contents={\the\kDThetoTokBuf}, matrix coordinates alias];
+  }
+  \kDThetoNode
+}
+
+\def\kDThetoEmptyCell{
+  \node[matrix coordinates alias]{};
+}
 
 \catcode`@ = 12
