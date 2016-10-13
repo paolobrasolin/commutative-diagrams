@@ -15,11 +15,6 @@
     execute at empty cell=\kDThetoEmptyCell,
     execute at begin cell=\kDThetoBeginCell,
     execute at end cell=\kDThetoCloseCell,
-    % nodes={
-      % self naming,
-      % execute at begin node=$,
-      % execute at end node=$,
-    % },
   },
   %: MEMO: this *cannot* be put along with global node styles (because order of execution)
   matrix coordinates alias/.style={
@@ -27,63 +22,79 @@
   },
 }
 
-\newtoks\kDThetoTokBuf
-\newtoks\kDThetoTokFub
-\newtoks\kDThetoTokCur
+
+
 \newtoks\kDThetoTokOpt
+\newtoks\kDThetoTokCur
+\newtoks\kDThetoTokBuf
 
 \catcode`@ = 11
+
+\bgroup
+\def\:{\global\let\kDBlankSpace= }\:
+\egroup
+
+\long\def\kDIfNextChar#1#2#3{%
+\let \reserved@d = #1%
+\def \reserved@a {#2}%
+\def \reserved@b {#3}%
+\futurelet \kDThetoINCTok \kDThetoINC%
+}
+
+\def\kDThetoINC%
+  {\ifx \kDThetoINCTok \reserved@d \let \reserved@b \reserved@a \fi \reserved@b}
 
 \def\kDThetoBeginCell%
   {\pgfutil@ifnextchar|{\kDThetoFetchOptions}{\kDThetoFetchOptions||}}
 
 \def\kDThetoFetchOptions|#1|%
-  {\kDThetoTokOpt={#1}\kDThetoTokFub={}\kDThetoTokBuf={}\kDThetoMaybeBog}
+  {\kDThetoTokOpt={#1}\kDThetoTokBuf={}\kDThetoMaybeBog}
+
+\def\kDThetoIdentity#1{#1}
 
 \bgroup\catcode`&=\active
 \gdef\kDThetoMaybeBog%
-  {\pgfutil@ifnextchar&{\kDThetoFinishCell}{\pgfutil@ifnextchar\\{\kDThetoFinishCell}{\catcode`\ =13\kDThetoBog}}}
+{\kDIfNextChar&{}{\kDIfNextChar\\{}{\kDIfNextChar\kDBlankSpace%
+{\kDThetoSpaceIt\expandafter\kDThetoMaybeBog\kDThetoIdentity}{\kDThetoBog}}}}
 \egroup
 
-\def\kDThetoPrependTok#1#2%
-  {\edef\kDThetoPrependAct{\noexpand#2={\the#1\the#2}}\kDThetoPrependAct}
+\def\kDThetoAppendTok#1#2%
+  {\edef\kDThetoAppendAct{\noexpand#2={\the#2\the#1}}\kDThetoAppendAct}
 
 \def\kDThetoBog#1{
   \kDThetoTokCur={#1}
-  \kDThetoPrependTok\kDThetoTokCur\kDThetoTokFub
+  \kDThetoAppendTok\kDThetoTokCur\kDThetoTokBuf
   \kDThetoMaybeBog
 }
 
-\bgroup\catcode`\ =13%
-\gdef\kDThetoGobSpace%
-{\pgfutil@ifnextchar {\expandafter\kDThetoGobSpace\pgfutil@gobble}{\kDThetoMaybeGob}}%
-\egroup
-
-\def\kDThetoMaybeGob%
-  {\pgfutil@ifnextchar\nobog{\pgfutil@gobble}{\kDThetoGob}}
-
-\def\kDThetoGob#1{
-  \kDThetoTokCur={#1}
-  \kDThetoPrependTok\kDThetoTokCur\kDThetoTokBuf
-  \kDThetoMaybeGob
-}
-
-\def\kDThetoFinishCell{\catcode`\ =10
-  \edef\fubs{\the\kDThetoTokFub}
-  \expandafter\kDThetoGobSpace\fubs\nobog
-}
+\def\kDThetoSpaceIt%
+  {\kDThetoTokCur={ }\kDThetoAppendTok\kDThetoTokCur\kDThetoTokBuf}
 
 \def\kDThetoCloseCell{
+  % \edef\RESULT{\the\kDThetoTokBuf}\show\RESULT%
   \edef\kDThetoNode{
     \noexpand\node
       \the\kDThetoTokOpt
       [node contents={\the\kDThetoTokBuf}, matrix coordinates alias];
   }
   \kDThetoNode
+  \kDThetoDebugDump
 }
 
 \def\kDThetoEmptyCell{
-  \node[matrix coordinates alias]{};
+  \kDThetoTokOpt={}
+  \kDThetoTokBuf={}
+  \kDThetoCloseCell
+}
+
+\def\kDThetoDebugDump{
+  \pgfextra{
+    \bgroup\let~\space
+    \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
+    \immediate\write\file{~~options: '\the\kDThetoTokOpt'}
+    \immediate\write\file{~~content: '\the\kDThetoTokBuf'}
+    \egroup
+  }
 }
 
 \catcode`@ = 12

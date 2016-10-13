@@ -16,7 +16,8 @@ When(/^the preamble is$/) do |code|
 end
 
 When(/^the body is$/) do |code|
-  @job.document.content['body'] = code
+  @job.document.content['body'] = code.gsub(/«(.*?)»/, '\1')
+  # puts  @job.document.content['body']
 end
 
 When(/^I input the "([^\"]*)" file$/) do |name|
@@ -83,6 +84,11 @@ end
 Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   expect(dump[field]).to eq(value)
+end
+
+Given(/^the dumped "([^\"]*)" of "([^\"]*)" is "([^\"]*)"$/) do |field, item, value|
+  dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
+  expect(dump[item][field]).to eq(value)
 end
 
 Given(/^I want a debugging dump$/) do
