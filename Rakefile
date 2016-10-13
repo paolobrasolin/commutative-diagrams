@@ -74,6 +74,21 @@ Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = "features --format pretty"
 end
 
+# task :gen_fea, :fea do |t, args|
+  # ['tex', 'latex'].each do |it|
+    # puts it, "WOOOOOt"
+    # Cucumber::Rake::Task.new(:run) do |t|
+      # puts "ITITITITITITIT"
+      # t.cucumber_opts = "--format progress DIALECT=#{it} PIPELINE=#{it} #{args[:fea]}"
+    # end
+    # puts "gonna run"
+    # Rake::Task[:run].execute
+    # puts "endrun"
+  # end
+  # puts "DIE"
+# end
+
+
 Cucumber::Rake::Task.new(:report) do |t|
   t.cucumber_opts = "features --format html --out report.html"
 end

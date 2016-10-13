@@ -1,25 +1,26 @@
-null:
-  preamble: ""
-  head: ""
-  body: ""
-  tail: ""
-
 tex: &tex
-  preamble: ""
-  head: ""
-  body: Hello world.
-  tail: \bye
+  content:
+    preamble: ''
+    head: ''
+    body: Hello world.
+    tail: \bye
+  idioms:
+    use: \input <%= arg %>
 
 latex: &latex
-  preamble: \documentclass{article}
-  head: \begin{document}
-  body: Hello world.
-  tail: \end{document}
-
-xelatex: *latex
+  content:
+    preamble: \documentclass{article}
+    head: \begin{document}
+    body: Hello world.
+    tail: \end{document}
+  idioms:
+    use: \usepackage{<%= arg %>}
 
 context: &context
-  preamble: ""
-  head: \starttext
-  body: Hello world.
-  tail: \stoptext
+  content:
+    preamble: ''
+    head: \starttext
+    body: Hello world.
+    tail: \stoptext
+  idioms:
+    use: \usemodule[<%= arg %>]

@@ -1,10 +1,9 @@
 # features/bapto/overwrite.feature
-Feature: bapto's overwrite setting
+Feature: bapto's overwrite key
 
-  Background: testing bapto on plain TeX
-    Given I have a "tex" document
-    And I am compiling through "tex"
-    And I input the "tikz" file
+  Background: testing bapto in a generic context
+    Given I'm in a context
+    And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.bapto" TikZ library
 

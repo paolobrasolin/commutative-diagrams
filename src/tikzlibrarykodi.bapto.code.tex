@@ -19,7 +19,7 @@
 
 \pgfqkeys{/bapto/overwrite}{.is choice,
   false/.style={/bapto/dispatcher/.code=
-    {\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
+    {\tikz@fig@name\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
   alias/.style={/bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
   true/.style= {/bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
   false, % default is no overwriting and no aliasing

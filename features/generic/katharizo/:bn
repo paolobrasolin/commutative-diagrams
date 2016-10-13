@@ -1,6 +1,9 @@
 # features/katharizo/kDSanitize.feature
 Feature: katharizo's kDSanitize macro
 
+  Background: testing katharizo in a generic context
+    Given I'm in a context
+    And I use "tikz"
   Background: testing on TeX
     Given I have a "tex" document
     And I am compiling through "tex"

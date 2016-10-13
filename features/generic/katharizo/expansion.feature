@@ -1,10 +1,9 @@
 # features/katharizo/expansion.feature
 Feature: katharizo's expansion control
 
-  Background: compiling an MWE
-    Given I have a "tex" document
-    And I am compiling through "tex"
-    Given I input the "tikz" file
+  Background: testing katharizo in a generic context
+    Given I'm in a context
+    And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
     And I want a debugging dump
 

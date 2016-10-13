@@ -15,10 +15,6 @@ When(/^the dump gives "([^\"]*)" and "([^\"]*)" for cells$/) do |options, conten
   end
 end
 
-
-
-
-
 Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   expect(dump[field]).to eq(value)

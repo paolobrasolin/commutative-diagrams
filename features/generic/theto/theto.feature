@@ -1,10 +1,9 @@
 # features/theto/theto.feature
 Feature: theto
 
-  Background: compiling an MWE
-    Given I have a "tex" document
-    And I am compiling through "tex"
-    Given I input the "tikz" file
+  Background: testing theto in a generic context
+    Given I'm in a context
+    And I use "tikz"
     And I use the "kodi.theto" TikZ library
 
   Scenario Outline: using a cell with an unknown TikZ key

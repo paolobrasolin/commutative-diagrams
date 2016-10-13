@@ -1,10 +1,9 @@
 # features/katharizo/replacement.feature
 Feature: katharizo's replacement control
 
-  Background: testing on TeX
-    Given I have a "tex" document
-    And I am compiling through "tex"
-    And I input the "tikz" file
+  Background: testing katharizo in a generic context
+    Given I'm in a context
+    And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
     And I want a debugging dump
 

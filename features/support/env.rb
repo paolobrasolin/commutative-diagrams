@@ -30,6 +30,7 @@ module TeXWorld
 
   #
   class Document
+    attr_accessor :idioms
     attr_accessor :dialect
     attr_accessor :content
 
@@ -42,7 +43,8 @@ module TeXWorld
     end
 
     def load_dialect(dialect, source = @source)
-      @content = YAML.load_file(source)[dialect]
+      @content = YAML.load_file(source)[dialect]['content']
+      @idioms = YAML.load_file(source)[dialect]['idioms']
     end
 
     def append_to_preamble(code)

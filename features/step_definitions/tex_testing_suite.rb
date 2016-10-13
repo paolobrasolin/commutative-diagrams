@@ -3,6 +3,14 @@ Before do |scenario|
   FileUtils.mkdir_p '.tex-test'
 end
 
+Given(/^I'm in a context$/) do
+  unless ENV.has_key?('DIALECT') && ENV.has_key?('PIPELINE')
+    raise 'You need to specify both DIALECT and PIPELINE from command line'
+  end
+  @job.document.load_dialect(ENV['DIALECT'])
+  @job.pipeline.load(ENV['PIPELINE'])
+end
+
 Given(/^I have a "([^\"]*)" document$/) do |dialect|
   @job.document.load_dialect(dialect)
 end
@@ -22,6 +30,11 @@ end
 
 When(/^I input the "([^\"]*)" file$/) do |name|
   @job.document.append_to_preamble("\\input #{name}\n")
+end
+
+When(/^I use "([^\"]*)"$/) do |arg|
+  command = ERB.new(@job.document.idioms['use']).result(binding)
+  @job.document.append_to_preamble("#{command}\n")
 end
 
 When(/^I code ([^\"]*)$/) do |code|

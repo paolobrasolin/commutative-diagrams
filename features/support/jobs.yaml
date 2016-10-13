@@ -1,0 +1,11 @@
+tex:
+  dialect: tex
+  pipeline: tex
+
+latex:
+  dialect: latex
+  pipeline: latex
+
+context:
+  dialect: context
+  pipeline: context
