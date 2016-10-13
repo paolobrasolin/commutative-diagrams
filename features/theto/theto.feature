@@ -14,7 +14,6 @@ Feature: theto
     """
     \let\foo\relax
     \let\bar\relax
-    \let\baz\relax
     \tikz\matrix[theto]{%
     <code>&X&X\\
     X&<code>&X\\
@@ -51,8 +50,6 @@ Feature: theto
     And the body is
     """
     \let\foo\relax
-    \let\bar\relax
-    \let\baz\relax
     \tikz\matrix[theto]{%
     <code>&X&X\\
     X&<code>&X\\
