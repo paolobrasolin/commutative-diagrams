@@ -13,7 +13,9 @@ before_script:
   - bundle install
 script: 
   - bundle exec rake install
-  - bundle exec rake features
+  - bundle exec rake features[generic,tex]
+  - bundle exec rake features[generic,latex]
+  - bundle exec rake features[generic,context]
 branches:
   only:
   - master
