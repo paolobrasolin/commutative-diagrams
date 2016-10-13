@@ -47,15 +47,23 @@
 \def\kDThetoBeginCell%
   {\pgfutil@ifnextchar|{\kDThetoFetchOptions}{\kDThetoFetchOptions||}}
 
-\def\kDThetoFetchOptions|#1|%
-  {\kDThetoTokOpt={#1}\kDThetoTokBuf={}\kDThetoMaybeBog}
-
 \def\kDThetoIdentity#1{#1}
+
+\def\kDThetoFetchOptions|#1|%
+  {\kDThetoTokOpt={#1}\kDThetoTokBuf={}\expandafter\kDThetoMaybeBog\kDThetoIdentity}
+
+\newif\ifmaybespace
+\maybespacefalse
 
 \bgroup\catcode`&=\active
 \gdef\kDThetoMaybeBog%
-{\kDIfNextChar&{}{\kDIfNextChar\\{}{\kDIfNextChar\kDBlankSpace%
-{\kDThetoSpaceIt\expandafter\kDThetoMaybeBog\kDThetoIdentity}{\kDThetoBog}}}}
+{\kDIfNextChar\kDBlankSpace{\maybespacetrue\eat}{\maybespacefalse\eat}}
+
+\gdef\eat%
+{\pgfutil@ifnextchar&{}%
+{\pgfutil@ifnextchar\\{}%
+{\ifmaybespace\kDThetoSpaceIt\fi\kDThetoBog}}}
+
 \egroup
 
 \def\kDThetoAppendTok#1#2%
@@ -71,7 +79,7 @@
   {\kDThetoTokCur={ }\kDThetoAppendTok\kDThetoTokCur\kDThetoTokBuf}
 
 \def\kDThetoCloseCell{
-  % \edef\RESULT{\the\kDThetoTokBuf}\show\RESULT%
+  % \edef\RESULT{"\the\kDThetoTokBuf"}\show\RESULT%
   \edef\kDThetoNode{
     \noexpand\node
       \the\kDThetoTokOpt

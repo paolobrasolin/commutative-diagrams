@@ -7,6 +7,7 @@ Feature: theto
     Given I input the "tikz" file
     And I use the "kodi.theto" TikZ library
 
+  @focus
   Scenario Outline: using cells with no node options
     Given I want a debugging dump
     And the body is
@@ -45,7 +46,6 @@ Feature: theto
     | «\foo\bar»   | «\foo \bar » | «»      |
     | «\foo  \bar» | «\foo \bar » | «»      |
 
-  @focus
   Scenario Outline: using cells with node options
     Given I want a debugging dump
     And the body is
