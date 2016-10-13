@@ -74,7 +74,7 @@ task :features, :feature, :setup do |_task, args|
   feature = args[:feature] || ''
 
   options = [
-    '--dry-run',
+    # '--dry-run',
     '--format progress'
   ]
 
