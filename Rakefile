@@ -70,28 +70,53 @@ end
 
 require 'cucumber/rake/task'
 
-Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "features --format pretty"
+FEATURES = Dir['features/**/*.feature']
+# ugly hack here:
+FEATURE_FOLDERS = (['features/generic'] + FEATURES.map { |f| File.split(f)[0] }).uniq.sort
+
+
+FEATURE_FOLDERS.each do |path|
+  scope = path.gsub('/', ':')
+  task scope
+  parent, = File.split(path)
+  parent.tr!('/', ':')
+  if path.include? 'generic'
+    ['tex', 'latex', 'context'].each do |ctx|
+      task "#{scope}:#{ctx}"
+      Rake::Task[scope].enhance ["#{scope}:#{ctx}"]
+      unless parent == '.' || parent == 'features'
+        Rake::Task["#{parent}:#{ctx}"].enhance ["#{scope}:#{ctx}"]
+      end
+    end
+  end
+  unless parent == '.'
+    Rake::Task[parent].enhance [scope]
+  end
 end
 
-# task :gen_fea, :fea do |t, args|
-  # ['tex', 'latex'].each do |it|
-    # puts it, "WOOOOOt"
-    # Cucumber::Rake::Task.new(:run) do |t|
-      # puts "ITITITITITITIT"
-      # t.cucumber_opts = "--format progress DIALECT=#{it} PIPELINE=#{it} #{args[:fea]}"
-    # end
-    # puts "gonna run"
-    # Rake::Task[:run].execute
-    # puts "endrun"
-  # end
-  # puts "DIE"
+FEATURES.each do |filename|
+  path, _ = File.split(filename)
+  name = File.basename(filename, File.extname(filename))
+  scope = path.gsub('/',':')
+  if path.include? 'generic'
+    task "#{scope}:#{name}"
+    ['tex', 'latex', 'context'].each do |ctx|
+      Cucumber::Rake::Task.new("#{scope}:#{name}:#{ctx}") do |t|
+        t.cucumber_opts = "--format progress DIALECT=#{ctx} PIPELINE=#{ctx} #{filename}"
+      end
+      Rake::Task["#{scope}:#{ctx}"].enhance ["#{scope}:#{name}:#{ctx}"]
+    end
+  else
+    Cucumber::Rake::Task.new("#{scope}:#{name}") do |t|
+      t.cucumber_opts = "--format progress #{filename}"
+    end
+  end
+  Rake::Task[scope].enhance ["#{scope}:#{name}"]
+end
+
+# Cucumber::Rake::Task.new(:report) do |t|
+  # t.cucumber_opts = "features --format html --out report.html"
 # end
-
-
-Cucumber::Rake::Task.new(:report) do |t|
-  t.cucumber_opts = "features --format html --out report.html"
-end
 
 require 'rake/clean'
 CLEAN.include 'dist/pkg', 'dist/tds'

@@ -30,8 +30,8 @@ module TeXWorld
 
   #
   class Document
-    attr_accessor :idioms
     attr_accessor :dialect
+    attr_accessor :idioms
     attr_accessor :content
 
     def initialize(
