@@ -7,7 +7,10 @@ Feature: theto
     Given I input the "tikz" file
     And I use the "kodi.theto" TikZ library
 
-  @focus
+  Scenario: using a cell with an unknown TikZ key
+    Given I code \tikz\matrix[theto]{|[foo]|\\};
+    Then compilation fails
+
   Scenario Outline: using cells with no node options
     Given I want a debugging dump
     And the body is
@@ -28,9 +31,9 @@ Feature: theto
       | 3   | 3   |
 
   Examples: empty cell
-    | code   | content | options |
-    | «»     | «»      | «»      |
-    | «    » | «»      | «»      |
+    | code | content | options |
+    | «»   | «»      | «»      |
+    | «  » | «»      | «»      |
   Examples: text
     | code       | content   | options |
     | «foo»      | «foo»     | «»      |

@@ -6,6 +6,7 @@ Feature: katharizo's expansion control
     And I am compiling through "tex"
     Given I input the "tikz" file
     And I use the "kodi.katharizo" TikZ library
+    And I want a debugging dump
 
   Scenario Outline: using koDi as a TikZ library
     Given the body is
@@ -16,13 +17,10 @@ Feature: katharizo's expansion control
       expand=<expand>,
       input={\NOTEXPANDED}
     }
-    \newwrite\file
-    \immediate\openout\file=\jobname.yml
-    \immediate\write\file{output: '\kDKatharizoOutput'}
-    \closeout\file
     """
+    And I dump "\kDKatharizoOutput" as "output"
     Then compilation succeeds
-    And the dumped "output" is "<output>"
+    And the dumped value of "output" is "<output>"
 
   Examples:
     | expand | output        |

@@ -70,18 +70,13 @@ end
 After do |scenario|
 end
 
-
-
-
-
-
 Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
   @job.document.append_to_body <<CODE
-\\immediate\\write\\file{#{field}: '#{macro}'}
+\\immediate\\write\\file{'#{field}': '#{macro}'}
 CODE
 end
 
-Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
+Given(/^the dumped value of "([^\"]*)" is "([^\"]*)"$/) do |field, value|
   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   expect(dump[field]).to eq(value)
 end
@@ -99,4 +94,3 @@ OPEN
 \closeout\file
 CLOSE
 end
-
