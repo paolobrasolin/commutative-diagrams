@@ -7,14 +7,20 @@ Feature: theto
     Given I input the "tikz" file
     And I use the "kodi.theto" TikZ library
 
-  Scenario: using a cell with an unknown TikZ key
-    Given I code \tikz\matrix[theto]{|[foo]|\\};
+  Scenario Outline: using a cell with an unknown TikZ key
+    Given I code \tikz\matrix[theto]{<code>};
     Then compilation fails
+  Examples:
+    | code          |
+    | «\|[foo]\|\\» |
+    | «  \|[foo]\|\\» |
+    | «\|[foo]\|  \\» |
 
   Scenario Outline: using cells with no node options
     Given I want a debugging dump
     And the body is
     """
+    \kDThetoDebugtrue
     \let\foo\relax
     \let\bar\relax
     \tikz\matrix[theto]{%
@@ -52,6 +58,7 @@ Feature: theto
     Given I want a debugging dump
     And the body is
     """
+    \kDThetoDebugtrue
     \let\foo\relax
     \tikz\matrix[theto]{%
     <code>&X&X\\

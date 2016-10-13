@@ -43,6 +43,11 @@
     },
     every lattice/.style={
         theto,
+        nodes={
+          self naming,
+          execute at begin node=$,%
+          execute at end node=$%
+        },
     },
     % basic arrow styles
     /kD/arrows/.cd,
