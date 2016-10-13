@@ -3,9 +3,34 @@ tex:
     - tex
     - <%= jobname %>.tex
 
+xetex:
+  - &xetex
+    - xetex
+    - <%= jobname %>.tex
+
 latex:
   - &latex
     - latex
+    - <%= jobname %>.tex
+
+luatex:
+  - &luatex
+    - luatex
+    - <%= jobname %>.tex
+
+xelatex:
+  - &xelatex
+    - xelatex
+    - <%= jobname %>.tex
+
+lualatex:
+  - &lualatex
+    - lualatex
+    - <%= jobname %>.tex
+
+pdftex:
+  - &pdftex
+    - pdftex
     - <%= jobname %>.tex
 
 pdflatex:
@@ -13,13 +38,15 @@ pdflatex:
     - pdflatex
     - <%= jobname %>.tex
 
-xelatex:
-  - *latex
-
 context:
   - &context
     - context
     - <%= jobname %>.tex
+
+
+
+
+
 
 dvipng:
   - &dvipng

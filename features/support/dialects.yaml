@@ -7,6 +7,10 @@ tex: &tex
   idioms:
     use: \input <%= arg %>
 
+pdftex: *tex
+xetex: *tex
+luatex: *tex
+
 latex: &latex
   content:
     preamble: \documentclass{article}
@@ -15,6 +19,10 @@ latex: &latex
     tail: \end{document}
   idioms:
     use: \usepackage{<%= arg %>}
+
+pdflatex: *latex
+xelatex: *latex
+lualatex: *latex
 
 context: &context
   content:
