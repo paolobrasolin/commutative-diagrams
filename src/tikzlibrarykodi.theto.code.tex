@@ -45,8 +45,16 @@
 
 \catcode`@=11
 
-\def\kDThetoBeginCell%
-  {\pgfutil@ifnextchar|{\kDThetoFetchOptions}{\kDThetoFetchOptions||}}
+
+\newif\ifConTeXt
+
+% Trick stolen from iftex. The second line is expanded inside the group so
+% the global scope isn't polluted by \csname defining the token.
+\begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
+  \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+
+\def\kDThetoBeginCell% TODO: is this a good place for the ConTeXt patch?
+  {\ifConTeXt\catcode`|=12\fi\pgfutil@ifnextchar|{\kDThetoFetchOptions}{\kDThetoFetchOptions||}}
 
 \def\kDThetoFetchOptions|#1|%
   {\kDThetoTokOpt={#1}\kDThetoTokBuf={}\expandafter\kDThetoMaybeGob\kDIdentity}
