@@ -19,7 +19,7 @@ Feature: katharizo's expansion control
     """
     And I dump "\kDKatharizoOutput" as "output"
     Then compilation succeeds
-    And the dumped value of "output" is "<output>"
+    And the dumped "output" is "<output>"
 
   Examples:
     | expand | output        |

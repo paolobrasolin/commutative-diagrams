@@ -89,7 +89,12 @@ Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
 CODE
 end
 
-Given(/^the dumped value of "([^\"]*)" is "([^\"]*)"$/) do |field, value|
+# Given(/^the dumped value of "([^\"]*)" is "([^\"]*)"$/) do |field, value|
+  # dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
+  # expect(dump[field]).to eq(value)
+# end
+
+Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   expect(dump[field]).to eq(value)
 end
@@ -107,3 +112,12 @@ OPEN
 \closeout\file
 CLOSE
 end
+
+
+
+
+Transform /^«(.*)»$/ do |unquoted|
+  unquoted
+end
+
+
