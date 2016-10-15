@@ -21,18 +21,68 @@
   },
 }
 
-% \bgroup
-% \def\:{\global\let\kDBlankSpace= }\:
-% \egroup
 
-% \long\def\kDIfNextChar#1#2#3{%
-% \let\kDINCToken= #1% <- MEMO: this space is crucial
-% \def\kDINCTrue{#2}\def\kDINCFalse{#3}%
-% \futurelet\kDINCTok\kDINC%
-% }
 
-% \def\kDINC%
-  % {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
+
+
+
+
+
+
+
+\bgroup
+\def\:{\global\let\kDBlankSpace= }\:
+\egroup
+
+\long\def\kDIfNextChar#1#2#3{%
+\let\kDINCToken= #1% <- MEMO: this space is crucial
+\def\kDINCTrue{#2}\def\kDINCFalse{#3}%
+\futurelet\kDINCTok\kDINC%
+}
+
+\def\kDINC%
+  {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
+
+\def\kDIdentity#1{#1}
+
+\catcode`@=11
+
+\newif\ifkDRTSHasTrail
+\newif\ifkDRTSPrevSpace
+
+\def\kDRTSGob{%
+\kDIfNextChar\kD%
+{\ifkDRTSPrevSpace\kDRTSHasTrailtrue\else\kDRTSHasTrailfalse\fi\pgfutil@gobble}%
+{\kDIfNextChar\kDBlankSpace%
+{\kDRTSPrevSpacetrue\expandafter\kDRTSGob\kDIdentity}%
+{\kDRTSPrevSpacefalse\expandafter\kDRTSGob\pgfutil@gobble}%
+}%
+}
+
+\def\kDRemoveTrailingSpace#1{
+\kDRTSPrevSpacefalse
+\edef\kDRTSAct{\noexpand\kDRTSGob\the#1\noexpand\kD}\kDRTSAct
+\ifkDRTSHasTrail
+\def\kDRTSCut##1 \kD{#1={##1}}
+\edef\kDRTSAct{\noexpand\kDRTSCut\the#1\noexpand\kD}\kDRTSAct
+\fi
+}
+
+\catcode`@=12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newtoks\kDTokOpt
 \newtoks\kDTokBuf
@@ -67,7 +117,7 @@
 }
 
 \gdef\kDFetchContent#1&%
-{\kDTokBuf={#1}\kDMakeCell}
+{\kDTokBuf={#1}\kDRemoveTrailingSpace\kDTokBuf\kDMakeCell}
 
 \gdef\kDMakeCell{%
 \kDMakeNode%
