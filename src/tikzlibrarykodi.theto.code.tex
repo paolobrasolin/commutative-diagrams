@@ -102,6 +102,7 @@
 \kDCurrentRowReadyfalse
 
 \def\kDBeginCell{%
+\ifConTeXt\catcode`|=12 \fi% TODO: why is the space necessary?
 \ifkDCurrentRowReady%
 \expandafter\kDParseCell\else%
 \expandafter\kDPrepareCurrentRow\fi%
@@ -129,9 +130,8 @@
 \egroup
 
 \def\kDParseCell%
-{\ifConTeXt\catcode`|=12\fi\pgfutil@ifnextchar|{\kDFetchOptions}{\kDFetchOptions||}}
+{\pgfutil@ifnextchar|{\kDFetchOptions}{\kDFetchOptions||}}
 
-\def\kDIdentity#1{#1}
 % TODO: is an identity really the smartest way to remove leading whitespace?
 \def\kDFetchOptions|#1|%
 {\kDTokOpt={#1}\expandafter\kDFetchContent\kDIdentity}

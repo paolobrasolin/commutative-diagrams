@@ -53,6 +53,7 @@ Feature: theto
     | «\foo\bar»   | «\foo \bar » | «»      |
     | «\foo  \bar» | «\foo \bar » | «»      |
 
+  @focus
   Scenario Outline: using cells with node options
     Given I want a debugging dump
     And the body is
