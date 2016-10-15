@@ -1,28 +1,23 @@
-# features/theto/theto.feature
-Feature: theto
+# features/mitra/mitra.feature
+Feature: mitra
 
-  Background: testing theto in a generic context
+  Background: testing mitra in a generic context
     Given I'm in a context
     And I use "tikz"
-    And I use the "kodi.theto" TikZ library
+    And I use the "kodi.mitra" TikZ library
 
   Scenario Outline: using a cell with an unknown TikZ key
-    Given I code \tikz\matrix[theto]{<code>};
+    Given I code \tikz\matrix[mitra]{|[foo]|};
     Then compilation fails
-  Examples:
-    | code          |
-    | «\|[foo]\|\\» |
-    | «  \|[foo]\|\\» |
-    | «\|[foo]\|  \\» |
 
   Scenario Outline: using cells with no node options
     Given I want a debugging dump
     And the body is
     """
-    \kDThetoDebugtrue
+    \kDMitraDebugtrue
     \let\foo\relax
     \let\bar\relax
-    \tikz\matrix[theto]{%
+    \tikz\matrix[mitra]{%
     <code>&X&X\\
     X&<code>&X\\
     X&X&<code>\\
@@ -53,14 +48,13 @@ Feature: theto
     | «\foo\bar»   | «\foo \bar » | «»      |
     | «\foo  \bar» | «\foo \bar » | «»      |
 
-  @focus
   Scenario Outline: using cells with node options
     Given I want a debugging dump
     And the body is
     """
-    \kDThetoDebugtrue
+    \kDMitraDebugtrue
     \let\foo\relax
-    \tikz\matrix[theto]{%
+    \tikz\matrix[mitra]{%
     <code>&X&X\\
     X&<code>&X\\
     X&X&<code>\\

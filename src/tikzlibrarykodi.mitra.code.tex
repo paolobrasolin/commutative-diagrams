@@ -1,15 +1,15 @@
 %===[ What is this? ]===========================================================
 
-% θέτω • (théto)
-%   1. put
-%   2. set
-%   3. place, position
+% μήτρα • (mítra)
+%  1. womb
+%  2. matrix
+%  3. mold
 
 % This module implements an alternative parsing mechanism
 % for TiKz matrices of nodes.
 
 \tikzset{
-  theto/.style={
+  mitra/.style={
     matrix,
     cells={anchor=base},
     execute at begin cell=\kDBeginCell,
@@ -122,7 +122,7 @@
 
 \gdef\kDMakeCell{%
 \kDMakeNode%
-\ifkDThetoDebug\kDThetoDebugDump\fi%
+\ifkDMitraDebug\kDMitraDebugDump\fi%
 \pgfutil@ifnextchar\\{\global\kDCurrentRowReadyfalse}%
 {\pgfutil@ifnextchar&{&{}}{&}}% fill up incoming empty cells with {}
 }
@@ -148,13 +148,13 @@
 \kDTokOpt={}%
 \kDTokBuf={}%
 \kDMakeNode%
-\ifkDThetoDebug\kDThetoDebugDump\fi%
+\ifkDMitraDebug\kDMitraDebugDump\fi%
 }
 
-\newif\ifkDThetoDebug
-\kDThetoDebugfalse
+\newif\ifkDMitraDebug
+\kDMitraDebugfalse
 
-\def\kDThetoDebugDump{
+\def\kDMitraDebugDump{
   \pgfextra{
     \bgroup\let~\space
     \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}

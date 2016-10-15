@@ -75,7 +75,8 @@ task :features, :feature, :setup do |_task, args|
 
   options = [
     # '--dry-run',
-    '--format progress'
+    # '--format progress'
+    '--format pretty'
   ]
 
   if feature.include? 'generic'

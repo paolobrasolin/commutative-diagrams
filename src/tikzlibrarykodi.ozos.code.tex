@@ -1,0 +1,50 @@
+%===[ What is this? ]===========================================================
+
+% όζος • (ózos)
+%   1. node
+%   2. nodule
+%   3. gnarl, knag
+%   4. gall
+
+% This module implements an alternative parsing mechanism
+% for TiKz nodes.
+
+\catcode`@=11
+
+\def\kDAppendTok#1#2%
+{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
+
+\newtoks\kDOzosOptTok\kDOzosOptTok={}
+\newtoks\kDOzosCurTok\kDOzosCurTok={}
+\newtoks\kDOzosGroTok\kDOzosGroTok={}
+
+\def\kDOzosGobTilGroup#1#{%
+\kDOzosCurTok={#1}%
+\kDAppendTok\kDOzosCurTok\kDOzosOptTok%
+\kDOzosGobGroup%
+}
+
+\def\kDOzosGobGroup#1{%
+\kDOzosGroTok={{#1}}%
+\pgfutil@ifnextchar;{\kDOzosMakeNode}%
+{\kDAppendTok\kDOzosGroTok\kDOzosOptTok\kDOzosGobTilGroup}%
+}
+
+\def\kDOzosMakeNode%
+{\ifkDOzosDebug\kDOzosDebugDump\fi%
+\edef\Act{\noexpand\node\the\kDOzosOptTok[node contents=\the\kDOzosGroTok]}\Act}
+
+\let\kDOzos\kDOzosGobTilGroup
+
+\newif\ifkDOzosDebug
+\kDOzosDebugfalse
+
+\def\kDOzosDebugDump{\pgfextra{
+  % \bgroup\let~\space
+  % \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
+  \immediate\write\file{options: '\the\kDOzosOptTok'}
+  \immediate\write\file{content: '\the\kDOzosGroTok'}
+  % \egroup
+}}
+
+\catcode`@=12
