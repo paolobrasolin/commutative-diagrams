@@ -12,9 +12,8 @@
   theto/.style={
     matrix,
     cells={anchor=base},
-    execute at empty cell=\kDThetoEmptyCell,
-    execute at begin cell=\kDThetoBeginCell,
-    execute at end cell=\kDThetoCloseCell,
+    execute at begin cell=\kDBeginCell,
+    execute at empty cell=\kDEmptyCell,
   },
   %: MEMO: this *cannot* be put along with global node styles (because order of execution)
   matrix coordinates alias/.style={
@@ -22,96 +21,100 @@
   },
 }
 
-\newtoks\kDThetoTokOpt
-\newtoks\kDThetoTokCur
-\newtoks\kDThetoTokBuf
+% \bgroup
+% \def\:{\global\let\kDBlankSpace= }\:
+% \egroup
 
+% \long\def\kDIfNextChar#1#2#3{%
+% \let\kDINCToken= #1% <- MEMO: this space is crucial
+% \def\kDINCTrue{#2}\def\kDINCFalse{#3}%
+% \futurelet\kDINCTok\kDINC%
+% }
 
-\bgroup
-\def\:{\global\let\kDBlankSpace= }\:
-\egroup
+% \def\kDINC%
+  % {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
 
-\long\def\kDIfNextChar#1#2#3{%
-\let\kDINCToken= #1% <- MEMO: this space is crucial
-\def\kDINCTrue{#2}\def\kDINCFalse{#3}%
-\futurelet\kDINCTok\kDINC%
-}
+\newtoks\kDTokOpt
+\newtoks\kDTokBuf
 
-\def\kDINC%
-  {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
-
-\def\kDIdentity#1{#1}
-
+\newtoks\buf
 
 \catcode`@=11
 
-
 \newif\ifConTeXt
-
 % Trick stolen from iftex. The second line is expanded inside the group so
 % the global scope isn't polluted by \csname defining the token.
 \begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
   \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
 
-\def\kDThetoBeginCell% TODO: is this a good place for the ConTeXt patch?
-  {\ifConTeXt\catcode`|=12\fi\pgfutil@ifnextchar|{\kDThetoFetchOptions}{\kDThetoFetchOptions||}}
 
-\def\kDThetoFetchOptions|#1|%
-  {\kDThetoTokOpt={#1}\kDThetoTokBuf={}\expandafter\kDThetoMaybeGob\kDIdentity}
+\newif\ifkDCurrentRowReady
+\kDCurrentRowReadyfalse
 
-\newif\ifkDThetoMaybeSpace
-
-\def\kDThetoMaybeGob%
-  {\kDIfNextChar\kDBlankSpace{\kDThetoMaybeSpacetrue\eat}{\kDThetoMaybeSpacefalse\eat}}
+\def\kDBeginCell{%
+\ifkDCurrentRowReady%
+\expandafter\kDParseCell\else%
+\expandafter\kDPrepareCurrentRow\fi%
+}
 
 \bgroup
 \catcode`&=\active
-\gdef\eat%
-{\pgfutil@ifnextchar&{}%
-{\pgfutil@ifnextchar\\{}%
-{\ifkDThetoMaybeSpace\kDThetoAppendSpace\fi\kDThetoGob}}}
-\egroup
 
-\def\kDThetoAppendTok#1#2%
-  {\edef\kDThetoAppendAct{\noexpand#2={\the#2\the#1}}\kDThetoAppendAct}
-
-\def\kDThetoGob#1{
-  \kDThetoTokCur={#1}
-  \kDThetoAppendTok\kDThetoTokCur\kDThetoTokBuf
-  \kDThetoMaybeGob
+\gdef\kDPrepareCurrentRow#1\\{%
+\global\kDCurrentRowReadytrue%
+\buf={#1&\\}\edef\tmp{\the\buf}%\show\tmp%
+\expandafter\kDBeginCell\tmp%
 }
 
-\def\kDThetoAppendSpace%
-  {\kDThetoTokCur={ }\kDThetoAppendTok\kDThetoTokCur\kDThetoTokBuf}
+\gdef\kDFetchContent#1&%
+{\kDTokBuf={#1}\kDMakeCell}
+
+\gdef\kDMakeCell{%
+\kDMakeNode%
+\ifkDThetoDebug\kDThetoDebugDump\fi%
+\pgfutil@ifnextchar\\{\global\kDCurrentRowReadyfalse}%
+{\pgfutil@ifnextchar&{&{}}{&}}% fill up incoming empty cells with {}
+}
+
+\egroup
+
+\def\kDParseCell%
+{\ifConTeXt\catcode`|=12\fi\pgfutil@ifnextchar|{\kDFetchOptions}{\kDFetchOptions||}}
+
+\def\kDIdentity#1{#1}
+% TODO: is an identity really the smartest way to remove leading whitespace?
+\def\kDFetchOptions|#1|%
+{\kDTokOpt={#1}\expandafter\kDFetchContent\kDIdentity}
+
+\def\kDMakeNode{%
+\edef\kDBuiltNode{\noexpand\node\the\kDTokOpt[
+  node contents={\the\kDTokBuf},
+  matrix coordinates alias
+];}%
+\kDBuiltNode%
+}
+
+\def\kDEmptyCell{%
+\kDTokOpt={}%
+\kDTokBuf={}%
+\kDMakeNode%
+\ifkDThetoDebug\kDThetoDebugDump\fi%
+}
 
 \newif\ifkDThetoDebug
 \kDThetoDebugfalse
-
-\def\kDThetoCloseCell{
-  % \edef\RESULT{"\the\kDThetoTokBuf"}\show\RESULT%
-  \edef\kDThetoNode{
-    \noexpand\node
-      \the\kDThetoTokOpt
-      [node contents={\the\kDThetoTokBuf}, matrix coordinates alias];
-  }
-  \kDThetoNode
-  \ifkDThetoDebug\kDThetoDebugDump\fi
-}
-
-\def\kDThetoEmptyCell{
-  \kDThetoTokOpt={}
-  \kDThetoTokBuf={}
-  \kDThetoCloseCell
-}
 
 \def\kDThetoDebugDump{
   \pgfextra{
     \bgroup\let~\space
     \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
-    \immediate\write\file{~~options: '\the\kDThetoTokOpt'}
-    \immediate\write\file{~~content: '\the\kDThetoTokBuf'}
+    \immediate\write\file{~~options: '\the\kDTokOpt'}
+    \immediate\write\file{~~content: '\the\kDTokBuf'}
     \egroup
   }
 }
 
 \catcode`@=12
+
+
+
