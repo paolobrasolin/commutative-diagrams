@@ -15,39 +15,45 @@
         }%
     },
     % keys to hold kD styles sorted by kind
-    objects/.unknown/.style={
-        /kD/fallback to={#1}{/kD/math node contents},
-    },
+    % objects/.unknown/.style={
+        % /kD/fallback to={#1}{/kD/math node contents},
+    % },
     arrows/.search also=/tikz,
     labels/.unknown/.style={
         /kD/fallback to={#1}{/kD/math node contents},
     },
-    lattices/.search also=/tikz,
     % keys to hold each currently manipulated object
-    current object/.style={},
     current arrow/.style={},
     current label/.style={},
-    current lattice/.style={},
     current chain/every arrow/.style={},
     current chain/every label/.style={},
     % universal styles
     every object/.style={
+        /ektropi/restore,% needed inside matrices
+        /ektropi/add=/kD/objects,
+        % /kD/objects/cd,
         self naming,
+        execute at begin node=$,%
+        execute at end node=$,%
+        % anchor=base,
     },
     every arrow/.style={},
     every label/.style={
-        self naming,
+        /tikz/self naming,
         /tikz/auto,
         /tikz/inner sep=0.5ex,
         /tikz/font=\everymath\expandafter{\the\everymath\scriptstyle},
     },
-    every lattice/.style={
-        theto,
+    every layout/.style={
+        /ektropi/add=/kD/layouts,
+        % /tikz/.search also=/kD/layouts,
+        mitra,
+        % blue,
         nodes={
-          self naming,
-          execute at begin node=$,%
-          execute at end node=$%
+          % /kD/objects/cd,
+          /kD/every object,
         },
+        % /kD/layouts/cd,
     },
     % basic arrow styles
     /kD/arrows/.cd,
@@ -77,22 +83,24 @@
             shape=circle,
             anchor=center,
         },
+    % basic objects styles
+    /kD/objects/.cd,
     % basic lattice styles
-    /kD/lattices/.cd,
+    /kD/layouts/.cd,
         rectangular/.style 2 args={
-            column sep={#1,between origins},
-            row sep={#2,between origins},
+            /tikz/column sep={#1,between origins},
+            /tikz/row sep={#2,between origins},
         },
         square/.style={
-            rectangular={#1}{#1},
+            /kD/layouts/rectangular={#1}{#1},
         },
         golden/.style={
-            rectangular={1.618*#1}{#1},
+            /kD/layouts/rectangular={1.618*#1}{#1},
         },
         comb/.style={
-            rectangular={sqrt(4/3)*#1}{#1},
+            /kD/layouts/rectangular={sqrt(4/3)*#1}{#1},
             /tikz/every odd row/.append style={
-                xshift=tan(30)*#1,
+                /tikz/xshift=tan(30)*#1,
             },
         },
         comb/.default=4em,
@@ -170,10 +178,8 @@
     \ifx\relax#1\relax\else\tikzset{edge node={node[/kD/parse/label={#1},/kD/render/label]}}\fi%
     \ifx\relax#2\relax\else\tikzset{edge node string={#2}}\fi%
   },
-  object/.forward to=/kD/current object/.style,
   arrow/.forward to=/kD/current arrow/.style,
   label/.forward to=/kD/current label/.style,
-  lattice/.forward to=/kD/current lattice/.style,
   morphism/.style={
     /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
     /kD/parse/arrow/.expand once=\kDSND,
@@ -197,11 +203,6 @@
 % ================================================================== RENDERING =
 
 \pgfqkeys{/kD/render}{
-  object/.style={
-    /kD/objects/.cd,
-    /kD/every object,
-    /kD/current object,
-  },
   morphism/.style={
     /kD/arrows/.cd,
     /kD/every arrow,
@@ -213,11 +214,6 @@
     /kD/every label,
     /kD/current chain/every label,
     /kD/current label,
-  },
-  lattice/.style={
-    /kD/lattices/.cd,
-    /kD/every lattice,
-    /kD/current lattice,
   },
 }
 
@@ -257,9 +253,6 @@
 % ============================================================ INTERNAL MACROS =
 % The TikZ code is used to define mid level macros.
 
-\def\kDDoObject#1;%
-  {\node [/kD/parse/object={#1}, /kD/render/object];}
-
 \def\kDDoMorphism#1 #2 #3\GO%
   {\path (#1) edge [/kD/parse/morphism={#2}, /kD/render/morphism] (#3);}
 
@@ -287,28 +280,24 @@
   {\pgfqkeys{/kD/parse}{chain={#1}}%
    \kDDoMorphismChain#2 \GO}
 
-\def\kDDoLatticeWithoutOptions%
-  {\kDDoLatticeWithOptions[]}
-
-\def\kDDoLatticeWithOptions[#1]%
-  {\matrix [/kD/parse/lattice={#1}, /kD/render/lattice] }
-
-
-
-
 %=====[ FRONT END ]=============================================================
 
 % Mid level macros are bundled up into high level macros for the final user.
 
 \tikzset{
   kodi/.code={
-    \catcode`\|=12% ConTeXt fix
-    \kDCSDef{obj}{\kDDoObject}
+    \catcode`\|=12% ConTeXt fix <- TODO: insufficient? investigate
+
+    \def\lay{\matrix[/kD/every layout]}
+    \def\obj{\kDOzos[/kD/every object]}
+
     \kDCSDefOptional mor\with%
       \kDDoMorphismChainWithOptions\and%
       \kDDoMorphismChainWithoutOptions\GO
-    \kDCSDefOptional lay\with%
-      \kDDoLatticeWithOptions\and%
-      \kDDoLatticeWithoutOptions\GO
   },
 }
+
+
+
+
+

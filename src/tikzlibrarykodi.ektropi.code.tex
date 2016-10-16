@@ -1,0 +1,35 @@
+%===[ What is this? ]===========================================================
+
+% εκτροπή • (ektropí)
+%  1. diversion
+%  2. deflection
+%  3. aberration
+
+\catcode`@=11
+
+\pgfqkeys{/ektropi}{
+  add/.style={
+    /tikz/.unknown/.add code={%
+\let\tikz@key\pgfkeyscurrentname% 
+\pgfkeys{#1/\tikz@key/.try={##1}}%
+\ifpgfkeyssuccess\else}{\fi}%
+  },
+  restore/.code={\kDEktropiRestore}
+}
+
+% initialization
+
+\newtoks\kDEktropiToks
+\expandafter\expandafter\expandafter\kDEktropiToks\expandafter\expandafter\expandafter{\csname pgfk@/tikz/.unknown/.@body\endcsname}
+\xdef\kDEktropiGlobalTmp{\the\kDEktropiToks}
+
+% restore
+
+\def\kDEktropiRestore{%
+\def\kDEktropiTmp{\pgfkeyssetvalue{/tikz/.unknown/.@body}}%
+\expandafter\kDEktropiTmp\expandafter{\kDEktropiGlobalTmp}%
+\expandafter\long\expandafter\def\expandafter\kDEktropiTmp\expandafter##\expandafter1\expandafter\pgfeov\expandafter{\kDEktropiGlobalTmp}%
+\pgfkeyslet{/tikz/.unknown/.@cmd}\kDEktropiTmp%
+}
+
+\catcode`@=12

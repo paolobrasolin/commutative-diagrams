@@ -6,7 +6,8 @@
 %  3. mold
 
 % This module implements an alternative parsing mechanism
-% for TiKz matrices of nodes.
+% for TiKz matrices of nodes. In essence, mitra always passes
+% the node contents through the 'node contents' TikZ key.
 
 \tikzset{
   mitra/.style={
@@ -20,15 +21,6 @@
     alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
   },
 }
-
-
-
-
-
-
-
-
-
 
 \bgroup
 \def\:{\global\let\kDBlankSpace= }\:
@@ -69,18 +61,6 @@
 }
 
 \catcode`@=12
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

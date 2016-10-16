@@ -7,7 +7,9 @@
 %   4. gall
 
 % This module implements an alternative parsing mechanism
-% for TiKz nodes.
+% for TiKz nodes. In essence, what happens is
+%   \kDOzos ... {CONTENT}; -> \node ... [node contents={CONTENT}];
+% so the node contents is always passed through the TikZ key.
 
 \catcode`@=11
 
