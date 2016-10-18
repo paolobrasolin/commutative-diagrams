@@ -71,21 +71,21 @@
   \def\Loop{\ThinkThen{#1}}
   \def\Break{#1}
   \IfNextChar[{%
-      \edef\Act{\noexpand\edg={edge node={node[\the\tmp]},\the\edg}}\Act
+      \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\tmp]},\the\edg}}\Act
     \FetchThen\Loop% and fetch next one
   }{%
     \IfNextChar:{
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={edge node={node[\the\tmp]},\the\edg}}\Act
+        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\tmp]},\the\edg}}\Act
       \else
-        \edef\Act{\noexpand\edg={edge node={node["\the\tmp"]},\the\edg}}\Act
+        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,"\the\tmp"]},\the\edg}}\Act
       \fi
       \expandafter\FetchThen\expandafter\Loop\pgfutil@gobble
     }{%
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
+        \edef\Act{\noexpand\edg={/kD/every arrow,\the\tmp,\the\edg}}\Act
       \else
-        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
+        \edef\Act{\noexpand\edg={/kD/every arrow,\the\tmp,\the\edg}}\Act
       \fi
       \Break
     }
@@ -103,11 +103,11 @@
 \def\FetchTargetAppendThen#1#2{\tar=\expandafter{\the\tar#2}#1}
 
 \def\DrawFetchedEdgeThen#1{
-\message{^^J-------------^^J}
-\message{SOURCE: \the\src^^J}
-\message{ EDGE : \the\edg^^J}
-\message{TARGET: \the\tar^^J}
-\message{^^J-------------^^J}
+% \message{^^J-------------^^J}
+% \message{SOURCE: \the\src^^J}
+% \message{ EDGE : \the\edg^^J}
+% \message{TARGET: \the\tar^^J}
+% \message{^^J-------------^^J}
 \edef\Act{\noexpand\path (\the\src) edge[\the\edg] (\the\tar);}
 \Act
 #1}
@@ -117,20 +117,6 @@
 {}
 {\src\expandafter{\the\tar}
 \FetchEdgeThen{\FetchTargetThen{\DrawFetchedEdgeThen\MaybeChainAnotherEdge}}}
-}
-
-\pgfqkeys{/handlers}{
-    first char syntax=true,
-    first char syntax/.cd,
-        the character "/.initial=\kDContentShortcut,
-}
-
-\def\kDPeelDoubleQuotes"#1"{#1}
-
-\def\kDContentShortcut#1{%
-    \pgfkeysalso{
-        node contents/.expand once={\kDPeelDoubleQuotes#1},
-    }%
 }
 
 \def\mor{\DoFirstEdgeThen\MaybeChainAnotherEdge}

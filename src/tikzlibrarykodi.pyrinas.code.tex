@@ -6,27 +6,21 @@
         /tikz/node contents={$#1$},
     },
     % fallback as parameter to given key after searching for key in /tikz
-    fallback to/.code 2 args={%
-        \let\searchname=\pgfkeyscurrentname%
-%        \message{SEARCH \searchname}
-        \pgfkeysalso{
-            /tikz/\searchname/.try=#1,
-            #2/.retry/.expand once=\searchname,
-        }%
-    },
+    % fallback to/.code 2 args={%
+        % \let\searchname=\pgfkeyscurrentname%
+        % \pgfkeysalso{
+            % /tikz/\searchname/.try=#1,
+            % #2/.retry/.expand once=\searchname,
+        % }%
+    % },
     % keys to hold kD styles sorted by kind
     % objects/.unknown/.style={
         % /kD/fallback to={#1}{/kD/math node contents},
     % },
-    arrows/.search also=/tikz,
-    labels/.unknown/.style={
-        /kD/fallback to={#1}{/kD/math node contents},
-    },
-    % keys to hold each currently manipulated object
-    current arrow/.style={},
-    current label/.style={},
-    current chain/every arrow/.style={},
-    current chain/every label/.style={},
+    % arrows/.search also=/tikz,
+    % labels/.unknown/.style={
+        % /kD/fallback to={#1}{/kD/math node contents},
+    % },
     % universal styles
     every object/.style={
         /ektropi/restore,% needed inside matrices
@@ -37,30 +31,30 @@
         execute at end node=$,%
         % anchor=base,
     },
-    every arrow/.style={},
+    every arrow/.style={
+        % /ektropi/restore,% actually not needed
+        /ektropi/add=/kD/arrows,
+    },
     every label/.style={
-        /tikz/self naming,
-        /tikz/auto,
-        /tikz/inner sep=0.5ex,
-        /tikz/font=\everymath\expandafter{\the\everymath\scriptstyle},
+        /ektropi/restore,% we're inside the edge
+        /ektropi/add=/kD/labels,
+        self naming,
+        auto,
+        inner sep=0.5ex,
+        font=\everymath\expandafter{\the\everymath\scriptstyle},
     },
     every layout/.style={
+        % /ektropi/restore,% actually not needed
         /ektropi/add=/kD/layouts,
-        % /tikz/.search also=/kD/layouts,
         mitra,
-        % blue,
-        nodes={
-          % /kD/objects/cd,
-          /kD/every object,
-        },
-        % /kD/layouts/cd,
+        nodes={/kD/every object}
     },
     % basic arrow styles
     /kD/arrows/.cd,
         crossing over/clearance/.initial=0.5ex,
         crossing over/color/.initial=white,
         crossing over/.style={
-        preaction={
+        /tikz/preaction={
             -,
             draw=\pgfkeysvalueof{/kD/arrows/crossing over/color},
             line width=\pgfkeysvalueof{/kD/arrows/crossing over/clearance},
@@ -82,6 +76,12 @@
             fill=white,
             shape=circle,
             anchor=center,
+        },
+        </.style={
+            near start,
+        },
+        >/.style={
+            near end,
         },
     % basic objects styles
     /kD/objects/.cd,
@@ -123,14 +123,6 @@
             ->,
             ÷,
         },
-    % label styles shortcuts
-    /kD/labels/.cd,
-        </.style={
-            near start,
-        },
-        >/.style={
-            near end,
-        },
 }
 
 % ======================================================== FIRST CHAR HANDLERS =
@@ -161,57 +153,61 @@
 
 % ==================================================================== PARSING =
 
-\pgfqkeys{/kD/parse}{
-  bisect/.code args={#1at#2into#3and#4}{%
-    \def\Cut#2##1#2##2#2##3\GO%
-      {\def\cnt{##3}\def\one{#2}\def\two{#2#2}%
-       \ifx\cnt\one\kDCSDef{#3}{##1}\kDCSDef{#4}{}\else%
-       \ifx\cnt\two\kDCSDef{#3}{##2}\kDCSDef{#4}{##1}\else%
-       \errmessage{A bisection crashed.}\fi\fi}%
-    \Cut#2#1#2#2#2\GO%
-  },
-  /tikz/edge node string/.code args={[#1]#2}{%
-    \ifx\relax#1\relax\else\tikzset{edge node={node[/kD/parse/label={#1},/kD/render/label]}}\fi%
-    \ifx\relax#2\relax\else\tikzset{edge node string={#2}}\fi%
-  },
-  arrow/.forward to=/kD/current arrow/.style,
-  label/.forward to=/kD/current label/.style,
-  morphism/.style={
-    /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
-    /kD/parse/arrow/.expand once=\kDSND,
-    /kD/parse/labels/.expand once=\kDFST,
-  },
-  chain/.style={
-    /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
-    /kD/current chain/every arrow/.estyle=\kDSND,
-    /kD/current chain/every label/.estyle=\kDFST,
-  },
-  labels/.code={%
-    \ifx\relax#1\relax\else%
-    \def\doit##1##2\GO{\def\tmp{##1}}\def\sqr{[}\doit#1\GO%
-    \ifx\tmp\sqr%
-      \pgfkeysalso{/kD/current arrow/.append style={edge node string={#1}}}\else%
-      \pgfkeysalso{/kD/current arrow/.append style={edge node string={[#1]}}}\fi%
-    \fi%
-  },
-}
+%% OBSOLETE
+
+% \pgfqkeys{/kD/parse}{
+  % bisect/.code args={#1at#2into#3and#4}{%
+    % \def\Cut#2##1#2##2#2##3\GO%
+      % {\def\cnt{##3}\def\one{#2}\def\two{#2#2}%
+       % \ifx\cnt\one\kDCSDef{#3}{##1}\kDCSDef{#4}{}\else%
+       % \ifx\cnt\two\kDCSDef{#3}{##2}\kDCSDef{#4}{##1}\else%
+       % \errmessage{A bisection crashed.}\fi\fi}%
+    % \Cut#2#1#2#2#2\GO%
+  % },
+  % /tikz/edge node string/.code args={[#1]#2}{%
+    % \ifx\relax#1\relax\else\tikzset{edge node={node[/kD/parse/label={#1},/kD/render/label]}}\fi%
+    % \ifx\relax#2\relax\else\tikzset{edge node string={#2}}\fi%
+  % },
+  % arrow/.forward to=/kD/current arrow/.style,
+  % label/.forward to=/kD/current label/.style,
+  % morphism/.style={
+    % /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
+    % /kD/parse/arrow/.expand once=\kDSND,
+    % /kD/parse/labels/.expand once=\kDFST,
+  % },
+  % chain/.style={
+    % /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
+    % /kD/current chain/every arrow/.estyle=\kDSND,
+    % /kD/current chain/every label/.estyle=\kDFST,
+  % },
+  % labels/.code={%
+    % \ifx\relax#1\relax\else%
+    % \def\doit##1##2\GO{\def\tmp{##1}}\def\sqr{[}\doit#1\GO%
+    % \ifx\tmp\sqr%
+      % \pgfkeysalso{/kD/current arrow/.append style={edge node string={#1}}}\else%
+      % \pgfkeysalso{/kD/current arrow/.append style={edge node string={[#1]}}}\fi%
+    % \fi%
+  % },
+% }
 
 % ================================================================== RENDERING =
 
-\pgfqkeys{/kD/render}{
-  morphism/.style={
-    /kD/arrows/.cd,
-    /kD/every arrow,
-    /kD/current chain/every arrow,
-    /kD/current arrow,
-  },
-  label/.style={
-    /kD/labels/.cd,
-    /kD/every label,
-    /kD/current chain/every label,
-    /kD/current label,
-  },
-}
+% OBSOLETE
+
+% \pgfqkeys{/kD/render}{
+  % morphism/.style={
+    % /kD/arrows/.cd,
+    % /kD/every arrow,
+    % /kD/current chain/every arrow,
+    % /kD/current arrow,
+  % },
+  % label/.style={
+    % /kD/labels/.cd,
+    % /kD/every label,
+    % /kD/current chain/every label,
+    % /kD/current label,
+  % },
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\def\kDChopParse#1|#2|#3\GO%
