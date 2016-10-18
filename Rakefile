@@ -132,3 +132,16 @@ end
 
 desc 'Reinstall locally'
 task :reinstall => [:uninstall, :install]
+
+desc 'Compile minimal koDi/standalone format'
+task :format => :install do
+  stdout, stderr, status = Open3.capture3(
+    'pdftex',
+    '-ini',
+    '&latex kodi-livedemo.tex\dump',
+    '--output-directory dist'
+  )
+  puts stdout, stderr
+  rm('kodi-livedemo.log')
+  mv('kodi-livedemo.fmt', 'dist')
+end
