@@ -15,7 +15,7 @@
     <script src="js/en-gb.js"></script>
 
     <!-- you don't need to keep this, but it's cool for stats! -->
-    <meta name="generator" content="Nanoc 4.3.4">
+    <meta name="generator" content="Nanoc 4.3.5">
   </head>
   <body>
       
@@ -43,16 +43,17 @@
 
 \lay[comb]{
   |(P)| A \times_Z B & B \\
-        A            & Z \\ };
+        A            & Z \\
+};
+
+\obj at ($(Z)!2!(P)$) {Q};
 
 \mor[swap] P p_1:-> A f:-> Z;
-\mor       * P_2:-> B g:-> *;
+\mor       P P_2:-> B g:-> Z;
 
-\obj at=($(Z)!2!(P)$), "Q";
-
-\mor[bend right, swap] Q q_1:-> A;
-\mor[bend left]        * q_2:-> B;
-\mor[mid:dashed]       *   u:-> P;
+\mor[swap]:[bend right] Q q_1:-> A;
+\mor      :[bend left]  Q q_2:-> B;
+\mor [mid]:[dashed]     Q   u:-> P;
 
 \end{kodi}</div>
 

@@ -20,6 +20,7 @@ p {
 
 #display {
   height: 0;
+  min-height: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,9 +32,7 @@ p {
 #loader-wrapper {
   position: absolute;
   opacity: 0;
-/*
-  z-index: -1;
-*/
+  visibility: hidden;
 }
 
 #logger-wrapper {
@@ -76,7 +75,7 @@ header .title .d {
   font-size: 1em;
 }
 
-#diagram svg {
+#diagram-wrapper svg {
   overflow: visible;
 }
 
@@ -112,6 +111,9 @@ header .title .d {
   display: inline-block;
   transition-duration: 0.3s;
   transition-property: background-color, width;
+  /* to stay above display */
+  position: relative;
+  z-index: 1000;
 }
 
 #compile[disabled] {

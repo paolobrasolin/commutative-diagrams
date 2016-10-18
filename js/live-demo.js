@@ -7,7 +7,18 @@ function getNaturalWidth(obj, text){
     return width;
 }
 
+function fadeOut(element) {
+  $(element).transition({ opacity: 0 });
+  setTimeout(function () {
+      $(element).css('visibility', 'hidden');
+  }, 300);
+}
 
+function fadeIn(element) {
+  $(element)
+    .css('visibility', 'visible')
+    .transition({ opacity: 1 });
+}
 // $('p').hyphenate('en-gb');
 
 var editor = ace.edit("editor");
@@ -37,12 +48,12 @@ logger.setOptions({
 
 $('#compile').click(function() {
 
-  $('#diagram-wrapper').transition({ opacity: 0 });
-  $('#logger-wrapper').transition({ opacity: 0 });
-  $('#loader-wrapper').transition({ opacity: 1 });
+  fadeOut('#diagram-wrapper');
+  fadeOut('#logger-wrapper');
+  fadeIn('#loader-wrapper');
 
   $('#display')
-      .transition({ height: $('#loader-wrapper').css('height') }, 150 );
+      .transition({ 'min-height': $('#loader-wrapper').css('height') }, 150 );
 
   $('#compile')
     .attr('disabled', true)
@@ -63,12 +74,13 @@ $('#compile').click(function() {
     data: {
       "document": editor.getValue(),
       'template': 'latex-minimal',
-      'format': 'kodi'
+      'format': 'kodi-livedemo'
     }
 
   }).done(function(data) {
 
-    $('#loader-wrapper').transition({ opacity: 0 });
+    fadeOut('#loader-wrapper');
+
     $('#compile').html("Tweak the code!");
     clearTimeout(longWaitTimerId);
 
@@ -81,17 +93,16 @@ $('#compile').click(function() {
     $('#display')
       .transition({ height: exHeight }, 150 );
 
-    $('#diagram-wrapper')
-      .html(svg)
-      .transition({ opacity: 1 },  150, 'snap' );
+    $('#diagram-wrapper').html(svg);
+    fadeIn('#diagram-wrapper');
 
   }).fail(function(jqXHR, textStatus, errorThrown) {
 
-    $('#loader-wrapper').transition({ opacity: 0 });
+    fadeOut('#loader-wrapper');
     $('#compile').html("You goofed up.");
 
-    logger.setValue(jqXHR.responseText, -1);
-    $('#logger-wrapper').transition({ opacity: 1 });
+    fadeIn('#logger-wrapper');
+/*    logger.setValue(jqXHR.responseText, -1);*/
 
     /* TODO: this is ridiculous, dammit... */
     setTimeout(function () {
