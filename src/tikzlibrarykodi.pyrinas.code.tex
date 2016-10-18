@@ -1,106 +1,84 @@
 % ================================================================= FOUNDATION =
 
 \pgfqkeys{/kD}{
-    % wrap node contents with inline math markers
-    math node contents/.style={
-        /tikz/node contents={$#1$},
-    },
     % universal styles
+    every layout/.style={
+      % /ektropi/restore,% actually not needed
+      /ektropi/add=/kD/layouts,
+      mitra,
+      nodes={/kD/every object}
+    },
     every object/.style={
-        /ektropi/restore,% needed inside matrices
-        /ektropi/add=/kD/objects,
-        % /kD/objects/cd,
-        self naming,
-        execute at begin node=$,%
-        execute at end node=$,%
-        % anchor=base,
+      /ektropi/restore,% needed inside matrices
+      /ektropi/add=/kD/objects,
+      self naming,
+      execute at begin node=$,%
+      execute at end node=$%
     },
     every arrow/.style={
-        % /ektropi/restore,% actually not needed
-        /ektropi/add=/kD/arrows,
+      % /ektropi/restore,% actually not needed
+      /ektropi/add=/kD/arrows
     },
     every label/.style={
-        /ektropi/restore,% we're inside the edge
-        /ektropi/add=/kD/labels,
-        self naming,
-        auto,
-        inner sep=0.5ex,
-        font=\everymath\expandafter{\the\everymath\scriptstyle},
-    },
-    every layout/.style={
-        % /ektropi/restore,% actually not needed
-        /ektropi/add=/kD/layouts,
-        mitra,
-        nodes={/kD/every object}
+      /ektropi/restore,% we're inside the edge
+      /ektropi/add=/kD/labels,
+      self naming,
+      execute at begin node=$,%
+      execute at end node=$,%
+      auto,
+      inner sep=0.5ex,
+      font=\everymath\expandafter{\the\everymath\scriptstyle}
     },
     % basic arrow styles
     /kD/arrows/.cd,
-        crossing over/clearance/.initial=0.5ex,
-        crossing over/color/.initial=white,
-        crossing over/.style={
+      crossing over/clearance/.initial=0.5ex,
+      crossing over/color/.initial=white,
+      crossing over/.style={
         /tikz/preaction={
-            -,
-            draw=\pgfkeysvalueof{/kD/arrows/crossing over/color},
-            line width=\pgfkeysvalueof{/kD/arrows/crossing over/clearance},
+          -,
+          draw=\pgfkeysvalueof{/kD/arrows/crossing over/color},
+          line width=\pgfkeysvalueof{/kD/arrows/crossing over/clearance},
         },
-        },
-        shift/.style={
-        transform canvas={
-            shift={($(\tikztostart)!#1!-90:(\tikztotarget)-(\tikztostart)$)},
-        },
-        },
-        slide/.style={
-        transform canvas={
-            shift={($(\tikztostart)!#1!0:(\tikztotarget)-(\tikztostart)$)},
-        },
-        },
+      },
+      shove/.style={
+        /tikz/transform canvas={
+          /tikz/shift={($(\tikztostart)!#1!-90:(\tikztotarget)-(\tikztostart)$)}
+        }
+      },
+      slide/.style={
+        /tikz/transform canvas={
+          /tikz/shift={($(\tikztostart)!#1!0:(\tikztotarget)-(\tikztostart)$)}
+        }
+      },
     % basic label styles
     /kD/labels/.cd,
-        mid/.style={
-            /tikz/fill=white,
-            /tikz/shape=circle,
-            /tikz/anchor=center,
-        },
+      mid/.style={
+        /tikz/fill=white,
+        /tikz/shape=circle,
+        /tikz/anchor=center,
+        /tikz/inner sep=.25ex
+      },
     % basic objects styles
     /kD/objects/.cd,
     % basic lattice styles
     /kD/layouts/.cd,
-        rectangular/.style 2 args={
-            /tikz/column sep={#1,between origins},
-            /tikz/row sep={#2,between origins},
-        },
-        square/.style={
-            /kD/layouts/rectangular={#1}{#1},
-        },
-        golden/.style={
-            /kD/layouts/rectangular={1.618*#1}{#1},
-        },
-        comb/.style={
-            /kD/layouts/rectangular={sqrt(4/3)*#1}{#1},
-            /tikz/every odd row/.append style={
-                /tikz/xshift=tan(30)*#1,
-            },
-        },
-        comb/.default=4em,
-        square/.default=4em,
-        golden/.default=4em,
-    % arrow styles shortcuts
-    /kD/arrows/.cd,
-        l>/.style={
-            ->,
-            bend right,
-        },
-        r>/.style={
-            ->,
-            bend left,
-        },
-        ÷/.style={
-            crossing over,
-        },
-        ÷>/.style={
-            ->,
-            ÷,
-        },
+      rectangular/.style 2 args={
+        /tikz/column sep={#1,between origins},
+        /tikz/row sep={#2,between origins}
+      },
+      square/.style={
+        /kD/layouts/rectangular={#1}{#1}
+      },
+      golden/.style={
+        /kD/layouts/rectangular={1.618*#1}{#1}
+      },
+      comb/.style={
+        /kD/layouts/rectangular={sqrt(4/3)*#1}{#1},
+        /tikz/every odd row/.append style={/tikz/xshift=tan(30)*#1}
+      },
+      comb/.default=4em,
+      square/.default=4em,
+      golden/.default=4em
 }
 
 % ======================================================== FIRST CHAR HANDLERS =
