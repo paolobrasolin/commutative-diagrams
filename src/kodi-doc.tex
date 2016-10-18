@@ -40,21 +40,21 @@
 };
 
 % horizontal chains
-\mor {ker a} -> {ker b} -> {ker c};
+\mor (ker a) -> (ker b) -> (ker c);
 \mor A f:-> B g:-> C -> 0;
 \mor 0' -> A' f':-> B' g':-> C';
-\mor {coker a} -> {coker b} -> {coker c};
+\mor (coker a) -> (coker b) -> (coker c);
 
 % vetical chains
-\mor[near start] {ker a} -> A a:-> A' -> {coker a};
-\mor[near start] {ker b} -> B b:-> B' -> {coker b};
-\mor[near start] {ker c} -> C c:-> C' -> {coker c};
+\mor[near start] (ker a) -> A a:-> A' -> (coker a);
+\mor[near start] (ker b) -> B b:-> B' -> (coker b);
+\mor[near start] (ker c) -> C c:-> C' -> (coker c);
 
-% the snake
+the snake
 \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
 \coordinate (head) at ($(coker b)!9/4!(coker a)$);
 \coordinate (belly) at ($(B)!9/16!(B')$);
-\draw[/kD/arrows/.cd,÷>,rounded corners]
+\draw[/kD/arrows/crossing over, ->, rounded corners]
   (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
 
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,11 +72,11 @@
      (w×x)×(y×x)}
   \obj (\n) at ({72*\n:9em}) {\o};
 
-\mor 1 a_{w,x,y}×ı_z:-> 2
-         a_{w,x×y,z}:-> 3
-       ı_w×a_{x,y,z}:-> 4;
-\mor *   a_{w×x,y,z}:-> 5
-         a_{w,x,y×z}:-> *;
+\mor 1 "a_{w,x,y}×ı_z": -> 2
+         "a_{w,x×y,z}": -> 3
+       "ı_w×a_{x,y,z}": -> 4;
+\mor 1   "a_{w×x,y,z}": -> 5
+         "a_{w,x,y×z}": -> 4;
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,22 +88,20 @@
 \obj at ($(Z)!2!(P)$) {Q};
 
 \mor[swap] P p_1:-> A f:-> Z;
-\mor       * P_2:-> B g:-> *;
-\mor[swap] Q q_1:l> A;
-\mor       * q_2:r> B;
-\mor[mid:dashed] * u:-> P;
+\mor       P P_2:-> B g:-> Z;
+\mor[swap]:[bend right] Q q_1:-> A;
+\mor      :[bend left]  Q q_2:-> B;
+\mor [mid]:[dashed]     Q   u:-> P;
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\startkodi[/cleanser/expand=full]
+\pgfkeys{/katharizo/expand=full}
 
 \foreach [count=\m] \a in {A,B,C}
   \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
-    \obj at=({5em*\n,-3em*\m}),\a_{\i};
+    \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
 
-\mor C_{n+1} >-> B_{n-1};
-
-\stopkodi
+\mor (C_{n+1}) -> (B_{n-1});
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[mwe-tex]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -378,7 +376,7 @@ A small expedient is necessary to use it with {\cs koDi}:
 \DoExample{Snake Lemma}{snake_lemma}
 \DoExample{K4 associahedron}{k4_associahedron}
 \DoExample{Pullback}{pullback}
-% \DoExample{Chain}{chain}
+\DoExample{Chain}{chain}
 
 \stopbodymatter
 
