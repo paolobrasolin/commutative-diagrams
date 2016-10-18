@@ -28,6 +28,70 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+\newif\ifaftercolon
+\aftercolonfalse
+
+\def\catchlabelkeylist[#1]{\pgfkeys{/labels/.append style={#1}}\parser}
+\def\catcharrowkeylist[#1]{\pgfkeys{/arrows/.append style={#1}}\parser}
+
+\def\parser{%
+\pgfutil@ifnextchar[{%
+\ifaftercolon%
+\expandafter\catcharrowkeylist\else%
+\expandafter\catchlabelkeylist\fi%
+}{%
+\pgfutil@ifnextchar:{\aftercolontrue\expandafter\parser\pgfutil@gobble}{%
+\relax% it's over
+}}}
+
+
+
+
+
+% GLOBAL OPTIONS
+
+\newtoks\tmp
+
+
+
+\newtoks\glab
+\newtoks\gedg
+
+\newif\ifaftercolon
+
+\def\FetchGOptThen#1{\aftercolonfalse\glab={}\gedg={}\MaybeFetchThen{\ReflectThen{#1}}}
+
+\def\MaybeFetchThen#1{\tmp={}\IfNextChar[{\FetchGOptListThen{#1}}{#1}}
+
+\def\FetchGOptListThen#1[#2]{\tmp={#2}#1}
+
+% \def\FetchAppendThen#1#2{\tmp=\expandafter{\the\tmp#2}#1}
+
+\def\ReflectThen#1{%
+  \def\Loop{\ReflectThen{#1}}
+  \def\Break{#1}
+  \IfNextChar:{\aftercolontrue
+    \glab\expandafter{\the\tmp}
+    \expandafter\MaybeFetchThen\expandafter\Loop\pgfutil@gobble
+  }{%
+    \ifaftercolon
+      \gedg\expandafter{\the\tmp}
+    \else
+      \glab\expandafter{\the\tmp}
+    \fi
+    \Break
+  }
+}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \def\DoFirstEdgeThen#1%
 {\FetchFirstSourceThen{\FetchFirstEdgeThen{\DrawFetchedEdgeThen{#1}}}}
 
@@ -44,7 +108,6 @@
 
 % EDGES
 
-\newtoks\tmp
 \newtoks\edg
 
 \def\FetchEdgeThen#1{\edg={}\FetchThen{\ThinkThen{#1}}}
@@ -71,21 +134,21 @@
   \def\Loop{\ThinkThen{#1}}
   \def\Break{#1}
   \IfNextChar[{%
-      \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\tmp]},\the\edg}}\Act
+      \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\glab,\the\tmp]},\the\edg}}\Act
     \FetchThen\Loop% and fetch next one
   }{%
     \IfNextChar:{
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\tmp]},\the\edg}}\Act
+        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\glab,\the\tmp]},\the\edg}}\Act
       \else
-        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,"\the\tmp"]},\the\edg}}\Act
+        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\glab,"\the\tmp"]},\the\edg}}\Act
       \fi
       \expandafter\FetchThen\expandafter\Loop\pgfutil@gobble
     }{%
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={/kD/every arrow,\the\tmp,\the\edg}}\Act
+        \edef\Act{\noexpand\edg={/kD/every arrow,\the\gedg,\the\tmp,\the\edg}}\Act
       \else
-        \edef\Act{\noexpand\edg={/kD/every arrow,\the\tmp,\the\edg}}\Act
+        \edef\Act{\noexpand\edg={/kD/every arrow,\the\gedg,\the\tmp,\the\edg}}\Act
       \fi
       \Break
     }
@@ -119,6 +182,6 @@
 \FetchEdgeThen{\FetchTargetThen{\DrawFetchedEdgeThen\MaybeChainAnotherEdge}}}
 }
 
-\def\mor{\DoFirstEdgeThen\MaybeChainAnotherEdge}
+\def\mor{\FetchGOptThen{\DoFirstEdgeThen\MaybeChainAnotherEdge}}
 
 \catcode`@=12
