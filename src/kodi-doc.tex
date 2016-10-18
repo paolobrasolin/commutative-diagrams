@@ -29,40 +29,37 @@
 % ##############################################################################
 
 \startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\startcommutativediagram
 
 \unexpanded\def\coker{{\rm coker}\,}
 
 \lay[golden]{
-         & \ker a   & \ker b   & \ker c   & {}  \\
+         & \ker a   & \ker b   & \ker c   &   \\
          & A        & B        & C        & 0 \\
-|(0')| 0 & A'       & B'       & C'       & {}  \\
-         & \coker a & \coker b & \coker c & {}  \\
+|(0')| 0 & A'       & B'       & C'       &   \\
+         & \coker a & \coker b & \coker c &   \\
 };
 
+% horizontal chains
 \mor {ker a} -> {ker b} -> {ker c};
 \mor A f:-> B g:-> C -> 0;
 \mor 0' -> A' f':-> B' g':-> C';
 \mor {coker a} -> {coker b} -> {coker c};
 
-\startscope[/kD/every label/.append style={near start}]
-    \mor {ker a} -> A a:-> A' -> {coker a};
-    \mor {ker b} -> B b:-> B' -> {coker b};
-    \mor {ker c} -> C c:-> C' -> {coker c};
-\stopscope
+% vetical chains
+\mor[near start] {ker a} -> A a:-> A' -> {coker a};
+\mor[near start] {ker b} -> B b:-> B' -> {coker b};
+\mor[near start] {ker c} -> C c:-> C' -> {coker c};
 
+% the snake
 \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
 \coordinate (head) at ($(coker b)!9/4!(coker a)$);
 \coordinate (belly) at ($(B)!9/16!(B')$);
 \draw[/kD/arrows/.cd,÷>,rounded corners]
   (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
 
-\stopcommutativediagram
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\startcommutativediagram
-
 \def\id{{\mathbf 1}}
 \catcode`ı=\active \letı\id
 \catcode`×=\active \let×\otimes
@@ -73,38 +70,32 @@
      w×((x×y)×x),
      w×(x×(y×x)),
      (w×x)×(y×x)}
-  \obj at=({72*\n:9em}),(\n),"\o";
+  \obj (\n) at ({72*\n:9em}) {\o};
 
 \mor 1 a_{w,x,y}×ı_z:-> 2
          a_{w,x×y,z}:-> 3
        ı_w×a_{x,y,z}:-> 4;
 \mor *   a_{w×x,y,z}:-> 5
          a_{w,x,y×z}:-> *;
-
-\stopcommutativediagram
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\startcommutativediagram
-
 \lay[comb]{
   |(P)| A \times_Z B & B \\
         A            & Z \\
 };
 
-\obj at=($(Z)!2!(P)$), "Q";
+\obj at ($(Z)!2!(P)$) {Q};
 
 \mor[swap] P p_1:-> A f:-> Z;
 \mor       * P_2:-> B g:-> *;
 \mor[swap] Q q_1:l> A;
 \mor       * q_2:r> B;
 \mor[mid:dashed] * u:-> P;
-
-\stopcommutativediagram
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\startcommutativediagram[/cleanser/expand=full]
+\startkodi[/cleanser/expand=full]
 
 \foreach [count=\m] \a in {A,B,C}
   \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
@@ -112,22 +103,28 @@
 
 \mor C_{n+1} >-> B_{n-1};
 
-\stopcommutativediagram
+\stopkodi
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \startbuffer[mwe-tex]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input tikz
-\usetikzlibrary kodi
-
+\input kodi
 \kodi
   % insert diagram here
 \endkodi
 \bye
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\startbuffer[mwe-tex-lib]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input tikz
+\usetikzlibrary kodi
+\tikzpicture[kodi]
+  % insert diagram here
+\endtikzpicture
+\bye
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \startbuffer[mwe-context]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usemodule[tikz]
-\usetikzlibrary[kodi]
+\usemodule[kodi]
 \starttext
 \startkodi
   % insert diagram here
@@ -135,15 +132,34 @@
 \stoptext
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\startbuffer[mwe-context-lib]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usemodule[tikz]
+\usetikzlibrary[kodi]
+\starttext
+\starttikzpicture[kodi]
+  % insert diagram here
+\stoptikzpicture
+\stoptext
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \startbuffer[mwe-latex]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ===== *LaTeX MWE =====
 \documentclass{article}
-\usepackage{tikz}
-\usetikzlibrary{kodi}
+\usepackage{kodi}
 \begin{document}
 \begin{kodi}
   % insert diagram here
 \end{kodi}
+\end{document}
+\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\startbuffer[mwe-latex-lib]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{kodi}
+\begin{document}
+\begin{tikzpicture}[kodi]
+  % insert diagram here
+\end{tikzpicture}
 \end{document}
 \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -193,7 +209,9 @@
 
 \def\DoExample#1#2{%
   \title{#1}
-  \framed{\begingroup\getbuffer[example-#2]\endgroup}
+  % \framed{
+\begingroup\starttikzpicture[kodi]\getbuffer[example-#2]\stoptikzpicture\endgroup
+% }
   {\tfxx\typebuffer[example-#2]}
 }
 
@@ -297,6 +315,14 @@ Here are minimal working examples of the {\tt kodi} environment for the main dia
   {\startframedtext\typebuffer[mwe-latex]\stopframedtext}{\LaTeX}
  \stopcombination} 
 
+\placetextmarginfigure[none,here]
+[fig:mwe]{}
+{\startcombination[3*1]
+  {\startframedtext\typebuffer[mwe-tex-lib]\stopframedtext}{\TeX\ (library)}
+  {\startframedtext\typebuffer[mwe-context-lib]\stopframedtext}{\ConTeXt\ (library)}
+  {\startframedtext\typebuffer[mwe-latex-lib]\stopframedtext}{\LaTeX\ (library)}
+ \stopcombination} 
+
 A useful {\sc TikZ} feature exclusive to \LaTeX\ is externalization.
 A small expedient is necessary to use it with {\cs koDi}:
 
@@ -331,28 +357,28 @@ A small expedient is necessary to use it with {\cs koDi}:
 \def\optional  {\syntaxbox[backgroundcolor=cyan]}
 \def\repetition{\syntaxbox[backgroundcolor=orange]}
 
-\chapter{Objects and Morphisms}
+% \chapter{Objects and Morphisms}
+% 
+% {\sc koDi} defines two basic macros: one to draw objects and one to draw morphisms.
+% We now look at the syntax of their parameters described with fancy coloured blocks.
+% 
+% \inouter{Blocks can be \mandatory{mandatory}, \optional{optional} or \repetition{repeated}.}
+% 
+% {\tt\backslash obj\mandatory{object};}
+% 
+% {\tt\backslash mor%
+ % \optional{[morphism]}%
+ % \mandatory{\{name\}}%
+ % \repetition{\textvisiblespace\{morphism\}\textvisiblespace\{name\}};}
 
-{\sc koDi} defines two basic macros: one to draw objects and one to draw morphisms.
-We now look at the syntax of their parameters described with fancy coloured blocks.
 
-\inouter{Blocks can be \mandatory{mandatory}, \optional{optional} or \repetition{repeated}.}
-
-{\tt\backslash obj\mandatory{object};}
-
-{\tt\backslash mor%
- \optional{[morphism]}%
- \mandatory{\{name\}}%
- \repetition{\textvisiblespace\{morphism\}\textvisiblespace\{name\}};}
-
-
-\chapter{Arrows}
-\chapter{Layouts}
+% \chapter{Arrows}
+% \chapter{Layouts}
 
 \DoExample{Snake Lemma}{snake_lemma}
 \DoExample{K4 associahedron}{k4_associahedron}
 \DoExample{Pullback}{pullback}
-\DoExample{Chain}{chain}
+% \DoExample{Chain}{chain}
 
 \stopbodymatter
 

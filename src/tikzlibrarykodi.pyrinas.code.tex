@@ -139,21 +139,17 @@
 \pgfqkeys{/handlers}{
     first char syntax=true,
     first char syntax/.cd,
-        the character (/.initial=\kDNamingShortcut,
+        % the character (/.initial=\kDNamingShortcut,
         the character "/.initial=\kDContentShortcut,
 }
 
-\def\kDPeelRoundParentheses(#1){#1}
+% \def\kDPeelRoundParentheses(#1){#1}
 
-\def\kDNamingShortcut#1{%
-    \pgfkeysalso{
-        % TODO: do alias iff name is empty
-        % TODO REDUX: actually this might be the best way. this name/alias stuff is subtle
-        % TODO: ok, I think it's ok now. just some testing has to be done
-        /tikz/name/.expand once={\kDPeelRoundParentheses#1},
-%        /tikz/alias/.expand once={\kDPeelRoundParentheses#1},
-    }%
-}
+% \def\kDNamingShortcut#1{%
+    % \pgfkeysalso{
+        % /tikz/name/.expand once={\kDPeelRoundParentheses#1},
+    % }%
+% }
 
 \def\kDPeelDoubleQuotes"#1"{#1}
 
@@ -253,32 +249,30 @@
 % ============================================================ INTERNAL MACROS =
 % The TikZ code is used to define mid level macros.
 
-\def\kDDoMorphism#1 #2 #3\GO%
-  {\path (#1) edge [/kD/parse/morphism={#2}, /kD/render/morphism] (#3);}
-
-% TODO: I don't like the mechanism handling the * shortcut
-
-\let\kDThisSource\relax \let\kDLastSource\relax
-\let\kDThisTarget\relax \let\kDLastTarget\relax
-\def\kDLast{*}
-
-\def\kDDoMorphismChain#1 #2 #3 #4\GO%
-  {\def\kDSource{#1}\ifx\kDSource\kDLast\let\kDSource\kDLastSource\fi%
-   \def\kDTarget{#3}\ifx\kDTarget\kDLast\let\kDTarget\kDLastTarget\fi%
-   \kDDoMorphism{\kDSource} {#2} {\kDTarget}\GO%
-   \ifx\kDThisSource\relax\let\kDThisSource\kDSource\fi%
-   \ifx\relax#4\relax%
-   \let\kDLastSource\kDThisSource\let\kDThisSource\relax%
-   \let\kDLastTarget\kDTarget%
-   \else\kDDoMorphismChain{#3} #4\GO%
-   \fi}
-
-\def\kDDoMorphismChainWithoutOptions #1;%
-  {\kDDoMorphismChainWithOptions[] #1;}
-
-\def\kDDoMorphismChainWithOptions[#1] #2;%
-  {\pgfqkeys{/kD/parse}{chain={#1}}%
-   \kDDoMorphismChain#2 \GO}
+% \def\kDDoMorphism#1 #2 #3\GO%
+  % {\path (#1) edge [/kD/parse/morphism={#2}, /kD/render/morphism] (#3);}
+% 
+% \let\kDThisSource\relax \let\kDLastSource\relax
+% \let\kDThisTarget\relax \let\kDLastTarget\relax
+% \def\kDLast{*}
+% 
+% \def\kDDoMorphismChain#1 #2 #3 #4\GO%
+  % {\def\kDSource{#1}\ifx\kDSource\kDLast\let\kDSource\kDLastSource\fi%
+   % \def\kDTarget{#3}\ifx\kDTarget\kDLast\let\kDTarget\kDLastTarget\fi%
+   % \kDDoMorphism{\kDSource} {#2} {\kDTarget}\GO%
+   % \ifx\kDThisSource\relax\let\kDThisSource\kDSource\fi%
+   % \ifx\relax#4\relax%
+   % \let\kDLastSource\kDThisSource\let\kDThisSource\relax%
+   % \let\kDLastTarget\kDTarget%
+   % \else\kDDoMorphismChain{#3} #4\GO%
+   % \fi}
+% 
+% \def\kDDoMorphismChainWithoutOptions #1;%
+  % {\kDDoMorphismChainWithOptions[] #1;}
+% 
+% \def\kDDoMorphismChainWithOptions[#1] #2;%
+  % {\pgfqkeys{/kD/parse}{chain={#1}}%
+   % \kDDoMorphismChain#2 \GO}
 
 %=====[ FRONT END ]=============================================================
 
@@ -291,9 +285,9 @@
     \def\lay{\matrix[/kD/every layout]}
     \def\obj{\kDOzos[/kD/every object]}
 
-    \kDCSDefOptional mor\with%
-      \kDDoMorphismChainWithOptions\and%
-      \kDDoMorphismChainWithoutOptions\GO
+    % \kDCSDefOptional mor\with%
+      % \kDDoMorphismChainWithOptions\and%
+      % \kDDoMorphismChainWithoutOptions\GO
   },
 }
 

@@ -7,3 +7,132 @@
 
 % This module implements a novel parsing mechanism for arrow chains.
 
+\catcode`@=11
+
+\bgroup
+\def\:{\global\let\kDBlankSpace= }\:
+\egroup
+
+\long\def\kDIfNextChar#1#2#3{%
+\let\kDINCToken= #1% <- MEMO: this space is crucial
+\def\kDINCTrue{#2}\def\kDINCFalse{#3}%
+\futurelet\kDINCTok\kDINC%
+}
+
+\def\kDINC%
+  {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
+
+\let\IfNextChar\pgfutil@ifnextchar
+\let\IfNextCharSoft\kDIfNextChar
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\DoFirstEdgeThen#1%
+{\FetchFirstSourceThen{\FetchFirstEdgeThen{\DrawFetchedEdgeThen{#1}}}}
+
+% FIRST SOURCE/ARROW
+
+\newtoks\src
+\def\FetchFirstSourceThen#1%
+{\IfNextChar({\FetchSourceBracketsThen{#1}}{\FetchSourceTillOverThen{#1}}}
+\def\FetchSourceBracketsThen#1(#2){\src={#2}#1}
+\def\FetchSourceTillOverThen#1#2 {\src={#2}#1}
+
+\def\FetchFirstEdgeThen#1%
+{\FetchEdgeThen{\FetchTargetThen{#1}}}
+
+% EDGES
+
+\newtoks\tmp
+\newtoks\edg
+
+\def\FetchEdgeThen#1{\edg={}\FetchThen{\ThinkThen{#1}}}
+
+\def\FetchThen#1%
+{\IfNextChar[{\FetchKeysListThen{#1}}%
+{\IfNextChar"{\FetchEnquotedThen{#1}}{\FetchTillOverThen{#1}}}}
+
+\newif\iftmpiskeylist
+
+\def\FetchEnquotedThen#1"#2"{\tmpiskeylistfalse\tmp={#2}#1}
+\def\FetchKeysListThen#1[#2]{\tmpiskeylisttrue\tmp={#2}#1}
+\def\FetchTillOverThen#1{\tmpiskeylistfalse\tmp={}\FetchTOThen{#1}}
+
+\def\FetchTOThen#1%
+{\IfNextCharSoft\kDBlankSpace{#1}{\IfNextChar:{#1}{\FetchAppendThen{\FetchTOThen{#1}}}}}
+
+\def\FetchAppendThen#1#2{\tmp=\expandafter{\the\tmp#2}#1}
+
+\def\AppendTo#1#2%
+{\edef\Act{\noexpand#1={\the#2\the#1}}\Act}
+
+\def\ThinkThen#1{%
+  \def\Loop{\ThinkThen{#1}}
+  \def\Break{#1}
+  \IfNextChar[{%
+      \edef\Act{\noexpand\edg={edge node={node[\the\tmp]},\the\edg}}\Act
+    \FetchThen\Loop% and fetch next one
+  }{%
+    \IfNextChar:{
+      \iftmpiskeylist
+        \edef\Act{\noexpand\edg={edge node={node[\the\tmp]},\the\edg}}\Act
+      \else
+        \edef\Act{\noexpand\edg={edge node={node["\the\tmp"]},\the\edg}}\Act
+      \fi
+      \expandafter\FetchThen\expandafter\Loop\pgfutil@gobble
+    }{%
+      \iftmpiskeylist
+        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
+      \else
+        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
+      \fi
+      \Break
+    }
+  }
+}
+
+% TARGET
+
+\newtoks\tar
+\def\FetchTargetThen#1{\IfNextChar({\FetchTargetBracketsThen{#1}}{\FetchTargetTillOverThen{#1}}}
+\def\FetchTargetBracketsThen#1(#2){\tar={#2}#1}
+\def\FetchTargetTillOverThen#1{\tar={}\FetchTargetTOThen{#1}}
+\def\FetchTargetTOThen#1%
+{\IfNextCharSoft\kDBlankSpace{#1}{\IfNextChar;{#1}{\FetchTargetAppendThen{\FetchTargetTOThen{#1}}}}}
+\def\FetchTargetAppendThen#1#2{\tar=\expandafter{\the\tar#2}#1}
+
+\def\DrawFetchedEdgeThen#1{
+\message{^^J-------------^^J}
+\message{SOURCE: \the\src^^J}
+\message{ EDGE : \the\edg^^J}
+\message{TARGET: \the\tar^^J}
+\message{^^J-------------^^J}
+\edef\Act{\noexpand\path (\the\src) edge[\the\edg] (\the\tar);}
+\Act
+#1}
+
+\def\MaybeChainAnotherEdge{
+\IfNextChar;%
+{}
+{\src\expandafter{\the\tar}
+\FetchEdgeThen{\FetchTargetThen{\DrawFetchedEdgeThen\MaybeChainAnotherEdge}}}
+}
+
+\pgfqkeys{/handlers}{
+    first char syntax=true,
+    first char syntax/.cd,
+        the character "/.initial=\kDContentShortcut,
+}
+
+\def\kDPeelDoubleQuotes"#1"{#1}
+
+\def\kDContentShortcut#1{%
+    \pgfkeysalso{
+        node contents/.expand once={\kDPeelDoubleQuotes#1},
+    }%
+}
+
+\def\mor{\DoFirstEdgeThen\MaybeChainAnotherEdge}
+
+\catcode`@=12
