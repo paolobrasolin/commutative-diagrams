@@ -11,6 +11,8 @@
 %   \kDOzos ... {CONTENT}; -> \node ... [node contents={CONTENT}];
 % so the node contents is always passed through the TikZ key.
 
+\usetikzlibrary{kodi.koinos}
+
 \catcode`@=11
 
 \def\kDAppendTok#1#2%
@@ -28,7 +30,7 @@
 
 \def\kDOzosGobGroup#1{%
 \kDOzosGroTok={{#1}}%
-\pgfutil@ifnextchar;{\kDOzosMakeNode}%
+\kDIfNextHardCh;{\kDOzosMakeNode}%
 {\kDAppendTok\kDOzosGroTok\kDOzosOptTok\kDOzosGobTilGroup}%
 }
 

@@ -47,6 +47,10 @@ Feature: velos
       | « A {f}:-> Z»      | succeeds |
       | « A "f":-> Z»      | succeeds |
       | « A ["f"]:-> Z»    | succeeds |
+      | « A foo:-> Z»      | succeeds |
+      | « A {foo}:-> Z»    | succeeds |
+      | « A "foo":-> Z»    | succeeds |
+      | « A ["foo"]:-> Z»  | succeeds |
       | « A f x:-> Z»      | fails    |
       | « A {f x}:-> Z»    | succeeds |
       | « A "f x":-> Z»    | succeeds |
