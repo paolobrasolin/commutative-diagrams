@@ -26,6 +26,19 @@
 \let\IfNextCharSoft\kDIfNextChar
 
 
+\pgfkeys{/velos/install quote handler/.style={
+    /handlers/first char syntax=true,
+    /handlers/first char syntax/the character "/.initial=\kDContentShortcut,
+}}
+
+\def\kDPeelDoubleQuotes"#1"{#1}
+
+\def\kDContentShortcut#1{%
+    \pgfkeysalso{
+        node contents/.expand once={\kDPeelDoubleQuotes#1},
+    }%
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -134,21 +147,21 @@
   \def\Loop{\ThinkThen{#1}}
   \def\Break{#1}
   \IfNextChar[{%
-      \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\glab,\the\tmp]},\the\edg}}\Act
+      \edef\Act{\noexpand\edg={edge node={node[every edge quotes][\the\tmp]},\the\edg}}\Act
     \FetchThen\Loop% and fetch next one
   }{%
     \IfNextChar:{
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\glab,\the\tmp]},\the\edg}}\Act
+        \edef\Act{\noexpand\edg={edge node={node[every edge quotes][\the\tmp]},\the\edg}}\Act
       \else
-        \edef\Act{\noexpand\edg={edge node={node[/kD/every label,\the\glab,"\the\tmp"]},\the\edg}}\Act
+        \edef\Act{\noexpand\edg={edge node={node[every edge quotes]["\the\tmp"]},\the\edg}}\Act
       \fi
       \expandafter\FetchThen\expandafter\Loop\pgfutil@gobble
     }{%
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={/kD/every arrow,\the\gedg,\the\tmp,\the\edg}}\Act
+        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
       \else
-        \edef\Act{\noexpand\edg={/kD/every arrow,\the\gedg,\the\tmp,\the\edg}}\Act
+        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
       \fi
       \Break
     }
@@ -171,9 +184,16 @@
 % \message{ EDGE : \the\edg^^J}
 % \message{TARGET: \the\tar^^J}
 % \message{^^J-------------^^J}
-\edef\Act{\noexpand\path (\the\src) edge[\the\edg] (\the\tar);}
+\edef\Act{\noexpand\path[/velos/every path][
+  /tikz/every edge/.append style={\the\gedg},
+  /tikz/every edge quotes/.append style={\the\glab},
+] (\the\src) edge[\the\edg] (\the\tar);}
 \Act
 #1}
+
+\pgfkeys{/velos/every path/.style={
+  /velos/install quote handler
+}}
 
 \def\MaybeChainAnotherEdge{
 \IfNextChar;%
@@ -182,6 +202,6 @@
 \FetchEdgeThen{\FetchTargetThen{\DrawFetchedEdgeThen\MaybeChainAnotherEdge}}}
 }
 
-\def\mor{\FetchGOptThen{\DoFirstEdgeThen\MaybeChainAnotherEdge}}
+\def\kDVelos{\FetchGOptThen{\DoFirstEdgeThen\MaybeChainAnotherEdge}}
 
 \catcode`@=12

@@ -84,20 +84,6 @@
 % ======================================================== FIRST CHAR HANDLERS =
 % a pair of shortcuts for node naming and math content
 
-\pgfqkeys{/handlers}{
-    first char syntax=true,
-    first char syntax/.cd,
-        the character "/.initial=\kDContentShortcut,
-}
-
-\def\kDPeelDoubleQuotes"#1"{#1}
-
-\def\kDContentShortcut#1{%
-    \pgfkeysalso{
-        node contents/.expand once={\kDPeelDoubleQuotes#1},
-    }%
-}
-
 
 % Mid level macros are bundled up into high level macros for the final user.
 
@@ -107,12 +93,15 @@
 
     \def\lay{\matrix[/kD/every layout]}
     \def\obj{\kDOzos[/kD/every object]}
-    % TODO: maybe put mor here
+    \let\mor\kDVelos
 
   },
 }
 
-
+\pgfkeys{/velos/every path/.append style={
+  /tikz/every edge/.append style=/kD/every arrow,
+  /tikz/every edge quotes/.append style=/kD/every label
+}}
 
 
 
