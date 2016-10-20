@@ -69,14 +69,16 @@
 {#1}}}}
 
 \newtoks\kDVelosSource
+\newtoks\kDVelosCurFstSrc
+\newtoks\kDVelosPrvFstSrc
 
 \def\kDVelosFetchFirstSourceThen#1%
 {\kDIfNextHardCh(
   {\kDVelosFFSBracketsThen{#1}}
   {\kDVelosFFSTillOverThen{#1}}}
 
-\def\kDVelosFFSBracketsThen#1(#2){\kDVelosSource={#2}#1}
-\def\kDVelosFFSTillOverThen#1#2 {\kDVelosSource={#2}#1}
+\def\kDVelosFFSBracketsThen#1(#2){\kDVelosSource={#2}\kDVelosCurFstSrc={#2}#1}
+ \def\kDVelosFFSTillOverThen#1#2 {\kDVelosSource={#2}\kDVelosCurFstSrc={#2}#1}
 
 \def\kDVelosFetchFirstEdgeThen#1%
 {\kDVelosFetchEdgeThen
@@ -141,36 +143,55 @@
 %===[ target ]==================================================================
 
 \newtoks\kDVelosTarget
+\newtoks\kDVelosCurLstTar
+\newtoks\kDVelosPrvLstTar
 
 \def\kDVelosFetchTargetThen#1%
 {\kDIfNextHardCh(
   {\kDVelosFTBracketsThen{#1}}
   {\kDVelosFTTillOverThen{#1}}}
 
-\def\kDVelosFTBracketsThen#1(#2){\kDVelosTarget={#2}#1}
+\def\kDVelosFTBracketsThen#1(#2){\kDVelosTarget={#2}\kDVelosCurLstTar={#2}#1}
 \def\kDVelosFTTillOverThen#1{\kDVelosTarget={}\kDVelosFTTOThen{#1}}
 
-\def\kDVelosFTTOThen#1%
-{\kDIfNextSoftCh\kDBlankSpace
-  {#1}
+\def\kDVelosFTTOThen#1{
+\def\kDVelosFTTOLoop{\kDVelosFTTOThen{#1}}
+\def\kDVelosFTTOExit{\kDVelosCurLstTar\expandafter{\the\kDVelosTarget}#1}
+\kDIfNextSoftCh\kDBlankSpace
+  {\kDVelosFTTOExit}
   {\kDIfNextHardCh;
-    {#1}
-    {\kDVelosFTAppendThen{\kDVelosFTTOThen{#1}}}}}
+    {\kDVelosFTTOExit}
+    {\kDVelosFTAppendThen\kDVelosFTTOLoop}}}
 
 \def\kDVelosFTAppendThen#1#2{\kDVelosTarget=\expandafter{\the\kDVelosTarget#2}#1}
 
 %===[ rendering ]===============================================================
 
+\def\kDVelosAlias{*}
+\def\kDVelosSaila{+}
+
+\newtoks\kDVelosDerefSrc
+\newtoks\kDVelosDerefTar
+
 \def\kDVelosDrawFetchedEdgeThen#1{
 % \message{^^J-------------^^J}
 % \message{SOURCE: \the\kDVelosSource^^J}
-% \message{ EDGE : \the\kDVelosEdge^^J}
+% \message{EDGE: \the\kDVelosEdge^^J}
 % \message{TARGET: \the\kDVelosTarget^^J}
 % \message{^^J-------------^^J}
+% DEREFERENCING
+\edef\cS{\the\kDVelosSource}
+\kDVelosDerefSrc\expandafter{\the\kDVelosSource}
+\ifx\cS\kDVelosAlias\kDVelosDerefSrc\expandafter{\the\kDVelosPrvFstSrc}\fi
+\ifx\cS\kDVelosSaila\kDVelosDerefSrc\expandafter{\the\kDVelosPrvLstTar}\fi
+\edef\cT{\the\kDVelosTarget}
+\kDVelosDerefTar\expandafter{\the\kDVelosTarget}
+\ifx\cT\kDVelosAlias\kDVelosDerefTar\expandafter{\the\kDVelosPrvLstTar}\fi
+\ifx\cT\kDVelosSaila\kDVelosDerefTar\expandafter{\the\kDVelosPrvFstSrc}\fi
 \edef\Act{\noexpand\path[/velos/every path][
   /tikz/every edge/.append style={\the\kDVelosGlobalEdgeOptions},
   /tikz/every edge quotes/.append style={auto,\the\kDVelosGlobalLabelOptions},
-] (\the\kDVelosSource) edge[\the\kDVelosEdge] (\the\kDVelosTarget);}
+] (\the\kDVelosDerefSrc) edge[\the\kDVelosEdge] (\the\kDVelosDerefTar);}
 \Act
 #1}
 
@@ -184,7 +205,25 @@
 {\kDVelosFetchGlobalOptionsThen{\kDVelosDoFirstEdgeThen\kDVelosMaybeChainEdge}}
 
 \def\kDVelosMaybeChainEdge%
-{\kDIfNextHardCh;{}{
+{\kDIfNextHardCh;{
+% DEREFERENCING
+\edef\cS{\the\kDVelosCurFstSrc}
+\ifx\cS\kDVelosAlias
+  \kDVelosCurFstSrc\expandafter{\the\kDVelosPrvFstSrc}
+\else\ifx\cS\kDVelosSaila
+  \kDVelosCurFstSrc\expandafter{\the\kDVelosPrvLstTar}
+\fi\fi
+\edef\cT{\the\kDVelosCurLstTar}
+\ifx\cT\kDVelosAlias
+  \kDVelosCurLstTar\expandafter{\the\kDVelosPrvLstTar}
+\else\ifx\cT\kDVelosSaila
+  \kDVelosCurLstTar\expandafter{\the\kDVelosPrvFstSrc}
+\fi\fi
+\kDVelosPrvFstSrc\expandafter{\the\kDVelosCurFstSrc}
+\kDVelosPrvLstTar\expandafter{\the\kDVelosCurLstTar}
+% \showthe\kDVelosCurFstSrc
+% \showthe\kDVelosCurLstTar
+}{
 \kDVelosSource\expandafter{\the\kDVelosTarget}
 \kDVelosFetchEdgeThen{\kDVelosFetchTargetThen
   {\kDVelosDrawFetchedEdgeThen\kDVelosMaybeChainEdge}}}}
