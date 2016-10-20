@@ -9,61 +9,53 @@
 
 \usetikzlibrary{kodi.koinos}
 
+%===[ handlers ]================================================================
+
 \pgfkeys{/velos/install quote handler/.style={
     /handlers/first char syntax=true,
-    /handlers/first char syntax/the character "/.initial=\kDContentShortcut,
+    /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler,
 }}
 
-\def\kDPeelDoubleQuotes"#1"{#1}
+\def\kDVelosQuoteHandler#1%
+{\pgfkeysalso{/tikz/node contents/.expand once={\kDVelosUnquote#1}}}
 
-\def\kDContentShortcut#1{%
-    \pgfkeysalso{
-        node contents/.expand once={\kDPeelDoubleQuotes#1},
-    }%
-}
+\def\kDVelosUnquote"#1"{#1}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%===[ global options ]==========================================================
 
+\newtoks\kDVelosTemp
 
+\newtoks\kDVelosGlobalLabelOptions
+\newtoks\kDVelosGlobalEdgeOptions
 
-
-\newtoks\tmp
-
-
-
-%===[ global options (labels+edges) ]===========================================
-
-\newtoks\glab
-\newtoks\gedg
-
-\newif\ifaftercolon
+\newif\ifkDVelosGOAfterColon
 
 \def\kDVelosFetchGlobalOptionsThen#1{
-  \aftercolonfalse
-  \glab={}
-  \gedg={}
+  \kDVelosGOAfterColonfalse
+  \kDVelosGlobalLabelOptions={}
+  \kDVelosGlobalEdgeOptions={}
   \kDVelosGOMaybeFetchThen{\kDVelosGOThinkThen{#1}}
 }
 
 \def\kDVelosGOMaybeFetchThen#1{
-  \tmp={}%
-  \kDIfNextHardCh[{\kDVelosGOFetchThen{#1}}{#1}
+  \kDVelosTemp={}
+  \kDIfNextHardCh[
+    {\kDVelosGOFetchThen{#1}}
+    {#1}
 }
 
-\def\kDVelosGOFetchThen#1[#2]{\tmp={#2}#1}
+\def\kDVelosGOFetchThen#1[#2]{\kDVelosTemp={#2}#1}
 
 \def\kDVelosGOThinkThen#1{
   \def\kDVelosGOLoop{\kDVelosGOThinkThen{#1}}
   \def\kDVelosGOBreak{#1}
-  \kDIfNextHardCh:{\aftercolontrue
-    \glab\expandafter{\the\tmp}
+  \kDIfNextHardCh:{\kDVelosGOAfterColontrue
+    \kDVelosGlobalLabelOptions\expandafter{\the\kDVelosTemp}
     \expandafter\kDVelosGOMaybeFetchThen\expandafter\kDVelosGOLoop\kDGobble
   }{%
-    \ifaftercolon
-      \gedg\expandafter{\the\tmp}
-    \else
-      \glab\expandafter{\the\tmp}
-    \fi
+    \ifkDVelosGOAfterColon
+      \kDVelosGlobalEdgeOptions\expandafter{\the\kDVelosTemp}\else
+      \kDVelosGlobalLabelOptions\expandafter{\the\kDVelosTemp}\fi
     \kDVelosGOBreak
   }
 }
@@ -105,11 +97,12 @@
     {\kDVelosFEEnquotedThen{#1}}
     {\kDVelosFETillOverThen{#1}}}}
 
-\newif\iftmpiskeylist
+\newif\ifkDVelosTempIsKeysList
 
-\def\kDVelosFEEnquotedThen#1"#2"{\tmpiskeylistfalse\tmp={#2}#1}
-\def\kDVelosFEKeysListThen#1[#2]{\tmpiskeylisttrue\tmp={#2}#1}
-\def\kDVelosFETillOverThen#1{\tmpiskeylistfalse\tmp={}\kDVelosFETOThen{#1}}
+\def\kDVelosFEEnquotedThen#1"#2"{\kDVelosTempIsKeysListfalse\kDVelosTemp={#2}#1}
+\def\kDVelosFEKeysListThen#1[#2]{\kDVelosTempIsKeysListtrue\kDVelosTemp={#2}#1}
+\def\kDVelosFETillOverThen#1%
+{\kDVelosTempIsKeysListfalse\kDVelosTemp={}\kDVelosFETOThen{#1}}
 
 \def\kDVelosFETOThen#1%
 {\kDIfNextSoftCh\kDBlankSpace
@@ -118,25 +111,28 @@
     {#1}
     {\kDVelosFEAppendThen{\kDVelosFETOThen{#1}}}}}
 
-\def\kDVelosFEAppendThen#1#2{\tmp=\expandafter{\the\tmp#2}#1}
+\def\kDVelosFEAppendThen#1#2{\kDVelosTemp=\expandafter{\the\kDVelosTemp#2}#1}
 
 \def\kDVelosFEEdgePrepend#1%
 {\edef\Act{\noexpand\kDVelosEdge={#1,\the\kDVelosEdge}}\Act}
+
+\def\kDVelosFEEdgePrependNode#1%
+{\kDVelosFEEdgePrepend{edge node={node[every edge quotes][#1]}}}
 
 \def\kDVelosFEThinkThen#1{%
   \def\kDVelosFELoop{\kDVelosFEThinkThen{#1}}
   \def\kDVelosFEBreak{#1}
   \kDIfNextHardCh[{
-    \kDVelosFEEdgePrepend{edge node={node[every edge quotes][\the\tmp]}}
+    \kDVelosFEEdgePrependNode{\the\kDVelosTemp}
     \kDVelosFEThen\kDVelosFELoop
   }{
     \kDIfNextHardCh:{
-      \iftmpiskeylist
-        \kDVelosFEEdgePrepend{edge node={node[every edge quotes][\the\tmp]}}\else
-        \kDVelosFEEdgePrepend{edge node={node[every edge quotes]["\the\tmp"]}}\fi
+      \ifkDVelosTempIsKeysList
+        \kDVelosFEEdgePrependNode{\the\kDVelosTemp}\else
+        \kDVelosFEEdgePrependNode{"\the\kDVelosTemp"}\fi
       \expandafter\kDVelosFEThen\expandafter\kDVelosFELoop\kDGobble
     }{
-      \kDVelosFEEdgePrepend{\the\tmp}
+      \kDVelosFEEdgePrepend{\the\kDVelosTemp}
       \kDVelosFEBreak
     }
   }
@@ -163,7 +159,7 @@
 
 \def\kDVelosFTAppendThen#1#2{\kDVelosTarget=\expandafter{\the\kDVelosTarget#2}#1}
 
-%===[ edge rendering ]==========================================================
+%===[ rendering ]===============================================================
 
 \def\kDVelosDrawFetchedEdgeThen#1{
 % \message{^^J-------------^^J}
@@ -172,8 +168,8 @@
 % \message{TARGET: \the\kDVelosTarget^^J}
 % \message{^^J-------------^^J}
 \edef\Act{\noexpand\path[/velos/every path][
-  /tikz/every edge/.append style={\the\gedg},
-  /tikz/every edge quotes/.append style={\the\glab},
+  /tikz/every edge/.append style={\the\kDVelosGlobalEdgeOptions},
+  /tikz/every edge quotes/.append style={auto,\the\kDVelosGlobalLabelOptions},
 ] (\the\kDVelosSource) edge[\the\kDVelosEdge] (\the\kDVelosTarget);}
 \Act
 #1}
@@ -182,13 +178,15 @@
   /velos/install quote handler
 }}
 
+%===[ high level ]==============================================================
+
+\def\kDVelos%
+{\kDVelosFetchGlobalOptionsThen{\kDVelosDoFirstEdgeThen\kDVelosMaybeChainEdge}}
+
 \def\kDVelosMaybeChainEdge%
 {\kDIfNextHardCh;{}{
 \kDVelosSource\expandafter{\the\kDVelosTarget}
 \kDVelosFetchEdgeThen{\kDVelosFetchTargetThen
   {\kDVelosDrawFetchedEdgeThen\kDVelosMaybeChainEdge}}}}
-
-\def\kDVelos%
-{\kDVelosFetchGlobalOptionsThen{\kDVelosDoFirstEdgeThen\kDVelosMaybeChainEdge}}
 
 \catcode`@=12
