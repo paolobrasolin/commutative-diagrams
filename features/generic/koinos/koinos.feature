@@ -8,7 +8,10 @@ Feature: koinos
 
   Scenario Outline: foobar
     Given I want a debugging dump
-    And I code \kDIfNext<tact>Ch<token>{<true>}{<false>}<code>
+    And the body is
+    """
+    \kDIfNext<tact>Ch<token>{<true>}{<false>}<code>
+    """
     Then compilation <outcome>
 
     Examples:

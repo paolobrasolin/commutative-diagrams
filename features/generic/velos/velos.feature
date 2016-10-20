@@ -19,6 +19,10 @@ Feature: velos
 
     Examples:
       | code          | outcome  |
+      | « A ["f", red] ["g", blue]["h", white]: [dashed,->] Z»  | succeeds |
+
+    Examples:
+      | code          | outcome  |
       | « A -> Z»     | succeeds |
       | « {A} -> Z»   | succeeds |
       | « (A) -> Z»   | succeeds |

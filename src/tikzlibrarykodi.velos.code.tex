@@ -25,152 +25,156 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\newif\ifaftercolon
-\aftercolonfalse
 
-\def\catchlabelkeylist[#1]{\pgfkeys{/labels/.append style={#1}}\parser}
-\def\catcharrowkeylist[#1]{\pgfkeys{/arrows/.append style={#1}}\parser}
-
-\def\parser{%
-\kDIfNextHardCh[{%
-\ifaftercolon%
-\expandafter\catcharrowkeylist\else%
-\expandafter\catchlabelkeylist\fi%
-}{%
-\kDIfNextHardCh:{\aftercolontrue\expandafter\parser\kDGobble}{%
-\relax% it's over
-}}}
-
-
-
-
-
-% GLOBAL OPTIONS
 
 \newtoks\tmp
 
 
+
+%===[ global options (labels+edges) ]===========================================
 
 \newtoks\glab
 \newtoks\gedg
 
 \newif\ifaftercolon
 
-\def\FetchGOptThen#1{\aftercolonfalse\glab={}\gedg={}\MaybeFetchThen{\ReflectThen{#1}}}
+\def\kDVelosFetchGlobalOptionsThen#1{
+  \aftercolonfalse
+  \glab={}
+  \gedg={}
+  \kDVelosGOMaybeFetchThen{\kDVelosGOThinkThen{#1}}
+}
 
-\def\MaybeFetchThen#1{\tmp={}\kDIfNextHardCh[{\FetchGOptListThen{#1}}{#1}}
+\def\kDVelosGOMaybeFetchThen#1{
+  \tmp={}%
+  \kDIfNextHardCh[{\kDVelosGOFetchThen{#1}}{#1}
+}
 
-\def\FetchGOptListThen#1[#2]{\tmp={#2}#1}
+\def\kDVelosGOFetchThen#1[#2]{\tmp={#2}#1}
 
-% \def\FetchAppendThen#1#2{\tmp=\expandafter{\the\tmp#2}#1}
-
-\def\ReflectThen#1{%
-  \def\Loop{\ReflectThen{#1}}
-  \def\Break{#1}
+\def\kDVelosGOThinkThen#1{
+  \def\kDVelosGOLoop{\kDVelosGOThinkThen{#1}}
+  \def\kDVelosGOBreak{#1}
   \kDIfNextHardCh:{\aftercolontrue
     \glab\expandafter{\the\tmp}
-    \expandafter\MaybeFetchThen\expandafter\Loop\kDGobble
+    \expandafter\kDVelosGOMaybeFetchThen\expandafter\kDVelosGOLoop\kDGobble
   }{%
     \ifaftercolon
       \gedg\expandafter{\the\tmp}
     \else
       \glab\expandafter{\the\tmp}
     \fi
-    \Break
+    \kDVelosGOBreak
   }
 }
 
+%===[ first edge ]==============================================================
 
+\def\kDVelosDoFirstEdgeThen#1%
+{\kDVelosFetchFirstSourceThen
+{\kDVelosFetchFirstEdgeThen
+{\kDVelosDrawFetchedEdgeThen
+{#1}}}}
 
+\newtoks\kDVelosSource
 
+\def\kDVelosFetchFirstSourceThen#1%
+{\kDIfNextHardCh(
+  {\kDVelosFFSBracketsThen{#1}}
+  {\kDVelosFFSTillOverThen{#1}}}
 
+\def\kDVelosFFSBracketsThen#1(#2){\kDVelosSource={#2}#1}
+\def\kDVelosFFSTillOverThen#1#2 {\kDVelosSource={#2}#1}
 
+\def\kDVelosFetchFirstEdgeThen#1%
+{\kDVelosFetchEdgeThen
+{\kDVelosFetchTargetThen
+{#1}}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%===[ chained edges ]===========================================================
 
-\def\DoFirstEdgeThen#1%
-{\FetchFirstSourceThen{\FetchFirstEdgeThen{\DrawFetchedEdgeThen{#1}}}}
+\newtoks\kDVelosEdge
 
-% FIRST SOURCE/ARROW
+\def\kDVelosFetchEdgeThen#1%
+{\kDVelosEdge={}\kDVelosFEThen{\kDVelosFEThinkThen{#1}}}
 
-\newtoks\src
-\def\FetchFirstSourceThen#1%
-{\kDIfNextHardCh({\FetchSourceBracketsThen{#1}}{\FetchSourceTillOverThen{#1}}}
-\def\FetchSourceBracketsThen#1(#2){\src={#2}#1}
-\def\FetchSourceTillOverThen#1#2 {\src={#2}#1}
-
-\def\FetchFirstEdgeThen#1%
-{\FetchEdgeThen{\FetchTargetThen{#1}}}
-
-% EDGES
-
-\newtoks\edg
-
-\def\FetchEdgeThen#1{\edg={}\FetchThen{\ThinkThen{#1}}}
-
-\def\FetchThen#1%
-{\kDIfNextHardCh[{\FetchKeysListThen{#1}}%
-{\kDIfNextHardCh"{\FetchEnquotedThen{#1}}{\FetchTillOverThen{#1}}}}
+\def\kDVelosFEThen#1%
+{\kDIfNextHardCh[
+  {\kDVelosFEKeysListThen{#1}}
+  {\kDIfNextHardCh"
+    {\kDVelosFEEnquotedThen{#1}}
+    {\kDVelosFETillOverThen{#1}}}}
 
 \newif\iftmpiskeylist
 
-\def\FetchEnquotedThen#1"#2"{\tmpiskeylistfalse\tmp={#2}#1}
-\def\FetchKeysListThen#1[#2]{\tmpiskeylisttrue\tmp={#2}#1}
-\def\FetchTillOverThen#1{\tmpiskeylistfalse\tmp={}\FetchTOThen{#1}}
+\def\kDVelosFEEnquotedThen#1"#2"{\tmpiskeylistfalse\tmp={#2}#1}
+\def\kDVelosFEKeysListThen#1[#2]{\tmpiskeylisttrue\tmp={#2}#1}
+\def\kDVelosFETillOverThen#1{\tmpiskeylistfalse\tmp={}\kDVelosFETOThen{#1}}
 
-\def\FetchTOThen#1%
-{\kDIfNextSoftCh\kDBlankSpace{#1}{\kDIfNextHardCh:{#1}{\FetchAppendThen{\FetchTOThen{#1}}}}}
+\def\kDVelosFETOThen#1%
+{\kDIfNextSoftCh\kDBlankSpace
+  {#1}
+  {\kDIfNextHardCh:
+    {#1}
+    {\kDVelosFEAppendThen{\kDVelosFETOThen{#1}}}}}
 
-\def\FetchAppendThen#1#2{\tmp=\expandafter{\the\tmp#2}#1}
+\def\kDVelosFEAppendThen#1#2{\tmp=\expandafter{\the\tmp#2}#1}
 
-\def\AppendTo#1#2%
-{\edef\Act{\noexpand#1={\the#2\the#1}}\Act}
+\def\kDVelosFEEdgePrepend#1%
+{\edef\Act{\noexpand\kDVelosEdge={#1,\the\kDVelosEdge}}\Act}
 
-\def\ThinkThen#1{%
-  \def\Loop{\ThinkThen{#1}}
-  \def\Break{#1}
-  \kDIfNextHardCh[{%
-      \edef\Act{\noexpand\edg={edge node={node[every edge quotes][\the\tmp]},\the\edg}}\Act
-    \FetchThen\Loop% and fetch next one
-  }{%
+\def\kDVelosFEThinkThen#1{%
+  \def\kDVelosFELoop{\kDVelosFEThinkThen{#1}}
+  \def\kDVelosFEBreak{#1}
+  \kDIfNextHardCh[{
+    \kDVelosFEEdgePrepend{edge node={node[every edge quotes][\the\tmp]}}
+    \kDVelosFEThen\kDVelosFELoop
+  }{
     \kDIfNextHardCh:{
       \iftmpiskeylist
-        \edef\Act{\noexpand\edg={edge node={node[every edge quotes][\the\tmp]},\the\edg}}\Act
-      \else
-        \edef\Act{\noexpand\edg={edge node={node[every edge quotes]["\the\tmp"]},\the\edg}}\Act
-      \fi
-      \expandafter\FetchThen\expandafter\Loop\kDGobble
-    }{%
-      \iftmpiskeylist
-        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
-      \else
-        \edef\Act{\noexpand\edg={\the\tmp,\the\edg}}\Act
-      \fi
-      \Break
+        \kDVelosFEEdgePrepend{edge node={node[every edge quotes][\the\tmp]}}\else
+        \kDVelosFEEdgePrepend{edge node={node[every edge quotes]["\the\tmp"]}}\fi
+      \expandafter\kDVelosFEThen\expandafter\kDVelosFELoop\kDGobble
+    }{
+      \kDVelosFEEdgePrepend{\the\tmp}
+      \kDVelosFEBreak
     }
   }
 }
 
-% TARGET
+%===[ target ]==================================================================
 
-\newtoks\tar
-\def\FetchTargetThen#1{\kDIfNextHardCh({\FetchTargetBracketsThen{#1}}{\FetchTargetTillOverThen{#1}}}
-\def\FetchTargetBracketsThen#1(#2){\tar={#2}#1}
-\def\FetchTargetTillOverThen#1{\tar={}\FetchTargetTOThen{#1}}
-\def\FetchTargetTOThen#1%
-{\kDIfNextSoftCh\kDBlankSpace{#1}{\kDIfNextHardCh;{#1}{\FetchTargetAppendThen{\FetchTargetTOThen{#1}}}}}
-\def\FetchTargetAppendThen#1#2{\tar=\expandafter{\the\tar#2}#1}
+\newtoks\kDVelosTarget
 
-\def\DrawFetchedEdgeThen#1{
+\def\kDVelosFetchTargetThen#1%
+{\kDIfNextHardCh(
+  {\kDVelosFTBracketsThen{#1}}
+  {\kDVelosFTTillOverThen{#1}}}
+
+\def\kDVelosFTBracketsThen#1(#2){\kDVelosTarget={#2}#1}
+\def\kDVelosFTTillOverThen#1{\kDVelosTarget={}\kDVelosFTTOThen{#1}}
+
+\def\kDVelosFTTOThen#1%
+{\kDIfNextSoftCh\kDBlankSpace
+  {#1}
+  {\kDIfNextHardCh;
+    {#1}
+    {\kDVelosFTAppendThen{\kDVelosFTTOThen{#1}}}}}
+
+\def\kDVelosFTAppendThen#1#2{\kDVelosTarget=\expandafter{\the\kDVelosTarget#2}#1}
+
+%===[ edge rendering ]==========================================================
+
+\def\kDVelosDrawFetchedEdgeThen#1{
 % \message{^^J-------------^^J}
-% \message{SOURCE: \the\src^^J}
-% \message{ EDGE : \the\edg^^J}
-% \message{TARGET: \the\tar^^J}
+% \message{SOURCE: \the\kDVelosSource^^J}
+% \message{ EDGE : \the\kDVelosEdge^^J}
+% \message{TARGET: \the\kDVelosTarget^^J}
 % \message{^^J-------------^^J}
 \edef\Act{\noexpand\path[/velos/every path][
   /tikz/every edge/.append style={\the\gedg},
   /tikz/every edge quotes/.append style={\the\glab},
-] (\the\src) edge[\the\edg] (\the\tar);}
+] (\the\kDVelosSource) edge[\the\kDVelosEdge] (\the\kDVelosTarget);}
 \Act
 #1}
 
@@ -178,13 +182,13 @@
   /velos/install quote handler
 }}
 
-\def\MaybeChainAnotherEdge{
-\kDIfNextHardCh;%
-{}
-{\src\expandafter{\the\tar}
-\FetchEdgeThen{\FetchTargetThen{\DrawFetchedEdgeThen\MaybeChainAnotherEdge}}}
-}
+\def\kDVelosMaybeChainEdge%
+{\kDIfNextHardCh;{}{
+\kDVelosSource\expandafter{\the\kDVelosTarget}
+\kDVelosFetchEdgeThen{\kDVelosFetchTargetThen
+  {\kDVelosDrawFetchedEdgeThen\kDVelosMaybeChainEdge}}}}
 
-\def\kDVelos{\FetchGOptThen{\DoFirstEdgeThen\MaybeChainAnotherEdge}}
+\def\kDVelos%
+{\kDVelosFetchGlobalOptionsThen{\kDVelosDoFirstEdgeThen\kDVelosMaybeChainEdge}}
 
 \catcode`@=12
