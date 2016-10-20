@@ -1,4 +1,3 @@
-
     % fallback as parameter to given key after searching for key in /tikz
     % fallback to/.code 2 args={%
         % \let\searchname=\pgfkeyscurrentname%
@@ -15,94 +14,6 @@
     % labels/.unknown/.style={
         % /kD/fallback to={#1}{/kD/math node contents},
     % },
-
-
-
-\pgfqkeys{/handlers}{
-    first char syntax=true,
-    first char syntax/.cd,
-        % the character (/.initial=\kDNamingShortcut,
-        the character "/.initial=\kDContentShortcut,
-}
-
-% \def\kDPeelRoundParentheses(#1){#1}
-
-% \def\kDNamingShortcut#1{%
-    % \pgfkeysalso{
-        % /tikz/name/.expand once={\kDPeelRoundParentheses#1},
-    % }%
-% }
-
-\def\kDPeelDoubleQuotes"#1"{#1}
-
-\def\kDContentShortcut#1{%
-    \pgfkeysalso{
-        /kD/math node contents/.expand once={\kDPeelDoubleQuotes#1},
-    }%
-}
-
-
-
-
-
-
-% ==================================================================== PARSING =
-
-%% OBSOLETE
-
-% \pgfqkeys{/kD/parse}{
-  % bisect/.code args={#1at#2into#3and#4}{%
-    % \def\Cut#2##1#2##2#2##3\GO%
-      % {\def\cnt{##3}\def\one{#2}\def\two{#2#2}%
-       % \ifx\cnt\one\kDCSDef{#3}{##1}\kDCSDef{#4}{}\else%
-       % \ifx\cnt\two\kDCSDef{#3}{##2}\kDCSDef{#4}{##1}\else%
-       % \errmessage{A bisection crashed.}\fi\fi}%
-    % \Cut#2#1#2#2#2\GO%
-  % },
-  % /tikz/edge node string/.code args={[#1]#2}{%
-    % \ifx\relax#1\relax\else\tikzset{edge node={node[/kD/parse/label={#1},/kD/render/label]}}\fi%
-    % \ifx\relax#2\relax\else\tikzset{edge node string={#2}}\fi%
-  % },
-  % arrow/.forward to=/kD/current arrow/.style,
-  % label/.forward to=/kD/current label/.style,
-  % morphism/.style={
-    % /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
-    % /kD/parse/arrow/.expand once=\kDSND,
-    % /kD/parse/labels/.expand once=\kDFST,
-  % },
-  % chain/.style={
-    % /kD/parse/bisect={#1}at{:}into{kDSND}and{kDFST},
-    % /kD/current chain/every arrow/.estyle=\kDSND,
-    % /kD/current chain/every label/.estyle=\kDFST,
-  % },
-  % labels/.code={%
-    % \ifx\relax#1\relax\else%
-    % \def\doit##1##2\GO{\def\tmp{##1}}\def\sqr{[}\doit#1\GO%
-    % \ifx\tmp\sqr%
-      % \pgfkeysalso{/kD/current arrow/.append style={edge node string={#1}}}\else%
-      % \pgfkeysalso{/kD/current arrow/.append style={edge node string={[#1]}}}\fi%
-    % \fi%
-  % },
-% }
-
-% ================================================================== RENDERING =
-
-% OBSOLETE
-
-% \pgfqkeys{/kD/render}{
-  % morphism/.style={
-    % /kD/arrows/.cd,
-    % /kD/every arrow,
-    % /kD/current chain/every arrow,
-    % /kD/current arrow,
-  % },
-  % label/.style={
-    % /kD/labels/.cd,
-    % /kD/every label,
-    % /kD/current chain/every label,
-    % /kD/current label,
-  % },
-% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\def\kDChopParse#1|#2|#3\GO%
@@ -136,47 +47,6 @@
 %  % the following key has to be integrated into the syntax of the main key
 %  /kD/arrows/schop/.style={/kD/arrows/chop=#1|*|#1},}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% ============================================================ INTERNAL MACROS =
-% The TikZ code is used to define mid level macros.
-
-% \def\kDDoMorphism#1 #2 #3\GO%
-  % {\path (#1) edge [/kD/parse/morphism={#2}, /kD/render/morphism] (#3);}
-% 
-% \let\kDThisSource\relax \let\kDLastSource\relax
-% \let\kDThisTarget\relax \let\kDLastTarget\relax
-% \def\kDLast{*}
-% 
-% \def\kDDoMorphismChain#1 #2 #3 #4\GO%
-  % {\def\kDSource{#1}\ifx\kDSource\kDLast\let\kDSource\kDLastSource\fi%
-   % \def\kDTarget{#3}\ifx\kDTarget\kDLast\let\kDTarget\kDLastTarget\fi%
-   % \kDDoMorphism{\kDSource} {#2} {\kDTarget}\GO%
-   % \ifx\kDThisSource\relax\let\kDThisSource\kDSource\fi%
-   % \ifx\relax#4\relax%
-   % \let\kDLastSource\kDThisSource\let\kDThisSource\relax%
-   % \let\kDLastTarget\kDTarget%
-   % \else\kDDoMorphismChain{#3} #4\GO%
-   % \fi}
-% 
-% \def\kDDoMorphismChainWithoutOptions #1;%
-  % {\kDDoMorphismChainWithOptions[] #1;}
-% 
-% \def\kDDoMorphismChainWithOptions[#1] #2;%
-  % {\pgfqkeys{/kD/parse}{chain={#1}}%
-   % \kDDoMorphismChain#2 \GO}
-
-%=====[ FRONT END ]=============================================================
-
-
-
-
-
-
-
-
-
-
-
 
 % \def\kDCSDef#1#2%
   % {\expandafter\def\csname#1\endcsname{#2}}
