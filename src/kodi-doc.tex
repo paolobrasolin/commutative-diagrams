@@ -1,421 +1,498 @@
-% ############################################################ REQUIRE CONTEXT #
+\documentclass[12pt]{scrbook}
+\usepackage[british]{babel}
+% \hyphenation{Fortran hy-phen-ation}
 
-\newif\ifConTeXt
+\usepackage{libertine}
+\usepackage{libertinust1math}
+\usepackage[ttdefault=true]{AnonymousPro}
 
-% Trick stolen from iftex. The second line is expanded inside the group so
-% the global scope isn't polluted by \csname defining the token.
-\begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
-  \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
-\def\RequireConTeXt%
-  {\ifConTeXt\else\begingroup
-     \errorcontextlines=-1\relax
-     \newlinechar=10\relax
-     \let~\space
-     \errmessage{^^J^^J
-~~~~~_________________________^^J
-~~~~~|~~~~~~~~~~~~~~~~~~~~~~~|^^J
-~~~~~|~~ ConTeXt (MKIV) is ~~|^^J
-~~~~~|~ required to compile ~|^^J
-~~~~~|~ this document. ~~~~~~|^^J
-~~~~~|~~~~~~~~~~~~~~~~~~~~~~~|^^J
-~~~~~|~~~~~~~~~~~~~~~~~ -P. ~|^^J
-~~~~~|~~~~~~~~~~~~~~~~~~~~~~~|^^J
-~~~~~|_______________________|^^J^^J^^J}%
-   \endgroup\fi}
+\setkomafont{disposition}{\rmfamily\scshape}
 
-\RequireConTeXt
 
-% ##############################################################################
+\usepackage{geometry}
 
-\startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\geometry{
+  a4paper,
+  portrait,
+  marginparwidth=4.25cm,
+  marginparsep=.75cm,
+  % showframe,
+  width=11cm,
+  hmarginratio=10:25,
+  vmarginratio=20:30,
+%  footskip=.5in,
+}
+%\savegeometry{main}
 
-\unexpanded\def\coker{{\rm coker}\,}
+%\usepackage{multicol}
+%\usepackage{tabularx}
+%\usepackage{verbatimbox}
+% \usepackage{wrapfig}
 
-\lay[golden]{
-         & \ker a   & \ker b   & \ker c   &   \\
-         & A        & B        & C        & 0 \\
-|(0')| 0 & A'       & B'       & C'       &   \\
-         & \coker a & \coker b & \coker c &   \\
-};
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
 
-% horizontal chains
-\mor (ker a) -> (ker b) -> (ker c);
-\mor A f:-> B g:-> C -> 0;
-\mor 0' -> A' f':-> B' g':-> C';
-\mor (coker a) -> (coker b) -> (coker c);
+\usepackage{float}
+% \usepackage{framed}
+% \usepackage{lipsum}
+% \usepackage{enumitem}
+% \usepackage{pdfpages}
 
-% vetical chains
-\mor[near start] (ker a) -> A a:-> A' -> (coker a);
-\mor[near start] (ker b) -> B b:-> B' -> (coker b);
-\mor[near start] (ker c) -> C c:-> C' -> (coker c);
+% \usepackage{caption}
+\usepackage{sidenotes}
 
-the snake
-\coordinate (tail) at ($(ker b)!9/4!(ker c)$);
-\coordinate (head) at ($(coker b)!9/4!(coker a)$);
-\coordinate (belly) at ($(B)!9/16!(B')$);
-\draw[/kD/arrows/crossing over, ->, rounded corners]
-  (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
+% \DeclareCaptionStyle{sidecaption}%
+% {font=footnotesize,labelfont=sc}
 
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \usepackage{csquotes}
 
-\startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\id{{\mathbf 1}}
-\catcode`ı=\active \letı\id
-\catcode`×=\active \let×\otimes
+\usepackage{graphicx}
+% \usepackage[makeroom]{cancel}
 
-\foreach [count=\n] \o in
-    {((w×x)×y)×x,
-     (w×(x×y))×x,
-     w×((x×y)×x),
-     w×(x×(y×x)),
-     (w×x)×(y×x)}
-  \obj (\n) at ({72*\n:9em}) {\o};
+\usepackage{etoolbox}
 
-\mor 1 "a_{w,x,y}×ı_z": -> 2
-         "a_{w,x×y,z}": -> 3
-       "ı_w×a_{x,y,z}": -> 4;
-\mor *   "a_{w×x,y,z}": -> 5
-         "a_{w,x,y×z}": -> *;
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \usepackage{todonotes}
+% \usepackage{marginnote}
 
-\startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lay[comb]{
-  |(P)| A \times_Z B & B \\
-        A            & Z \\
-};
+% \usepackage[lastpage,user]{zref}
+% \usepackage[hidelinks]{hyperref}
 
-\obj at ($(Z)!2!(P)$) {Q};
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{kodi}
 
-\mor[swap] P p_1:-> A f:-> Z;
-\mor       * P_2:-> B g:-> *;
-\mor[swap]:[bend right] Q q_1:-> A;
-\mor      :[bend left]  * q_2:-> B;
-\mor [mid]:[dashed]     *   u:-> P;
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xparse}
 
-\startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\pgfkeys{/katharizo/expand=full}
+\usepackage[
+  headwidth=textwithmarginpar,
+  footwidth=textwithmarginpar,
+]{scrlayer-scrpage}
+%\clearpairofpagestyles
 
-\foreach [count=\m] \a in {A,B,C}
-  \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
-    \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
+% \lofoot{}
+% \cofoot{}
+% \rofoot{}
+% \lohead{}
+% \cohead{}
+% \rohead{\thepage}
 
-\mor (C_{n+1}) -> (B_{n-1});
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\startbuffer[example-ref]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lay[square]{A&B&C&D\\E&F&G&H\\I&L&M&N\\};
+%\usepackage{multicol}
 
-\mor:                     B -> C;
+\usepackage{microtype}
 
-% * src = prv first src
-\mor:[draw=none]          B -> C;
-\mor:[bend right, green]  * -> D;
+\usepackage{listings}
+% http://tex.stackexchange.com/a/134860/82186
+% \makeatletter
+% \lst@Key{lastline}\relax{\ifnumcomp{#1}{<}{0}{%
+  % \let\mylst@file\lst@intname\sbox0{\lstinputlisting{\mylst@file}}%
+  % \def\lst@lastline{\the\numexpr#1+\value{lstnumber}-1\relax}}%
+  % {\def\lst@lastline{#1\relax}}}
+% \makeatother
 
-% * tar = prv last tar
-\mor:[draw=none]          B -> C;
-\mor:[bend right, blue]   A -> *;
 
-\mor:[draw=none]          B -> C;
-\mor:[bend left, red]     A -> * -> D;
+\usepackage{showexpl}
+\makeatletter
+\lst@Key{postset}\relax{\def\SX@postset{#1}}
+\newcommand\SX@postset{}
+\renewcommand*\SX@resultInput{%
+  \ifx\SX@graphicname\@empty
+    \begingroup
+      \MakePercentComment\makeatother\catcode`\^^M=5\relax
+      \SX@@preset\SX@preset
+      \if@SX@rangeaccept
+       \let\SX@tempa=\SX@input
+      \else
+       \let\SX@tempa=\input
+      \fi
+      \if\SX@scaled ?%
+        \let\SX@tempb=\@firstofone
+      \else
+        \if\SX@scaled !%
+          \def\SX@tempb##1{\resizebox{\SX@width}{!}{##1}}%
+        \else
+          \def\SX@tempb##1{\scalebox{\SX@scaled}{##1}}%
+        \fi
+      \fi
+      \SX@tempb{\SX@tempa{\SX@codefile}}\SX@postset\par
+    \endgroup
+  \else
+    \expandafter\includegraphics\expandafter[\SX@graphicparam]%
+      {\SX@graphicname}%
+  \fi
+}
+\makeatother
 
-\mor:                     F -> G;
 
-% + src = prv last tar
-\mor:[draw=none]          F -> G;
-\mor:[bend right, green]  + -> H;
 
-% + tar = prv first src
-\mor:[draw=none]          F -> G;
-\mor:[bend right, blue]   E -> +;
+\lstdefinelanguage{TikZ}
+{morekeywords={for},
+sensitive=false,
+morecomment=[l]{//},
+morecomment=[s]{/*}{*/},
+morestring=[b]",
+}
 
-\mor:[draw=none]          F -> G;
-\mor:[bend left, red]     E -> + -> H;
+\lstset{
+  language=[LaTeX]TeX,
+  basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{black!8},
+  % keywordstyle=*\color{blue},
+  % identifierstyle=\color{orange}\bfseries,
+  % morekeywords={\path},
+  moretexcs={
+    \starttext,\stoptext,\usemodule,
+    \tikzpicture,\endtikzpicture,
+    \starttikzpicture,\stoptikzpicture,
+    \usetikzlibrary,
+    \kodi,\endkodi,
+    \startkodi,\stopkodi,
+    \lay,\obj,\mor,
+    \bye
+  },
+  texcsstyle=*\textbf,
+  % morestring=[b]",
+  commentstyle=\itshape,
+  frame=none,
+}
 
-% so, basically, * is the opposite of +
-\mor:      M -> L;
-\mor:[red] I <- * <- N;
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstset{explpreset={
+  wide,
+  pos=o,
+  preset=\centering,
+  width=\marginparwidth,
+  hsep=\marginparsep,
+  rframe={}
+}}
 
-\startbuffer[mwe-tex]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{lipsum}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{hologo}
+\def\ConTeXt{\hologo{ConTeXt}}
+\def\koDi{{\scshape koDi}}
+\def\TikZ{{\scshape TikZ}}
+
+\begin{document}
+
+%===[ TITLE PAGE ]==============================================================
+
+\thispagestyle{empty}
+\noindent
+\resizebox{\linewidth}{!}{\scshape \kern-.05ex koDi\kern-.06ex}\\[1em]
+\resizebox{\linewidth}{!}{\scshape enchiridion}\par
+% \vfill\hfill
+% \llap{\resizebox{.2\linewidth}{!}{\scshape v1.0.0}}
+\newpage
+
+%===[ FOREWORD ]================================================================
+
+
+% \begin{adjustwidth}{.45\textwidth}{.45\textwidth-\marginparwidth-\marginparsep}
+\noindent\koDi\ is a \TikZ\ library. Its purpose
+is drawing commutative diagrams.
+It is designed precisely to overcome
+the shortcomings of traditional ones.
+The syntax is minimalistic and intelligible.\par
+\hfill{\itshape Paolo al-Imkānī Brasolin}
+% \end{adjustwidth}
+
+\newpage
+
+
+%===[ PRELIMINARIES ]===========================================================
+
+\section{Preliminaries}
+
+\TikZ\ is the only requirement of \koDi.  This ensures compatibility with
+most \TeX\ flavours.  Here are minimal working examples for the main dialects:
+
+\begin{figure}[H]
+  \begin{adjustwidth}{0sp}{-\marginparwidth-\marginparsep}
+  % \centering
+    \begin{subfigure}[]{0.3\linewidth}
+      \caption*{\TeX}
+      \begin{lstlisting}
+
 \input kodi
+
 \kodi
-  % insert diagram here
+  % diagram here
 \endkodi
 \bye
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \end{lstlisting}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+      \caption*{\ConTeXt\ module}
+      \begin{lstlisting}
 
-\startbuffer[mwe-tex-lib]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input tikz
-\usetikzlibrary kodi
-\tikzpicture[kodi]
-  % insert diagram here
-\endtikzpicture
-\bye
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\startbuffer[mwe-context]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usemodule[kodi]
 \starttext
 \startkodi
-  % insert diagram here
+  % diagram here
 \stopkodi
 \stoptext
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\startbuffer[mwe-context-lib]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usemodule[tikz]
-\usetikzlibrary[kodi]
-\starttext
-\starttikzpicture[kodi]
-  % insert diagram here
-\stoptikzpicture
-\stoptext
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\startbuffer[mwe-latex]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \end{lstlisting}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+      \caption*{\LaTeX\ package}
+      \begin{lstlisting}
 \documentclass{article}
 \usepackage{kodi}
 \begin{document}
 \begin{kodi}
-  % insert diagram here
+  % diagram here
 \end{kodi}
 \end{document}
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \end{lstlisting}
+    \end{subfigure}
+    \par
+    \begin{subfigure}{0.3\linewidth}
+      \caption*{\TeX\ (\TikZ\ library)}
+      \begin{lstlisting}
 
-\startbuffer[mwe-latex-lib]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass{article}
-\usepackage{tikz}
-\usetikzlibrary{kodi}
-\begin{document}
-\begin{tikzpicture}[kodi]
-  % insert diagram here
-\end{tikzpicture}
-\end{document}
-\stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input tikz
+\usetikzlibrary kodi
 
-\unexpanded\def\openout{\immediate\normalopenout}
+\tikzpicture[kodi]
+  % diagram here
+\endtikzpicture
+\bye
+      \end{lstlisting}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+      \caption*{\ConTeXt\ (\TikZ\ library)}
+      \begin{lstlisting}
+
 \usemodule[tikz]
-\usetikzlibrary[calc]
-\usetikzlibrary[positioning]
 \usetikzlibrary[kodi]
-
-% ==============================================================================
-
-\definefontfeature
-  [default]
-  [default]
-  [protrusion=quality,expansion=quality]
-
-\setupalign[hz, hanging, nothyphenated, tolerant]
-
-%\setupbodyfont[12pt]
-%\setupinterlinespace[line=12pt]%.8\lead]
-
-\newdimen\lead
-\lead=\baselineskip
-
-% X: 5 + (21+ 8) + (2+8+3) = 34
-% Y: 3 + (34+13) + (2+1+5) = 45
-
-\definepapersize[golden][
-   width=\numexpr5+29+13\relax\lead,
-  height=\numexpr3+47+ 8\relax\lead]
-\setuppapersize[golden][golden]
-
-\setuplayout[
-             backspace=5\lead,       width=29\lead,
-              topspace=3\lead,       lines=47,
-    leftmargindistance=0\lead,  leftmargin=0\lead,
-   rightmargindistance=2\lead, rightmargin=8\lead,
-        headerdistance=0\lead,      header=0\lead,
-        footerdistance=2\lead,      footer=1\lead,
-  grid=yes]
-
-\setuphead[chapter][align=middle,number=no,style=\scc,grid=high,page=yes]
-
-\setuptyping[option=TEX,style=tx]
-
-
-
-\def\DoExample#1#2{%
-  \title{#1}
-  % \framed{
-\begingroup\starttikzpicture[kodi]\getbuffer[example-#2]\stoptikzpicture\endgroup
-% }
-  {\tfxx\typebuffer[example-#2]}
-}
-
-%\showframe
-%\showgrid
-%\showboxes
-%\showmakeup
-
-\setuppagenumbering[
-  alternative=doublesided,
-  location=margin,
-  style=cap]
-
-\setupuserpagenumber[
-  numberconversion=romannumerals]
-
-
-
-% ####################################################################### TEXT #
-
 \starttext
-
-\startfrontmatter
-
-% =================================================================== COVER ====
-
-\startstandardmakeup
-  [
-    align=center,
-    height=.9\makeupheight,
-    top=\vfil,bottom=\vfil\vfil
-  ]
-{\bf\switchtobodyfont[64pt] koDi}
-\blank
-\color[red]{\bf Unreleased version}
-%\date[d=27,m=12,y=2015][year,-,mm,-,dd]
-\vfil
-{\scc enchiridion}
-\stopstandardmakeup
-
-% ================================================================ FOREWORD ====
-
-\setupnarrower[middle=\lead]
-\startstandardmakeup[align={hz,hanging,nothyphenated,tolerant}]
-\startnarrower[8*middle]
-\parfillskip=0pt
-{\sc koDi} is a {\sc TikZ} library. Its purpose
-is drawing commutative diagrams.
-It is designed precisely to overcome
-the shortcomings of traditional ones.
-The syntax is minimalistic and intelligible.
-\blank
-This is a wakka wakka blah blah
-\blank
-I am wobbly wibbly timey wimey
-\blank
-\wordright{\it Paolo al-Imkānī Brasolin}
-\stopnarrower
-\stopstandardmakeup
-
-\stopfrontmatter
-
-\startbodymatter
-
-% =========================================================== PRELIMINARIES ====
-
-\setupframedtext[
-%  background=color,
-%  backgroundcolor=gray,
-  width=10\lead,
-%  height=8\lead,
-  frame=off,
-  rightframe=on,
-  framecolor=darkgreen,
-  rulethickness=2pt]
-
-\setupcombinations[
-%  distance=0pt,
-%  align=middle,
-%  location=left,
-%  alternative=text
-  ]
-
-\definefloat[textmarginfigure][textmarginfigures]
-\setupfloat[textmarginfigure][location=inner]
-
-\setupcaptions[textmarginfigure][location=top]
-
-\chapter{Preliminaries}
-
-{\sc TikZ} is the only requirement of {\sc koDi}.
-This ensures compatibility with all \TeX\ flavours.
-Here are minimal working examples of the {\tt kodi} environment for the main dialects:
-
-
-\placetextmarginfigure[none,here]
-[fig:mwe]{}
-{\startcombination[3*1]
-  {\startframedtext\typebuffer[mwe-tex]\stopframedtext}{\TeX}
-  {\startframedtext\typebuffer[mwe-context]\stopframedtext}{\ConTeXt}
-  {\startframedtext\typebuffer[mwe-latex]\stopframedtext}{\LaTeX}
- \stopcombination} 
-
-\placetextmarginfigure[none,here]
-[fig:mwe]{}
-{\startcombination[3*1]
-  {\startframedtext\typebuffer[mwe-tex-lib]\stopframedtext}{\TeX\ (library)}
-  {\startframedtext\typebuffer[mwe-context-lib]\stopframedtext}{\ConTeXt\ (library)}
-  {\startframedtext\typebuffer[mwe-latex-lib]\stopframedtext}{\LaTeX\ (library)}
- \stopcombination} 
-
-A useful {\sc TikZ} feature exclusive to \LaTeX\ is externalization.
-A small expedient is necessary to use it with {\cs koDi}:
-
-\blank
-
-\starttyping
+\starttikzpicture[kodi]
+  % diagram here
+\stoptikzpicture
+\stoptext
+      \end{lstlisting}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+      \caption*{\LaTeX\ (\TikZ\ library)}
+      \begin{lstlisting}
 \documentclass{article}
 \usepackage{tikz}
 \usetikzlibrary{kodi}
-\usetikzlibrary{external}
-\tikzexternalize[prefix=tikzpictures/]
 \begin{document}
 \begin{tikzpicture}[kodi]
-% -> insert diagram here
+  % diagram here
 \end{tikzpicture}
 \end{document}
-\stoptyping
+      \end{lstlisting}
+    \end{subfigure}
+  \end{adjustwidth}
+\end{figure}
 
-% ==============================================================================
 
-\defineframed[syntaxbox][
-  background=color,
-  backgroundcorner=round,
-  radius=3pt,
-  frame=off,
-  location=low]
 
-\setupinmargin[outer][
-  style=slanted]
 
-\def\mandatory {\syntaxbox[backgroundcolor=yellow]}
-\def\optional  {\syntaxbox[backgroundcolor=cyan]}
-\def\repetition{\syntaxbox[backgroundcolor=orange]}
 
-% \chapter{Objects and Morphisms}
+% A useful {\sc TikZ} feature exclusive to \LaTeX\ is externalization.
+% A small expedient is necessary to use it with {\cs koDi}:
 % 
-% {\sc koDi} defines two basic macros: one to draw objects and one to draw morphisms.
-% We now look at the syntax of their parameters described with fancy coloured blocks.
+% \blank
 % 
-% \inouter{Blocks can be \mandatory{mandatory}, \optional{optional} or \repetition{repeated}.}
+% \starttyping
+% \documentclass{article}
+% \usepackage{tikz}
+% \usetikzlibrary{kodi}
+% \usetikzlibrary{external}
+% \tikzexternalize[prefix=tikzpictures/]
+% \begin{document}
+% \begin{tikzpicture}[kodi]
+% -> insert diagram here
+% \end{tikzpicture}
+% \end{document}
+% \stoptyping
+
+
+
+
+
+% Questo è un testo di prova \sidenote{Questa è una riflessione amargine, dotata anche di una certa lunghezza.}.
+
+\lipsum[1]
+
+\begin{LTXexample}[
+  preset={\tikzpicture[kodi]},
+  postset={\endtikzpicture}
+]
+\lay [golden=2em] { A & B & C \\ D & E & F \\ };
+\mor A [bend right, ->] B [bend left, ->] C
+  -> D [bend right, ->] E [bend left, ->] F;
+\end{LTXexample}
+
+\lipsum[2]
+
+\begin{LTXexample}[linerange={2-3}]
+\begin{tikzpicture}[kodi]
+\lay { A & B \\};
+\mor A -> B;
+\end{tikzpicture}
+\end{LTXexample}
+
+\lipsum
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 % 
-% {\tt\backslash obj\mandatory{object};}
 % 
-% {\tt\backslash mor%
- % \optional{[morphism]}%
- % \mandatory{\{name\}}%
- % \repetition{\textvisiblespace\{morphism\}\textvisiblespace\{name\}};}
+% % ##############################################################################
+% 
+% \startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \unexpanded\def\coker{{\rm coker}\,}
+% 
+% \lay[golden]{
+         % & \ker a   & \ker b   & \ker c   &   \\
+         % & A        & B        & C        & 0 \\
+% |(0')| 0 & A'       & B'       & C'       &   \\
+         % & \coker a & \coker b & \coker c &   \\
+% };
+% 
+% % horizontal chains
+% \mor (ker a) -> (ker b) -> (ker c);
+% \mor A f:-> B g:-> C -> 0;
+% \mor 0' -> A' f':-> B' g':-> C';
+% \mor (coker a) -> (coker b) -> (coker c);
+% 
+% % vetical chains
+% \mor[near start] (ker a) -> A a:-> A' -> (coker a);
+% \mor[near start] (ker b) -> B b:-> B' -> (coker b);
+% \mor[near start] (ker c) -> C c:-> C' -> (coker c);
+% 
+% the snake
+% \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
+% \coordinate (head) at ($(coker b)!9/4!(coker a)$);
+% \coordinate (belly) at ($(B)!9/16!(B')$);
+% \draw[/kD/arrows/crossing over, ->, rounded corners]
+  % (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
+% 
+% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \def\id{{\mathbf 1}}
+% \catcode`ı=\active \letı\id
+% \catcode`×=\active \let×\otimes
+% 
+% \foreach [count=\n] \o in
+    % {((w×x)×y)×x,
+     % (w×(x×y))×x,
+     % w×((x×y)×x),
+     % w×(x×(y×x)),
+     % (w×x)×(y×x)}
+  % \obj (\n) at ({72*\n:9em}) {\o};
+% 
+% \mor 1 "a_{w,x,y}×ı_z": -> 2
+         % "a_{w,x×y,z}": -> 3
+       % "ı_w×a_{x,y,z}": -> 4;
+% \mor *   "a_{w×x,y,z}": -> 5
+         % "a_{w,x,y×z}": -> *;
+% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \lay[comb]{
+  % |(P)| A \times_Z B & B \\
+        % A            & Z \\
+% };
+% 
+% \obj at ($(Z)!2!(P)$) {Q};
+% 
+% \mor[swap] P p_1:-> A f:-> Z;
+% \mor       * P_2:-> B g:-> *;
+% \mor[swap]:[bend right] Q q_1:-> A;
+% \mor      :[bend left]  * q_2:-> B;
+% \mor [mid]:[dashed]     *   u:-> P;
+% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \pgfkeys{/katharizo/expand=full}
+% 
+% \foreach [count=\m] \a in {A,B,C}
+  % \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
+    % \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
+% 
+% \mor (C_{n+1}) -> (B_{n-1});
+% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% \startbuffer[example-ref]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \lay[square]{A&B&C&D\\E&F&G&H\\I&L&M&N\\};
+% 
+% \mor:                     B -> C;
+% 
+% % * src = prv first src
+% \mor:[draw=none]          B -> C;
+% \mor:[bend right, green]  * -> D;
+% 
+% % * tar = prv last tar
+% \mor:[draw=none]          B -> C;
+% \mor:[bend right, blue]   A -> *;
+% 
+% \mor:[draw=none]          B -> C;
+% \mor:[bend left, red]     A -> * -> D;
+% 
+% \mor:                     F -> G;
+% 
+% % + src = prv last tar
+% \mor:[draw=none]          F -> G;
+% \mor:[bend right, green]  + -> H;
+% 
+% % + tar = prv first src
+% \mor:[draw=none]          F -> G;
+% \mor:[bend right, blue]   E -> +;
+% 
+% \mor:[draw=none]          F -> G;
+% \mor:[bend left, red]     E -> + -> H;
+% 
+% % so, basically, * is the opposite of +
+% \mor:      M -> L;
+% \mor:[red] I <- * <- N;
+% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
+% 
 
 
-% \chapter{Arrows}
-% \chapter{Layouts}
-
-\DoExample{Snake Lemma}{snake_lemma}
-\DoExample{K4 associahedron}{k4_associahedron}
-\DoExample{Pullback}{pullback}
-\DoExample{Chain}{chain}
-\DoExample{}{ref}
-
-\stopbodymatter
-
-\startbackmatter
-
-\stopbackmatter
-\stoptext
+\end{document}
