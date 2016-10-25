@@ -36,6 +36,11 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 
+\DeclareMathOperator{\coker}{coker}
+
+
+
+
 \usepackage{float}
 % \usepackage{framed}
 % \usepackage{lipsum}
@@ -147,6 +152,7 @@ morestring=[b]",
   moretexcs={
     \starttext,\stoptext,\usemodule,
     \tikzpicture,\endtikzpicture,
+    \tikzexternalize,
     \starttikzpicture,\stoptikzpicture,
     \usetikzlibrary,
     \kodi,\endkodi,
@@ -175,6 +181,19 @@ morestring=[b]",
 \usepackage{caption}
 \usepackage{subcaption}
 
+
+\captionsetup[marginfigure]{
+  textfont=bf,
+  justification=centering
+}
+\captionsetup[subfigure]{
+  textfont=normalfont,
+  singlelinecheck=off,
+  justification=centering
+}
+
+
+
 \usepackage{hologo}
 \def\ConTeXt{\hologo{ConTeXt}}
 \def\koDi{{\scshape koDi}}
@@ -186,10 +205,15 @@ morestring=[b]",
 
 \thispagestyle{empty}
 \noindent
-\resizebox{\linewidth}{!}{\scshape \kern-.05ex koDi\kern-.06ex}\\[1em]
+\resizebox{\linewidth}{!}{\scshape koDi}\\[.6em]
+\resizebox{\linewidth}{!}{\scshape kommutative Diagramme für \TeX}\\[1.6em]
 \resizebox{\linewidth}{!}{\scshape enchiridion}\par
-% \vfill\hfill
-% \llap{\resizebox{.2\linewidth}{!}{\scshape v1.0.0}}
+\vfill\hfill
+\marginpar{
+  \resizebox{\linewidth}{!}{\scshape\color{red} unreleased}\\[.6em]
+  \resizebox{\linewidth}{!}{\scshape v0.0.0}\\
+  \resizebox{\linewidth}{!}{\scshape \today}
+}
 \newpage
 
 %===[ FOREWORD ]================================================================
@@ -216,8 +240,7 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
 
 \begin{figure}[H]
   \begin{adjustwidth}{0sp}{-\marginparwidth-\marginparsep}
-  % \centering
-    \begin{subfigure}[]{0.3\linewidth}
+    \begin{subfigure}{\marginparwidth}
       \caption*{\TeX}
       \begin{lstlisting}
 
@@ -230,7 +253,7 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
       \end{lstlisting}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\linewidth}
+    \begin{subfigure}{\marginparwidth}
       \caption*{\ConTeXt\ module}
       \begin{lstlisting}
 
@@ -243,7 +266,7 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
       \end{lstlisting}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\linewidth}
+    \begin{subfigure}{\marginparwidth}
       \caption*{\LaTeX\ package}
       \begin{lstlisting}
 \documentclass{article}
@@ -256,7 +279,7 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
       \end{lstlisting}
     \end{subfigure}
     \par
-    \begin{subfigure}{0.3\linewidth}
+    \begin{subfigure}{\marginparwidth}
       \caption*{\TeX\ (\TikZ\ library)}
       \begin{lstlisting}
 
@@ -270,7 +293,7 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
       \end{lstlisting}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\linewidth}
+    \begin{subfigure}{\marginparwidth}
       \caption*{\ConTeXt\ (\TikZ\ library)}
       \begin{lstlisting}
 
@@ -284,7 +307,7 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
       \end{lstlisting}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\linewidth}
+    \begin{subfigure}{\marginparwidth}
       \caption*{\LaTeX\ (\TikZ\ library)}
       \begin{lstlisting}
 \documentclass{article}
@@ -300,33 +323,27 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
   \end{adjustwidth}
 \end{figure}
 
+A useful \TikZ\ feature exclusive to \LaTeX\ is externalization.
+A small expedient is necessary to use it with \koDi.
+\begin{marginfigure}[-2em]
+  \caption*{\TikZ\ externalization}
+  \begin{lstlisting}
+\documentclass{article}
+\usepackage{tikz}
+\usetikzlibrary{kodi}
+\usetikzlibrary{external}
+\tikzexternalize
+  [prefix=tikzpicfolder/]
+\begin{document}
+\begin{tikzpicture}[kodi]
+  % diagram here
+\end{tikzpicture}
+\end{document}
+  \end{lstlisting}
+\end{marginfigure}
 
 
-
-
-% A useful {\sc TikZ} feature exclusive to \LaTeX\ is externalization.
-% A small expedient is necessary to use it with {\cs koDi}:
-% 
-% \blank
-% 
-% \starttyping
-% \documentclass{article}
-% \usepackage{tikz}
-% \usetikzlibrary{kodi}
-% \usetikzlibrary{external}
-% \tikzexternalize[prefix=tikzpictures/]
-% \begin{document}
-% \begin{tikzpicture}[kodi]
-% -> insert diagram here
-% \end{tikzpicture}
-% \end{document}
-% \stoptyping
-
-
-
-
-
-% Questo è un testo di prova \sidenote{Questa è una riflessione amargine, dotata anche di una certa lunghezza.}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \lipsum[1]
 
@@ -348,63 +365,42 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
 \end{tikzpicture}
 \end{LTXexample}
 
-\lipsum
+\lipsum[3]
 
 
 
+% \show\ker
 
+\begin{LTXexample}[pos=b]
+\begin{tikzpicture}[kodi]
 
+\lay[golden]{
+         & \ker a   & \ker b   & \ker c   &   \\
+         & A        & B        & C        & 0 \\
+|(0')| 0 & A'       & B'       & C'       &   \\
+         & \coker a & \coker b & \coker c &   \\
+};
 
+% horizontal chains
+\mor (ker a) -> (ker b) -> (ker c);
+\mor A f:-> B g:-> C -> 0;
+\mor 0' -> A' f':-> B' g':-> C';
+\mor (coker a) -> (coker b) -> (coker c);
 
+% vertical chains
+\mor[near start] (ker a) -> A a:-> A' -> (coker a);
+\mor[near start] (ker b) -> B b:-> B' -> (coker b);
+\mor[near start] (ker c) -> C c:-> C' -> (coker c);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% 
-% 
-% % ##############################################################################
-% 
-% \startbuffer[example-snake_lemma]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% \unexpanded\def\coker{{\rm coker}\,}
-% 
-% \lay[golden]{
-         % & \ker a   & \ker b   & \ker c   &   \\
-         % & A        & B        & C        & 0 \\
-% |(0')| 0 & A'       & B'       & C'       &   \\
-         % & \coker a & \coker b & \coker c &   \\
-% };
-% 
-% % horizontal chains
-% \mor (ker a) -> (ker b) -> (ker c);
-% \mor A f:-> B g:-> C -> 0;
-% \mor 0' -> A' f':-> B' g':-> C';
-% \mor (coker a) -> (coker b) -> (coker c);
-% 
-% % vetical chains
-% \mor[near start] (ker a) -> A a:-> A' -> (coker a);
-% \mor[near start] (ker b) -> B b:-> B' -> (coker b);
-% \mor[near start] (ker c) -> C c:-> C' -> (coker c);
-% 
 % the snake
 % \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
 % \coordinate (head) at ($(coker b)!9/4!(coker a)$);
 % \coordinate (belly) at ($(B)!9/16!(B')$);
 % \draw[/kD/arrows/crossing over, ->, rounded corners]
   % (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
-% 
-% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{LTXexample}
+
 % 
 % \startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \def\id{{\mathbf 1}}
@@ -484,15 +480,5 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
 % \mor:      M -> L;
 % \mor:[red] I <- * <- N;
 % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-% 
-
 
 \end{document}

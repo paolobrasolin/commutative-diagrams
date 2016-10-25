@@ -15,8 +15,6 @@
   mitra/.style={
     matrix,
     cells={anchor=base},
-    execute at begin cell=\kDBeginCell,
-    execute at empty cell=\kDEmptyCell,
   },
   %: MEMO: this *cannot* be put along with global node styles (because order of execution)
   matrix coordinates alias/.style={
@@ -24,114 +22,149 @@
   },
 }
 
-\catcode`@=11
-
-\newif\ifkDRTSHasTrail
-\newif\ifkDRTSPrevSpace
-
-\def\kDRTSGob{%
-\kDIfNextSoftCh\kD%
-{\ifkDRTSPrevSpace\kDRTSHasTrailtrue\else\kDRTSHasTrailfalse\fi\kDGobble}%
-{\kDIfNextSoftCh\kDBlankSpace%
-{\kDRTSPrevSpacetrue\expandafter\kDRTSGob\kDIdentity}%
-{\kDRTSPrevSpacefalse\expandafter\kDRTSGob\kDGobble}%
-}%
-}
-
-\def\kDRemoveTrailingSpace#1{
-\kDRTSPrevSpacefalse
-\edef\kDRTSAct{\noexpand\kDRTSGob\the#1\noexpand\kD}\kDRTSAct
-\ifkDRTSHasTrail
-\def\kDRTSCut##1 \kD{#1={##1}}
-\edef\kDRTSAct{\noexpand\kDRTSCut\the#1\noexpand\kD}\kDRTSAct
-\fi
-}
-
-\catcode`@=12
-
-
-
-\newtoks\kDTokOpt
-\newtoks\kDTokBuf
-
-\newtoks\buf
-
-\catcode`@=11
-
 \newif\ifConTeXt
 % Trick stolen from iftex. The second line is expanded inside the group so
 % the global scope isn't polluted by \csname defining the token.
 \begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
   \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+% \ifConTeXt\catcode`|=12 \fi% TODO: why is the space necessary?
 
+% \newif\ifkDMitraDebug
+% \kDMitraDebugfalse
 
-\newif\ifkDCurrentRowReady
-\kDCurrentRowReadyfalse
+% \def\kDMitraDebugDump{
+  % \pgfextra{
+    % \bgroup\let~\space
+    % \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
+    % \immediate\write\file{~~options: '\the\kDTokOpt'}
+    % \immediate\write\file{~~content: '\the\kDTokBuf'}
+    % \egroup
+  % }
+% }
 
-\def\kDBeginCell{%
-\ifConTeXt\catcode`|=12 \fi% TODO: why is the space necessary?
-\ifkDCurrentRowReady%
-\expandafter\kDParseCell\else%
-\expandafter\kDPrepareCurrentRow\fi%
-}
+\def\kDAppend#1#2%
+{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
 
-\bgroup
+\newtoks\kDMitraTmpTok
+
+\def\kDMitra%
+{\kDMitraFetchMatrixThen
+{\kDMitraParseMatrixTableThen
+\kDMitraOutput}}
+
+\def\kDMitraOutput{
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\matrix[mitra]\the\kDMitraMNTok{\the\kDMitraMatOutTok};}}%
+\kDAct\the\kDMitraTmpTok}
+
+%===[ fetch ]===================================================================
+
+\def\kDMitraFetchMatrixThen#1%
+{\kDMitraFetchMatrixNodeThen
+{\kDMitraFetchMatrixTableThen
+{#1}}}
+
+\newtoks\kDMitraMNTok
+\def\kDMitraFetchMatrixNodeThen#1#2#%
+{\kDMitraMNTok={#2}#1}
+
+\newtoks\kDMitraMTTok
+\def\kDMitraFetchMatrixTableThen#1#2;%
+{\kDMitraMTTok={#2}#1}
+
+%===[ parse/table ]=============================================================
+
+\newtoks\kDMitraMatOutTok
+\def\kDMitraParseMatrixTableThen#1{%
+\kDMitraMatOutTok={}%
+\expandafter\kDMitraParseTable\the\kDMitraMTTok\kD%
+#1}
+
+\def\kDMitraParseTable{\kDMitraParseAllRowsThen\relax}
+
+\def\kDMitraParseAllRowsThen#1{%
+  \def\kDExit{#1}%
+  \kDIfNextHardCh\kD
+    {\expandafter\kDExit\kDGobble}
+    {\kDMitraParseOneRowThen{\kDMitraParseAllRowsThen{#1}}}}
+
+%===[ parse/table/row ]=========================================================
+
+\def\kDMitraParseOneRowThen#1%
+  {\kDMitraMarkRowEndBefore
+  {\kDMitraParseAllColsThen
+  {\kDMitraParseRowEndThen
+  {#1}}}}
+
+\def\kDMitraMarkRowEndBefore#1#2\\{#1#2&\kD\\}
+
+\def\kDMitraParseAllColsThen#1{%
+  \def\kDExit{#1}%
+  \kDIfNextHardCh\kD
+    {\expandafter\kDExit\kDGobble}
+    {\kDMitraParseOneColThen{\kDMitraParseAllColsThen{#1}}}}
+
+\def\kDMitraParseRowEndThen#1%
+  {\kDMitraFetchRowEndThen
+  {\kDMitraPrintRowEndThen
+  {#1}}}
+
+\def\kDMitraFetchRowEndThen#1\\{\kDMitraMaybeFetchRowOptionsThen{#1}}
+
+\newtoks\kDMitraRowOptTok
+\def\kDMitraMaybeFetchRowOptionsThen#1%
+{\kDMitraRowOptTok={}\kDIfNextHardCh[{\kDMitraFetchRowOptionsThen{#1}}{#1}}
+\def\kDMitraFetchRowOptionsThen#1[#2]{\kDMitraRowOptTok={[#2]}#1}
+
+\def\kDMitraPrintRowEndThen#1{%
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\\\the\kDMitraRowOptTok}}%
+\kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1}
+
+%===[ parse/table/row/col ]=====================================================
+
+\def\kDMitraParseOneColThen#1%
+{\kDMitraParseCellThen
+{\kDMitraParseColEndThen
+{#1}}}
+
+\def\kDMitraParseColEndThen#1%
+{\kDMitraMaybeFetchColOptionsThen
+{\kDMitraMaybePrintColEndThen
+{#1}}}
+
+\newtoks\kDMitraColOptTok
+\def\kDMitraMaybeFetchColOptionsThen#1%
+{\kDMitraColOptTok={}\kDIfNextHardCh[{\kDMitraFetchColOptionsThen{#1}}{#1}}
+\def\kDMitraFetchColOptionsThen#1[#2]{\kDMitraColOptTok={[#2]}#1}
+
 \catcode`&=\active
-
-\gdef\kDPrepareCurrentRow#1\\{%
-\global\kDCurrentRowReadytrue%
-\buf={#1&\\}\edef\tmp{\the\buf}%\show\tmp%
-\expandafter\kDBeginCell\tmp%
+\def\kDMitraMaybePrintColEndThen#1{
+\kDIfNextHardCh\kD{#1}{
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand&\the\kDMitraColOptTok}}%
+\kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1
 }
-
-\gdef\kDFetchContent#1&%
-{\kDTokBuf={#1}\kDRemoveTrailingSpace\kDTokBuf\kDMakeCell}
-
-\gdef\kDMakeCell{%
-\kDMakeNode%
-\ifkDMitraDebug\kDMitraDebugDump\fi%
-\kDIfNextHardCh\\{\global\kDCurrentRowReadyfalse}%
-{\kDIfNextHardCh&{&{}}{&}}% fill up incoming empty cells with {}
 }
+\catcode`&=4
 
-\egroup
+%===[ parse/table/row/col/cell ]================================================
 
-\def\kDParseCell%
-{\kDIfNextHardCh|{\kDFetchOptions}{\kDFetchOptions||}}
+\def\kDMitraParseCellThen#1%
+{\kDMitraMaybeFetchCellOptionsThen
+{\kDMitraFetchCellContentThen
+{\kDMitraPrintCellThen
+{#1}}}}
 
-% TODO: is an identity really the smartest way to remove leading whitespace?
-\def\kDFetchOptions|#1|%
-{\kDTokOpt={#1}\expandafter\kDFetchContent\kDIdentity}
+\newtoks\kDMitraCelOptTok
+\def\kDMitraMaybeFetchCellOptionsThen#1%
+{\kDMitraCelOptTok={}\kDIfNextHardCh|{\kDMitraFetchCellOptionsThen{#1}}{#1}}
+\def\kDMitraFetchCellOptionsThen#1|#2|{\kDMitraCelOptTok={#2}#1}
 
-\def\kDMakeNode{%
-\edef\kDBuiltNode{\noexpand\node\the\kDTokOpt[
-  node contents={\the\kDTokBuf},
-  matrix coordinates alias
-];}%
-\kDBuiltNode%
-}
+\newtoks\kDMitraCelCntTok
+\def\kDMitraFetchCellContentThen#1#2&{\kDMitraCelCntTok={#2}#1}
 
-\def\kDEmptyCell{%
-\kDTokOpt={}%
-\kDTokBuf={}%
-\kDMakeNode%
-\ifkDMitraDebug\kDMitraDebugDump\fi%
-}
+\def\kDMitraMaybeDoCellThen#1%
+{\kDIfNextHardCh\kD{#1}{\kDMitraParseOneColThen{#1}}}
 
-\newif\ifkDMitraDebug
-\kDMitraDebugfalse
-
-\def\kDMitraDebugDump{
-  \pgfextra{
-    \bgroup\let~\space
-    \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
-    \immediate\write\file{~~options: '\the\kDTokOpt'}
-    \immediate\write\file{~~content: '\the\kDTokBuf'}
-    \egroup
-  }
-}
-
-\catcode`@=12
-
-
+\def\kDMitraPrintCellThen#1{%
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok},matrix coordinates alias];}}%
+\kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1}
 
