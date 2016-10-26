@@ -9,8 +9,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\setkomafont{disposition}{\rmfamily\scshape}
+% \def\id{{\mathbf 1}}
+% \DeclareUnicodeCharacter{0131}{{\noexpand\mathbf R}}
+% \DeclareUnicodeCharacter{00D7}{{\otimes}}
+% \catcode`ı=\active \letı\id
+% \catcode`×=\active \let×\otimes
+% \usepackage{newunicodechar}
+% \newunicodechar{ı}{\mathbf 1}
+% \newunicodechar{×}{\otimes}
 
+\setkomafont{disposition}{\rmfamily\scshape}
 
 \usepackage{geometry}
 
@@ -32,14 +40,14 @@
 %\usepackage{verbatimbox}
 % \usepackage{wrapfig}
 
+\usepackage{parskip}
+
 \usepackage{mathtools}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 
+
 \DeclareMathOperator{\coker}{coker}
-
-
-
 
 \usepackage{float}
 % \usepackage{framed}
@@ -68,7 +76,16 @@
 
 \usepackage{xcolor}
 \usepackage{tikz}
+% \usetikzlibrary{cd}
+% \usetikzlibrary{quotes}
+% \pgfkeys{/handlers/first char syntax=false}
+
 \usetikzlibrary{kodi}
+\usetikzlibrary{positioning}
+
+% \usepackage[all]{xy}
+% \usepackage{pstricks,pst-node}
+
 
 \usepackage{xparse}
 
@@ -85,7 +102,6 @@
 % \cohead{}
 % \rohead{\thepage}
 
-
 %\usepackage{multicol}
 
 \usepackage{microtype}
@@ -98,7 +114,6 @@
   % \def\lst@lastline{\the\numexpr#1+\value{lstnumber}-1\relax}}%
   % {\def\lst@lastline{#1\relax}}}
 % \makeatother
-
 
 \usepackage{showexpl}
 \makeatletter
@@ -132,8 +147,6 @@
 }
 \makeatother
 
-
-
 \lstdefinelanguage{TikZ}
 {morekeywords={for},
 sensitive=false,
@@ -142,10 +155,14 @@ morecomment=[s]{/*}{*/},
 morestring=[b]",
 }
 
+\usepackage{color,soul}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\setulcolor{darkblue}
+
 \lstset{
   language=[LaTeX]TeX,
-  basicstyle=\ttfamily\scriptsize,
-  backgroundcolor=\color{black!8},
+  basicstyle=\ttfamily\lst@ifdisplaystyle\scriptsize\fi,
+  backgroundcolor=\color{teal!5},
   % keywordstyle=*\color{blue},
   % identifierstyle=\color{orange}\bfseries,
   % morekeywords={\path},
@@ -164,23 +181,35 @@ morestring=[b]",
   % morestring=[b]",
   commentstyle=\itshape,
   frame=none,
+  % extendedchars=false,
+  % inputencoding=utf8,
+  escapeinside={(@}{@)},
+  moredelim=**[is][\color{orange!80!black}]{@opt@}{@/opt@},
+  moredelim=**[s][\itshape]{<}{>},
+  literate={:=}{{$\equiv$}}1 {~}{{\textvisiblespace}}1,
 }
+
+% \makeatletter
+% \newcount\ublvl\ublvl=0
+% \newcount\ubdpt\ubdpt=0
+% \newdimen\ubgap\ubgap=.2em
+% \def\underbra#1{\underline {\sbox \tw@ {\global\advance\ubdpt1\advance\ublvl1#1}\dp \tw@ \dimexpr\ubgap*(\ubdpt-\ublvl-1)\relax \box \tw@ }\ifnum\ublvl=0\ubdpt=0\fi}
+% \makeatother
 
 \lstset{explpreset={
   wide,
+  basicstyle=\ttfamily\scriptsize,
   pos=o,
-  preset=\centering,
   width=\marginparwidth,
   hsep=\marginparsep,
-  rframe={}
+  rframe={},
+  preset={\centering\tikzpicture[kodi]},
+  postset={\endtikzpicture}
 }}
-
-
 
 \usepackage{lipsum}
 \usepackage{caption}
 \usepackage{subcaption}
-
 
 \captionsetup[marginfigure]{
   textfont=bf,
@@ -192,12 +221,14 @@ morestring=[b]",
   justification=centering
 }
 
-
-
 \usepackage{hologo}
 \def\ConTeXt{\hologo{ConTeXt}}
 \def\koDi{{\scshape koDi}}
 \def\TikZ{{\scshape TikZ}}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{listingsutf8}
+\tcbset{listing utf8=latin1}
 
 \begin{document}
 
@@ -218,7 +249,6 @@ morestring=[b]",
 
 %===[ FOREWORD ]================================================================
 
-
 % \begin{adjustwidth}{.45\textwidth}{.45\textwidth-\marginparwidth-\marginparsep}
 \noindent\koDi\ is a \TikZ\ library. Its purpose
 is drawing commutative diagrams.
@@ -229,7 +259,6 @@ The syntax is minimalistic and intelligible.\par
 % \end{adjustwidth}
 
 \newpage
-
 
 %===[ PRELIMINARIES ]===========================================================
 
@@ -342,143 +371,339 @@ A small expedient is necessary to use it with \koDi.
   \end{lstlisting}
 \end{marginfigure}
 
+\tcbset{kodi snippet/.style={
+  size=tight,
+  colback=white,
+  colframe=white,
+  if odd page={
+    listing side text,
+    lefthand width=\textwidth,
+    righthand width=\marginparwidth,
+    halign lower=center,
+  }{
+    text side listing,
+    righthand width=\textwidth,
+    lefthand width=\marginparwidth,
+    halign upper=center,
+  },
+  toggle enlargement,
+  grow to right by=\marginparsep+\marginparwidth,
+  sidebyside gap=\marginparsep,
+}}
+
+\tcbset{xy snippet/.style={
+  size=tight,
+  colback=white,
+  colframe=white,
+  if odd page={
+    listing side text,
+    lefthand width=\textwidth,
+    righthand width=\marginparwidth,
+    halign lower=center,
+  }{
+    text side listing,
+    righthand width=\textwidth,
+    lefthand width=\marginparwidth,
+    halign upper=center,
+  },
+  toggle enlargement,
+  grow to right by=\marginparsep+\marginparwidth,
+  sidebyside gap=\marginparsep,
+}}
+
+%===[ QUICK TOUR ]==============================================================
+
+\newpage
+
+\def\nilstrut{\rule{0sp}{0sp}}
+
+\section{Quick tour}
+
+Objects are typeset using the \lstinline!\obj! macro.
+%
+\begin{tcblisting}{kodi snippet, listing options={linerange=2-2}}
+\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\obj {X};
+\endtikzpicture}
+\end{tcblisting}
+%
+Almost every diagram is laid along a regular grid,
+so the customary tabular syntax of \TeX\ is recognized.
+%
+\begin{tcblisting}{kodi snippet, listing options={linerange=2-5}}
+\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\obj {
+  A & B \\
+  C & D \\
+};
+\endtikzpicture}
+\end{tcblisting}
+%
+\koDi\ objects are self-aware and clever enough to name themselves
+so you can comfortably refer to them.
+%
+\begin{tcblisting}{kodi snippet, listing options={linerange=2-3}}
+\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\obj {\lim F};
+\draw (lim F) circle (4ex);
+\endtikzpicture}
+\end{tcblisting}
+%
+Morphisms are typeset using the \lstinline!\mor! macro.
+%
+\begin{tcblisting}{kodi snippet, listing options={linerange=2-3}}
+\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\obj { A & B \\ };
+\mor A f:-> B;
+\endtikzpicture}
+\end{tcblisting}
+%
+Commutative diagrams exist to study composition and commutation
+so naturally \koDi\ allows for the chaining of morphisms and
+the gluing of chains.
+%
+\begin{tcblisting}{kodi snippet, listing options={linerange=2-4}}
+\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\obj { A & B \\ C & D \\ };
+\mor A -> B -> D;
+\mor * -> C -> *;
+\endtikzpicture}
+\end{tcblisting}
+%
+These are the only two macros defined by \koDi.
+
+There are more features so please continue reading if this got your attention.
+
+%===[ COMPETITION ]=============================================================
+
+% \newpage
+% 
+% \section{Competitors}
+% 
+% \begin{tcblisting}{xy snippet, listing options={linerange=1-5}}
+% \xymatrix{
+ % U \ar@/_/[ddr]_y \ar[dr] \ar@/^/[drr]^x \\
+  % & X \times_Z Y \ar[d]^q \ar[r]_p
+                 % & X \ar[d]_f            \\
+  % & Y \ar[r]^g & Z                       }
+% \end{tcblisting}
+% 
+% yo yo yo 
+% 
+% 
+% \begin{tcblisting}{xy snippet, listing options={linerange=1-5}}
+% \[ \psset{arrows=->, arrowinset=0.25, linewidth=0.6pt, nodesep=3pt, labelsep=2pt, rowsep=1.2cm}
+% \begin{psmatrix}
+  % (X, d) & (X_1 ,d_1 )\\%
+   % & (X_2 ,d_2)
+% %%%
+ % \ncline{1,1}{1,2}\naput{T_1} \ncline{1,1}{2,2}\nbput{T_2 }
+ % \ncline{1,2}{2,2}\naput[npos=0.45]{T}
+% \end{psmatrix}
+% \]
+% \end{tcblisting}
+% 
+% 
+% 
+% wot wot
+% 
+% \begin{tcblisting}{kodi snippet, listing options={linerange=2-13}}
+% \tikzpicture[baseline=(current bounding box.center),kodi]
+% \obj {
+  % U \\
+    % & |(P)| X \times_Z Y & X \\
+    % &                  Y & Z \\
+% };
+% 
+% \mor[swap] P p:-> X f:-> Z;
+% \mor       * q:-> Y g:-> *;
+% 
+% \mor                    U   -> P;
+% \mor      :[bend left]  * x:-> X;
+% \mor[swap]:[bend right] * y:-> Y;
+% \endtikzpicture
+% \end{tcblisting}
+
+%===[  ]========================================================================
+
+\newpage
+
+\section{EBNF specification}
+
+% \begin{lstlisting}
+% \obj@opt@ [<object opts>] (<name>) at (<coordinate>) @/opt@{<math>};
+% \end{lstlisting}
+%
+% \begin{lstlisting}
+% \obj@opt@ [<object opts>] (<name>) at (<coordinate>) @/opt@{<math>};
+% \end{lstlisting}
+%
+
+\begin{lstlisting}
+\lay@opt@ [<layout opts>] (<name>) at (<coordinate>) @/opt@{<table>};
+
+<table> := (@\underbar{\itshape<row>}@)
+<row> := <cell> (@\itshape\color{orange!80!black}\underbar{<col sep> <cell>}@) <row sep>
+<col sep> := & @opt@[<length>]@/opt@
+<row sep> := \\ @opt@[<length>]@/opt@
+\end{lstlisting}
+
+
+\begin{lstlisting}
+\mor@opt@ [<label opts>] : [<arrow opts>]@/opt@ <object>(@\itshape\underbar{\textvisiblespace<morphism>\textvisiblespace<object>}@);
+<morphism> := <labels> : <arrow>
+\end{lstlisting}
+
+
+\begin{lstlisting}
+<one or more foo> := @rep@<foo>@/rep@
+<zero or more foo> := @opt@@rep@<foo>@/rep@@/opt@
+<zero or one foo> := @opt@<foo>@/opt@
+<row> := <cell> @opt@@rep@<col sep> <cell>@/rep@@/opt@ <row sep>
+<col sep> := & @opt@[<length>]@/opt@
+<row sep> := \\ @opt@[<length>]@/opt@
+\end{lstlisting}
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\lipsum[1]
-
-\begin{LTXexample}[
-  preset={\tikzpicture[kodi]},
-  postset={\endtikzpicture}
-]
-\lay [golden=2em] { A & B & C \\ D & E & F \\ };
-\mor A [bend right, ->] B [bend left, ->] C
-  -> D [bend right, ->] E [bend left, ->] F;
-\end{LTXexample}
-
-\lipsum[2]
-
-\begin{LTXexample}[linerange={2-3}]
-\begin{tikzpicture}[kodi]
-\lay { A & B \\};
-\mor A -> B;
-\end{tikzpicture}
-\end{LTXexample}
-
-\lipsum[3]
-
-
-
-% \show\ker
-
-\begin{LTXexample}[pos=b]
-\begin{tikzpicture}[kodi]
-
-\lay[golden]{
-         & \ker a   & \ker b   & \ker c   &   \\
-         & A        & B        & C        & 0 \\
-|(0')| 0 & A'       & B'       & C'       &   \\
-         & \coker a & \coker b & \coker c &   \\
-};
-
-% horizontal chains
-\mor (ker a) -> (ker b) -> (ker c);
-\mor A f:-> B g:-> C -> 0;
-\mor 0' -> A' f':-> B' g':-> C';
-\mor (coker a) -> (coker b) -> (coker c);
-
-% vertical chains
-\mor[near start] (ker a) -> A a:-> A' -> (coker a);
-\mor[near start] (ker b) -> B b:-> B' -> (coker b);
-\mor[near start] (ker c) -> C c:-> C' -> (coker c);
-
-% the snake
+% \lipsum[1]
+% 
+% \begin{LTXexample}
+% \lay [golden=2em] { A & B & C \\ D & E & F \\ };
+% \mor A [bend right, ->] B [bend left, ->] C
+  % -> D [bend right, ->] E [bend left, ->] F;
+% \end{LTXexample}
+% 
+% \lipsum[2]
+% 
+% \begin{LTXexample}
+% \lay { A & B \\};
+% \mor A -> B;
+% \end{LTXexample}
+% 
+% \lipsum[3]
+% 
+% 
+% 
+% % \show\ker
+% 
+% \begin{LTXexample}[pos=t]
+% \begin{tikzpicture}[kodi]
+% 
+% \lay[golden]{
+           % & \ker a   & \ker b   & \ker c   &   \\
+           % & A        & B        & C        & 0 \\
+  % |(0')| 0 & A'       & B'       & C'       &   \\
+           % & \coker a & \coker b & \coker c &   \\
+% };
+% 
+% % horizontal chains
+% \mor   (ker a) ->   (ker b) ->   (ker c);
+% \mor (coker a) -> (coker b) -> (coker c);
+% \mor       A  f :-> B  g :-> C -> 0;
+% \mor 0' -> A' f':-> B' g':-> C';
+% 
+% % vertical chains
+% \mor[near start] (ker a) -> A a:-> A' -> (coker a);
+% \mor[near start] (ker b) -> B b:-> B' -> (coker b);
+% \mor[near start] (ker c) -> C c:-> C' -> (coker c);
+% 
+% % the snake
 % \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
 % \coordinate (head) at ($(coker b)!9/4!(coker a)$);
 % \coordinate (belly) at ($(B)!9/16!(B')$);
 % \draw[/kD/arrows/crossing over, ->, rounded corners]
-  % (ker c) -- (tail) -- (tail|-belly) -- (belly-|head) -- (head) -- (coker a);
-\end{tikzpicture}
-\end{LTXexample}
-
+  % (ker c) -- (tail) -- (tail|-belly)
+          % -- (belly-|head) -- (head) -- (coker a);
 % 
-% \startbuffer[example-k4_associahedron]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \def\id{{\mathbf 1}}
-% \catcode`ı=\active \letı\id
-% \catcode`×=\active \let×\otimes
+% \end{tikzpicture}
+% \end{LTXexample}
 % 
-% \foreach [count=\n] \o in
-    % {((w×x)×y)×x,
-     % (w×(x×y))×x,
-     % w×((x×y)×x),
-     % w×(x×(y×x)),
-     % (w×x)×(y×x)}
-  % \obj (\n) at ({72*\n:9em}) {\o};
+% \newpage
 % 
-% \mor 1 "a_{w,x,y}×ı_z": -> 2
-         % "a_{w,x×y,z}": -> 3
-       % "ı_w×a_{x,y,z}": -> 4;
-% \mor *   "a_{w×x,y,z}": -> 5
-         % "a_{w,x,y×z}": -> *;
-% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \begin{LTXexample}[pos=t]
+% % \begin{tikzpicture}[kodi]
+% % 
+% % \foreach [count=\n] \o in
+    % % {((w×x)×y)×x,
+     % % (w×(x×y))×x,
+     % % w×((x×y)×x),
+     % % w×(x×(y×x)),
+     % % (w×x)×(y×x)}
+  % % \obj (\n) at ({72*\n:9em}) {\o};
+% % 
+% % \mor 1 "a_{w,x,y}×ı_z": -> 2
+         % % "a_{w,x×y,z}": -> 3
+       % % "ı_w×a_{x,y,z}": -> 4;
+% % \mor *   "a_{w×x,y,z}": -> 5
+         % % "a_{w,x,y×z}": -> *;
+% % 
+% % \end{tikzpicture}
+% % \end{LTXexample}
 % 
-% \startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \lay[comb]{
-  % |(P)| A \times_Z B & B \\
-        % A            & Z \\
-% };
-% 
-% \obj at ($(Z)!2!(P)$) {Q};
-% 
-% \mor[swap] P p_1:-> A f:-> Z;
-% \mor       * P_2:-> B g:-> *;
-% \mor[swap]:[bend right] Q q_1:-> A;
-% \mor      :[bend left]  * q_2:-> B;
-% \mor [mid]:[dashed]     *   u:-> P;
-% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% \startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \pgfkeys{/katharizo/expand=full}
-% 
-% \foreach [count=\m] \a in {A,B,C}
-  % \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
-    % \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
-% 
-% \mor (C_{n+1}) -> (B_{n-1});
-% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% \startbuffer[example-ref]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \lay[square]{A&B&C&D\\E&F&G&H\\I&L&M&N\\};
-% 
-% \mor:                     B -> C;
-% 
-% % * src = prv first src
-% \mor:[draw=none]          B -> C;
-% \mor:[bend right, green]  * -> D;
-% 
-% % * tar = prv last tar
-% \mor:[draw=none]          B -> C;
-% \mor:[bend right, blue]   A -> *;
-% 
-% \mor:[draw=none]          B -> C;
-% \mor:[bend left, red]     A -> * -> D;
-% 
-% \mor:                     F -> G;
-% 
-% % + src = prv last tar
-% \mor:[draw=none]          F -> G;
-% \mor:[bend right, green]  + -> H;
-% 
-% % + tar = prv first src
-% \mor:[draw=none]          F -> G;
-% \mor:[bend right, blue]   E -> +;
-% 
-% \mor:[draw=none]          F -> G;
-% \mor:[bend left, red]     E -> + -> H;
-% 
-% % so, basically, * is the opposite of +
-% \mor:      M -> L;
-% \mor:[red] I <- * <- N;
-% \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \lay[comb]{
+  % % |(P)| A \times_Z B & B \\
+        % % A            & Z \\
+% % };
+% % 
+% % \obj at ($(Z)!2!(P)$) {Q};
+% % 
+% % \mor[swap] P p_1:-> A f:-> Z;
+% % \mor       * P_2:-> B g:-> *;
+% % \mor[swap]:[bend right] Q q_1:-> A;
+% % \mor      :[bend left]  * q_2:-> B;
+% % \mor [mid]:[dashed]     *   u:-> P;
+% % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 
+% % \startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \pgfkeys{/katharizo/expand=full}
+% % 
+% % \foreach [count=\m] \a in {A,B,C}
+  % % \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
+    % % \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
+% % 
+% % \mor (C_{n+1}) -> (B_{n-1});
+% % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 
+% % \startbuffer[example-ref]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \lay[square]{A&B&C&D\\E&F&G&H\\I&L&M&N\\};
+% % 
+% % \mor:                     B -> C;
+% % 
+% % % * src = prv first src
+% % \mor:[draw=none]          B -> C;
+% % \mor:[bend right, green]  * -> D;
+% % 
+% % % * tar = prv last tar
+% % \mor:[draw=none]          B -> C;
+% % \mor:[bend right, blue]   A -> *;
+% % 
+% % \mor:[draw=none]          B -> C;
+% % \mor:[bend left, red]     A -> * -> D;
+% % 
+% % \mor:                     F -> G;
+% % 
+% % % + src = prv last tar
+% % \mor:[draw=none]          F -> G;
+% % \mor:[bend right, green]  + -> H;
+% % 
+% % % + tar = prv first src
+% % \mor:[draw=none]          F -> G;
+% % \mor:[bend right, blue]   E -> +;
+% % 
+% % \mor:[draw=none]          F -> G;
+% % \mor:[bend left, red]     E -> + -> H;
+% % 
+% % % so, basically, * is the opposite of +
+% % \mor:      M -> L;
+% % \mor:[red] I <- * <- N;
+% % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}

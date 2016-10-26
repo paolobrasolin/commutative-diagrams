@@ -11,6 +11,13 @@
 
 \usetikzlibrary{kodi.koinos}
 
+\pgfkeys{
+  /mitra/every matrix/.style={
+    /tikz/mitra
+  },
+  /mitra/every node/.style={}
+}
+
 \tikzset{
   mitra/.style={
     matrix,
@@ -42,9 +49,6 @@
   % }
 % }
 
-\def\kDAppend#1#2%
-{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
-
 \newtoks\kDMitraTmpTok
 
 \def\kDMitra%
@@ -53,30 +57,19 @@
 \kDMitraOutput}}
 
 \def\kDMitraOutput{
-\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\matrix[mitra]\the\kDMitraMNTok{\the\kDMitraMatOutTok};}}%
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\matrix[/mitra/every matrix]\the\kDOptTok{\the\kDMitraMatOutTok};}}%
 \kDAct\the\kDMitraTmpTok}
 
 %===[ fetch ]===================================================================
 
-\def\kDMitraFetchMatrixThen#1%
-{\kDMitraFetchMatrixNodeThen
-{\kDMitraFetchMatrixTableThen
-{#1}}}
-
-\newtoks\kDMitraMNTok
-\def\kDMitraFetchMatrixNodeThen#1#2#%
-{\kDMitraMNTok={#2}#1}
-
-\newtoks\kDMitraMTTok
-\def\kDMitraFetchMatrixTableThen#1#2;%
-{\kDMitraMTTok={#2}#1}
+\let\kDMitraFetchMatrixThen\kDFetchOptAndGrpThen
 
 %===[ parse/table ]=============================================================
 
 \newtoks\kDMitraMatOutTok
 \def\kDMitraParseMatrixTableThen#1{%
 \kDMitraMatOutTok={}%
-\expandafter\kDMitraParseTable\the\kDMitraMTTok\kD%
+\expandafter\kDMitraParseTable\the\kDGrpTok\kD%
 #1}
 
 \def\kDMitraParseTable{\kDMitraParseAllRowsThen\relax}
@@ -165,6 +158,6 @@
 {\kDIfNextHardCh\kD{#1}{\kDMitraParseOneColThen{#1}}}
 
 \def\kDMitraPrintCellThen#1{%
-\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok},matrix coordinates alias];}}%
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node[/mitra/every node]\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok}][matrix coordinates alias];}}%
 \kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1}
 

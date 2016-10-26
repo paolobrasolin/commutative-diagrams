@@ -15,30 +15,12 @@
 
 \catcode`@=11
 
-\def\kDAppendTok#1#2%
-{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
+\pgfkeys{/ozos/every node/.style={}}
 
-\newtoks\kDOzosOptTok\kDOzosOptTok={}
-\newtoks\kDOzosCurTok\kDOzosCurTok={}
-\newtoks\kDOzosGroTok\kDOzosGroTok={}
-
-\def\kDOzosGobTilGroup#1#{%
-\kDOzosCurTok={#1}%
-\kDAppendTok\kDOzosCurTok\kDOzosOptTok%
-\kDOzosGobGroup%
-}
-
-\def\kDOzosGobGroup#1{%
-\kDOzosGroTok={{#1}}%
-\kDIfNextHardCh;{\kDOzosMakeNode}%
-{\kDAppendTok\kDOzosGroTok\kDOzosOptTok\kDOzosGobTilGroup}%
-}
-
-\def\kDOzosMakeNode%
+\def\kDOzosOutput%
 {\ifkDOzosDebug\kDOzosDebugDump\fi%
-\edef\Act{\noexpand\node\the\kDOzosOptTok[node contents=\the\kDOzosGroTok]}\Act}
+\edef\Act{\noexpand\node[/ozos/every node]\the\kDOptTok[node contents=\the\kDGrpTok];}\Act}
 
-\let\kDOzos\kDOzosGobTilGroup
 
 \newif\ifkDOzosDebug
 \kDOzosDebugfalse
@@ -46,9 +28,11 @@
 \def\kDOzosDebugDump{\pgfextra{
   % \bgroup\let~\space
   % \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
-  \immediate\write\file{options: '\the\kDOzosOptTok'}
-  \immediate\write\file{content: '\the\kDOzosGroTok'}
+  \immediate\write\file{options: '\the\kDOptTok'}
+  \immediate\write\file{content: '\the\kDGrpTok'}
   % \egroup
 }}
+
+\def\kDOzos{\kDFetchOptAndGrpThen\kDOzosOutput}
 
 \catcode`@=12
