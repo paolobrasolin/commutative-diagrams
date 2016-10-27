@@ -89,6 +89,18 @@ Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
 CODE
 end
 
+Given(/^I dump the "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
+  @job.document.append_to_body <<CODE
+\\immediate\\write\\file{'#{field}': '\\the#{macro}'}
+CODE
+end
+
+Given(/^I dump the meaning of "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
+  @job.document.append_to_body <<CODE
+\\immediate\\write\\file{'#{field}': '\\meaning#{macro}'}
+CODE
+end
+
 # Given(/^the dumped value of "([^\"]*)" is "([^\"]*)"$/) do |field, value|
   # dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   # expect(dump[field]).to eq(value)

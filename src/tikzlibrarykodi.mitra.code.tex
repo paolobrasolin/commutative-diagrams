@@ -13,19 +13,13 @@
 
 \pgfkeys{
   /mitra/every matrix/.style={
-    /tikz/mitra
+    /tikz/matrix,
+    /tikz/cells={/tikz/anchor=base},
   },
-  /mitra/every node/.style={}
-}
-
-\tikzset{
-  mitra/.style={
-    matrix,
-    cells={anchor=base},
-  },
+  /mitra/every node/.style={},
   %: MEMO: this *cannot* be put along with global node styles (because order of execution)
-  matrix coordinates alias/.style={
-    alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
+  /mitra/matrix coordinates alias/.style={
+    /tikz/alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
   },
 }
 
@@ -158,6 +152,6 @@
 {\kDIfNextHardCh\kD{#1}{\kDMitraParseOneColThen{#1}}}
 
 \def\kDMitraPrintCellThen#1{%
-\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node[/mitra/every node]\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok}][matrix coordinates alias];}}%
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node[/mitra/every node]\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok}][/mitra/matrix coordinates alias];}}%
 \kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1}
 

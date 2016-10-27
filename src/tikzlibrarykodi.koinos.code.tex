@@ -8,38 +8,39 @@
 % This module implements and aliases some commonplace macros.
 
 
+% append token list #1 to token list #2
+
 \def\kDAppend#1#2%
 {\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
 
 
+% gobble next token
 
-\newtoks\kDTmpTok
-\newtoks\kDOptTok
-\newtoks\kDGrpTok
-
-\def\kDFetchTilGrpThen#1#2#{%
-  \kDTmpTok={#2}
-  \kDAppend\kDTmpTok\kDOptTok
-  \kDFetchGrpThen{#1}}
-
-\def\kDFetchGrpThen#1#2{%
-  \def\kDExit{#1}
-  \def\kDLoop{\kDFetchTilGrpThen{#1}}
-  \kDTmpTok={{#2}}
-  \kDIfNextHardCh;
-    {\kDGrpTok\the\kDTmpTok\expandafter\kDExit\kDGobble}
-    {\kDAppend\kDTmpTok\kDOptTok\kDLoop}}
-
-\let\kDFetchOptAndGrpThen\kDFetchTilGrpThen
+\catcode`@=12
+\let\kDGobble\pgfutil@gobble
+\catcode`@=12
 
 
+% gobble blank space preceeding next token
+
+\def\kDIdentity#1{#1}
 
 
+% the blank space token
 
 \bgroup
 \def\:{\global\let\kDBlankSpace= }\:
 \egroup
 
+
+% if next token is #1 then #2 else #3
+
+\catcode`@=11
+% ignoring whitespace
+\let\kDIfNextHardCh\pgfutil@ifnextchar
+\catcode`@=11
+
+% not ignoring whitespace
 \long\def\kDIfNextSoftCh#1#2#3{%
 \let\kDINCToken= #1% <- MEMO: this space is crucial
 \def\kDINCTrue{#2}\def\kDINCFalse{#3}%
@@ -49,11 +50,27 @@
 \def\kDINC%
   {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
 
-\def\kDIdentity#1{#1}
 
-\catcode`@=11
+% tokenize stream into \kDOptTok until a group preceeding a ';' char is found,
+% then put the group into \kDGrpTok and gobble the ';'.
 
-\let\kDIfNextHardCh\pgfutil@ifnextchar
-\let\kDGobble\pgfutil@gobble
+\newtoks\kDTmpTok
+\newtoks\kDOptTok
+\newtoks\kDGrpTok
 
-\catcode`@=12
+\def\kDFetchTilGrpThen#1#2#{%
+  \kDTmpTok={#2}%
+  \kDAppend\kDTmpTok\kDOptTok
+  \kDFetchGrpThen{#1}}
+
+\def\kDFetchGrpThen#1#2{%
+  \def\kDExit{#1}%
+  \def\kDLoop{\kDFetchTilGrpThen{#1}}%
+  \kDTmpTok={{#2}}%
+  \kDIfNextHardCh;
+    {\kDGrpTok\the\kDTmpTok\expandafter\kDExit\kDGobble}
+    {\kDAppend\kDTmpTok\kDOptTok\kDLoop}}
+
+\let\kDFetchOptAndGrpThen\kDFetchTilGrpThen
+
+
