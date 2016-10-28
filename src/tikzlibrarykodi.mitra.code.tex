@@ -30,19 +30,6 @@
   \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
 % \ifConTeXt\catcode`|=12 \fi% TODO: why is the space necessary?
 
-% \newif\ifkDMitraDebug
-% \kDMitraDebugfalse
-
-% \def\kDMitraDebugDump{
-  % \pgfextra{
-    % \bgroup\let~\space
-    % \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
-    % \immediate\write\file{~~options: '\the\kDTokOpt'}
-    % \immediate\write\file{~~content: '\the\kDTokBuf'}
-    % \egroup
-  % }
-% }
-
 \newtoks\kDMitraTmpTok
 
 \def\kDMitra%
@@ -146,12 +133,22 @@
 \def\kDMitraFetchCellOptionsThen#1|#2|{\kDMitraCelOptTok={#2}#1}
 
 \newtoks\kDMitraCelCntTok
-\def\kDMitraFetchCellContentThen#1#2&{\kDMitraCelCntTok={#2}#1}
+\def\kDMitraFetchCellContentThen#1#2&{%
+\kDMitraCelCntTok={#2}%
+\kDTrimLeadingSpace\kDMitraCelCntTok%
+\kDTrimTrailingSpace\kDMitraCelCntTok%
+#1}
 
 \def\kDMitraMaybeDoCellThen#1%
 {\kDIfNextHardCh\kD{#1}{\kDMitraParseOneColThen{#1}}}
 
 \def\kDMitraPrintCellThen#1{%
-\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node[/mitra/every node]\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok}][/mitra/matrix coordinates alias];}}%
+\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\node[/mitra/every node]\the\kDMitraCelOptTok[node contents={\the\kDMitraCelCntTok}][/mitra/matrix coordinates alias];\kDMitraMaybeDumpCell}}%
 \kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1}
 
+% not beautiful but eh!
+\def\kDMitraMaybeDumpCell{\noexpand\pgfextra{
+  \noexpand\kDDump{'\noexpand\the\noexpand\pgfmatrixcurrentrow-\noexpand\the\noexpand\pgfmatrixcurrentcolumn':}
+  \noexpand\kDDump{\space\space options: '\the\kDMitraCelOptTok'}
+  \noexpand\kDDump{\space\space content: '\the\kDMitraCelCntTok'}
+}}

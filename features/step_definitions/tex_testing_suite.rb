@@ -97,7 +97,7 @@ end
 
 Given(/^I dump the meaning of "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
   @job.document.append_to_body <<CODE
-\\immediate\\write\\file{'#{field}': '\\meaning#{macro}'}
+\\kDDump{'#{field}': '\\meaning#{macro}'}
 CODE
 end
 
@@ -118,11 +118,10 @@ end
 
 Given(/^I want a debugging dump$/) do
   @job.document.wrap_body <<'OPEN', <<'CLOSE'
-\newwrite\file
-\immediate\openout\file=\jobname.yml
-\def\DUMP#1#2{\immediate\write\file{#1: '#2'}}
+\kDDumpingtrue
+\kDDumpOpen
 OPEN
-\closeout\file
+\kDDumpClose
 CLOSE
 end
 

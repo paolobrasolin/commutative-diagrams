@@ -5,19 +5,18 @@ Feature: mitra
     Given I'm in a context
     And I use "tikz"
     And I use the "kodi.mitra" TikZ library
+    And I want a debugging dump
 
-  Scenario Outline: using a cell with an unknown TikZ key
-    Given I code \tikz\matrix[mitra]{|[foo]|};
-    Then compilation fails
+  # Scenario Outline: using a cell with an unknown TikZ key
+    # Given I code \tikz\matrix[mitra]{|[foo]|};
+    # Then compilation fails
 
   Scenario Outline: using cells with no node options
-    Given I want a debugging dump
-    And the body is
+    Given the body is
     """
-    \kDMitraDebugtrue
     \let\foo\relax
     \let\bar\relax
-    \tikz\matrix[mitra]{%
+    \tikz\kDMitra{%
     <code>&X&X\\
     X&<code>&X\\
     X&X&<code>\\
@@ -49,12 +48,10 @@ Feature: mitra
     | «\foo  \bar» | «\foo \bar » | «»      |
 
   Scenario Outline: using cells with node options
-    Given I want a debugging dump
-    And the body is
+    Given the body is
     """
-    \kDMitraDebugtrue
     \let\foo\relax
-    \tikz\matrix[mitra]{%
+    \tikz\kDMitra{%
     <code>&X&X\\
     X&<code>&X\\
     X&X&<code>\\

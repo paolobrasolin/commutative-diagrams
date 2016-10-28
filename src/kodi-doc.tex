@@ -107,13 +107,16 @@
 \usepackage{microtype}
 
 \usepackage{listings}
-% http://tex.stackexchange.com/a/134860/82186
-% \makeatletter
-% \lst@Key{lastline}\relax{\ifnumcomp{#1}{<}{0}{%
-  % \let\mylst@file\lst@intname\sbox0{\lstinputlisting{\mylst@file}}%
-  % \def\lst@lastline{\the\numexpr#1+\value{lstnumber}-1\relax}}%
-  % {\def\lst@lastline{#1\relax}}}
-% \makeatother
+
+% http://tex.stackexchange.com/a/336331/82186
+\makeatletter
+\lst@Key{lastline}\relax{\ifnumcomp{#1}{<}{0}{%
+  \let\mylst@file\lst@intname\sbox0{\lstinputlisting{\mylst@file}}%
+  \def\lst@lastline{\the\numexpr#1+\value{lstnumber}-1\relax}}%
+  {\def\lst@lastline{#1\relax}}}
+\makeatother
+
+
 
 \usepackage{showexpl}
 \makeatletter
@@ -389,6 +392,10 @@ A small expedient is necessary to use it with \koDi.
   toggle enlargement,
   grow to right by=\marginparsep+\marginparwidth,
   sidebyside gap=\marginparsep,
+  listing options={
+    firstline=2,
+    lastline=-1
+  }
 }}
 
 \tcbset{xy snippet/.style={
@@ -421,7 +428,7 @@ A small expedient is necessary to use it with \koDi.
 
 Objects are typeset using the \lstinline!\obj! macro.
 %
-\begin{tcblisting}{kodi snippet, listing options={linerange=2-2}}
+\begin{tcblisting}{kodi snippet}
 \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
 \obj {X};
 \endtikzpicture}
@@ -430,7 +437,7 @@ Objects are typeset using the \lstinline!\obj! macro.
 Almost every diagram is laid along a regular grid,
 so the customary tabular syntax of \TeX\ is recognized.
 %
-\begin{tcblisting}{kodi snippet, listing options={linerange=2-5}}
+\begin{tcblisting}{kodi snippet}
 \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
 \obj {
   A & B \\
@@ -442,7 +449,7 @@ so the customary tabular syntax of \TeX\ is recognized.
 \koDi\ objects are self-aware and clever enough to name themselves
 so you can comfortably refer to them.
 %
-\begin{tcblisting}{kodi snippet, listing options={linerange=2-3}}
+\begin{tcblisting}{kodi snippet}
 \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
 \obj {\lim F};
 \draw (lim F) circle (4ex);
@@ -451,7 +458,7 @@ so you can comfortably refer to them.
 %
 Morphisms are typeset using the \lstinline!\mor! macro.
 %
-\begin{tcblisting}{kodi snippet, listing options={linerange=2-3}}
+\begin{tcblisting}{kodi snippet}
 \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
 \obj { A & B \\ };
 \mor A f:-> B;
@@ -462,7 +469,7 @@ Commutative diagrams exist to study composition and commutation
 so naturally \koDi\ allows for the chaining of morphisms and
 the gluing of chains.
 %
-\begin{tcblisting}{kodi snippet, listing options={linerange=2-4}}
+\begin{tcblisting}{kodi snippet}
 \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
 \obj { A & B \\ C & D \\ };
 \mor A -> B -> D;

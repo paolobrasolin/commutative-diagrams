@@ -13,26 +13,25 @@
 
 \usetikzlibrary{kodi.koinos}
 
-\catcode`@=11
-
 \pgfkeys{/ozos/every node/.style={}}
 
-\def\kDOzosOutput%
-{\ifkDOzosDebug\kDOzosDebugDump\fi%
-\edef\Act{\noexpand\node[/ozos/every node]\the\kDOptTok[node contents=\the\kDGrpTok];}\Act}
+\def\kDOzos%
+{\kDOzosFetchThen
+{\kDOzosMaybeDumpThen
+\kDOzosOutput}}
 
+\let\kDOzosFetchThen\kDFetchOptAndGrpThen
 
-\newif\ifkDOzosDebug
-\kDOzosDebugfalse
+\def\kDOzosMaybeDumpThen#1{
+\kDDump{options: '\the\kDOptTok'}
+\kDDump{content: '\the\kDGrpTok'}
+#1}
 
-\def\kDOzosDebugDump{\pgfextra{
-  % \bgroup\let~\space
-  % \immediate\write\file{'\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn':}
-  \immediate\write\file{options: '\the\kDOptTok'}
-  \immediate\write\file{content: '\the\kDGrpTok'}
-  % \egroup
-}}
-
-\def\kDOzos{\kDFetchOptAndGrpThen\kDOzosOutput}
-
-\catcode`@=12
+\def\kDOzosOutput{
+  \edef\Act{
+    \noexpand\node
+      [/ozos/every node]
+      \the\kDOptTok
+      [/tikz/node contents={\the\kDGrpTok}];
+  }
+  \Act}

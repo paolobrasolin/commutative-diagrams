@@ -16,7 +16,7 @@
 
 % gobble next token
 
-\catcode`@=12
+\catcode`@=11
 \let\kDGobble\pgfutil@gobble
 \catcode`@=12
 
@@ -38,7 +38,7 @@
 \catcode`@=11
 % ignoring whitespace
 \let\kDIfNextHardCh\pgfutil@ifnextchar
-\catcode`@=11
+\catcode`@=12
 
 % not ignoring whitespace
 \long\def\kDIfNextSoftCh#1#2#3{%
@@ -73,4 +73,61 @@
 
 \let\kDFetchOptAndGrpThen\kDFetchTilGrpThen
 
+
+% macros for dumping, debugging and testing
+
+\newif\ifkDDumping
+\kDDumpingfalse
+
+\newwrite\kDDumpFile
+
+\def\kDDumpOpen%
+{\ifkDDumping\immediate\openout\kDDumpFile=\jobname.yml\fi}
+
+\def\kDDump#1%
+{\ifkDDumping\immediate\write\kDDumpFile{#1}\fi}
+
+\def\kDDumpClose%
+{\ifkDDumping\closeout\kDDumpFile\fi}
+
+
+% remove trailing whitespace from token list
+
+\newif\ifkDDTSHasTrail
+\newif\ifkDDTSPrevSpace
+
+\def\kDTrimTrailingSpace#1{
+\kDDetectTrailingSpace#1
+\ifkDDTSHasTrail
+\def\kDRTS##1 \kD{#1={##1}}
+\edef\kDRTSAct{\noexpand\kDRTS\the#1\noexpand\kD}\kDRTSAct
+\fi
+}
+
+\def\kDDetectTrailingSpace#1%
+{\edef\kDAct{\noexpand\kDDTSGob\the#1\noexpand\kD}\kDAct}
+
+\def\kDDTSGob%
+{\kDIfNextSoftCh\kD
+  {\ifkDDTSPrevSpace\kDDTSHasTrailtrue\else\kDDTSHasTrailfalse\fi\kDGobble}
+  {\kDIfNextSoftCh\kDBlankSpace
+    {\kDDTSPrevSpacetrue\expandafter\kDDTSGob\kDIdentity}
+    {\kDDTSPrevSpacefalse\expandafter\kDDTSGob\kDGobble}}}
+
+
+% remove leading whitespace from token list
+
+\def\kDGobbleSpaceThen#1%
+{\kDIfNextHardCh\bgroup
+  {\kDGSGroupThen#1}
+  {\kDGSOtherThen#1}}
+
+\def\kDGSGroupThen#1#2{#1{#2}}
+\def\kDGSOtherThen#1#2{#1#2}
+
+\def\kDTrimLeadingSpace#1{
+\def\kDAct##1\kD{#1={##1}}
+\expandafter\kDGobbleSpaceThen
+\expandafter\kDAct\the#1\kD
+}
 
