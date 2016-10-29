@@ -5,6 +5,7 @@ Feature: katharizo's replacement control
     Given I'm in a context
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
+    And I use the "kodi.koinos" TikZ library
     And I want a debugging dump
 
   Scenario Outline: using default replacements

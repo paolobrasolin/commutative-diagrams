@@ -11,10 +11,10 @@
 %===[ TikZ magic ]==============================================================
 
 \pgfqkeys{/tikz}{
-    self naming/.style={
-        /tikz/node contents/.forward to=/katharizo/input,
-        /katharizo/output/.forward to=/bapto/dispatcher,
-    },
+  self naming/.style={
+    /tikz/node contents/.forward to=/katharizo/input,
+    /katharizo/output/.forward to=/bapto/dispatcher
+  }
 }
 
 \pgfqkeys{/bapto/overwrite}{.is choice,

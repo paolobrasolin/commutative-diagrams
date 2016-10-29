@@ -5,6 +5,7 @@ Feature: ektropi can restore the original handler
     Given I'm in a context
     And I use "tikz"
     And I use the "kodi.ektropi" TikZ library
+    And I use the "kodi.koinos" TikZ library
     And I want a debugging dump
 
   Scenario Outline: undoing a single deviation
@@ -32,8 +33,8 @@ Feature: ektropi can restore the original handler
     Given the body is
     """
     \pgfkeys{
-      /tikz/foo/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}},
-      /quux/foo/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}},
+      /tikz/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
+      /quux/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
     }
     \tikz\node[/ektropi/add=/quux]<keylists>{};
     """

@@ -5,6 +5,7 @@ Feature: ektropi can add deviations
     Given I'm in a context
     And I use "tikz"
     And I use the "kodi.ektropi" TikZ library
+    And I use the "kodi.koinos" TikZ library
     And I want a debugging dump
 
   Scenario Outline: adding a simple deviation
@@ -32,9 +33,9 @@ Feature: ektropi can add deviations
     Given the body is
     """
     \pgfkeys{
-      /foo/bar/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}},
-      /foo/baz/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}},
-      /qux/baz/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}}
+      /foo/bar/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
+      /foo/baz/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
+      /qux/baz/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}}
     }
     \tikz\node<keylists>{};
     """
@@ -60,8 +61,8 @@ Feature: ektropi can add deviations
     Given the body is
     """
     \pgfkeys{
-      /tikz/foo/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}},
-      /quux/foo/.ecode={\noexpand\DUMP{path}{\pgfkeyscurrentpath}},
+      /tikz/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
+      /quux/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
     }
     \tikz\node<keylists>{};
     """

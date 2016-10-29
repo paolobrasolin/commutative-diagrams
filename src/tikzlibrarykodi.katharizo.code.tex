@@ -39,10 +39,10 @@
 }
 
 \pgfqkeys{/katharizo/sanitizer}{.code={%
-  \kDSanitize{#1}\kDInto kDKatharizoSanitized\kDRelax%
+  \kDSanitize{#1}\kDInto kDKatharizoSanitized\kD%
   \pgfkeysalso{/katharizo/sanitized/.expanded=\kDKatharizoSanitized}%
   % logging routine:
-  \expandafter\kDDetokenize\kDKatharizoInput\kDInto kDKatharizoDetokenizedInput\kDRelax%
+  \expandafter\kDDetokenize\kDKatharizoInput\kDInto kDKatharizoDetokenizedInput\kD%
   \pgfkeysalso{/kD/log={katharizo~~~~~~~}%
     {{\kDKatharizoDetokenizedInput} -> (\kDKatharizoSanitized)}}%
 }}
@@ -58,29 +58,29 @@
 
 %===[ TeX is hell <3 ]==========================================================
 
-\def\kDDetokenize#1\kDInto#2\kDRelax{%
+\def\kDDetokenize#1\kDInto#2\kD{%
   \def\kDFoo{#1}%
   \edef\kDBar{\meaning\kDFoo}%
-  \def\kDAct##1:->##2\kDRelax{##2}%
-  \expandafter\edef\csname#2\endcsname{\expandafter\kDAct\kDBar\kDRelax}%
+  \def\kDAct##1:->##2\kD{##2}%
+  \expandafter\edef\csname#2\endcsname{\expandafter\kDAct\kDBar\kD}%
 }
 
-\def\kDSanitize#1\kDInto#2\kDRelax{%
-  \kDDetokenize#1\kDInto kDKatharizoDetokenized\kDRelax%
+\def\kDSanitize#1\kDInto#2\kD{%
+  \kDDetokenize#1\kDInto kDKatharizoDetokenized\kD%
   \edef\kDKatharizoDetokenizedTerminated{\kDKatharizoDetokenized\space}%
   \expandafter\edef\csname#2\endcsname%
-    {\expandafter\kDSanitizeString\kDKatharizoDetokenizedTerminated\kDRelax}%
+    {\expandafter\kDSanitizeString\kDKatharizoDetokenizedTerminated\kD}%
 }
 
-\def\kDSanitizeString#1 #2\kDRelax%
+\def\kDSanitizeString#1 #2\kD%
     {%\message{"#1"+"#2"}%
-\ifx\relax#1\else\kDSanitizeWord#1\kDRelax\fi%
+\ifx\relax#1\else\kDSanitizeWord#1\kD\fi%
 \ifx\relax#1\else\if#2\space\else\ifx\relax#2\else%
 \pgfkeysvalueof{/katharizo/replacements/space}\fi\fi\fi%
-\ifx\relax#2\else\kDSanitizeString#2\kDRelax\fi}
+\ifx\relax#2\else\kDSanitizeString#2\kD\fi}
 
-\def\kDSanitizeWord#1#2\kDRelax%
-    {\kDSanitizeCharacter#1\kDRelax\ifx\relax#2\else\kDSanitizeWord#2\kDRelax\fi}
+\def\kDSanitizeWord#1#2\kD%
+    {\kDSanitizeCharacter#1\kD\ifx\relax#2\else\kDSanitizeWord#2\kD\fi}
 
 \pgfqkeys{/katharizo/replacements}{.cd,
   space/.initial=\space,
@@ -95,7 +95,7 @@
 
 % MEMO: Spaces after number to avoid stray \relax
 % TODO: rethink of all the dangerous characters cross-format-wise
-\def\kDSanitizeCharacter#1\kDRelax{%
+\def\kDSanitizeCharacter#1\kD{%
     \ifnum`#1=36 \pgfkeysvalueof{/katharizo/replacements/dollar}\else%
     \ifnum`#1=40 \pgfkeysvalueof{/katharizo/replacements/left round brace}\else%
     \ifnum`#1=41 \pgfkeysvalueof{/katharizo/replacements/right round brace}\else%

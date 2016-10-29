@@ -5,6 +5,8 @@ Feature: katharizo's expansion control
     Given I'm in a context
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
+    And I use the "kodi.koinos" TikZ library
+    And I use the "kodi.koinos" TikZ library
     And I want a debugging dump
 
   Scenario Outline: using koDi as a TikZ library

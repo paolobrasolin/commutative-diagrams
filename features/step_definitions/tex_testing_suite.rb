@@ -85,13 +85,13 @@ end
 
 Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
   @job.document.append_to_body <<CODE
-\\immediate\\write\\file{'#{field}': '#{macro}'}
+\\kDDump{'#{field}': '#{macro}'}
 CODE
 end
 
 Given(/^I dump the "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
   @job.document.append_to_body <<CODE
-\\immediate\\write\\file{'#{field}': '\\the#{macro}'}
+\\kDDump{'#{field}': '\\the#{macro}'}
 CODE
 end
 

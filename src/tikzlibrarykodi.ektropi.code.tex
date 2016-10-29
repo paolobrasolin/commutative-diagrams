@@ -17,19 +17,22 @@
   restore/.code={\kDEktropiRestore}
 }
 
-% initialization
-
 \newtoks\kDEktropiToks
-\expandafter\expandafter\expandafter\kDEktropiToks\expandafter\expandafter\expandafter{\csname pgfk@/tikz/.unknown/.@body\endcsname}
-\xdef\kDEktropiGlobalTmp{\the\kDEktropiToks}
 
-% restore
+\expandafter\expandafter
+\expandafter\kDEktropiToks
+\expandafter\expandafter
+\expandafter{\csname pgfk@/tikz/.unknown/.@body\endcsname}
 
-\def\kDEktropiRestore{%
-\def\kDEktropiTmp{\pgfkeyssetvalue{/tikz/.unknown/.@body}}%
-\expandafter\kDEktropiTmp\expandafter{\kDEktropiGlobalTmp}%
-\expandafter\long\expandafter\def\expandafter\kDEktropiTmp\expandafter##\expandafter1\expandafter\pgfeov\expandafter{\kDEktropiGlobalTmp}%
-\pgfkeyslet{/tikz/.unknown/.@cmd}\kDEktropiTmp%
+\def\kDEktropiRestore{
+  % restore handler body
+  \def\kDAct{\pgfkeyssetvalue{/tikz/.unknown/.@body}}
+  \expandafter\kDAct\expandafter{\the\kDEktropiToks}
+  % restore handler macro
+  % MEMO: #s are doubled since inside \kDAct helper
+  \def\kDAct{\long\def\kDAct####1\pgfeov}
+  \expandafter\kDAct\expandafter{\the\kDEktropiToks}
+  \pgfkeyslet{/tikz/.unknown/.@cmd}\kDAct
 }
 
 \catcode`@=12
