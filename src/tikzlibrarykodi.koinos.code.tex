@@ -71,7 +71,8 @@
     {\kDGrpTok\the\kDTmpTok\expandafter\kDExit\kDGobble}
     {\kDAppend\kDTmpTok\kDOptTok\kDLoop}}
 
-\let\kDFetchOptAndGrpThen\kDFetchTilGrpThen
+\def\kDFetchOptAndGrpThen#1%
+  {\kDOptTok={}\kDGrpTok={}\kDFetchTilGrpThen{#1}}
 
 
 % macros for dumping, debugging and testing
