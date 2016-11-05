@@ -70,7 +70,7 @@ $('#compile').click(function() {
 
     method: 'POST',
     url: 'https://texrhobot.herokuapp.com/crank',
-    // url: 'http://0.0.0.0:9292/crank',
+    // url: 'http://0.0.0.0:5000/crank',
     data: {
       "document": editor.getValue(),
       'template': 'latex-minimal',
@@ -102,7 +102,7 @@ $('#compile').click(function() {
     $('#compile').html("You goofed up.");
 
     fadeIn('#logger-wrapper');
-/*    logger.setValue(jqXHR.responseText, -1);*/
+    logger.setValue(jqXHR.responseText, -1);
 
     /* TODO: this is ridiculous, dammit... */
     setTimeout(function () {
