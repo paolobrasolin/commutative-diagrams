@@ -23,11 +23,11 @@
   },
 }
 
-\newif\ifConTeXt
+% \newif\ifConTeXt
 % Trick stolen from iftex. The second line is expanded inside the group so
 % the global scope isn't polluted by \csname defining the token.
-\begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
-  \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+% \begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
+  % \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
 % \ifConTeXt\catcode`|=12 \fi% TODO: why is the space necessary?
 
 \newtoks\kDMitraTmpTok
@@ -70,7 +70,9 @@
   {\kDMitraParseRowEndThen
   {#1}}}}
 
-\def\kDMitraMarkRowEndBefore#1#2\\{#1#2&\kD\\}
+\begingroup\catcode`&=4 % questo serve, ma solo con ConTeXt
+\gdef\kDMitraMarkRowEndBefore#1#2\\{#1#2&\kD\\}
+\endgroup
 
 \def\kDMitraParseAllColsThen#1{%
   \def\kDExit{#1}%
