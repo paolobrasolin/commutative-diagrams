@@ -90,7 +90,8 @@
   comma/.initial={},
   full stop/.initial={},
   colon/.initial={},
-  backslash/.initial={}
+  backslash/.initial={},
+  underscore/.initial=_,
 }
 
 % MEMO: Spaces after number to avoid stray \relax
@@ -103,5 +104,6 @@
     \ifnum`#1=46 \pgfkeysvalueof{/katharizo/replacements/full stop}\else%
     \ifnum`#1=58 \pgfkeysvalueof{/katharizo/replacements/colon}\else%
     \ifnum`#1=92 \pgfkeysvalueof{/katharizo/replacements/backslash}\else%
-    #1\fi\fi\fi\fi\fi\fi\fi%
+    \ifnum`#1=95 \pgfkeysvalueof{/katharizo/replacements/underscore}\else%
+    #1\fi\fi\fi\fi\fi\fi\fi\fi%
 }

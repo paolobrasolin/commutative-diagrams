@@ -100,12 +100,22 @@
 \kDDetectTrailingSpace#1
 \ifkDDTSHasTrail
 \def\kDRTS##1 \kD{#1={##1}}
-\edef\kDRTSAct{\noexpand\kDRTS\the#1\noexpand\kD}\kDRTSAct
+\edef\kDRTSAct{\noexpand\kDRTS\the#1\noexpand\kD}
+\kDRTSAct
 \fi
 }
 
 \def\kDDetectTrailingSpace#1%
-{\edef\kDAct{\noexpand\kDDTSGob\the#1\noexpand\kD}\kDAct}
+{
+\kDDTSPrevSpacefalse
+\edef\kDAct{\noexpand\kDDTSGob\the#1\noexpand\kD}
+\kDAct
+% \ifkDDTSHasTrail
+% \show\kDAct
+% \message{HAS TRAIL: "\the#1"}
+% \showthe#1
+% \fi
+}
 
 \def\kDDTSGob%
 {\kDIfNextSoftCh\kD

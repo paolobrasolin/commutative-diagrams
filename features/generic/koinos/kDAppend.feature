@@ -10,11 +10,11 @@ Feature: kDAppend macro
   Scenario Outline: appending token lists
     Given the body is
     """
-    \newtoks\foo\foo={<foo>}
-    \newtoks\bar\bar={<bar>}
-    \kDAppend\bar\foo
+    \newtoks\FOO\FOO={<foo>}
+    \newtoks\BAR\BAR={<bar>}
+    \kDAppend\BAR\FOO
     """
-    And I dump the "\foo" as "foo"
+    And I dump the "\FOO" as "foo"
     Then compilation succeeds
     And the dumped "foo" is "<concatenation>"
 
