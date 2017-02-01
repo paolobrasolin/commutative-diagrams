@@ -11,7 +11,7 @@ desc 'prepare PKG filetree'
 task :pkg do
   mkdir_p 'dist/pkg/kodi'
   cp('README', 'dist/pkg/kodi/README')
-  source_files = FileList['source/*.sty', 'source/*.tex']
+  source_files = FileList['src/*.sty', 'src/*.tex']
   source_template = File.read('HEADER.erb')
   source_renderer = ERB.new(source_template, 0, '<>')
   source_files.each do |filename|
