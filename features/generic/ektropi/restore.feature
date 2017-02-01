@@ -2,7 +2,7 @@
 Feature: ektropi can restore the original handler
 
   Background: testing ektropi in a generic context
-    Given I'm in a context
+    Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.ektropi" TikZ library
     And I use the "kodi.koinos" TikZ library

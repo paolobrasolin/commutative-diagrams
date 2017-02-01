@@ -7,7 +7,7 @@ require 'yaml'
 
 @name = 'kodi'
 
-@meta = YAML.load(File.read('metadata.yaml'))
+@meta = YAML. load(File.read('metadata.yaml'))
 
 desc 'prepare PKG distribution'
 task :pkg do
@@ -74,7 +74,8 @@ task :features, :feature, :setup do |_task, args|
   options = [
     # '--dry-run',
     # '--format progress'
-    '--format pretty'
+    '--format pretty',
+    '--no-source'
   ]
 
   if feature.include? 'generic'

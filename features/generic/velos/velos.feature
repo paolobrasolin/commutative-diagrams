@@ -2,7 +2,7 @@
 Feature: velos
 
   Background: testing ozos in a generic context
-    Given I'm in a context
+    Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.velos" TikZ library
 

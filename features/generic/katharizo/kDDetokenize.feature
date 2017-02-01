@@ -2,7 +2,7 @@
 Feature: katharizo's kDDetokenize macro
 
   Background: testing katharizo in a generic context
-    Given I'm in a context
+    Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.koinos" TikZ library

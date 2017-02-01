@@ -6,8 +6,11 @@ Feature: koDi works with TeX
     And I am compiling through "tex"
 
   Scenario: using koDi as a TikZ library
-    Given I input the "tikz.tex" file
-    And I use the "kodi" TikZ library
+    Given the preamble is
+    """
+    \input tikz
+    \usetikzlibrary{kodi}
+    """
     And the body is
     """
     \tikzpicture[kodi]
@@ -16,7 +19,10 @@ Feature: koDi works with TeX
     Then compilation succeeds
 
   Scenario: using koDi as a TeX input
-    Given I input the "kodi.tex" file
+    Given the preamble is
+    """
+    \input kodi
+    """
     And the body is
     """
     \kodi

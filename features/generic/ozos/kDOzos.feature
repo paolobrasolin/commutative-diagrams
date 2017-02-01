@@ -2,7 +2,7 @@
 Feature: kDOzos macro
 
   Background: testing ozos in a generic context
-    Given I'm in a context
+    Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.ozos" TikZ library
     And I want a debugging dump

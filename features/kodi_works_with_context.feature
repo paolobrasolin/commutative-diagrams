@@ -6,8 +6,11 @@ Feature: koDi works with ConTeXt
     And I am compiling through "context"
 
   Scenario: using koDi as a TikZ library
-    Given I use the "tikz" module
-    And I use the "kodi" TikZ library
+    Given the preamble is
+    """
+    \usemodule[tikz]
+    \usetikzlibrary[kodi]
+    """
     And the body is
     """
     \starttikzpicture[kodi]
@@ -16,7 +19,10 @@ Feature: koDi works with ConTeXt
     Then compilation succeeds
 
   Scenario: using koDi as a ConTeXt module
-    Given I use the "kodi" module
+    Given the preamble is
+    """
+    \usemodule[kodi]
+    """
     And the body is
     """
     \startkodi

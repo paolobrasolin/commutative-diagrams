@@ -6,8 +6,11 @@ Feature: koDi works with LaTeX
     And I am compiling through "latex"
 
   Scenario: using koDi as a TikZ library
-    Given I use the "tikz" package
-    And I use the "kodi" TikZ library
+    Given the preamble contains
+    """
+    \usepackage{tikz}
+    \usetikzlibrary{kodi}
+    """
     And the body is
     """
     \begin{tikzpicture}[kodi]
@@ -16,7 +19,10 @@ Feature: koDi works with LaTeX
     Then compilation succeeds
 
   Scenario: using koDi as a LaTeX package
-    Given I use the "kodi" package
+    Given the preamble contains
+    """
+    \usepackage{kodi}
+    """
     And the body is
     """
     \begin{kodi}

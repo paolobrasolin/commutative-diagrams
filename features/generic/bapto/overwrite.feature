@@ -2,7 +2,7 @@
 Feature: bapto's overwrite key
 
   Background: testing bapto in a generic context
-    Given I'm in a context
+    Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.bapto" TikZ library
