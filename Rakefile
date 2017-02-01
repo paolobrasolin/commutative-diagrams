@@ -1,30 +1,32 @@
+require 'cucumber/rake/task'
 require 'erb'
 require 'fileutils'
 require 'open3'
 require 'yaml'
 
+
 @name = 'kodi'
 
 @meta = YAML.load(File.read('metadata.yaml'))
 
-desc 'prepare PKG filetree'
+desc 'prepare PKG distribution'
 task :pkg do
   mkdir_p 'dist/pkg/kodi'
   cp('README', 'dist/pkg/kodi/README')
-  source_files = FileList['src/*.sty', 'src/*.tex']
-  source_template = File.read('HEADER.erb')
-  source_renderer = ERB.new(source_template, 0, '<>')
-  source_files.each do |filename|
+  code_files = FileList['src/*.sty', 'src/*.tex']
+  code_template = File.read('HEADER.erb')
+  code_renderer = ERB.new(code_template, 0, '<>')
+  code_files.each do |filename|
     @filename = File.basename(filename)
     @source = File.read(filename)
     target_filename = "dist/pkg/kodi/#{File.basename(filename)}"
     puts "render #{filename} to #{target_filename}"
-    File.write(target_filename, source_renderer.result)
+    File.write(target_filename, code_renderer.result)
   end
 end
 
-desc 'prepare TDS filetree'
-task :tds => :pkg do
+desc 'prepare TDS distribution'
+task tds: [:pkg] do
   {
     'kodi.tex'         => 'tex/plain/kodi/',         # TeX include
     'kodi.sty'         => 'tex/latex/kodi/',         # LaTeX package
@@ -33,40 +35,38 @@ task :tds => :pkg do
     'kodi-doc.tex'     => 'doc/generic/kodi/',       # documentation
     'kodi-doc.pdf'     => 'doc/generic/kodi/',       #   "
     'README.md'        => 'doc/generic/kodi/'        #   "
-  }.each do |source_files, target_dir|
-    copy_with_path("dist/pkg/kodi/#{source_files}", "dist/tds/#{target_dir}")
+  }.each do |source_file, target_subdir|
+    copy_with_path("dist/pkg/kodi/#{source_file}", "dist/tds/#{target_subdir}")
   end
 end
 
 desc 'Compress'
-task :compress => [:pkg, :tds] do
-  Dir.chdir("dist/tds") do
+task compress: [:pkg, :tds] do
+  Dir.chdir('dist/tds') do
     system('zip', '--recurse-paths', "../pkg/#{@name}.tds.zip", '.')
   end
-  Dir.chdir("dist/pkg") do
+  Dir.chdir('dist/pkg') do
     system('zip', '--recurse-paths', "../#{@name}.zip", '.')
   end
 end
 
 desc 'Build'
-task :build => [:pkg, :tds, :compress]
+task build: [:pkg, :tds, :compress]
 
 def copy_with_path(mask, path)
   mkdir_p(path)
   cp_r(Dir[mask], path)
 end
 
-desc 'Prepare package'
-task :ctanify do
-  `ctanify --pkgname mypkg dummy.tex`
-end
+# desc 'Prepare package'
+# task :ctanify do
+#   `ctanify --pkgname mypkg dummy.tex`
+# end
 
 desc 'Upload'
 task :ctanupload do
   # puts Open3.capture3(@meta['ctan'], 'ctanupload')
 end
-
-require 'cucumber/rake/task'
 
 task :features, :feature, :setup do |_task, args|
   feature = args[:feature] || ''
@@ -79,7 +79,7 @@ task :features, :feature, :setup do |_task, args|
 
   if feature.include? 'generic'
     setup = args[:setup] || 'tex'
-    setup = YAML.load(File.read('features/support/workflows.yaml'))[setup]
+    setup = YAML.safe_load(File.read('features/support/workflows.yaml'))[setup]
     options += [
       "DIALECT=#{setup['dialect']}",
       "PIPELINE=#{setup['pipeline']}"
@@ -88,9 +88,9 @@ task :features, :feature, :setup do |_task, args|
 
   target = "features/#{feature}"
   if File.file?("#{target}.feature")
-    target += ".feature"
-  elsif not File.exist?("#{target}")
-    raise "Invalid feature name."
+    target += '.feature'
+  elsif !File.exist?(target.to_s)
+    raise 'Invalid feature name.'
   end
 
   options += [
@@ -109,7 +109,7 @@ CLEAN.include 'dist/pkg', 'dist/tds'
 CLOBBER.include 'dist'
 
 desc 'Install locally'
-task :install => :tds do
+task install: :tds do
   basedir = `kpsexpand '$TEXMFHOME'`.chomp
   cp_r 'dist/tds/.', basedir
 end
@@ -129,10 +129,10 @@ task :uninstall do
 end
 
 desc 'Reinstall locally'
-task :reinstall => [:uninstall, :install]
+task reinstall: [:uninstall, :install]
 
 desc 'Compile minimal koDi/standalone format'
-task :format => :install do
+task format: :install do
   stdout, stderr, status = Open3.capture3(
     'pdftex',
     '-ini',
