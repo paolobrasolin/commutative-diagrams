@@ -1,15 +1,13 @@
+require 'erb'
 require 'fileutils'
 require 'open3'
+require 'yaml'
 
 @name = 'kodi'
 
-require 'erb'
-
-require 'yaml'
-
 @meta = YAML.load(File.read('metadata.yaml'))
 
-desc 'Prepare PKG'
+desc 'prepare PKG filetree'
 task :pkg do
   mkdir_p 'dist/pkg/kodi'
   cp('README', 'dist/pkg/kodi/README')
@@ -25,7 +23,7 @@ task :pkg do
   end
 end
 
-desc 'Prepare TDS'
+desc 'prepare TDS filetree'
 task :tds => :pkg do
   {
     'kodi.tex'         => 'tex/plain/kodi/',         # TeX include
@@ -33,8 +31,8 @@ task :tds => :pkg do
     't-kodi.tex'       => 'tex/context/third/kodi/', # ConTeXt module
     'tikzlibrarykodi*' => 'tex/generic/kodi/',       # common TikZ library
     'kodi-doc.tex'     => 'doc/generic/kodi/',       # documentation
-    'kodi-doc.pdf'     => 'doc/generic/kodi/',       #  "
-    'README.md'        => 'doc/generic/kodi/'        #  "
+    'kodi-doc.pdf'     => 'doc/generic/kodi/',       #   "
+    'README.md'        => 'doc/generic/kodi/'        #   "
   }.each do |source_files, target_dir|
     copy_with_path("dist/pkg/kodi/#{source_files}", "dist/tds/#{target_dir}")
   end

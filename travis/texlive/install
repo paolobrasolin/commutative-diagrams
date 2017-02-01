@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Standard post install step.
+# We're cheating here so we can call tlmgr from the installer.
+# MEMO: /tmp/texlive is defined as the root in the profile file.
+export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
+
+# Since we need to source the script from .travis.yml in order to export
+# the PATH, we encasulate the bulk of the procedure and into a subshell
+# so we can act freely in it without polluting the scope in any way.
+
+(
+
+# Exit with nonzero exit code if anything fails.
+set -e
+
+# Get the dir of this script.
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Make a temp dir.
+tmp=$(mktemp -d)
+
+# Fetch and extract TeX Live installer.
+cd "$tmp" || exit 1
+wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+tar -xzf install-tl-unx.tar.gz
+
+# Install TeX Live using provided custom profile.
+cd install-tl-20* || exit 1
+./install-tl --profile="$dir/texlive.profile"
+
+# Install extra packages from packages file.
+readarray -t texlive_packages < "$dir/texlive.packages"
+tlmgr install "${texlive_packages[@]}"
+
+# Be nice and remove tmp files.
+rm -rf "$tmp"
+
+) || exit 1

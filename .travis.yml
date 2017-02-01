@@ -5,9 +5,7 @@ language: ruby
 rvm:
 - 2.2.5
 before_script:
-  - ./script/tl
-  - export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
-  - tlmgr install standalone pgf xcolor oberdiek ms graphics latex-bin context
+  - source travis/texlive/install
   - bundle install
 script: 
   - bundle exec rake install

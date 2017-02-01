@@ -8,4 +8,3 @@ TEXMFSYSVAR /tmp/texlive/texmf-var
 TEXMFVAR ~/.texlive/texmf-var
 option_doc 0
 option_src 0
-
