@@ -30,7 +30,7 @@ module TeXWorld
 #{@content['body'].strip}
 #{@content['tail'].strip}
 TEXCODE
-      puts sourcecode
+      # puts sourcecode
       File.open(filename, 'w') do |file|
         file.write sourcecode
       end

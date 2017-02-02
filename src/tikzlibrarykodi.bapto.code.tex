@@ -5,22 +5,28 @@
 %   2. I dye, colour
 %   3. I baptise
 
-% The baptism process has three stages realized by wiring TikZ keys:
+% The bapto process has three stages realized by wiring TikZ keys:
 %   node contents  --->  [katharizo]  --(dispatcher)->  name/alias
 
-%===[ TikZ magic ]==============================================================
+%    /tikz/node contents -.
+% .- /katharizo/input <---'
+% '----[ katharizo ]------.
+% .- /katharizo/output <--'
+% '> /bapto/dispatcher ---.
+%    (name|alias| ) <-----'
+
 
 \pgfqkeys{/tikz}{
   self naming/.style={
     /tikz/node contents/.forward to=/katharizo/input,
-    /katharizo/output/.forward to=/bapto/dispatcher
+    /katharizo/output/.forward to=/bapto/input
   }
 }
 
 \pgfqkeys{/bapto/overwrite}{.is choice,
-  false/.style={/bapto/dispatcher/.code=
+  false/.style={/bapto/input/.code=
     {\tikz@fig@name\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
-  alias/.style={/bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
-  true/.style= {/bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
+  alias/.style={/bapto/input/.code={\pgfqkeys{/tikz}{alias=##1}}},
+  true/.style= {/bapto/input/.code={\pgfqkeys{/tikz}{name=##1}}},
   false, % default is no overwriting and no aliasing
 }
