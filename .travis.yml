@@ -4,20 +4,12 @@
 language: ruby
 rvm:
 - 2.2.5
-before_script:
+install:
   - source travis/texlive/install
   - bundle install
 script: 
   - bundle exec rake install
-  - bundle exec rake features[generic,tex]
-  - bundle exec rake features[generic,pdftex]
-  - bundle exec rake features[generic,xetex]
-  - bundle exec rake features[generic,luatex]
-  - bundle exec rake features[generic,latex]
-  - bundle exec rake features[generic,pdflatex]
-  - bundle exec rake features[generic,xelatex]
-  - bundle exec rake features[generic,lualatex]
-  - bundle exec rake features[generic,context]
+  - bundle exec rake "features[.*,tex]"
 branches:
   only:
   - master

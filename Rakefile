@@ -68,41 +68,50 @@ task :ctanupload do
   # puts Open3.capture3(@meta['ctan'], 'ctanupload')
 end
 
-task :features, :feature, :setup do |_task, args|
-  feature = args[:feature] || ''
+task :features, :features_regexp, :tex_envs_regexp do |_task, args|
+  features_regexp = args[:features_regexp] || '.*'
+  tex_envs_regexp = args[:tex_envs_regexp] || '.*'
 
   options = [
     # '--dry-run',
-    # '--format progress'
+    # '--format progress',
     '--format pretty',
     '--no-source'
   ]
 
-  if feature.include? 'generic'
-    setup = args[:setup] || 'tex'
-    setup = YAML.safe_load(File.read('features/support/workflows.yaml'))[setup]
-    options += [
-      "DIALECT=#{setup['dialect']}",
-      "PIPELINE=#{setup['pipeline']}"
-    ]
+  tex_envs = YAML.safe_load(File.read('features/support/workflows.yaml'))
+  tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
+  raise ArgumentError, "The provided TeX environment regexp has no matches." if tex_envs.empty?
+
+  features = Dir.glob("features/**/*.feature")
+  features.select! { |f| f[/#{features_regexp}/] }
+  raise ArgumentError, "The provided feature regexp has no matches." if features.empty?
+
+  filtered_features_syms = []
+
+  features.each do |filename|
+    if filename.include?('generic')
+      tex_envs.each do |k, v|
+        hash = Digest::MD5.hexdigest(k+filename).to_sym
+        filtered_features_syms <<= hash
+        Cucumber::Rake::Task.new(hash) do |task|
+          task.cucumber_opts = options + [
+            "DIALECT=#{v['dialect']}",
+            "PIPELINE=#{v['pipeline']}"
+          ] + [filename]
+        end
+      end
+    else
+      hash = Digest::MD5.hexdigest(filename).to_sym
+      filtered_features_syms <<= hash
+      Cucumber::Rake::Task.new(hash) do |task|
+        task.cucumber_opts = options + [filename]
+      end
+    end
   end
 
-  target = "features/#{feature}"
-  if File.file?("#{target}.feature")
-    target += '.feature'
-  elsif !File.exist?(target.to_s)
-    raise 'Invalid feature name.'
-  end
-
-  options += [
-    target.to_s
-  ]
-
-  Cucumber::Rake::Task.new(:cucumber) do |t|
-    t.cucumber_opts = options
-  end
-
-  Rake::Task[:cucumber].invoke
+  task :filtered_features => filtered_features_syms
+  Rake::Task[:filtered_features].invoke
 end
 
 require 'rake/clean'
