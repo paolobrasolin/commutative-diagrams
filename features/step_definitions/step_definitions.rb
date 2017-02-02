@@ -61,7 +61,7 @@ Then(/^compilation (succeeds|fails)$/) do |outcome|
   succeeded = @job.run
   case outcome
   when 'succeeds'
-    # puts File.read(".tex-test/#{@job.jobname}.log") unless succeeded
+    puts File.read(".tex-test/#{@job.jobname}.log") unless succeeded
     expect(succeeded).to be true
   when 'fails'
     expect(succeeded).to be false

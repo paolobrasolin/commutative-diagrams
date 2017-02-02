@@ -1,25 +1,38 @@
 # features/katharizo/expansion.feature
-Feature: katharizo's expansion control
+Feature: katharizo can control macro expansion
 
-  Background: testing katharizo in a generic context
+  Background: testing katharizo
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.koinos" TikZ library
-    And I use the "kodi.koinos" TikZ library
     And I want a debugging dump
 
-  Scenario Outline: using koDi as a TikZ library
+  Scenario: using default expansion behaviour
+    Given the body is
+    """
+    \def\NOTEXPANDED{\EXPANDED}
+    \pgfqkeys{/katharizo}{
+      output/.store in=\OUTPUT,
+      input=\NOTEXPANDED,
+    }
+    """
+    And I dump "\OUTPUT" as "output"
+    Then compilation succeeds
+    And the dumped "output" is "NOTEXPANDED"
+
+  Scenario Outline: using custom expansion behaviour
     Given the body is
     """
     \def\EXPANDEDONCE{FULLYEXPANDED}
     \def\NOTEXPANDED{\EXPANDEDONCE}
     \pgfqkeys{/katharizo}{
+      output/.store in=\OUTPUT,
       expand=<expand>,
-      input={\NOTEXPANDED}
+      input=\NOTEXPANDED,
     }
     """
-    And I dump "\kDKatharizoOutput" as "output"
+    And I dump "\OUTPUT" as "output"
     Then compilation succeeds
     And the dumped "output" is "<output>"
 

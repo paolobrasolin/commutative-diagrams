@@ -1,4 +1,4 @@
-# features/katharizo/kDDetokenize.feature
+# features/katharizo/kDDetokenize_macro.feature
 Feature: katharizo's kDDetokenize macro
 
   Background: testing katharizo in a generic context

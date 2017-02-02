@@ -1,32 +1,38 @@
-%===[ What is this? ]===========================================================
-
 % βάπτω • (báptō)
 %   1. I dip, submerge
 %   2. I dye, colour
 %   3. I baptise
 
-% The bapto process has three stages realized by wiring TikZ keys:
-%   node contents  --->  [katharizo]  --(dispatcher)->  name/alias
+% Bapto is a node labeling mechanism.
+% It allows for non-invasive relabeling.
 
-%    /tikz/node contents -.
-% .- /katharizo/input <---'
-% '----[ katharizo ]------.
-% .- /katharizo/output <--'
-% '> /bapto/dispatcher ---.
-%    (name|alias| ) <-----'
+% ,-- input             input hook
+% `-> dispatcher ----.  forwards according to
+% ,---[overwrite]----'    label overwriting configuration
+% `-> (name|alias|×)    to either name key, alias key or discarding the input
 
+%==[ input stage ]==============================================================
 
+\pgfqkeys{/bapto/input}{
+  .forward to=/bapto/dispatcher,
+}
+
+%==[ dispatching stage ]========================================================
+
+\pgfqkeys{/bapto/overwrite}{.is choice,
+  false/.style={/bapto/dispatcher/.code=
+    {\tikz@fig@name\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
+  alias/.style={/bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
+  true/.style= {/bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
+  false, % default is no name overwriting and no aliasing
+}
+
+%==[ extra stuff ]==============================================================
+
+% TODO: {self naming} should be moved elsewhere
 \pgfqkeys{/tikz}{
   self naming/.style={
     /tikz/node contents/.forward to=/katharizo/input,
     /katharizo/output/.forward to=/bapto/input
   }
-}
-
-\pgfqkeys{/bapto/overwrite}{.is choice,
-  false/.style={/bapto/input/.code=
-    {\tikz@fig@name\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
-  alias/.style={/bapto/input/.code={\pgfqkeys{/tikz}{alias=##1}}},
-  true/.style= {/bapto/input/.code={\pgfqkeys{/tikz}{name=##1}}},
-  false, % default is no overwriting and no aliasing
 }
