@@ -5,7 +5,10 @@ tex: &tex
     body: Hello world.
     tail: \bye
   idioms:
-    use: \input <%= arg %>
+    use: \input <%= name %>
+    enclose:
+      before: \<%= name %><%= options %>
+      after: \end<%= name %>
 
 pdftex: *tex
 xetex: *tex
@@ -18,7 +21,10 @@ latex: &latex
     body: Hello world.
     tail: \end{document}
   idioms:
-    use: \usepackage{<%= arg %>}
+    use: \usepackage{<%= name %>}
+    enclose:
+      before: \begin{<%= name %>}<%= options %>
+      after: \end{<%= name %>}
 
 pdflatex: *latex
 xelatex: *latex
@@ -31,4 +37,7 @@ context: &context
     body: Hello world.
     tail: \stoptext
   idioms:
-    use: \usemodule[<%= arg %>]
+    use: \usemodule[<%= name %>]
+    enclose:
+      before: \start<%= name %><%= options %>
+      after: \stop<%= name %>

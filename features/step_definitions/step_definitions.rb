@@ -13,7 +13,7 @@ Given(/^I'm using any TeX flavour$/) do
   @job.pipeline.load(ENV['PIPELINE'])
 end
 
-When(/^I use "([^\"]*)"$/) do |arg|
+When(/^I use "([^\"]*)"$/) do |name|
   macro = ERB.new(@job.document.idioms['use']).result(binding)
   @job.document.append_to('preamble', macro)
 end
@@ -32,6 +32,10 @@ When(/^the (preamble|body) is$/) do |part, sourcecode|
   @job.document.content[part] = sourcecode.gsub(/«(.*?)»/, '\1')
 end
 
+When(/^the (preamble|body) is empty$/) do |part|
+  @job.document.content[part] = ''
+end
+
 When(/^the (preamble|body) contains$/) do |part, sourcecode|
   # MEMO: the replacement is useful when interpolating
   #   from tables using trailing/leading spaces.
@@ -46,8 +50,10 @@ When(/^I use the "([^\"]*)" TikZ library$/) do |name|
   @job.document.append_to('preamble', "\\usetikzlibrary{#{name}}\n")
 end
 
-When(/^I(?:'m| am) inside a "([^\"]*)" environment$/) do |name|
-  @job.document.wrap_body("\\begin{#{name}}", "\\end{#{name}}")
+When(/^I(?:'m| am) inside a "([^\"]*)"(?: with options "(.*)")?$/) do |name, options|
+  before = ERB.new(@job.document.idioms['enclose']['before']).result(binding)
+  after = ERB.new(@job.document.idioms['enclose']['after']).result(binding)
+  @job.document.wrap_body(before, after)
 end
 
 Then(/^compilation (succeeds|fails)$/) do |outcome|
