@@ -5,7 +5,6 @@ Feature: ektropi can add deviations
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.ektropi" TikZ library
-    And I use the "kodi.koinos" TikZ library
 
   Scenario Outline: adding a simple deviation
     Given the body is
@@ -78,13 +77,13 @@ Feature: ektropi can add deviations
     \tikz<keylist>;
     """
     Then compilation succeeds
-    And the log matches <regexp>
+    And the log includes <string>
 
     Examples: test keys logging works as expected
-      | keylist     | regexp            |
+      | keylist     | string            |
       | [/tikz/foo] | path: '/tikz/foo' |
       | [/quux/foo] | path: '/quux/foo' |
 
     Examples: /tikz/* keys always maintain precedence
-      | keylist                   | regexp            |
+      | keylist                   | string            |
       | [/ektropi/add=/quux, foo] | path: '/tikz/foo' |

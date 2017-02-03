@@ -26,13 +26,3 @@
   true/.style= {/bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
   false, % default is no name overwriting and no aliasing
 }
-
-%==[ extra stuff ]==============================================================
-
-% TODO: {self naming} should be moved elsewhere
-\pgfqkeys{/tikz}{
-  self naming/.style={
-    /tikz/node contents/.forward to=/katharizo/input,
-    /katharizo/output/.forward to=/bapto/input
-  }
-}

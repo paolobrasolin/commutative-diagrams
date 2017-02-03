@@ -5,8 +5,6 @@ Feature: ektropi can restore the original handler
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.ektropi" TikZ library
-    And I use the "kodi.koinos" TikZ library
-    And I want a debugging dump
 
   Scenario Outline: undoing a single deviation
     Given the body is
@@ -33,20 +31,20 @@ Feature: ektropi can restore the original handler
     Given the body is
     """
     \pgfkeys{
-      /tikz/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
-      /quux/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
+      /tikz/foo/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}},
+      /quux/foo/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}},
     }
     \tikz\node[/ektropi/add=/quux]<keylists>{};
     """
     Then compilation succeeds
-    And the dumped "path" is "<path>"
+    And the log includes <string>
 
   Examples: test keys work as expected
-    | keylists    | path      |
+    | keylists    | string    |
     | [/tikz/foo] | /tikz/foo |
     | [/quux/foo] | /quux/foo |
 
   Examples: /tikz/* keys maintain precedence
-    | keylists                | path      |
+    | keylists                | string    |
     | [foo][/ektropi/restore] | /tikz/foo |
     | [/ektropi/restore][foo] | /tikz/foo |

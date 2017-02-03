@@ -5,8 +5,6 @@ Feature: katharizo controls dangerous characters replacement
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
-    And I use the "kodi.koinos" TikZ library
-    And I want a debugging dump
 
   Scenario Outline: using default replacements
     Given the body is
@@ -15,22 +13,22 @@ Feature: katharizo controls dangerous characters replacement
       output/.store in=\OUTPUT,
       input=<input>
     }
+    \message{the output: [\OUTPUT]}
     """
-    And I dump "\OUTPUT" as "output"
     Then compilation succeeds
-    And the dumped "output" is <output>
+    And the log includes the output: <output>
 
   Examples:
     | input  | output |
-    | {A Z}  | "A Z"  |
-    | {$}    | ""     |
-    | {(}    | ""     |
-    | {)}    | ""     |
-    | {,}    | ""     |
-    | {.}    | ""     |
-    | {:}    | ""     |
-    | {\foo} | "foo"  |
-    | {_}    | "_"    |
+    | {A Z}  | [A Z]  |
+    | {$}    | []     |
+    | {(}    | []     |
+    | {)}    | []     |
+    | {,}    | []     |
+    | {.}    | []     |
+    | {:}    | []     |
+    | {\foo} | [foo]  |
+    | {_}    | [_]    |
 
   Scenario Outline: using custom replacements
     Given the body is
@@ -50,19 +48,19 @@ Feature: katharizo controls dangerous characters replacement
       output/.store in=\OUTPUT,
       input=<input>
     }
+    \message{the output: [\OUTPUT]}
     """
-    And I dump "\OUTPUT" as "output"
     Then compilation succeeds
-    And the dumped "output" is <output>
+    And the log includes the output: <output>
 
   Examples:
     | input  | output |
-    | {A Z}  | "A1Z"  |
-    | {$}    | "2"    |
-    | {(}    | "3"    |
-    | {)}    | "4"    |
-    | {,}    | "5"    |
-    | {.}    | "6"    |
-    | {:}    | "7"    |
-    | {\foo} | "8foo" |
-    | {_}    | "9"    |
+    | {A Z}  | [A1Z]  |
+    | {$}    | [2]    |
+    | {(}    | [3]    |
+    | {)}    | [4]    |
+    | {,}    | [5]    |
+    | {.}    | [6]    |
+    | {:}    | [7]    |
+    | {\foo} | [8foo] |
+    | {_}    | [9]    |

@@ -5,8 +5,6 @@ Feature: kDFetchOptAndGrpThen macro
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.koinos" TikZ library
-    And I want a debugging dump
-
 
   Scenario Outline: testing baseline syntax
     Given the body is
@@ -30,12 +28,12 @@ Feature: kDFetchOptAndGrpThen macro
     Given the body is
     """
     \kDFetchOptAndGrpThen\relax<stream>
+    \message{the captured options: [\the\kDOptTok]}
+    \message{the captured group: [\the\kDGrpTok]}
     """
-    And I dump the "\kDOptTok" as "options"
-    And I dump the "\kDGrpTok" as "group"
     Then compilation succeeds
-    And the dumped "options" is "<options>"
-    And the dumped "group" is "<group>"
+    And the log includes the captured options: [<options>]
+    And the log includes the captured group: [<group>]
 
     Examples: 
       | stream    | options | group   |

@@ -1,5 +1,12 @@
 % ================================================================= FOUNDATION =
 
+\pgfqkeys{/tikz}{
+  self naming/.style={
+    /tikz/node contents/.forward to=/katharizo/input,
+    /katharizo/output/.forward to=/bapto/input
+  }
+}
+
 \pgfqkeys{/kD}{
     % universal styles
     every layout/.style={

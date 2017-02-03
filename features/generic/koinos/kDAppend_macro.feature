@@ -5,7 +5,6 @@ Feature: kDAppend macro
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.koinos" TikZ library
-    And I want a debugging dump
 
   Scenario Outline: appending token lists
     Given the body is
@@ -13,10 +12,10 @@ Feature: kDAppend macro
     \newtoks\FOO\FOO={<foo>}
     \newtoks\BAR\BAR={<bar>}
     \kDAppend\BAR\FOO
+    \message{the concatenation: [\the\FOO]}
     """
-    And I dump the "\FOO" as "foo"
     Then compilation succeeds
-    And the dumped "foo" is "<concatenation>"
+    And the log includes the concatenation: [<concatenation>]
 
     Examples:
       | foo | bar | concatenation |

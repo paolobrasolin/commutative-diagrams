@@ -5,8 +5,6 @@ Feature: katharizo can control macro expansion
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
-    And I use the "kodi.koinos" TikZ library
-    And I want a debugging dump
 
   Scenario: using default expansion behaviour
     Given the body is
@@ -16,10 +14,10 @@ Feature: katharizo can control macro expansion
       output/.store in=\OUTPUT,
       input=\NOTEXPANDED,
     }
+    \message{the output: \OUTPUT}
     """
-    And I dump "\OUTPUT" as "output"
     Then compilation succeeds
-    And the dumped "output" is "NOTEXPANDED"
+    And the log includes the output: NOTEXPANDED
 
   Scenario Outline: using custom expansion behaviour
     Given the body is
@@ -31,10 +29,10 @@ Feature: katharizo can control macro expansion
       expand=<expand>,
       input=\NOTEXPANDED,
     }
+    \message{the output: \OUTPUT}
     """
-    And I dump "\OUTPUT" as "output"
     Then compilation succeeds
-    And the dumped "output" is "<output>"
+    And the log includes the output: <output>
 
   Examples:
     | expand | output        |
