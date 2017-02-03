@@ -1,38 +1,61 @@
-%===[ What is this? ]===========================================================
-
 % εκτροπή • (ektropí)
 %  1. diversion
 %  2. deflection
 %  3. aberration
 
-\catcode`@=11
+% Ektropi is a mechanism to hijack the /tikz/.unknown handler.
+% It allows the addition of maximum priority paths in the key finding algorithm.
+% The diversions are globally scoped, cumulative and removable.
 
-\pgfqkeys{/ektropi}{
-  add/.style={
-    /tikz/.unknown/.add code={%
-\let\tikz@key\pgfkeyscurrentname% 
-\pgfkeys{#1/\tikz@key/.try={##1}}%
-\ifpgfkeyssuccess\else}{\fi}%
-  },
-  restore/.code={\kDEktropiRestore}
-}
+% Save catcode of @ to restore it at EOF.
+\edef\kDAct{\catcode`@=\the\catcode`@\relax}
+\catcode`@=11\relax
 
-\newtoks\kDEktropiToks
+%==[ handler restoring procedure ]==============================================
+
+% The default handler's code is backed up as a token list at load time.
+% NOTE: this has implications on loading order!
+% TODO: figure out whether it safe or not to just assume no other package
+%   does this kind dangerous of stuff.
+% TODO: just in case, wrap the backup procedure inside a callable key.
+
+\newtoks\kDEktropiDefaultToksBackup
 
 \expandafter\expandafter
-\expandafter\kDEktropiToks
+\expandafter\kDEktropiDefaultToksBackup
 \expandafter\expandafter
 \expandafter{\csname pgfk@/tikz/.unknown/.@body\endcsname}
 
 \def\kDEktropiRestore{
-  % restore handler body
+  % Restore handler body.
   \def\kDAct{\pgfkeyssetvalue{/tikz/.unknown/.@body}}
-  \expandafter\kDAct\expandafter{\the\kDEktropiToks}
-  % restore handler macro
-  % MEMO: #s are doubled since inside \kDAct helper
+  \expandafter\kDAct\expandafter{\the\kDEktropiDefaultToksBackup}
+  % Restore handler macro.
+  % NOTE: #s are doubled since we're inside \kDAct helper.
   \def\kDAct{\long\def\kDAct####1\pgfeov}
-  \expandafter\kDAct\expandafter{\the\kDEktropiToks}
+  \expandafter\kDAct\expandafter{\the\kDEktropiDefaultToksBackup}
   \pgfkeyslet{/tikz/.unknown/.@cmd}\kDAct
 }
 
-\catcode`@=12
+% This key is the user interface. Self explanatory.
+\pgfkeys{/ektropi/restore/.code={\kDEktropiRestore}}
+
+%==[ handler hacking procedure ]================================================
+
+% This key is the user interface. It wraps the /tikz/.unknown handler code
+% with a conditional that executes it only if the unknown key retrieval
+% fails inside the path passed to /ektropi/add.
+\pgfkeys{/ektropi/add/.style={
+  /tikz/.unknown/.add code=
+    {
+      \let\tikz@key\pgfkeyscurrentname
+      \pgfkeys{#1/\tikz@key/.try={##1}}
+      \ifpgfkeyssuccess\else
+    }{
+      \fi
+    }
+  }
+}
+
+% Restore catcode of @.
+\kDAct
