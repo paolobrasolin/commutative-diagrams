@@ -1,11 +1,48 @@
-%===[ What is this? ]===========================================================
-
 % κοινός • (koinós)
 %  1. shared
 %  2. common
 %  3. public
 
-% This module implements and aliases some commonplace macros.
+% Koinos implements or aliases some commonplace macros.
+
+% This macro is the blank space token.
+\bgroup
+\def\:{\global\let\kDBlankSpace= }\:
+\egroup
+
+% The next two macros both implement token gobbling.
+
+% This "hard" version gobbles any token, ignoring whitespace.
+\catcode`@=11
+\let\kDGobbleHardTok\pgfutil@gobble
+\catcode`@=12
+
+% This "soft" version gobbles only whitespace.
+% NOTE: this is just the identity macro. Fun fact.
+\def\kDGobbleSoftTok#1{#1}
+
+% The next two macros both implement the following logical condition:
+%   if next token is #1 then #2 else #3
+
+\catcode`@=11
+% This "hard" version ignores whitespace.
+\let\kDIfNextHardCh\pgfutil@ifnextchar
+\catcode`@=12
+
+% This "soft" version does not ignore whitespace.
+\long\def\kDIfNextSoftCh#1#2#3{%
+\let\kDINCToken= #1% <- MEMO: this space is crucial
+\def\kDINCTrue{#2}\def\kDINCFalse{#3}%
+\futurelet\kDINCTok\kDINC%
+}
+
+\def\kDINC{\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
+
+
+
+
+
+
 
 
 % append token list #1 to token list #2
@@ -14,41 +51,6 @@
 {\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
 
 
-% gobble next token
-
-\catcode`@=11
-\let\kDGobble\pgfutil@gobble
-\catcode`@=12
-
-
-% gobble blank space preceeding next token
-
-\def\kDIdentity#1{#1}
-
-
-% the blank space token
-
-\bgroup
-\def\:{\global\let\kDBlankSpace= }\:
-\egroup
-
-
-% if next token is #1 then #2 else #3
-
-\catcode`@=11
-% ignoring whitespace
-\let\kDIfNextHardCh\pgfutil@ifnextchar
-\catcode`@=12
-
-% not ignoring whitespace
-\long\def\kDIfNextSoftCh#1#2#3{%
-\let\kDINCToken= #1% <- MEMO: this space is crucial
-\def\kDINCTrue{#2}\def\kDINCFalse{#3}%
-\futurelet\kDINCTok\kDINC%
-}
-
-\def\kDINC%
-  {\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
 
 
 % tokenize stream into \kDOptTok until a group preceeding a ';' char is found,
@@ -68,7 +70,7 @@
   \def\kDLoop{\kDFetchTilGrpThen{#1}}%
   \kDTmpTok={{#2}}%
   \kDIfNextHardCh;
-    {\kDGrpTok\the\kDTmpTok\expandafter\kDExit\kDGobble}
+    {\kDGrpTok\the\kDTmpTok\expandafter\kDExit\kDGobbleHardTok}
     {\kDAppend\kDTmpTok\kDOptTok\kDLoop}}
 
 \def\kDFetchOptAndGrpThen#1%
@@ -120,10 +122,10 @@
 
 \def\kDDTSGob%
 {\kDIfNextSoftCh\kD
-  {\ifkDDTSPrevSpace\kDDTSHasTrailtrue\else\kDDTSHasTrailfalse\fi\kDGobble}
+  {\ifkDDTSPrevSpace\kDDTSHasTrailtrue\else\kDDTSHasTrailfalse\fi\kDGobbleHardTok}
   {\kDIfNextSoftCh\kDBlankSpace
-    {\kDDTSPrevSpacetrue\expandafter\kDDTSGob\kDIdentity}
-    {\kDDTSPrevSpacefalse\expandafter\kDDTSGob\kDGobble}}}
+    {\kDDTSPrevSpacetrue\expandafter\kDDTSGob\kDGobbleSoftTok}
+    {\kDDTSPrevSpacefalse\expandafter\kDDTSGob\kDGobbleHardTok}}}
 
 
 % remove leading whitespace from token list

@@ -43,6 +43,7 @@ When(/^the (preamble|body) contains$/) do |part, sourcecode|
 end
 
 When(/^I code ([^\"]*)$/) do |sourcecode|
+  sourcecode.gsub!(/«(.*?)»/, '\1')
   @job.document.append_to('body', sourcecode)
 end
 
@@ -119,6 +120,12 @@ Then(%r%^the log matches (.*)$%) do |regexp_string|
   log = File.read(".tex-test/#{@job.jobname}.log")
   regexp = Regexp.new(regexp_string)
   expect(log).to match(regexp)
+end
+
+Then(%r%^the log includes (.*)$%) do |string|
+  string.gsub!(/«(.*?)»/, '\1')
+  log = File.read(".tex-test/#{@job.jobname}.log")
+  expect(log).to include(string)
 end
 
 Given(/^I expect a node labeled "([^\"]*)" to exist$/) do |label|

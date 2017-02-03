@@ -59,7 +59,7 @@
 \def\kDMitraParseAllRowsThen#1{%
   \def\kDExit{#1}%
   \kDIfNextHardCh\kD
-    {\expandafter\kDExit\kDGobble}
+    {\expandafter\kDExit\kDGobbleHardTok}
     {\kDMitraParseOneRowThen{\kDMitraParseAllRowsThen{#1}}}}
 
 %===[ parse/table/row ]=========================================================
@@ -77,7 +77,7 @@
 \def\kDMitraParseAllColsThen#1{%
   \def\kDExit{#1}%
   \kDIfNextHardCh\kD
-    {\expandafter\kDExit\kDGobble}
+    {\expandafter\kDExit\kDGobbleHardTok}
     {\kDMitraParseOneColThen{\kDMitraParseAllColsThen{#1}}}}
 
 \def\kDMitraParseRowEndThen#1%

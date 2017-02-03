@@ -51,7 +51,7 @@
   \def\kDVelosGOBreak{#1}
   \kDIfNextHardCh:{\kDVelosGOAfterColontrue
     \kDVelosGlobalLabelOptions\expandafter{\the\kDVelosTemp}
-    \expandafter\kDVelosGOMaybeFetchThen\expandafter\kDVelosGOLoop\kDGobble
+    \expandafter\kDVelosGOMaybeFetchThen\expandafter\kDVelosGOLoop\kDGobbleHardTok
   }{%
     \ifkDVelosGOAfterColon
       \kDVelosGlobalEdgeOptions\expandafter{\the\kDVelosTemp}\else
@@ -132,7 +132,7 @@
       \ifkDVelosTempIsKeysList
         \kDVelosFEEdgePrependNode{\the\kDVelosTemp}\else
         \kDVelosFEEdgePrependNode{"\the\kDVelosTemp"}\fi
-      \expandafter\kDVelosFEThen\expandafter\kDVelosFELoop\kDGobble
+      \expandafter\kDVelosFEThen\expandafter\kDVelosFELoop\kDGobbleHardTok
     }{
       \kDVelosFEEdgePrepend{\the\kDVelosTemp}
       \kDVelosFEBreak
