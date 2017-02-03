@@ -10,12 +10,14 @@
 \def\:{\global\let\kDBlankSpace= }\:
 \egroup
 
+% Save catcode of @ to restore it later.
+\edef\kDAct{\catcode`@=\the\catcode`@\relax}
+\catcode`@=11\relax
+
 % The next two macros both implement token gobbling.
 
 % This "hard" version gobbles any token, ignoring whitespace.
-\catcode`@=11
 \let\kDGobbleHardTok\pgfutil@gobble
-\catcode`@=12
 
 % This "soft" version gobbles only whitespace.
 % NOTE: this is just the identity macro. Fun fact.
@@ -24,10 +26,8 @@
 % The next two macros both implement the following logical condition:
 %   if next token is #1 then #2 else #3
 
-\catcode`@=11
 % This "hard" version ignores whitespace.
 \let\kDIfNextHardCh\pgfutil@ifnextchar
-\catcode`@=12
 
 % This "soft" version does not ignore whitespace.
 \long\def\kDIfNextSoftCh#1#2#3{%
@@ -38,32 +38,20 @@
 
 \def\kDINC{\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
 
+% Restore catcode of @.
+\kDAct
 
+% This macro appends token list #1 to token list #2.
+\def\kDAppend#1#2{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
 
-
-
-
-
-
-% append token list #1 to token list #2
-
-\def\kDAppend#1#2%
-{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
-
-
-
-
-% tokenize stream into \kDOptTok until a group preceeding a ';' char is found,
-% then put the group into \kDGrpTok and gobble the ';'.
-
-\newtoks\kDTmpTok
+% This macro tokenizes the stream into \kDOptTok
+% until a group preceeding a ';' character is found;
+% then it puts the group into \kDGrpTok and gobbles the ';'.
+\def\kDFetchOptAndGrpThen#1%
+  {\kDOptTok={}\kDGrpTok={}\kDFetchTilGrpThen{#1}}
+  
 \newtoks\kDOptTok
 \newtoks\kDGrpTok
-
-\def\kDFetchTilGrpThen#1#2#{%
-  \kDTmpTok={#2}%
-  \kDAppend\kDTmpTok\kDOptTok
-  \kDFetchGrpThen{#1}}
 
 \def\kDFetchGrpThen#1#2{%
   \def\kDExit{#1}%
@@ -73,32 +61,15 @@
     {\kDGrpTok\the\kDTmpTok\expandafter\kDExit\kDGobbleHardTok}
     {\kDAppend\kDTmpTok\kDOptTok\kDLoop}}
 
-\def\kDFetchOptAndGrpThen#1%
-  {\kDOptTok={}\kDGrpTok={}\kDFetchTilGrpThen{#1}}
+\newtoks\kDTmpTok
 
+\def\kDFetchTilGrpThen#1#2#{%
+  \kDTmpTok={#2}%
+  \kDAppend\kDTmpTok\kDOptTok
+  \kDFetchGrpThen{#1}}
 
-% macros for dumping, debugging and testing
-
-\newif\ifkDDumping
-\kDDumpingfalse
-
-\newwrite\kDDumpFile
-
-\def\kDDumpOpen%
-{\ifkDDumping\immediate\openout\kDDumpFile=\jobname.yml\fi}
-
-\def\kDDump#1%
-{\ifkDDumping\immediate\write\kDDumpFile{#1}\fi}
-
-\def\kDDumpClose%
-{\ifkDDumping\closeout\kDDumpFile\fi}
-
-
-% remove trailing whitespace from token list
-
-\newif\ifkDDTSHasTrail
-\newif\ifkDDTSPrevSpace
-
+% This macro removes trailing whitespace from token list #1.
+% TODO: it seems to be expanding macros; investigate.
 \def\kDTrimTrailingSpace#1{
 \kDDetectTrailingSpace#1
 \ifkDDTSHasTrail
@@ -113,12 +84,9 @@
 \kDDTSPrevSpacefalse
 \edef\kDAct{\noexpand\kDDTSGob\the#1\noexpand\kD}
 \kDAct
-% \ifkDDTSHasTrail
-% \show\kDAct
-% \message{HAS TRAIL: "\the#1"}
-% \showthe#1
-% \fi
 }
+
+\newif\ifkDDTSHasTrail
 
 \def\kDDTSGob%
 {\kDIfNextSoftCh\kD
@@ -127,8 +95,14 @@
     {\kDDTSPrevSpacetrue\expandafter\kDDTSGob\kDGobbleSoftTok}
     {\kDDTSPrevSpacefalse\expandafter\kDDTSGob\kDGobbleHardTok}}}
 
+\newif\ifkDDTSPrevSpace
 
-% remove leading whitespace from token list
+% This macro removes leading whitespace from token list #1.
+\def\kDTrimLeadingSpace#1{
+\def\kDAct##1\kD{#1={##1}}
+\expandafter\kDGobbleSpaceThen
+\expandafter\kDAct\the#1\kD
+}
 
 \def\kDGobbleSpaceThen#1%
 {\kDIfNextHardCh\bgroup
@@ -136,11 +110,26 @@
   {\kDGSOtherThen#1}}
 
 \def\kDGSGroupThen#1#2{#1{#2}}
+
 \def\kDGSOtherThen#1#2{#1#2}
 
-\def\kDTrimLeadingSpace#1{
-\def\kDAct##1\kD{#1={##1}}
-\expandafter\kDGobbleSpaceThen
-\expandafter\kDAct\the#1\kD
-}
+%===============================================================================
 
+% macros for dumping, debugging and testing
+% TODO: not sure I want to depend on these being in the sourcecode instead of
+%   some external package integrated with a TeX unit testing suite.
+%   I'll work in that direction.
+
+\newif\ifkDDumping
+\kDDumpingfalse
+
+\newwrite\kDDumpFile
+
+\def\kDDumpOpen%
+{\ifkDDumping\immediate\openout\kDDumpFile=\jobname.yml\fi}
+
+\def\kDDump#1%
+{\ifkDDumping\immediate\write\kDDumpFile{#1}\fi}
+
+\def\kDDumpClose%
+{\ifkDDumping\closeout\kDDumpFile\fi}

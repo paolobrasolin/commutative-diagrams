@@ -1,4 +1,4 @@
-# features/koinos/kDAppend.feature
+# features/koinos/kDAppend_macro.feature
 Feature: kDAppend macro
 
   Background: testing koinos in a generic context

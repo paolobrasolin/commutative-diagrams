@@ -1,5 +1,5 @@
 # features/koinos/kDGobbleHardTok_macro.feature
-Feature: kDGobble macro gobbles a token from the stream, ignoring spaces
+Feature: kDGobbleHardTok macro gobbles a token from the stream, ignoring spaces
 
   Background: testing koinos in a generic context
     Given I'm using any TeX flavour

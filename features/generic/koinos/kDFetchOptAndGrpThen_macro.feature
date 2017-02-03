@@ -1,4 +1,4 @@
-# features/koinos/kDFetchOptAndGrpThen.feature
+# features/koinos/kDFetchOptAndGrpThen_macro.feature
 Feature: kDFetchOptAndGrpThen macro
 
   Background: testing koinos in a generic context

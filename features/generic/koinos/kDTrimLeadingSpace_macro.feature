@@ -1,19 +1,18 @@
-# features/koinos/kDGobbleSoftTok_macro.feature
-Feature: kDGobbleSoftTok gobbles all spaces from the token stream
+# features/koinos/kDTrimLeadingSpace_macro.feature
+Feature: kDTrimLeadingSpace trims leading spaces from a token list
 
   Background: testing koinos in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.koinos" TikZ library
 
-  Scenario Outline: verifying the macro does gobble spaces
+  Scenario Outline: verifying the macro does trim leading spaces
     Given the body is
     """
     \newtoks\toks
     \toks{<code>}
     \message{the input token list: [\the\toks]}
-    \expandafter\toks\expandafter\expandafter
-      \expandafter{\expandafter\kDGobbleSoftTok\the\toks}
+    \kDTrimLeadingSpace\toks
     \message{the output token list: [\the\toks]}
     """
     Then compilation succeeds
@@ -22,7 +21,12 @@ Feature: kDGobbleSoftTok gobbles all spaces from the token stream
 
     Examples:
       | code     | input toks | output toks |
+      | «»       | «»         | «»          |
+      | « »      | « »        | «»          |
+      | «  »     | « »        | «»          |
+      | «foo»    | «foo»      | «foo»       |
       | « foo»   | « foo»     | «foo»       |
       | «  foo»  | « foo»     | «foo»       |
+      | «\foo»   | «\foo »    | «\foo »     |
       | « \foo»  | « \foo »   | «\foo »     |
       | «  \foo» | « \foo »   | «\foo »     |
