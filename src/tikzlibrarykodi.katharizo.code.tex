@@ -4,7 +4,7 @@
 %   3. (slang) kill
 
 % Katharizo is a detokenization/sanitation mechanism.
-% It produces "safe" strings from token lists.
+% It produces "safe" strings from tokens.
 
 % ,-- input          input hook
 % `-> expander ---.  performs expansion according to
@@ -18,7 +18,7 @@
 %==[ input stage ]==============================================================
 
 \pgfqkeys{/katharizo/input}{
-  .forward to=/katharizo/expander,
+  .forward to=/katharizo/expander
 }
 
 %==[ expansion stage ]==========================================================
@@ -27,11 +27,11 @@
   once/.style={/katharizo/expander/.style={/katharizo/expanded/.expand once={##1}}},
   full/.style={/katharizo/expander/.style={/katharizo/expanded/.expanded={##1}}},
   none/.style={/katharizo/expander/.style={/katharizo/expanded={##1}}},
-  none, % default is no expansion
+  none % default is no expansion
 }
 
 \pgfqkeys{/katharizo/expanded}{
-  .forward to=/katharizo/sanitizer,
+  .forward to=/katharizo/sanitizer
 }
 
 %==[ sanitation stage ]=========================================================
@@ -45,74 +45,65 @@
   full stop/.initial={},
   colon/.initial={},
   backslash/.initial={},
-  underscore/.initial=_,
+  underscore/.initial={_}
 }
 
-% TODO: export this somewhere else
-% \newif\ifkatharizoisverbose
-% \pgfqkeys{/kD}{
-%   verbose/.is if=katharizoisverbose,
-%   verbose=true,
-%   log/.code 2 args={
-%     \let~\space
-%     \newlinechar=`\^
-%     \message{kD.#1~>~#2^}
-%   },
-% }
-
-\pgfqkeys{/katharizo/sanitizer}{.code={%
-  \kDSanitize{#1}\kDInto kDFoo\kD%
-  \pgfkeysalso{/katharizo/sanitized/.expanded=\kDFoo}%
-  % TODO: rewrite this in a decent manner
-  % logging routine:
-  % \expandafter\kDDetokenize\kDKatharizoInput\kDInto kDKatharizoDetokenizedInput\kD%
-  % \pgfkeysalso{/kD/log={katharizo~~~~~~~}%
-  %   {{\kDKatharizoDetokenizedInput} -> (\kDFoo)}}%
-}}
+\pgfqkeys{/katharizo/sanitizer}{
+  .code={
+    \kDKatharizoSanitize{#1}\kDInto kDFoo\kD
+    \pgfkeysalso{/katharizo/sanitized/.expanded=\kDFoo}
+  }
+}
 
 \pgfqkeys{/katharizo/sanitized}{
-  .forward to=/katharizo/output,
+  .forward to=/katharizo/output
 }
 
 %==[ output stage ]=============================================================
 
+% NOTE: this must be defined/hooked before calling input
 \pgfqkeys{/katharizo/output}{
 }
 
-%==[ TeX is hell <3 ]===========================================================
+%==[ Plain TeX sanitation routine ]=============================================
 
-% This macro sanitizes tokens #1 to a string put into a macro named #2.
-\def\kDSanitize#1\kDInto#2\kD{
-  \kDDetokenize#1\kDInto kDKatharizoDetokenized\kD
-  \edef\kDKatharizoDetokenizedTerminated{\kDKatharizoDetokenized\space}
+% This macro sanitizes tokens {#1} and saves them as a macro named {#2}.
+\def\kDKatharizoSanitize#1\kDInto#2\kD{
+  \kDKatharizoDetokenize#1\kDInto kDFoo\kD
+  \edef\kDKatharizoDetokenizedTerminated{\kDFoo\space}
   \expandafter\edef\csname#2\endcsname
-    {\expandafter\kDSanitizeString\kDKatharizoDetokenizedTerminated\kD}
+    {\expandafter\kDKatharizoSanitizeString\kDKatharizoDetokenizedTerminated\kD}
 }
 
-% This macro detokenizes tokens #1 to a string put into a macro named #2.
-\def\kDDetokenize#1\kDInto#2\kD{
+% This macro detokenizes a tokens {#1} and saves them as a macro named {#2}.
+\def\kDKatharizoDetokenize#1\kDInto#2\kD{
   \def\kDFoo{#1}
   \edef\kDBar{\meaning\kDFoo}
   \def\kDAct##1:->##2\kD{##2}
   \expandafter\edef\csname#2\endcsname{\expandafter\kDAct\kDBar\kD}
 }
 
-% These macro recursively sanitize a string, a word and a character in place.
-
-\def\kDSanitizeString#1 #2\kD{%
-  \ifx\relax#1\else\kDSanitizeWord#1\kD\fi
+% This macro sanitizes a string in place by replacing words while trimming
+% and replacing spaces. {#1 #2} must be a string, i.e. a series of words
+% separated by spaces and it must be terminated by a space.
+\def\kDKatharizoSanitizeString#1 #2\kD{%
+  \ifx\relax#1\else\kDKatharizoReplaceWord#1\kD\fi
   \ifx\relax#1\else\if#2\space\else\ifx\relax#2\else
   \pgfkeysvalueof{/katharizo/replace/space}\fi\fi\fi
-  \ifx\relax#2\else\kDSanitizeString#2\kD\fi
+  \ifx\relax#2\else\kDKatharizoSanitizeString#2\kD\fi
 }
 
-\def\kDSanitizeWord#1#2\kD{%
-  \kDSanitizeCharacter#1\kD\ifx\relax#2\else\kDSanitizeWord#2\kD\fi%
+% This macro substitutes a word in place by applying replacement rules.
+% {#1#2} must be a word, i.e. a series of characters unbroken by spaces.
+\def\kDKatharizoReplaceWord#1#2\kD{%
+  \kDKatharizoReplaceCharacter#1\kD\ifx\relax#2\else\kDKatharizoReplaceWord#2\kD\fi
 }
 
-% TODO: rethink of all the dangerous characters cross-format-wise
-\def\kDSanitizeCharacter#1\kD{%
+% This macro substitutes a character in place by applying replacement rules.
+% {#1} must be a character, i.e. a single token.
+\def\kDKatharizoReplaceCharacter#1\kD{%
   % NOTE: spaces after number are there to avoid a stray \relax.
+  % TODO: really think of all the dangerous characters cross-format-wise
   \ifnum`#1=36 \pgfkeysvalueof{/katharizo/replace/dollar}\else
   \ifnum`#1=40 \pgfkeysvalueof{/katharizo/replace/left round brace}\else
   \ifnum`#1=41 \pgfkeysvalueof{/katharizo/replace/right round brace}\else

@@ -1,5 +1,5 @@
-# features/katharizo/kDSanitize.feature
-Feature: katharizo's kDSanitize macro
+# features/katharizo/sanitize_macro.feature
+Feature: \kDKatharizoSanitize macro
 
   Background: testing katharizo in a generic context
     Given I'm using any TeX flavour
@@ -9,7 +9,7 @@ Feature: katharizo's kDSanitize macro
     And I want a debugging dump
 
   Scenario Outline: sanitizing with \kDSanitize
-    Given I code \kDSanitize<input>\kDInto SANITIZED\kD
+    Given I code \kDKatharizoSanitize<input>\kDInto SANITIZED\kD
     And I dump "\SANITIZED" as "sanitized"
     Then compilation succeeds
     And the dumped "sanitized" is <output>

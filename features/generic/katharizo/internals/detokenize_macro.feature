@@ -1,5 +1,5 @@
-# features/katharizo/kDDetokenize_macro.feature
-Feature: katharizo's kDDetokenize macro
+# features/katharizo/detokenize_macro.feature
+Feature: \kDKatharizoDetokenize macro
 
   Background: testing katharizo in a generic context
     Given I'm using any TeX flavour
@@ -9,7 +9,7 @@ Feature: katharizo's kDDetokenize macro
     And I want a debugging dump
 
   Scenario Outline: detokenizing with \kDDetokenize
-    Given I code \kDDetokenize<input>\kDInto DETOKENIZED\kD
+    Given I code \kDKatharizoDetokenize<input>\kDInto DETOKENIZED\kD
     And I dump "\DETOKENIZED" as "detokenized"
     Then compilation succeeds
     And the dumped "detokenized" is <output>

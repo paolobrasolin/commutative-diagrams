@@ -2,12 +2,12 @@
  "tikzlibrarykodi.katharizo.code"
  (lambda ()
    (TeX-add-symbols
-    "kDSanitize"
-    "kDDetokenize"
+    "kDKatharizoSanitize"
+    "kDKatharizoDetokenize"
     "kDFoo"
     "kDAct"
-    "kDSanitizeString"
-    "kDSanitizeWord"
-    "kDSanitizeCharacter"))
+    "kDKatharizoSanitizeString"
+    "kDKatharizoReplaceWord"
+    "kDKatharizoReplaceCharacter"))
  :plain-tex)
 
