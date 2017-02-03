@@ -115,6 +115,12 @@ OPEN
 CLOSE
 end
 
+Then(%r%^the log matches (.*)$%) do |regexp_string|
+  log = File.read(".tex-test/#{@job.jobname}.log")
+  regexp = Regexp.new(regexp_string)
+  expect(log).to match(regexp)
+end
+
 Given(/^I expect a node labeled "([^\"]*)" to exist$/) do |label|
   @job.document.append_to 'body', <<CODE
 \\expandafter\\ifx\\csname pgf@sh@ns@#{label}\\endcsname\\relax\\FAIL\\else\\fi%

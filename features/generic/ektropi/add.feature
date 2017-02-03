@@ -6,74 +6,85 @@ Feature: ektropi can add deviations
     And I use "tikz"
     And I use the "kodi.ektropi" TikZ library
     And I use the "kodi.koinos" TikZ library
-    And I want a debugging dump
 
   Scenario Outline: adding a simple deviation
     Given the body is
     """
     \pgfkeys{
-      /foo/bar/.code={}
+      /foo/bar/.code={#1},
+      /ektropi/add=/foo
     }
-    \tikz\node<keylists>{};
+    \tikz<keylist>;
     """
     Then compilation <outcome>
+    And the log matches <regexp>
 
-  Examples: test key work as expected
-    | keylists    | outcome  |
-    | [/foo/bar]  | succeeds |
+    Examples: test key work as expected
+      | keylist      | outcome  | regexp                                |
+      | [bar=\relax] | succeeds |                                       |
+      | [bar=\HALT]  | fails    | Undefined control sequence.*\n.*\HALT |
 
-  Examples: key is found at any point after the call
-    | keylists                 | outcome  |
-    | [bar][/ektropi/add=/foo] | fails    |
-    | [bar, /ektropi/add=/foo] | fails    |
-    | [/ektropi/add=/foo, bar] | succeeds |
-    | [/ektropi/add=/foo][bar] | succeeds |
+  Scenario Outline: using deviations in a series of keylists
+    Given the body is
+    """
+    \pgfkeys{/foo/bar/.code={}}
+    \tikz<keylists>;
+    """
+    Then compilation <outcome>
+    And the log matches <regexp>
 
-  Scenario Outline: adding multiple deviations
+    Examples: key is found at any point after the call
+      | keylists                 | outcome  | regexp                            |
+      | [bar][/ektropi/add=/foo] | fails    | I do not know the key '/tikz/bar' |
+      | [bar, /ektropi/add=/foo] | fails    | I do not know the key '/tikz/bar' |
+      | [/ektropi/add=/foo, bar] | succeeds |                                   |
+      | [/ektropi/add=/foo][bar] | succeeds |                                   |
+
+  Scenario Outline: using multiple deviations
     Given the body is
     """
     \pgfkeys{
-      /foo/bar/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
-      /foo/baz/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
-      /qux/baz/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}}
+      /foo/bar/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}},
+      /foo/baz/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}},
+      /qux/baz/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}}
     }
-    \tikz\node<keylists>{};
+    \tikz<keylist>;
     """
     Then compilation succeeds
-    And the dumped "path" is "<path>"
+    And the log matches <regexp>
 
-  Examples: test keys work as expected
-    | keylists   | path     |
-    | [/foo/bar] | /foo/bar |
-    | [/foo/baz] | /foo/baz |
-    | [/qux/baz] | /qux/baz |
+    Examples: test keys logging works as expected
+      | keylist    | regexp           |
+      | [/foo/bar] | path: '/foo/bar' |
+      | [/foo/baz] | path: '/foo/baz' |
+      | [/qux/baz] | path: '/qux/baz' |
 
-  Examples: previous deviations are preserved
-    | keylists                                | path     |
-    | [/ektropi/.cd, add=/foo, add=/qux][bar] | /foo/bar |
+    Examples: previous deviations are preserved
+      | keylist                                       | regexp           |
+      | [/ektropi/.cd, add=/foo, add=/qux, /tikz/bar] | path: '/foo/bar' |
 
-  Examples: latest deviations have higher precedence
-    | keylists                                | path     |
-    | [/ektropi/.cd, add=/foo, add=/qux][baz] | /qux/baz |
-    | [/ektropi/.cd, add=/qux, add=/foo][baz] | /foo/baz |
+    Examples: latest deviations have higher precedence
+      | keylist                                       | regexp           |
+      | [/ektropi/.cd, add=/foo, add=/qux, /tikz/baz] | path: '/qux/baz' |
+      | [/ektropi/.cd, add=/qux, add=/foo, /tikz/baz] | path: '/foo/baz' |
 
-  Scenario Outline: there is a naming conflict
+  Scenario Outline: naming conflict with a /tikz/* key
     Given the body is
     """
     \pgfkeys{
-      /tikz/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
-      /quux/foo/.ecode={\noexpand\kDDump{path: '\pgfkeyscurrentpath'}},
+      /tikz/foo/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}},
+      /quux/foo/.ecode={\noexpand\message{path: '\pgfkeyscurrentpath'}},
     }
-    \tikz\node<keylists>{};
+    \tikz<keylist>;
     """
     Then compilation succeeds
-    And the dumped "path" is "<path>"
+    And the log matches <regexp>
 
-  Examples: test keys work as expected
-    | keylists    | path      |
-    | [/tikz/foo] | /tikz/foo |
-    | [/quux/foo] | /quux/foo |
+    Examples: test keys logging works as expected
+      | keylist     | regexp            |
+      | [/tikz/foo] | path: '/tikz/foo' |
+      | [/quux/foo] | path: '/quux/foo' |
 
-  Examples: /tikz/* keys maintain precedence
-    | keylists                  | path      |
-    | [/ektropi/add=/quux, foo] | /tikz/foo |
+    Examples: /tikz/* keys always maintain precedence
+      | keylist                   | regexp            |
+      | [/ektropi/add=/quux, foo] | path: '/tikz/foo' |
