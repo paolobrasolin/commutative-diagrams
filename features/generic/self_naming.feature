@@ -4,6 +4,7 @@ Feature: bapto's self naming key
   Background: testing bapto in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
+    # TODO: fix the broken dependencies
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.bapto" TikZ library
 
