@@ -1,9 +1,17 @@
-% =================================================== \pgfpathcurvebetweentime =
-% Original fix by Mark Wibrow, see http://tex.stackexchange.com/a/271024/82186
+% διορθώνω • (diorthóno)
+%   1. I correct
+%   2. I mend
+%   3. I repair
 
-\begingroup
-\catcode`\@=11
+% Diorthono is a collection of bugfixes.
 
+% Save catcode of @ to restore it at EOF.
+\edef\kDAct{\catcode`@=\the\catcode`@\relax}
+\catcode`@=11\relax
+
+% The following code patches \pgfpathcurvebetweentime.
+% See http://tex.stackexchange.com/a/271024/82186 for reference.
+% Original fix by Mark Wibrow.
 \def\pgf@@pathcurvebetweentime#1#2#3#4#5#6{%
   \pgfmathparse{#1}%
   \let\pgf@time@s=\pgfmathresult%
@@ -58,4 +66,5 @@
 \endgroup%
 }
 
-\endgroup
+% Restore catcode of @.
+\kDAct

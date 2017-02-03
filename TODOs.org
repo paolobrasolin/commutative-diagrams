@@ -11,4 +11,4 @@
 ** TODO ozos
 ** TODO pyrinas
 ** TODO velos
-** TODO veltio
+** TODO diorthono
