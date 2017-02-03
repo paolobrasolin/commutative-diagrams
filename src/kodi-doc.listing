@@ -1,5 +1,0 @@
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
-\obj { A & B \\ C & D \\ };
-\mor A -> B -> D;
-\mor * -> C -> *;
-\endtikzpicture}
