@@ -7,5 +7,4 @@ group :development do
   gem 'guard-rake'
   gem 'rake'
   gem 'rspec'
-  # gem 'ruby_parser'
 end
