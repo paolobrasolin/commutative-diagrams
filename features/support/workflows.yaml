@@ -30,6 +30,6 @@ latex:
 #   dialect: xelatex
 #   pipeline: lualatex
 
-# context:
-#   dialect: context
-#   pipeline: context
+context:
+  dialect: context
+  pipeline: context
