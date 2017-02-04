@@ -7,7 +7,7 @@ Feature: bapto's self naming key
     # TODO: fix the broken dependencies
     And I use the "kodi.katharizo" TikZ library
     And I use the "kodi.bapto" TikZ library
-    And I use the "kodi.pyrinas" TikZ library
+    And I use the "kodi.ramma" TikZ library
 
   Scenario Outline: using a self naming node
     Given I code \tikz\node[self naming, node contents=<contents>];
