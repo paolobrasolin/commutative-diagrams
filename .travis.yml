@@ -10,6 +10,8 @@ install:
 script: 
   - bundle exec rake install
   - bundle exec rake "features[.*,tex]"
+  - bundle exec rake "features[.*,latex]"
+  - bundle exec rake "features[.*,context]"
 branches:
   only:
   - master
