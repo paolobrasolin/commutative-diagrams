@@ -10,19 +10,35 @@
 
 \usetikzlibrary{kodi.koinos}
 
+%==[ TikZ/pgf layer ]===========================================================
+
 \pgfkeys{/ozos/every node/.style={}}
 
-\def\kDOzos%
-{\kDOzosFetchThen
-{\kDOzosMaybeDumpThen
- \kDOzosOutput}}
+%==[ main macro ]===============================================================
 
+\def\kDOzos%
+  {\kDOzosFetchThen
+  {\kDOzosMaybeDumpThen
+   \kDOzosOutput}}
+
+%==[ fetching routine ]=========================================================
+
+% I use the general one implemented by koinos.
 \let\kDOzosFetchThen\kDFetchOptAndGrpThen
 
+%==[ parsing routine ]==========================================================
+
+% Trivially solved by fetching.
+
+%==[ dumping routine ]==========================================================
+
+% TODO: revise the mechanism
 \def\kDOzosMaybeDumpThen#1{%
   \kDDump{options: '\the\kDOptTok'}%
   \kDDump{content: '\the\kDGrpTok'}%
   #1}
+
+%==[ output routine ]===========================================================
 
 \def\kDOzosOutput{
   \edef\kDAct{
