@@ -1,13 +1,10 @@
-%===[ What is this? ]===========================================================
-
 % μήτρα • (mítra)
 %   1. womb
 %   2. matrix
 %   3. mold
 
-% This module implements an alternative parsing mechanism
-% for TiKz matrices of nodes. In essence, mitra always passes
-% the node contents through the 'node contents' TikZ key.
+% Mitra is an alternative parsing mechanism for TiKz matrices of nodes.
+% It couples with ozos to ensure the node contents  always pass through the TikZ key.
 
 \usetikzlibrary{kodi.koinos}
 
@@ -32,20 +29,18 @@
 
 \newtoks\kDMitraTmpTok
 
-\def\kDMitra%
-{\kDMitraFetchMatrixThen
-{\kDMitraParseMatrixTableThen
-\kDMitraOutput}}
 
-\def\kDMitraOutput{
-\edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\matrix[/mitra/every matrix]\the\kDOptTok{\the\kDMitraMatOutTok};}}%
-\kDAct\the\kDMitraTmpTok}
+\def\kDMitra
+  {\kDMitraFetchMatrixThen
+  {\kDMitraParseMatrixTableThen
+   \kDMitraOutput}}
 
-%===[ fetch ]===================================================================
+%===[ fetching routine ]========================================================
 
+% I use the general one implemented by koinos.
 \let\kDMitraFetchMatrixThen\kDFetchOptAndGrpThen
 
-%===[ parse/table ]=============================================================
+%===[ parsing routine: /table ]=================================================
 
 \newtoks\kDMitraMatOutTok
 \def\kDMitraParseMatrixTableThen#1{%
@@ -62,7 +57,7 @@
     {\expandafter\kDExit\kDGobbleHardTok}
     {\kDMitraParseOneRowThen{\kDMitraParseAllRowsThen{#1}}}}
 
-%===[ parse/table/row ]=========================================================
+%===[ parsing routine: /table/row ]=============================================
 
 \def\kDMitraParseOneRowThen#1%
   {\kDMitraMarkRowEndBefore
@@ -96,7 +91,7 @@
 \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\\\the\kDMitraRowOptTok}}%
 \kDAct\kDAppend\kDMitraTmpTok\kDMitraMatOutTok#1}
 
-%===[ parse/table/row/col ]=====================================================
+%===[ parsing routine: /table/row/column ]======================================
 
 \def\kDMitraParseOneColThen#1%
 {\kDMitraParseCellThen
@@ -122,7 +117,7 @@
 }
 \catcode`&=4
 
-%===[ parse/table/row/col/cell ]================================================
+%===[ parsing routine: /table/row/column/cell ]=================================
 
 \def\kDMitraParseCellThen#1%
 {\kDMitraMaybeFetchCellOptionsThen
@@ -155,3 +150,20 @@
   \noexpand\kDDump{\space\space options: '\the\kDMitraCelOptTok'}
   \noexpand\kDDump{\space\space content: '\the\kDMitraCelCntTok'}
 }}
+
+
+
+%==[ output routine ]==========================================================
+
+\def\kDMitraOutput{%
+  \edef\kDAct{%
+    \noexpand\kDMitraTmpTok={%
+      \noexpand\matrix
+        [/mitra/every matrix]
+        \the\kDOptTok
+        {\the\kDMitraMatOutTok};%
+    }%
+  }%
+  \kDAct
+  \the\kDMitraTmpTok
+}

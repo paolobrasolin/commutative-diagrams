@@ -7,7 +7,6 @@ Feature: kDOzos macro
     And I use the "kodi.ozos" TikZ library
     And I want a debugging dump
 
-
   Scenario Outline: testing baseline parsing
     Given the body is
     """
@@ -17,12 +16,11 @@ Feature: kDOzos macro
     And the dumped "options" is "<options>"
     And the dumped "content" is "<content>"
 
-  Examples:
-    | code         | options | content |
-    | «{foo}»      | «»      | «foo»   |
-    | «[red]{}»    | «[red]» | «»      |
-    | «[red]{foo}» | «[red]» | «foo»   |
-
+    Examples:
+      | code         | options | content |
+      | «{foo}»      | «»      | «foo»   |
+      | «[red]{}»    | «[red]» | «»      |
+      | «[red]{foo}» | «[red]» | «foo»   |
 
   Scenario Outline: testing correct expansion of code
     Given the body is
@@ -31,11 +29,10 @@ Feature: kDOzos macro
     """
     Then compilation fails
 
-
-  Examples:
-    | code         |
-    | «{\HALT}»    |
-    | «[HALT]{}»   |
+    Examples:
+      | code         |
+      | «{\HALT}»    |
+      | «[HALT]{}»   |
 
   Scenario: testing execution of universal styles
     Given the body is

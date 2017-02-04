@@ -1,13 +1,12 @@
 % όζος • (ózos)
 %   1. node
 %   2. nodule
-%   3. gnarl, knag
-%   4. gall
+%   3. gnarl
 
-% This module implements an alternative parsing mechanism
-% for TiKz nodes. In essence, what happens is
-%   \kDOzos ... {CONTENT}; -> \node ... [node contents={CONTENT}];
-% so the node contents is always passed through the TikZ key.
+% Ozos is an alternative parsing mechanism for TiKz nodes.
+% It implements the following transformation
+%   \kDOzos ... {CONTENTS};  --->  \node ... [node contents={CONTENTS}];
+% to ensure the node contents always pass through the TikZ key.
 
 \usetikzlibrary{kodi.koinos}
 
@@ -16,20 +15,21 @@
 \def\kDOzos%
 {\kDOzosFetchThen
 {\kDOzosMaybeDumpThen
-\kDOzosOutput}}
+ \kDOzosOutput}}
 
 \let\kDOzosFetchThen\kDFetchOptAndGrpThen
 
-\def\kDOzosMaybeDumpThen#1{
-\kDDump{options: '\the\kDOptTok'}
-\kDDump{content: '\the\kDGrpTok'}
-#1}
+\def\kDOzosMaybeDumpThen#1{%
+  \kDDump{options: '\the\kDOptTok'}%
+  \kDDump{content: '\the\kDGrpTok'}%
+  #1}
 
 \def\kDOzosOutput{
-  \edef\Act{
+  \edef\kDAct{
     \noexpand\node
       [/ozos/every node]
       \the\kDOptTok
       [/tikz/node contents={\the\kDGrpTok}];
   }
-  \Act}
+  \kDAct
+}

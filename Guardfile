@@ -31,11 +31,15 @@ cucumber_options = {
   # notification: false
 }
 
-guard "cucumber", cucumber_options do
-  watch(%r{^features/.+\.feature$})
-  watch(%r{^features/support/.+$}) { "features" }
+# guard "cucumber", cucumber_options do
+#   watch(%r{^features/.+\.feature$})
+#   watch(%r{^features/support/.+$}) { "features" }
+#   watch(%r{^features/step_definitions/(.+)_steps\.rb$}) do |m|
+#     Dir[File.join("**/#{m[1]}.feature")][0] || "features"
+#   end
+# end
 
-  watch(%r{^features/step_definitions/(.+)_steps\.rb$}) do |m|
-    Dir[File.join("**/#{m[1]}.feature")][0] || "features"
-  end
+
+guard 'rake', :task => 'install' do
+  watch(%r{^src/.+\.tex$})
 end
