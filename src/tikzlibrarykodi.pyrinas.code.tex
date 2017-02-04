@@ -16,7 +16,7 @@
       nodes={/kD/every object}
     },
     every object/.style={
-      /ektropi/restore,% needed inside matrices
+      /ektropi/restore,% NOTE: needed when inside matrices
       /ektropi/add=/kD/objects,
       self naming,
       execute at begin node=$,%
@@ -27,7 +27,7 @@
       /ektropi/add=/kD/arrows
     },
     every label/.style={
-      /ektropi/restore,% we're inside the edge
+      /ektropi/restore,% NOTE: needed since inside edge
       /ektropi/add=/kD/labels,
       self naming,
       execute at begin node=$,%
