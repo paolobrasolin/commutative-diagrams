@@ -26,3 +26,9 @@ guard 'cucumber', cucumber_options do
     "features/generic/#{m[1]}"
   end
 end
+
+guard 'cucumber', cucumber_options do
+  ENV['DIALECT'] = 'tex'
+  ENV['PIPELINE'] = 'tex'
+  watch(%r{^features/.+\.feature$})
+end
