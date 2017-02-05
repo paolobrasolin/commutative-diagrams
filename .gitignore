@@ -1,6 +1,7 @@
 !.gitignore
 
 **/dist/
+**/build/
 .tex-test/
 report.html
 
