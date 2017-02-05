@@ -1,28 +1,44 @@
 %==[ external dependencies ]====================================================
 
+% TODO: clean up these
 \usetikzlibrary[calc]
 \usetikzlibrary[decorations.pathreplacing]
 \usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary[decorations.markings]
 \usetikzlibrary[arrows.meta]
-\usetikzlibrary[matrix]
 
-%==[ koDi lower layer ]=========================================================
+%==[ koDi: dependencies graph ]=================================================
 
-\usetikzlibrary[kodi.bapto]
-\usetikzlibrary[kodi.ektropi]
-\usetikzlibrary[kodi.katharizo]
-\usetikzlibrary[kodi.koinos]
+% NOTE: arrow notation means targets require sources.
+
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+%                             %  TikZ/pgf standard libraries
+%      matrix -------------.  %
+%                          |  %
+%~~~~~~~~~~~~~~~~~~~~~~~~~~|~~%
+%                          |  %  koDi volatile layer: TikZ bugfixes
+%      kodi.diorthono      |  %
+%                          |  %
+%~~~~~~~~~~~~~~~~~~~~~~~~~~|~~%
+%                          |  %  koDi inner layer: baseline features
+%      kodi.ektropi ----.  |  %
+%      kodi.bapto ------|  |  %
+%      kodi.katharizo --|  |  %
+%  .-- kodi.koinos --.  |  |  %
+%  |                 |  |  |  %
+%~~|~~~~~~~~~~~~~~~~~|~~|~~|~~%
+%  |                 |  |  |  %  koDi middle layer: custom parsers
+%  |-- kodi.ozos <---|  |  |  %
+%  |-- kodi.mitra <--+--|--'  %
+%  |-- kodi.velos <--'  |     %
+%  |                    |     %
+%~~|~~~~~~~~~~~~~~~~~~~~|~~~~~%
+%  |                    |     %  koDi outer layer: user interface
+%  '-> kodi.ramma <-----'     %
+%                             %
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+
+% Given the graph above, these suffice to encompass koDi:
+
 \usetikzlibrary[kodi.diorthono]
-
-%==[ koDi middle layer ]========================================================
-
-\usetikzlibrary[kodi.ozos]
-\usetikzlibrary[kodi.mitra]
-\usetikzlibrary[kodi.velos]
-
-%==[ koDi upper layer ]=========================================================
-
 \usetikzlibrary[kodi.ramma]
-
-
