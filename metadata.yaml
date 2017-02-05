@@ -4,6 +4,15 @@ status: maintained
 author: &author Paolo Brasolin
 email: &email paolo.brasolin@gmail.com
 
+filemap: # PKG glob to TDS subfolder
+  kodi.tex: tex/plain/kodi/
+  kodi.sty: tex/latex/kodi/
+  t-kodi.tex: tex/context/third/kodi/
+  tikzlibrarykodi*: tex/generic/kodi/
+  kodi-doc.tex: doc/generic/kodi/
+  kodi-doc.pdf: doc/generic/kodi/
+  README.md: doc/generic/kodi/
+
 ctanupload:
   CONTRIBUTION: *name
   VERSION: *version

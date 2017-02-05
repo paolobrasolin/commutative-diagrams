@@ -2,105 +2,135 @@ require 'cucumber/rake/task'
 require 'erb'
 require 'fileutils'
 require 'open3'
+require 'rake/clean'
 require 'yaml'
 
-
-@name = 'kodi'
+# TODO: fix filelist in header
+# TODO: doc pass here is optional (simpler to handle stuff on Travis like this)
 
 @meta = YAML.load(File.read('metadata.yaml'))
 
-# TODO: fix filelist in header
-desc 'prepare docs'
+def print_title(title)
+  print ("\n#==[ #{title} ]" + '=' * 80)[0,80] + "\n"
+end
+
+#==[ doc: build documents ]=====================================================
+
+desc 'build documents'
 task :doc do
-  # Make dist folder.
+  print_title 'build documents'
+
+  # Make build folder.
   mkdir_p 'doc/build'
-  # Flatten TeX sourcecode.
-  # TODO: this is suboptimal, given the bugs of latexpand. But... meh.
+
+  print 'Flattening main doc sourcecode... '
   _stdout, stderr, status = Open3.capture3(
-    'latexpand',
-    '--output=build/kodi-doc.tex',
-    '--keep-comments',
-    'main.tex',
+    # TODO: this is suboptimal, given the bugs of latexpand. But... meh.
+    'latexpand', '--output=build/kodi-doc.tex', '--keep-comments', 'main.tex',
     chdir: 'doc'
   )
   raise StandardError, stderr unless status.success?
+  print "Done.\n"
+
+  print 'Loading header template... '
   code_template = File.read('HEADER.erb')
   code_renderer = ERB.new(code_template, 0, '<>')
+  print "Done.\n"
+
   Dir.chdir 'doc/build' do
+    print 'Applying header template to main doc sourcecode... '
     @filename = 'kodi-doc.tex'
     @source = File.read(@filename)
-    # Prepend header to sourcecode.
     File.write(@filename, code_renderer.result)
-    # Compile to PDF.
+    print "Done.\n"
+
+    print 'Compiling main doc sourcecode to PDF... '
     _stdout, stderr, status = Open3.capture3(
       'latexmk', '-pdf', '-gg', 'kodi-doc.tex'
     )
     raise StandardError, stderr unless status.success?
+    print "Done.\n"
   end
 end
 
-# TODO: fix filelist in header
-desc 'prepare source'
+#==[ src: build sourcecode ]====================================================
+
+desc 'build sourcecode'
 task :src do
+  print_title 'build sourcecode'
+  mkdir_p 'src/build'
+
+  print 'Loading header template... '
   code_template = File.read('HEADER.erb')
   code_renderer = ERB.new(code_template, 0, '<>')
+  print "Done.\n"
+
+  print 'Applying header template to sourcecode files... '
   Dir.chdir 'src' do
-    mkdir_p 'build'
-    Dir["*.{tex,sty}"].each do |filename|
+    Dir['*.{tex,sty}'].each do |filename|
       @filename = filename
       @source = File.read(@filename)
       File.write("build/#{@filename}", code_renderer.result)
     end
   end
+  print "Done.\n"
 end
 
-desc 'prepare PKG distribution'
-task pkg: [:src, :doc] do
+#==[ pkg: prepare files for PKG distribution ]==================================
+
+desc 'prepare files for PKG distribution'
+task pkg: [:src] do
+  print_title 'prepare files for PKG distribution'
   target_folder = 'dist/pkg/kodi'
-  # Make target folder.
   mkdir_p target_folder
-  # Move prepared documentation files.
-  cp('README.md', "#{target_folder}/README.md")
-  cp('doc/build/kodi-doc.tex', "#{target_folder}/kodi-doc.tex")
-  cp('doc/build/kodi-doc.pdf', "#{target_folder}/kodi-doc.pdf")
-  # Move prepared sourcecode files.
+
+  print "Moving built documentation files...\n"
+  src_files = ['README.md', 'doc/build/kodi-doc.tex', 'doc/build/kodi-doc.pdf']
+  cp_r(src_files, target_folder)
+  print "Done.\n"
+
+  print "Moving built sourcecode files...\n"
   src_files = Dir['src/build/*.{tex,sty}']
-  src_files.each do |source_filename|
-    target_filename = "#{target_folder}/#{File.basename(source_filename)}"
-    cp(source_filename, target_filename)
-  end
+  cp_r(src_files, target_folder)
+  print "Done.\n"
 end
 
-desc 'prepare TDS distribution'
+#==[ tds: prepare files for TDS distribution ]==================================
+
+desc 'prepare files for TDS distribution'
 task tds: [:pkg] do
-  {
-    'kodi.tex'         => 'tex/plain/kodi/',         # TeX include
-    'kodi.sty'         => 'tex/latex/kodi/',         # LaTeX package
-    't-kodi.tex'       => 'tex/context/third/kodi/', # ConTeXt module
-    'tikzlibrarykodi*' => 'tex/generic/kodi/',       # common TikZ library
-    'kodi-doc.tex'     => 'doc/generic/kodi/',       # documentation
-    'kodi-doc.pdf'     => 'doc/generic/kodi/',       #   "
-    'README.md'        => 'doc/generic/kodi/'        #   "
-  }.each do |source_file, target_subdir|
-    source_dir = 'dist/pkg/kodi'
+  print_title 'prepare files for TDS distribution'
+  source_dir = 'dist/pkg/kodi'
+
+  print "Moving files...\n"
+  @meta['filemap'].each do |source_file, target_subdir|
     target_dir = "dist/tds/#{target_subdir}"
     mkdir_p target_dir
     cp_r(Dir["#{source_dir}/#{source_file}"], target_dir)
   end
+  print "Done.\n"
 end
 
-desc 'Compress'
+#==[ zip: prepare archives for distribution ]===================================
+
+desc 'prepare archives for distribution'
 task zip: [:pkg, :tds] do
+  print_title 'prepare archives for distribution'
+
+  print "Zipping TDS tree...\n"
   Dir.chdir('dist/tds') do
-    system('zip', '--recurse-paths', "../pkg/#{@name}.tds.zip", '.')
+    system('zip', '--recurse-paths', "../pkg/kodi.tds.zip", '.')
   end
+  print "Done.\n"
+
+  print "Zipping PKG folder...\n"
   Dir.chdir('dist/pkg') do
-    system('zip', '--recurse-paths', "../#{@name}.zip", '.')
+    system('zip', '--recurse-paths', "../kodi.zip", '.')
   end
+  print "Done.\n"
 end
 
-desc 'Build'
-task build: [:pkg, :tds, :compress]
+################################################################################
 
 # desc 'Prepare package'
 # task :ctanify do
@@ -112,13 +142,13 @@ task :ctanupload do
   # puts Open3.capture3(@meta['ctan'], 'ctanupload')
 end
 
+################################################################################
+
 task :features, :features_regexp, :tex_envs_regexp do |_task, args|
   features_regexp = args[:features_regexp] || '.*'
   tex_envs_regexp = args[:tex_envs_regexp] || '.*'
 
   options = [
-    # '--dry-run',
-    # '--format progress',
     '--format pretty',
     '--no-source'
   ]
@@ -158,35 +188,43 @@ task :features, :features_regexp, :tex_envs_regexp do |_task, args|
   Rake::Task[:filtered_features].invoke
 end
 
-require 'rake/clean'
-CLEAN.include 'dist/pkg', 'dist/tds'
-CLOBBER.include 'dist'
+#==[ install ]==================================================================
 
-desc 'Install locally'
-task install: :tds do
+desc 'install'
+task :install do
+  print_title 'install locally'
+
+  print "Moving files from the built TDS...\n"
   basedir = `kpsexpand '$TEXMFHOME'`.chomp
   cp_r 'dist/tds/.', basedir
+  print "Done.\n"
 end
 
-desc 'Uninstall locally'
+#==[ uninstall ]================================================================
+
+desc 'uninstall'
 task :uninstall do
+  print_title 'uninstall'
+
+  print "Removing files from the $TEXMFHOME...\n"
   basedir = `kpsexpand '$TEXMFHOME'`.chomp
-  [
-    'tex/plain/kodi/',         # TeX include
-    'tex/latex/kodi/',         # LaTeX package
-    'tex/context/third/kodi/', # ConTeXt module
-    'tex/generic/kodi/',       # common TikZ library
-    'doc/generic/kodi/'        # documentation
-  ].each do |subfolder|
+
+  puts @meta['filemap'].values.uniq.each do |subfolder|
     rm_rf "#{basedir}/#{subfolder}"
   end
+  print "Done.\n"
 end
 
-desc 'Reinstall locally'
+#==[ reinstall ]================================================================
+
+desc 'reinstall'
 task reinstall: [:uninstall, :install]
 
-desc 'Compile minimal koDi/standalone format'
+#==[ dump minimal koDi/standalone format ]======================================
+
+desc 'dump minimal koDi/standalone format'
 task format: :install do
+  mkdir_p 'dist'
   stdout, stderr, status = Open3.capture3(
     'pdftex',
     '-ini',
@@ -197,3 +235,8 @@ task format: :install do
   rm('kodi-livedemo.log')
   mv('kodi-livedemo.fmt', 'dist')
 end
+
+#==[ cleanup ]==================================================================
+
+CLEAN.include '**/dist/'
+CLOBBER.include '**/dist/', '**/build/'
