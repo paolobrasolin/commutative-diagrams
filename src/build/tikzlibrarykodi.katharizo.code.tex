@@ -1,0 +1,134 @@
+%% tikzlibrarykodi.katharizo.code.tex
+%% Copyright 2017 Paolo Brasolin
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   <http://www.latex-project.org/lppl.txt>
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Paolo Brasolin
+% who can be contacted at <paolo.brasolin@gmail.com>.
+%
+% This work consists of the following files:
+
+% καθαρίζω • (katharízo)
+%   1. clean, wash
+%   2. peel, descale
+%   3. (slang) kill
+
+% Katharizo is a detokenization/sanitation mechanism.
+% It produces "safe" strings from tokens.
+
+% ,-- input          input hook
+% `-> expander ---.  performs expansion according to
+% ,---[expand]----'    macro expansion configuration
+% `-> expanded ---.  pre-sanitation hook
+% ,-- sanitizer <-'  performs detokenization and sanitation according to
+% `---[replace]---.    character replacement configuration
+% ,-- sanitized <-'  pre-output hook
+% `-> output         output hook
+
+%==[ input stage ]==============================================================
+
+\pgfqkeys{/katharizo/input}{
+  .forward to=/katharizo/expander
+}
+
+%==[ expansion stage ]==========================================================
+
+\pgfqkeys{/katharizo/expand}{.is choice,
+  once/.style={/katharizo/expander/.style={/katharizo/expanded/.expand once={##1}}},
+  full/.style={/katharizo/expander/.style={/katharizo/expanded/.expanded={##1}}},
+  none/.style={/katharizo/expander/.style={/katharizo/expanded={##1}}},
+  none % default is no expansion
+}
+
+\pgfqkeys{/katharizo/expanded}{
+  .forward to=/katharizo/sanitizer
+}
+
+%==[ sanitation stage ]=========================================================
+
+\pgfqkeys{/katharizo/replace}{.cd,
+  space/.initial=\space,
+  dollar/.initial={},
+  left round brace/.initial={},
+  right round brace/.initial={},
+  comma/.initial={},
+  full stop/.initial={},
+  colon/.initial={},
+  backslash/.initial={},
+  underscore/.initial={_}
+}
+
+\pgfqkeys{/katharizo/sanitizer}{
+  .code={
+    \kDKatharizoSanitize{#1}\kDInto kDFoo\kD
+    \pgfkeysalso{/katharizo/sanitized/.expanded=\kDFoo}
+  }
+}
+
+\pgfqkeys{/katharizo/sanitized}{
+  .forward to=/katharizo/output
+}
+
+%==[ output stage ]=============================================================
+
+% NOTE: this must be defined/hooked before calling input
+\pgfqkeys{/katharizo/output}{
+}
+
+%==[ Plain TeX sanitation routine ]=============================================
+
+% This macro sanitizes tokens {#1} and saves them as a macro named {#2}.
+\def\kDKatharizoSanitize#1\kDInto#2\kD{
+  \kDKatharizoDetokenize#1\kDInto kDFoo\kD
+  \edef\kDKatharizoDetokenizedTerminated{\kDFoo\space}
+  \expandafter\edef\csname#2\endcsname
+    {\expandafter\kDKatharizoSanitizeString\kDKatharizoDetokenizedTerminated\kD}
+}
+
+% This macro detokenizes a tokens {#1} and saves them as a macro named {#2}.
+\def\kDKatharizoDetokenize#1\kDInto#2\kD{
+  \def\kDFoo{#1}
+  \edef\kDBar{\meaning\kDFoo}
+  \def\kDAct##1:->##2\kD{##2}
+  \expandafter\edef\csname#2\endcsname{\expandafter\kDAct\kDBar\kD}
+}
+
+% This macro sanitizes a string in place by replacing words while trimming
+% and replacing spaces. {#1 #2} must be a string, i.e. a series of words
+% separated by spaces and it must be terminated by a space.
+\def\kDKatharizoSanitizeString#1 #2\kD{%
+  \ifx\relax#1\else\kDKatharizoReplaceWord#1\kD\fi
+  \ifx\relax#1\else\if#2\space\else\ifx\relax#2\else
+  \pgfkeysvalueof{/katharizo/replace/space}\fi\fi\fi
+  \ifx\relax#2\else\kDKatharizoSanitizeString#2\kD\fi
+}
+
+% This macro substitutes a word in place by applying replacement rules.
+% {#1#2} must be a word, i.e. a series of characters unbroken by spaces.
+\def\kDKatharizoReplaceWord#1#2\kD{%
+  \kDKatharizoReplaceCharacter#1\kD\ifx\relax#2\else\kDKatharizoReplaceWord#2\kD\fi
+}
+
+% This macro substitutes a character in place by applying replacement rules.
+% {#1} must be a character, i.e. a single token.
+\def\kDKatharizoReplaceCharacter#1\kD{%
+  % NOTE: spaces after number are there to avoid a stray \relax.
+  % TODO: really think of all the dangerous characters cross-format-wise
+  \ifnum`#1=36 \pgfkeysvalueof{/katharizo/replace/dollar}\else
+  \ifnum`#1=40 \pgfkeysvalueof{/katharizo/replace/left round brace}\else
+  \ifnum`#1=41 \pgfkeysvalueof{/katharizo/replace/right round brace}\else
+  \ifnum`#1=44 \pgfkeysvalueof{/katharizo/replace/comma}\else
+  \ifnum`#1=46 \pgfkeysvalueof{/katharizo/replace/full stop}\else
+  \ifnum`#1=58 \pgfkeysvalueof{/katharizo/replace/colon}\else
+  \ifnum`#1=92 \pgfkeysvalueof{/katharizo/replace/backslash}\else
+  \ifnum`#1=95 \pgfkeysvalueof{/katharizo/replace/underscore}\else
+  #1\fi\fi\fi\fi\fi\fi\fi\fi
+}

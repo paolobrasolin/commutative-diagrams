@@ -1,0 +1,228 @@
+%% tikzlibrarykodi.mitra.code.tex
+%% Copyright 2017 Paolo Brasolin
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   <http://www.latex-project.org/lppl.txt>
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Paolo Brasolin
+% who can be contacted at <paolo.brasolin@gmail.com>.
+%
+% This work consists of the following files:
+
+% μήτρα • (mítra)
+%   1. womb
+%   2. matrix
+%   3. mold
+
+% Mitra is an alternative parsing mechanism for TiKz matrices of nodes.
+% It couples with ozos to ensure the node contents  always pass through the TikZ key.
+
+\usetikzlibrary{matrix}
+\usetikzlibrary{kodi.koinos}
+
+%==[ TikZ/pgf layer ]===========================================================
+
+\pgfkeys{
+  /mitra/every matrix/.style={
+    /tikz/matrix,
+    /tikz/cells={
+      /tikz/anchor=base
+    }
+  },
+  /mitra/every node/.style={},
+  % NOTE: the alisa key *cannot* be put along with global node styles
+  %   because order of execution.
+  /mitra/matrix coordinates alias/.style={
+    /tikz/alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
+  }
+}
+
+%==[ main macro ]===============================================================
+
+\def\kDMitra
+  {\kDMitraFetchMatrixThen
+  {\kDMitraParseMatrixTableThen
+   \kDMitraOutput}}
+
+% General purpose scratch register.
+\newtoks\kDMitraTmpTok
+
+%==[ fetching routine ]=========================================================
+
+% I use the general one implemented by koinos.
+\let\kDMitraFetchMatrixThen\kDFetchOptAndGrpThen
+
+%==[ parsing routine: /table ]==================================================
+
+\newtoks\kDMitraMatOutTok
+
+\def\kDMitraParseMatrixTableThen#1{%
+  \kDMitraMatOutTok={}%
+  \expandafter\kDMitraParseTable\the\kDGrpTok\kD
+  #1}
+
+\def\kDMitraParseTable
+  {\kDMitraParseAllRowsThen\relax}
+
+\def\kDMitraParseAllRowsThen#1{%
+  \def\kDExit{#1}%
+  \kDIfNextHardCh\kD
+    {\expandafter\kDExit\kDGobbleHardTok}%
+    {\kDMitraParseOneRowThen{\kDMitraParseAllRowsThen{#1}}}}
+
+%==[ parsing routine: /table/row ]==============================================
+
+\def\kDMitraParseOneRowThen#1%
+  {\kDMitraMarkRowEndBefore
+  {\kDMitraParseAllColsThen
+  {\kDMitraParseRowEndThen
+  {#1}}}}
+
+\begingroup\catcode`&=4 % ConTeXt hack
+\gdef\kDMitraMarkRowEndBefore#1#2\\{#1#2&\kD\\}
+\endgroup
+
+\def\kDMitraParseAllColsThen#1{%
+  \def\kDExit{#1}%
+  \kDIfNextHardCh\kD
+    {\expandafter\kDExit\kDGobbleHardTok}%
+    {\kDMitraParseOneColThen{\kDMitraParseAllColsThen{#1}}}}
+
+\def\kDMitraParseRowEndThen#1%
+  {\kDMitraFetchRowEndThen
+  {\kDMitraPrintRowEndThen
+  {#1}}}
+
+\def\kDMitraFetchRowEndThen#1\\{\kDMitraMaybeFetchRowOptionsThen{#1}}
+
+\newtoks\kDMitraRowOptTok
+
+\def\kDMitraPrintRowEndThen#1{%
+  \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\\\the\kDMitraRowOptTok}}%
+  \kDAct
+  \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
+  #1}
+
+\def\kDMitraMaybeFetchRowOptionsThen#1{%
+  \kDMitraRowOptTok={}%
+  \kDIfNextHardCh[%
+    {\kDMitraFetchRowOptionsThen{#1}}%
+    {#1}}
+
+\def\kDMitraFetchRowOptionsThen#1[#2]{\kDMitraRowOptTok={[#2]}#1}
+
+%==[ parsing routine: /table/row/column ]=======================================
+
+\def\kDMitraParseOneColThen#1%
+  {\kDMitraParseCellThen
+  {\kDMitraParseColEndThen
+  {#1}}}
+
+\def\kDMitraParseColEndThen#1%
+  {\kDMitraMaybeFetchColOptionsThen
+  {\kDMitraMaybePrintColEndThen
+  {#1}}}
+
+\newtoks\kDMitraColOptTok
+
+\def\kDMitraMaybeFetchColOptionsThen#1{%
+  \kDMitraColOptTok={}%
+  \kDIfNextHardCh[%
+    {\kDMitraFetchColOptionsThen{#1}}%
+    {#1}}
+
+\def\kDMitraFetchColOptionsThen#1[#2]{\kDMitraColOptTok={[#2]}#1}
+
+% TODO: make catcode change temporary with wrapping group and global defs
+%   making sure auxiliary macros aren't botched (and don't botch anything).
+\catcode`&=\active
+\def\kDMitraMaybePrintColEndThen#1{%
+  \kDIfNextHardCh\kD
+    {#1}%
+    {%
+      \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand&\the\kDMitraColOptTok}}%
+      \kDAct
+      \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
+      #1%
+    }}
+\catcode`&=4
+
+%==[ parsing routine: /table/row/column/cell ]==================================
+
+\def\kDMitraParseCellThen#1%
+  {\kDMitraMaybeFetchCellOptionsThen
+  {\kDMitraFetchCellContentThen
+  {\kDMitraPrintCellThen
+  {#1}}}}
+
+\newtoks\kDMitraCelOptTok
+
+\def\kDMitraMaybeFetchCellOptionsThen#1{%
+  \kDMitraCelOptTok={}%
+  \kDIfNextHardCh|%
+    {\kDMitraFetchCellOptionsThen{#1}}
+    {#1}}
+
+\def\kDMitraFetchCellOptionsThen#1|#2|{\kDMitraCelOptTok={#2}#1}
+
+\newtoks\kDMitraCelCntTok
+
+\def\kDMitraFetchCellContentThen#1#2&{%
+  \kDMitraCelCntTok={#2}%
+  \kDTrimLeadingSpace\kDMitraCelCntTok
+  \kDTrimTrailingSpace\kDMitraCelCntTok
+  #1}
+
+\def\kDMitraMaybeDoCellThen#1{%
+  \kDIfNextHardCh\kD
+    {#1}%
+    {\kDMitraParseOneColThen{#1}}}
+
+\def\kDMitraPrintCellThen#1{%
+  \edef\kDAct{%
+    \noexpand\kDMitraTmpTok={%
+      \noexpand\node
+        [/mitra/every node]%
+        \the\kDMitraCelOptTok
+        [node contents={\the\kDMitraCelCntTok}]%
+        [/mitra/matrix coordinates alias];%
+      \kDMitraMaybeDumpCell}}%
+  \kDAct
+  \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
+  #1}
+
+%==[ dumping routine ]==========================================================
+
+% TODO: revise the mechanism
+\def\kDMitraMaybeDumpCell{\noexpand\pgfextra{%
+  \noexpand\kDDump{'\noexpand\the\noexpand\pgfmatrixcurrentrow-\noexpand\the\noexpand\pgfmatrixcurrentcolumn':}%
+  \noexpand\kDDump{\space\space options: '\the\kDMitraCelOptTok'}%
+  \noexpand\kDDump{\space\space content: '\the\kDMitraCelCntTok'}}}
+
+%==[ output routine ]===========================================================
+
+\def\kDMitraOutput{%
+  \edef\kDAct{%
+    \noexpand\kDMitraTmpTok={%
+      \noexpand\matrix
+        [/mitra/every matrix]%
+        \the\kDOptTok
+        {\the\kDMitraMatOutTok};}}%
+  \kDAct
+  \the\kDMitraTmpTok}
+
+%==[ notes ]====================================================================
+
+% \newif\ifConTeXt
+% Trick stolen from iftex. The second line is expanded inside the group so
+% the global scope isn't polluted by \csname defining the token.
+% \begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
+%   \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+% \ifConTeXt\catcode`|=12 \fi% TODO: why was the space necessary again?

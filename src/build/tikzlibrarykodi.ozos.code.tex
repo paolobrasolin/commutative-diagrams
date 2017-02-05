@@ -1,0 +1,69 @@
+%% tikzlibrarykodi.ozos.code.tex
+%% Copyright 2017 Paolo Brasolin
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   <http://www.latex-project.org/lppl.txt>
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Paolo Brasolin
+% who can be contacted at <paolo.brasolin@gmail.com>.
+%
+% This work consists of the following files:
+
+% όζος • (ózos)
+%   1. node
+%   2. nodule
+%   3. gnarl
+
+% Ozos is an alternative parsing mechanism for TiKz nodes.
+% It implements the following transformation
+%   \kDOzos ... {CONTENTS};  --->  \node ... [node contents={CONTENTS}];
+% to ensure the node contents always pass through the TikZ key.
+
+\usetikzlibrary{kodi.koinos}
+
+%==[ TikZ/pgf layer ]===========================================================
+
+\pgfkeys{/ozos/every node/.style={}}
+
+%==[ main macro ]===============================================================
+
+\def\kDOzos%
+  {\kDOzosFetchThen
+  {\kDOzosMaybeDumpThen
+   \kDOzosOutput}}
+
+%==[ fetching routine ]=========================================================
+
+% I use the general one implemented by koinos.
+\let\kDOzosFetchThen\kDFetchOptAndGrpThen
+
+%==[ parsing routine ]==========================================================
+
+% Trivially solved by fetching.
+
+%==[ dumping routine ]==========================================================
+
+% TODO: revise the mechanism
+\def\kDOzosMaybeDumpThen#1{%
+  \kDDump{options: '\the\kDOptTok'}%
+  \kDDump{content: '\the\kDGrpTok'}%
+  #1}
+
+%==[ output routine ]===========================================================
+
+\def\kDOzosOutput{
+  \edef\kDAct{
+    \noexpand\node
+      [/ozos/every node]
+      \the\kDOptTok
+      [/tikz/node contents={\the\kDGrpTok}];
+  }
+  \kDAct
+}

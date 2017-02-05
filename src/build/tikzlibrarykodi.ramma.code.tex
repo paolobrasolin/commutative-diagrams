@@ -1,0 +1,116 @@
+%% tikzlibrarykodi.ramma.code.tex
+%% Copyright 2017 Paolo Brasolin
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   <http://www.latex-project.org/lppl.txt>
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Paolo Brasolin
+% who can be contacted at <paolo.brasolin@gmail.com>.
+%
+% This work consists of the following files:
+
+% ράμμα • (rámma)
+%   1. suture
+%   2. catgut
+%   3. stitch
+
+% Ramma ties together the lower level libraries to define
+% the user level functionality. NOTE: strictly no aesthetics, see mandyas.
+
+\usetikzlibrary[kodi.bapto]
+\usetikzlibrary[kodi.ektropi]
+\usetikzlibrary[kodi.katharizo]
+\usetikzlibrary[kodi.koinos]
+\usetikzlibrary[kodi.ozos]
+\usetikzlibrary[kodi.mitra]
+\usetikzlibrary[kodi.velos]
+
+% And here is the core idea of koDi itself:
+
+\pgfqkeys{/tikz}{% TODO: is this the best scope to put the key into?
+  self naming/.style={
+    /tikz/node contents/.forward to=/katharizo/input,
+    /katharizo/output/.forward to=/bapto/input
+  }
+}
+
+% Some mischief with handlers and baseline math/labeling functionality.
+
+\pgfqkeys{/kD}{
+  every layout/.style={
+    % /ektropi/restore,% unnecessary
+    /ektropi/add=/kD/layouts,
+    nodes={/kD/every object}
+  },
+  every object/.style={
+    /ektropi/restore,% NOTE: needed when inside matrices
+    /ektropi/add=/kD/objects,
+    execute at begin node=$,%
+    execute at end node=$,%
+    self naming,
+  },
+  every arrow/.style={
+    % /ektropi/restore,% unnecessary
+    /ektropi/add=/kD/arrows
+  },
+  every label/.style={
+    /ektropi/restore,% NOTE: needed because inside edge
+    /ektropi/add=/kD/labels,
+    execute at begin node=$,%
+    execute at end node=$,%
+    self naming
+  }
+}
+
+% The user level keys are bound to the underlying parsers.
+
+\pgfkeys{
+  /mitra/every matrix/.append style=/kD/every layout,
+  /ozos/every node/.append style=/kD/every object,
+  /velos/every path/.append style={
+    /tikz/every edge/.append style=/kD/every arrow,
+    /tikz/every edge quotes/.append style=/kD/every label
+  }
+}
+
+% I merge the macro syntax for objects and matrices. Convenient!
+
+\newif\ifkDObjIsMatrix
+
+\def\kDObjDecideWhetherIsMatrixThen#1{%
+  \def\kDObjDWIM{\kDObjDWIMSightThen{\kDObjDWIMGobThen{#1}}}%
+  \expandafter\kDObjDWIM\the\kDGrpTok\\\kD}
+
+\def\kDObjDWIMSightThen#1#2\\%
+  {\kDIfNextHardCh\kD
+    {\kDObjIsMatrixfalse#1}%
+    {\kDObjIsMatrixtrue#1}}
+
+\def\kDObjDWIMGobThen#1#2\kD{#1}
+
+\def\kDObjOutput
+  {\ifkDObjIsMatrix
+    \kDMitraParseMatrixTableThen\kDMitraOutput\else
+    \kDOzosOutput\fi}
+
+\def\kDObj
+  {\kDFetchOptAndGrpThen
+  {\kDObjDecideWhetherIsMatrixThen
+   \kDObjOutput}}
+
+% I envelope the koDi main macros in a simple key for maximal flexibility.
+
+\tikzset{
+  kodi/.code={%
+    \catcode`\|=12% ConTeXt hack TODO: is it sufficient? investigate
+    \let\obj\kDObj
+    \let\mor\kDVelos
+  }
+}

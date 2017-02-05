@@ -1,0 +1,66 @@
+\input{preamble}
+
+\begin{document}
+
+%==[ TITLE PAGE ]===============================================================
+
+\thispagestyle{empty}
+\noindent
+\resizebox{\linewidth}{!}{\scshape koDi}\\[.6em]
+\resizebox{\linewidth}{!}{\scshape kommutative Diagramme für \TeX}\\[1.6em]
+\resizebox{\linewidth}{!}{\scshape enchiridion}\par
+\vfill\hfill
+\marginpar{
+  \resizebox{\linewidth}{!}{\scshape\color{red} unreleased}\\[.6em]
+  \resizebox{\linewidth}{!}{\scshape v0.0.0}\\
+  \resizebox{\linewidth}{!}{\scshape \today}
+}
+
+%==[ FOREWORD ]=================================================================
+
+\newpage
+% \begin{adjustwidth}{.45\textwidth}{.45\textwidth-\marginparwidth-\marginparsep}
+\noindent\koDi\ is a \TikZ\ library. Its purpose
+is drawing commutative diagrams.
+It is designed precisely to overcome
+the shortcomings of traditional ones.
+The syntax is minimalistic and intelligible.\par
+\hfill{\itshape Paolo al-Imkānī Brasolin}
+% \end{adjustwidth}
+
+%==[ PRELIMINARIES ]============================================================
+
+\newpage
+\section{Preliminaries}
+
+\input{preliminaries}
+
+%==[ QUICK TOUR ]===============================================================
+
+\newpage
+\section{Quick tour}
+
+\input{quick-tour}
+
+%==[ ALTERNATIVES ]=============================================================
+
+\newpage
+\section{Alternatives}
+
+\input{alternatives}
+
+%==[ EBNF specification ]=======================================================
+
+\newpage
+\section{EBNF specification}
+
+\input{ebnf-specification}
+
+%==[ GALLERY ]==================================================================
+
+\newpage
+\section{Gallery}
+
+\input{gallery}
+
+\end{document}

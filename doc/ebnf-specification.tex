@@ -1,0 +1,33 @@
+% \begin{lstlisting}
+% \obj@opt@ [<object opts>] (<name>) at (<coordinate>) @/opt@{<math>};
+% \end{lstlisting}
+%
+% \begin{lstlisting}
+% \obj@opt@ [<object opts>] (<name>) at (<coordinate>) @/opt@{<math>};
+% \end{lstlisting}
+%
+
+\begin{lstlisting}
+\lay@opt@ [<layout opts>] (<name>) at (<coordinate>) @/opt@{<table>};
+
+<table> := (@\underbar{\itshape<row>}@)
+<row> := <cell> (@\itshape\color{orange!80!black}\underbar{<col sep> <cell>}@) <row sep>
+<col sep> := & @opt@[<length>]@/opt@
+<row sep> := \\ @opt@[<length>]@/opt@
+\end{lstlisting}
+
+
+\begin{lstlisting}
+\mor@opt@ [<label opts>] : [<arrow opts>]@/opt@ <object>(@\itshape\underbar{\textvisiblespace<morphism>\textvisiblespace<object>}@);
+<morphism> := <labels> : <arrow>
+\end{lstlisting}
+
+
+\begin{lstlisting}
+<one or more foo> := @rep@<foo>@/rep@
+<zero or more foo> := @opt@@rep@<foo>@/rep@@/opt@
+<zero or one foo> := @opt@<foo>@/opt@
+<row> := <cell> @opt@@rep@<col sep> <cell>@/rep@@/opt@ <row sep>
+<col sep> := & @opt@[<length>]@/opt@
+<row sep> := \\ @opt@[<length>]@/opt@
+\end{lstlisting}

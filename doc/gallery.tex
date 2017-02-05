@@ -1,0 +1,133 @@
+% \lipsum[1]
+% 
+% \begin{LTXexample}
+% \lay [golden=2em] { A & B & C \\ D & E & F \\ };
+% \mor A [bend right, ->] B [bend left, ->] C
+  % -> D [bend right, ->] E [bend left, ->] F;
+% \end{LTXexample}
+% 
+% \lipsum[2]
+% 
+% \begin{LTXexample}
+% \lay { A & B \\};
+% \mor A -> B;
+% \end{LTXexample}
+% 
+% \lipsum[3]
+% 
+% 
+% 
+% % \show\ker
+% 
+% \begin{LTXexample}[pos=t]
+% \begin{tikzpicture}[kodi]
+% 
+% \lay[golden]{
+           % & \ker a   & \ker b   & \ker c   &   \\
+           % & A        & B        & C        & 0 \\
+  % |(0')| 0 & A'       & B'       & C'       &   \\
+           % & \coker a & \coker b & \coker c &   \\
+% };
+% 
+% % horizontal chains
+% \mor   (ker a) ->   (ker b) ->   (ker c);
+% \mor (coker a) -> (coker b) -> (coker c);
+% \mor       A  f :-> B  g :-> C -> 0;
+% \mor 0' -> A' f':-> B' g':-> C';
+% 
+% % vertical chains
+% \mor[near start] (ker a) -> A a:-> A' -> (coker a);
+% \mor[near start] (ker b) -> B b:-> B' -> (coker b);
+% \mor[near start] (ker c) -> C c:-> C' -> (coker c);
+% 
+% % the snake
+% \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
+% \coordinate (head) at ($(coker b)!9/4!(coker a)$);
+% \coordinate (belly) at ($(B)!9/16!(B')$);
+% \draw[/kD/arrows/crossing over, ->, rounded corners]
+  % (ker c) -- (tail) -- (tail|-belly)
+          % -- (belly-|head) -- (head) -- (coker a);
+% 
+% \end{tikzpicture}
+% \end{LTXexample}
+% 
+% \newpage
+% 
+% % \begin{LTXexample}[pos=t]
+% % \begin{tikzpicture}[kodi]
+% % 
+% % \foreach [count=\n] \o in
+    % % {((w×x)×y)×x,
+     % % (w×(x×y))×x,
+     % % w×((x×y)×x),
+     % % w×(x×(y×x)),
+     % % (w×x)×(y×x)}
+  % % \obj (\n) at ({72*\n:9em}) {\o};
+% % 
+% % \mor 1 "a_{w,x,y}×ı_z": -> 2
+         % % "a_{w,x×y,z}": -> 3
+       % % "ı_w×a_{x,y,z}": -> 4;
+% % \mor *   "a_{w×x,y,z}": -> 5
+         % % "a_{w,x,y×z}": -> *;
+% % 
+% % \end{tikzpicture}
+% % \end{LTXexample}
+% 
+% % \startbuffer[example-pullback]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \lay[comb]{
+  % % |(P)| A \times_Z B & B \\
+        % % A            & Z \\
+% % };
+% % 
+% % \obj at ($(Z)!2!(P)$) {Q};
+% % 
+% % \mor[swap] P p_1:-> A f:-> Z;
+% % \mor       * P_2:-> B g:-> *;
+% % \mor[swap]:[bend right] Q q_1:-> A;
+% % \mor      :[bend left]  * q_2:-> B;
+% % \mor [mid]:[dashed]     *   u:-> P;
+% % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 
+% % \startbuffer[example-chain]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \pgfkeys{/katharizo/expand=full}
+% % 
+% % \foreach [count=\m] \a in {A,B,C}
+  % % \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
+    % % \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
+% % 
+% % \mor (C_{n+1}) -> (B_{n-1});
+% % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % 
+% % \startbuffer[example-ref]%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % \lay[square]{A&B&C&D\\E&F&G&H\\I&L&M&N\\};
+% % 
+% % \mor:                     B -> C;
+% % 
+% % % * src = prv first src
+% % \mor:[draw=none]          B -> C;
+% % \mor:[bend right, green]  * -> D;
+% % 
+% % % * tar = prv last tar
+% % \mor:[draw=none]          B -> C;
+% % \mor:[bend right, blue]   A -> *;
+% % 
+% % \mor:[draw=none]          B -> C;
+% % \mor:[bend left, red]     A -> * -> D;
+% % 
+% % \mor:                     F -> G;
+% % 
+% % % + src = prv last tar
+% % \mor:[draw=none]          F -> G;
+% % \mor:[bend right, green]  + -> H;
+% % 
+% % % + tar = prv first src
+% % \mor:[draw=none]          F -> G;
+% % \mor:[bend right, blue]   E -> +;
+% % 
+% % \mor:[draw=none]          F -> G;
+% % \mor:[bend left, red]     E -> + -> H;
+% % 
+% % % so, basically, * is the opposite of +
+% % \mor:      M -> L;
+% % \mor:[red] I <- * <- N;
+% % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

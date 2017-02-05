@@ -1,0 +1,288 @@
+%% tikzlibrarykodi.velos.code.tex
+%% Copyright 2017 Paolo Brasolin
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   <http://www.latex-project.org/lppl.txt>
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Paolo Brasolin
+% who can be contacted at <paolo.brasolin@gmail.com>.
+%
+% This work consists of the following files:
+
+% βέλος • (vélos)
+%   1. arrow
+%   2. dart
+%   3. shaft
+
+% Velos is a parsing mechanism for arrow chains.
+
+\usetikzlibrary{kodi.koinos}
+
+%==[ handlers ]=================================================================
+
+\pgfkeys{
+  /velos/install quote handler/.style={
+    /handlers/first char syntax=true,
+    /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler
+  }
+}
+
+\def\kDVelosQuoteHandler#1%
+  {\pgfkeysalso{/tikz/node contents/.expand once={\kDVelosUnquote#1}}}
+
+\def\kDVelosUnquote"#1"{#1}
+
+%==[ global options ]===========================================================
+
+\newtoks\kDVelosTemp
+
+\newtoks\kDVelosGlobalLabelOptions
+\newtoks\kDVelosGlobalEdgeOptions
+
+\newif\ifkDVelosGOAfterColon
+
+\def\kDVelosFetchGlobalOptionsThen#1{%
+  \kDVelosGOAfterColonfalse
+  \kDVelosGlobalLabelOptions={}%
+  \kDVelosGlobalEdgeOptions={}%
+  \kDVelosGOMaybeFetchThen{\kDVelosGOThinkThen{#1}}}
+
+\def\kDVelosGOMaybeFetchThen#1{%
+  \kDVelosTemp={}%
+  \kDIfNextHardCh[%
+    {\kDVelosGOFetchThen{#1}}%
+    {#1}}
+
+\def\kDVelosGOFetchThen#1[#2]{%
+  \kDVelosTemp={#2}%
+  #1}
+
+\def\kDVelosGOThinkThen#1{%
+  \def\kDVelosGOLoop{\kDVelosGOThinkThen{#1}}%
+  \def\kDVelosGOBreak{#1}%
+  \kDIfNextHardCh:%
+    {%
+      \kDVelosGOAfterColontrue
+      \kDVelosGlobalLabelOptions\expandafter{\the\kDVelosTemp}%
+      \expandafter\kDVelosGOMaybeFetchThen\expandafter\kDVelosGOLoop\kDGobbleHardTok
+    }{%
+      \ifkDVelosGOAfterColon
+        \kDVelosGlobalEdgeOptions\expandafter{\the\kDVelosTemp}\else
+        \kDVelosGlobalLabelOptions\expandafter{\the\kDVelosTemp}\fi
+      \kDVelosGOBreak
+    }}
+
+%==[ first edge ]===============================================================
+
+\def\kDVelosDoFirstEdgeThen#1%
+  {\kDVelosFetchFirstSourceThen
+  {\kDVelosFetchFirstEdgeThen
+  {\kDVelosDrawFetchedEdgeThen
+  {#1}}}}
+
+\newtoks\kDVelosSource
+\newtoks\kDVelosCurFstSrc
+\newtoks\kDVelosPrvFstSrc
+
+\def\kDVelosFetchFirstSourceThen#1%
+  {\kDIfNextHardCh(%
+    {\kDVelosFFSBracketsThen{#1}}%
+    {\kDVelosFFSTillOverThen{#1}}}
+
+\def\kDVelosFFSBracketsThen#1(#2){%
+  \kDVelosSource={#2}%
+  \kDVelosCurFstSrc={#2}%
+  #1}
+
+\def\kDVelosFFSTillOverThen#1#2 {% <- mind the space!
+  \kDVelosSource={#2}%
+  \kDVelosCurFstSrc={#2}%
+  #1}
+
+\def\kDVelosFetchFirstEdgeThen#1%
+  {\kDVelosFetchEdgeThen
+  {\kDVelosFetchTargetThen
+  {#1}}}
+
+%==[ chained edges ]============================================================
+
+\newtoks\kDVelosEdge
+
+\def\kDVelosFetchEdgeThen#1{%
+  \kDVelosEdge={}%
+  \kDVelosFEThen{\kDVelosFEThinkThen{#1}}}
+
+\def\kDVelosFEThen#1%
+  {\kDIfNextHardCh[%
+    {\kDVelosFEKeysListThen{#1}}%
+    {\kDIfNextHardCh"%
+      {\kDVelosFEEnquotedThen{#1}}%
+      {\kDVelosFETillOverThen{#1}}}}
+
+\newif\ifkDVelosTempIsKeysList
+
+\def\kDVelosFEEnquotedThen#1"#2"{%
+  \kDVelosTempIsKeysListfalse
+  \kDVelosTemp={#2}%
+  #1}
+
+\def\kDVelosFEKeysListThen#1[#2]{%
+  \kDVelosTempIsKeysListtrue
+  \kDVelosTemp={#2}%
+  #1}
+
+\def\kDVelosFETillOverThen#1{%
+  \kDVelosTempIsKeysListfalse
+  \kDVelosTemp={}%
+  \kDVelosFETOThen{#1}}
+
+\def\kDVelosFETOThen#1%
+  {\kDIfNextSoftCh\kDBlankSpace
+    {#1}%
+    {\kDIfNextHardCh:%
+      {#1}
+      {\kDVelosFEAppendThen{\kDVelosFETOThen{#1}}}}}
+
+\def\kDVelosFEAppendThen#1#2{%
+  \kDVelosTemp=\expandafter{\the\kDVelosTemp#2}% TODO: wasn't the \ea redundant?
+  #1}
+
+\def\kDVelosFEEdgePrepend#1{%
+  \edef\Act{\noexpand\kDVelosEdge={#1,\the\kDVelosEdge}}%
+  \Act}
+
+\def\kDVelosFEEdgePrependNode#1%
+  {\kDVelosFEEdgePrepend{edge node={node[every edge quotes][#1]}}}
+
+\def\kDVelosFEThinkThen#1{%
+  \def\kDVelosFELoop{\kDVelosFEThinkThen{#1}}%
+  \def\kDVelosFEBreak{#1}%
+  \kDIfNextHardCh[%
+    {%
+      \kDVelosFEEdgePrependNode{\the\kDVelosTemp}%
+      \kDVelosFEThen\kDVelosFELoop
+    }{%
+      \kDIfNextHardCh:%
+        {%
+          \ifkDVelosTempIsKeysList
+            \kDVelosFEEdgePrependNode{\the\kDVelosTemp}\else
+            \kDVelosFEEdgePrependNode{"\the\kDVelosTemp"}\fi
+          \expandafter\kDVelosFEThen\expandafter\kDVelosFELoop\kDGobbleHardTok
+        }{%
+          \kDVelosFEEdgePrepend{\the\kDVelosTemp}%
+          \kDVelosFEBreak
+        }%
+    }}
+
+%==[ target ]===================================================================
+
+\newtoks\kDVelosTarget
+\newtoks\kDVelosCurLstTar
+\newtoks\kDVelosPrvLstTar
+
+\def\kDVelosFetchTargetThen#1%
+  {\kDIfNextHardCh(%
+    {\kDVelosFTBracketsThen{#1}}%
+    {\kDVelosFTTillOverThen{#1}}}
+
+\def\kDVelosFTBracketsThen#1(#2){%
+  \kDVelosTarget={#2}%
+  \kDVelosCurLstTar={#2}%
+  #1}
+
+\def\kDVelosFTTillOverThen#1{%
+  \kDVelosTarget={}%
+  \kDVelosFTTOThen{#1}}
+
+\def\kDVelosFTTOThen#1{%
+  \def\kDVelosFTTOLoop%
+    {\kDVelosFTTOThen{#1}}%
+  \def\kDVelosFTTOExit{%
+    \kDVelosCurLstTar\expandafter{\the\kDVelosTarget}%
+    #1}%
+  \kDIfNextSoftCh\kDBlankSpace
+    {\kDVelosFTTOExit}%
+    {\kDIfNextHardCh;%
+      {\kDVelosFTTOExit}%
+      {\kDVelosFTAppendThen\kDVelosFTTOLoop}}}
+
+\def\kDVelosFTAppendThen#1#2{%
+  \kDVelosTarget=\expandafter{\the\kDVelosTarget#2}%
+  #1}
+
+%==[ rendering/dereferencing ]==================================================
+
+\def\kDVelosAlias{*}
+\def\kDVelosSaila{+}
+
+\newtoks\kDVelosDerefSrc
+\newtoks\kDVelosDerefTar
+
+\def\kDVelosDrawFetchedEdgeThen#1{
+  \edef\cS{\the\kDVelosSource}%
+  \kDVelosDerefSrc\expandafter{\the\kDVelosSource}%
+  \ifx\cS\kDVelosAlias\kDVelosDerefSrc\expandafter{\the\kDVelosPrvFstSrc}\fi
+  \ifx\cS\kDVelosSaila\kDVelosDerefSrc\expandafter{\the\kDVelosPrvLstTar}\fi
+  \edef\cT{\the\kDVelosTarget}%
+  \kDVelosDerefTar\expandafter{\the\kDVelosTarget}%
+  \ifx\cT\kDVelosAlias\kDVelosDerefTar\expandafter{\the\kDVelosPrvLstTar}\fi
+  \ifx\cT\kDVelosSaila\kDVelosDerefTar\expandafter{\the\kDVelosPrvFstSrc}\fi
+  \edef\Act{%
+    \noexpand\path
+      [/velos/every path]%
+      [%
+        /tikz/every edge/.append style=%
+          {\the\kDVelosGlobalEdgeOptions},%
+        /tikz/every edge quotes/.append style=%
+          {auto,\the\kDVelosGlobalLabelOptions},%
+      ]%
+      (\the\kDVelosDerefSrc)%
+      edge[\the\kDVelosEdge]%
+      (\the\kDVelosDerefTar);}%
+  \Act%
+  #1}
+
+\pgfkeys{
+  /velos/every path/.style={
+    /velos/install quote handler
+  }
+}
+
+%==[ high level ]===============================================================
+
+\def\kDVelos%
+  {\kDVelosFetchGlobalOptionsThen
+  {\kDVelosDoFirstEdgeThen
+   \kDVelosMaybeChainEdge}}
+
+\def\kDVelosMaybeChainEdge{%
+  \kDIfNextHardCh;%
+    {%
+    \edef\cS{\the\kDVelosCurFstSrc}%
+    \ifx\cS\kDVelosAlias
+      \kDVelosCurFstSrc\expandafter{\the\kDVelosPrvFstSrc}%
+    \else\ifx\cS\kDVelosSaila
+      \kDVelosCurFstSrc\expandafter{\the\kDVelosPrvLstTar}%
+    \fi\fi
+    \edef\cT{\the\kDVelosCurLstTar}%
+    \ifx\cT\kDVelosAlias
+      \kDVelosCurLstTar\expandafter{\the\kDVelosPrvLstTar}%
+    \else\ifx\cT\kDVelosSaila
+      \kDVelosCurLstTar\expandafter{\the\kDVelosPrvFstSrc}%
+    \fi\fi
+    \kDVelosPrvFstSrc\expandafter{\the\kDVelosCurFstSrc}%
+    \kDVelosPrvLstTar\expandafter{\the\kDVelosCurLstTar}%
+    }{%
+      \kDVelosSource\expandafter{\the\kDVelosTarget}
+      \kDVelosFetchEdgeThen
+        {\kDVelosFetchTargetThen
+        {\kDVelosDrawFetchedEdgeThen
+         \kDVelosMaybeChainEdge}}%
+    }}

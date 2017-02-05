@@ -1,5 +1,24 @@
+%% kodi-doc.tex
+%% Copyright 2017 Paolo Brasolin
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   <http://www.latex-project.org/lppl.txt>
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Paolo Brasolin
+% who can be contacted at <paolo.brasolin@gmail.com>.
+%
+% This work consists of the following files:
+
 \documentclass[12pt]{scrbook}
 \usepackage[british]{babel}
+
 % \hyphenation{Fortran hy-phen-ation}
 
 \usepackage{libertine}
@@ -233,9 +252,57 @@ morestring=[b]",
 \tcbuselibrary{listingsutf8}
 \tcbset{listing utf8=latin1}
 
+\tcbset{kodi snippet/.style={
+  size=tight,
+  colback=white,
+  colframe=white,
+  if odd page={
+    listing side text,
+    lefthand width=\textwidth,
+    righthand width=\marginparwidth,
+    halign lower=center,
+  }{
+    text side listing,
+    righthand width=\textwidth,
+    lefthand width=\marginparwidth,
+    halign upper=center,
+  },
+  toggle enlargement,
+  grow to right by=\marginparsep+\marginparwidth,
+  sidebyside gap=\marginparsep,
+  listing options={
+    firstline=2,
+    lastline=-1
+  }
+}}
+
+\tcbset{xy snippet/.style={
+  size=tight,
+  colback=white,
+  colframe=white,
+  if odd page={
+    listing side text,
+    lefthand width=\textwidth,
+    righthand width=\marginparwidth,
+    halign lower=center,
+  }{
+    text side listing,
+    righthand width=\textwidth,
+    lefthand width=\marginparwidth,
+    halign upper=center,
+  },
+  toggle enlargement,
+  grow to right by=\marginparsep+\marginparwidth,
+  sidebyside gap=\marginparsep,
+}}
+
+
+
+\def\nilstrut{\rule{0sp}{0sp}}
+ 
 \begin{document}
 
-%===[ TITLE PAGE ]==============================================================
+%==[ TITLE PAGE ]===============================================================
 
 \thispagestyle{empty}
 \noindent
@@ -248,10 +315,10 @@ morestring=[b]",
   \resizebox{\linewidth}{!}{\scshape v0.0.0}\\
   \resizebox{\linewidth}{!}{\scshape \today}
 }
+
+%==[ FOREWORD ]=================================================================
+
 \newpage
-
-%===[ FOREWORD ]================================================================
-
 % \begin{adjustwidth}{.45\textwidth}{.45\textwidth-\marginparwidth-\marginparsep}
 \noindent\koDi\ is a \TikZ\ library. Its purpose
 is drawing commutative diagrams.
@@ -261,10 +328,9 @@ The syntax is minimalistic and intelligible.\par
 \hfill{\itshape Paolo al-Imkānī Brasolin}
 % \end{adjustwidth}
 
+%==[ PRELIMINARIES ]============================================================
+
 \newpage
-
-%===[ PRELIMINARIES ]===========================================================
-
 \section{Preliminaries}
 
 \TikZ\ is the only requirement of \koDi.  This ensures compatibility with
@@ -373,57 +439,10 @@ A small expedient is necessary to use it with \koDi.
 \end{document}
   \end{lstlisting}
 \end{marginfigure}
-
-\tcbset{kodi snippet/.style={
-  size=tight,
-  colback=white,
-  colframe=white,
-  if odd page={
-    listing side text,
-    lefthand width=\textwidth,
-    righthand width=\marginparwidth,
-    halign lower=center,
-  }{
-    text side listing,
-    righthand width=\textwidth,
-    lefthand width=\marginparwidth,
-    halign upper=center,
-  },
-  toggle enlargement,
-  grow to right by=\marginparsep+\marginparwidth,
-  sidebyside gap=\marginparsep,
-  listing options={
-    firstline=2,
-    lastline=-1
-  }
-}}
-
-\tcbset{xy snippet/.style={
-  size=tight,
-  colback=white,
-  colframe=white,
-  if odd page={
-    listing side text,
-    lefthand width=\textwidth,
-    righthand width=\marginparwidth,
-    halign lower=center,
-  }{
-    text side listing,
-    righthand width=\textwidth,
-    lefthand width=\marginparwidth,
-    halign upper=center,
-  },
-  toggle enlargement,
-  grow to right by=\marginparsep+\marginparwidth,
-  sidebyside gap=\marginparsep,
-}}
-
-%===[ QUICK TOUR ]==============================================================
+ 
+%==[ QUICK TOUR ]===============================================================
 
 \newpage
-
-\def\nilstrut{\rule{0sp}{0sp}}
-
 \section{Quick tour}
 
 Objects are typeset using the \lstinline!\obj! macro.
@@ -480,8 +499,11 @@ the gluing of chains.
 These are the only two macros defined by \koDi.
 
 There are more features so please continue reading if this got your attention.
+ 
+%==[ ALTERNATIVES ]=============================================================
 
-%===[ COMPETITION ]=============================================================
+\newpage
+\section{Alternatives}
 
 % \newpage
 % 
@@ -530,11 +552,10 @@ There are more features so please continue reading if this got your attention.
 % \mor[swap]:[bend right] * y:-> Y;
 % \endtikzpicture
 % \end{tcblisting}
-
-%===[  ]========================================================================
+ 
+%==[ EBNF specification ]=======================================================
 
 \newpage
-
 \section{EBNF specification}
 
 % \begin{lstlisting}
@@ -570,14 +591,11 @@ There are more features so please continue reading if this got your attention.
 <col sep> := & @opt@[<length>]@/opt@
 <row sep> := \\ @opt@[<length>]@/opt@
 \end{lstlisting}
+ 
+%==[ GALLERY ]==================================================================
 
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Gallery}
 
 % \lipsum[1]
 % 
@@ -712,5 +730,5 @@ There are more features so please continue reading if this got your attention.
 % % \mor:      M -> L;
 % % \mor:[red] I <- * <- N;
 % % \stopbuffer%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+ 
 \end{document}

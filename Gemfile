@@ -5,6 +5,7 @@ group :development do
   gem 'guard'
   gem 'guard-cucumber'
   gem 'guard-rake'
+  gem 'guard-shell'
   gem 'rake'
   gem 'rspec'
 end
