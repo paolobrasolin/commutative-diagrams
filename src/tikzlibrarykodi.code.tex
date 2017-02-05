@@ -1,44 +1,40 @@
-%==[ external dependencies ]====================================================
+% koDi stands for kommutative Diagramme für *TEX*.
 
-% TODO: clean up these
-\usetikzlibrary[calc]
-\usetikzlibrary[decorations.pathreplacing]
-\usetikzlibrary{decorations.pathmorphing}
-\usetikzlibrary[decorations.markings]
-\usetikzlibrary[arrows.meta]
-
-%==[ koDi: dependencies graph ]=================================================
+%==[ dependencies graph ]=======================================================
 
 % NOTE: arrow notation means targets require sources.
 
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
-%                             %  TikZ/pgf standard libraries
-%      matrix -------------.  %
-%                          |  %
-%~~~~~~~~~~~~~~~~~~~~~~~~~~|~~%
-%                          |  %  koDi volatile layer: TikZ bugfixes
-%      kodi.diorthono      |  %
-%                          |  %
-%~~~~~~~~~~~~~~~~~~~~~~~~~~|~~%
-%                          |  %  koDi inner layer: baseline features
-%      kodi.ektropi ----.  |  %
-%      kodi.bapto ------|  |  %
-%      kodi.katharizo --|  |  %
-%  .-- kodi.koinos --.  |  |  %
-%  |                 |  |  |  %
-%~~|~~~~~~~~~~~~~~~~~|~~|~~|~~%
-%  |                 |  |  |  %  koDi middle layer: custom parsers
-%  |-- kodi.ozos <---|  |  |  %
-%  |-- kodi.mitra <--+--|--'  %
-%  |-- kodi.velos <--'  |     %
-%  |                    |     %
-%~~|~~~~~~~~~~~~~~~~~~~~|~~~~~%
-%  |                    |     %  koDi outer layer: user interface
-%  '-> kodi.ramma <-----'     %
-%                             %
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
+%                                %  TikZ/pgf standard libraries
+%      calc ------------------.  %
+%      matrix -------------.  |  %
+%                          |  |  %
+%~~~~~~~~~~~~~~~~~~~~~~~~~~|~~|~~%
+%                          |  |  %  koDi volatile layer: TikZ bugfixes
+%      kodi.diorthono      |  |  %
+%                          |  |  %
+%~~~~~~~~~~~~~~~~~~~~~~~~~~|~~|~~%
+%                          |  |  %  koDi inner layer: baseline features
+%      kodi.ektropi ----.  |  |  %
+%      kodi.bapto ------|  |  |  %
+%      kodi.katharizo --|  |  |  %
+%  ,-- kodi.koinos --.  |  |  |  %
+%  |                 |  |  |  |  %
+%~~|~~~~~~~~~~~~~~~~~|~~|~~|~~|~~%
+%  |                 |  |  |  |  %  koDi middle layer: custom parsers
+%  |-- kodi.mitra <--+--|--'  |  %
+%  |-- kodi.ozos <---|  |     |  %
+%  |-- kodi.velos <--'  |     |  %
+%  |                    |     |  %
+%~~|~~~~~~~~~~~~~~~~~~~~|~~~~~|~~%
+%  |                    |     |  %  koDi outer layer: user interface
+%  `-> kodi.ramma <-----'     |  %
+%      kodi.mandyas <---------'  %  TODO: does mandyas depend upon ramma?
+%                                %
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~%
 
 % Given the graph above, these suffice to encompass koDi:
 
 \usetikzlibrary[kodi.diorthono]
 \usetikzlibrary[kodi.ramma]
+\usetikzlibrary[kodi.mandyas]
