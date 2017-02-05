@@ -32,8 +32,8 @@ task tds: [:pkg] do
     'kodi.sty'         => 'tex/latex/kodi/',         # LaTeX package
     't-kodi.tex'       => 'tex/context/third/kodi/', # ConTeXt module
     'tikzlibrarykodi*' => 'tex/generic/kodi/',       # common TikZ library
-    'kodi-doc.tex'     => 'doc/generic/kodi/',       # documentation
-    'kodi-doc.pdf'     => 'doc/generic/kodi/',       #   "
+    # 'kodi-doc.tex'     => 'doc/generic/kodi/',       # documentation
+    # 'kodi-doc.pdf'     => 'doc/generic/kodi/',       #   "
     'README.md'        => 'doc/generic/kodi/'        #   "
   }.each do |source_file, target_subdir|
     copy_with_path("dist/pkg/kodi/#{source_file}", "dist/tds/#{target_subdir}")
