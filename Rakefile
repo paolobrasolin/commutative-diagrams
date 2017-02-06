@@ -5,9 +5,6 @@ require 'open3'
 require 'rake/clean'
 require 'yaml'
 
-# TODO: fix filelist in header
-# TODO: doc pass here is optional (simpler to handle stuff on Travis like this)
-
 @meta = YAML.load(File.read('metadata.yaml'))
 
 def print_title(title)
