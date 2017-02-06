@@ -11,7 +11,7 @@ require 'yaml'
 @meta = YAML.load(File.read('metadata.yaml'))
 
 def print_title(title)
-  print ("\n#==[ #{title} ]" + '=' * 80)[0,80] + "\n"
+  print ("\n#==[ #{title} ]" + '=' * 80)[0, 80] + "\n"
 end
 
 #==[ doc: build documents ]=====================================================
@@ -19,9 +19,12 @@ end
 desc 'build documents'
 task :doc do
   print_title 'build documents'
+  target_dir = 'doc/build'
+  mkdir_p target_dir
 
-  # Make build folder.
-  mkdir_p 'doc/build'
+  print "Copying auxiliary doc...\n"
+  cp_r(Dir['doc/README'], target_dir)
+  print "Done.\n"
 
   print 'Flattening main doc sourcecode... '
   _stdout, stderr, status = Open3.capture3(
@@ -32,17 +35,17 @@ task :doc do
   raise StandardError, stderr unless status.success?
   print "Done.\n"
 
-  print 'Loading header template... '
-  code_template = File.read('HEADER.erb')
-  code_renderer = ERB.new(code_template, 0, '<>')
-  print "Done.\n"
+  # print 'Loading header template... '
+  # code_template = File.read('HEADER.erb')
+  # code_renderer = ERB.new(code_template, 0, '<>')
+  # print "Done.\n"
 
-  Dir.chdir 'doc/build' do
-    print 'Applying header template to main doc sourcecode... '
-    @filename = 'kodi-doc.tex'
-    @source = File.read(@filename)
-    File.write(@filename, code_renderer.result)
-    print "Done.\n"
+  Dir.chdir target_dir do
+    # print 'Applying header template to main doc sourcecode... '
+    # @filename = 'kodi-doc.tex'
+    # @source = File.read(@filename)
+    # File.write(@filename, code_renderer.result)
+    # print "Done.\n"
 
     print 'Compiling main doc sourcecode to PDF... '
     _stdout, stderr, status = Open3.capture3(
@@ -58,7 +61,26 @@ end
 desc 'build sourcecode'
 task :src do
   print_title 'build sourcecode'
-  mkdir_p 'src/build'
+  target_dir = 'src/build'
+  mkdir_p target_dir
+
+  print "Preparing files...\n"
+  cp_r(Dir['src/*.{tex,sty}'], target_dir)
+  print "Done.\n"
+end
+
+#==[ build: build all ]=========================================================
+
+desc 'build all'
+task build: [:doc, :src] do
+  print_title 'build all'
+  target_dir = 'build'
+  mkdir_p target_dir
+
+  print "Gathering partially built files...\n"
+  cp_r Dir[*@meta['filemap'].keys.map { |f| "src/build/#{f}" }], target_dir
+  cp_r Dir[*@meta['filemap'].keys.map { |f| "doc/build/#{f}" }], target_dir
+  print "Done.\n"
 
   print 'Loading header template... '
   code_template = File.read('HEADER.erb')
@@ -66,12 +88,10 @@ task :src do
   print "Done.\n"
 
   print 'Applying header template to sourcecode files... '
-  Dir.chdir 'src' do
-    Dir['*.{tex,sty}'].each do |filename|
-      @filename = filename
-      @source = File.read(@filename)
-      File.write("build/#{@filename}", code_renderer.result)
-    end
+  Dir["#{target_dir}/*.{tex,sty}"].each do |filename|
+    @filename = File.basename(filename)
+    @source = File.read(filename)
+    File.write(filename, code_renderer.result)
   end
   print "Done.\n"
 end
@@ -79,34 +99,29 @@ end
 #==[ pkg: prepare files for PKG distribution ]==================================
 
 desc 'prepare files for PKG distribution'
-task pkg: [:src] do
+task pkg: [:build] do
   print_title 'prepare files for PKG distribution'
   target_folder = 'dist/pkg/kodi'
   mkdir_p target_folder
 
-  print "Moving built documentation files...\n"
-  src_files = ['README.md', 'doc/build/kodi-doc.tex', 'doc/build/kodi-doc.pdf']
-  cp_r(src_files, target_folder)
-  print "Done.\n"
-
-  print "Moving built sourcecode files...\n"
-  src_files = Dir['src/build/*.{tex,sty}']
-  cp_r(src_files, target_folder)
+  print "Copying built files...\n"
+  cp_r Dir[*@meta['filemap'].keys.map { |f| "build/#{f}" }], target_folder
   print "Done.\n"
 end
 
 #==[ tds: prepare files for TDS distribution ]==================================
 
 desc 'prepare files for TDS distribution'
-task tds: [:pkg] do
+task tds: [:build] do
   print_title 'prepare files for TDS distribution'
-  source_dir = 'dist/pkg/kodi'
+  source_dir = 'build'
+  target_dir = 'dist/tds'
 
-  print "Moving files...\n"
-  @meta['filemap'].each do |source_file, target_subdir|
-    target_dir = "dist/tds/#{target_subdir}"
-    mkdir_p target_dir
-    cp_r(Dir["#{source_dir}/#{source_file}"], target_dir)
+  print "Copying built files...\n"
+  @meta['filemap'].each do |source_glob, target_subdir|
+    target_fulldir = "#{target_dir}/#{target_subdir}"
+    mkdir_p target_fulldir
+    cp_r Dir["#{source_dir}/#{source_glob}"], target_fulldir
   end
   print "Done.\n"
 end
@@ -129,6 +144,11 @@ task zip: [:pkg, :tds] do
   end
   print "Done.\n"
 end
+
+#==[ cleanup ]==================================================================
+
+CLEAN.include '**/dist/'
+CLOBBER.include '**/dist/', '**/build/'
 
 ################################################################################
 
@@ -236,7 +256,3 @@ task format: :install do
   mv('kodi-livedemo.fmt', 'dist')
 end
 
-#==[ cleanup ]==================================================================
-
-CLEAN.include '**/dist/'
-CLOBBER.include '**/dist/', '**/build/'

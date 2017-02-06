@@ -15,8 +15,8 @@
 % who can be contacted at <<%= @meta['email'] %>>.
 %
 % This work consists of the following files:
-<% for item in FileList['src/*'] %>
-%   - <%= File.basename(item) %>
+<% for item in [] %>
+%   <%= item %>
 <% end %>
 
 <%= @source %>

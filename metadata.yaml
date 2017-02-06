@@ -11,7 +11,7 @@ filemap: # PKG glob to TDS subfolder
   tikzlibrarykodi*: tex/generic/kodi/
   kodi-doc.tex: doc/generic/kodi/
   kodi-doc.pdf: doc/generic/kodi/
-  README.md: doc/generic/kodi/
+  README: doc/generic/kodi/
 
 ctanupload:
   CONTRIBUTION: *name
