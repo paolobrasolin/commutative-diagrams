@@ -15,8 +15,15 @@
 % who can be contacted at <<%= @meta['email'] %>>.
 %
 % This work consists of the following files:
-<% for item in [] %>
-%   <%= item %>
-<% end %>
+<%  @meta['filemap'].each do |path, globs|
+      filelist = Dir[*Array[globs].flatten.map { |f| "build/#{f}" }]
+      next if filelist.empty? -%>
+%   <%= path %>
+<%    filelist[0..-2].each do |filename| -%>
+%     |- <%= filename %>
+<%    end -%>
+%     '- <%= filelist[-1] %>
+<%  end -%>
+%
 
 <%= @source %>

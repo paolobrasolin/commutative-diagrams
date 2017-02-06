@@ -67,13 +67,15 @@ task build: [:src] do # TODO: should :doc be a prerequisite or not?
   mkdir_p target_dir
 
   print "Gathering partially built files...\n"
-  cp_r Dir[*@meta['filemap'].keys.map { |f| "src/build/#{f}" }], target_dir
-  cp_r Dir[*@meta['filemap'].keys.map { |f| "doc/build/#{f}" }], target_dir
+  cp_r Dir[*@meta['filemap'].values.flatten
+                            .map { |f| "src/build/#{f}" }], target_dir
+  cp_r Dir[*@meta['filemap'].values.flatten
+                            .map { |f| "doc/build/#{f}" }], target_dir
   print "Done.\n"
 
   print 'Loading header template... '
   code_template = File.read('HEADER.erb')
-  code_renderer = ERB.new(code_template, 0, '<>')
+  code_renderer = ERB.new(code_template, 0, '-')
   print "Done.\n"
 
   print 'Applying header template to sourcecode files... '
@@ -94,7 +96,8 @@ task pkg: [:build] do
   mkdir_p target_folder
 
   print "Copying built files...\n"
-  cp_r Dir[*@meta['filemap'].keys.map { |f| "build/#{f}" }], target_folder
+  cp_r Dir[*@meta['filemap'].values.flatten
+                            .map { |f| "build/#{f}" }], target_folder
   print "Done.\n"
 end
 
@@ -107,10 +110,11 @@ task tds: [:build] do
   target_dir = 'dist/tds'
 
   print "Copying built files...\n"
-  @meta['filemap'].each do |source_glob, target_subdir|
+  @meta['filemap'].each do |target_subdir, source_globs|
     target_fulldir = "#{target_dir}/#{target_subdir}"
     mkdir_p target_fulldir
-    cp_r Dir["#{source_dir}/#{source_glob}"], target_fulldir
+    glob_list = Array[source_globs].flatten.map { |f| "#{source_dir}/#{f}" }
+    cp_r Dir[*glob_list], target_fulldir
   end
   print "Done.\n"
 end
@@ -220,7 +224,7 @@ task :uninstall do
   print "Removing files from the $TEXMFHOME...\n"
   basedir = `kpsexpand '$TEXMFHOME'`.chomp
 
-  @meta['filemap'].values.uniq.each do |subfolder|
+  @meta['filemap'].keys.each do |subfolder|
     rm_rf "#{basedir}/#{subfolder}"
   end
   print "Done.\n"
