@@ -35,18 +35,7 @@ task :doc do
   raise StandardError, stderr unless status.success?
   print "Done.\n"
 
-  # print 'Loading header template... '
-  # code_template = File.read('HEADER.erb')
-  # code_renderer = ERB.new(code_template, 0, '<>')
-  # print "Done.\n"
-
   Dir.chdir target_dir do
-    # print 'Applying header template to main doc sourcecode... '
-    # @filename = 'kodi-doc.tex'
-    # @source = File.read(@filename)
-    # File.write(@filename, code_renderer.result)
-    # print "Done.\n"
-
     print 'Compiling main doc sourcecode to PDF... '
     _stdout, stderr, status = Open3.capture3(
       'latexmk', '-pdf', '-gg', 'kodi-doc.tex'
@@ -72,7 +61,7 @@ end
 #==[ build: build all ]=========================================================
 
 desc 'build all'
-task build: [:doc, :src] do
+task build: [:src] do # TODO: should :doc be a prerequisite or not?
   print_title 'build all'
   target_dir = 'build'
   mkdir_p target_dir
@@ -134,13 +123,13 @@ task zip: [:pkg, :tds] do
 
   print "Zipping TDS tree...\n"
   Dir.chdir('dist/tds') do
-    system('zip', '--recurse-paths', "../pkg/kodi.tds.zip", '.')
+    system('zip', '--recurse-paths', '../pkg/kodi.tds.zip', '.')
   end
   print "Done.\n"
 
   print "Zipping PKG folder...\n"
   Dir.chdir('dist/pkg') do
-    system('zip', '--recurse-paths', "../kodi.zip", '.')
+    system('zip', '--recurse-paths', '../kodi.zip', '.')
   end
   print "Done.\n"
 end
@@ -175,18 +164,20 @@ task :features, :features_regexp, :tex_envs_regexp do |_task, args|
 
   tex_envs = YAML.safe_load(File.read('features/support/workflows.yaml'))
   tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
-  raise ArgumentError, "The provided TeX environment regexp has no matches." if tex_envs.empty?
+  message = 'The provided TeX environment regexp has no matches.'
+  raise ArgumentError, message if tex_envs.empty?
 
-  features = Dir.glob("features/**/*.feature")
+  features = Dir.glob('features/**/*.feature')
   features.select! { |f| f[/#{features_regexp}/] }
-  raise ArgumentError, "The provided feature regexp has no matches." if features.empty?
+  message = 'The provided feature regexp has no matches.'
+  raise ArgumentError, message if features.empty?
 
   filtered_features_syms = []
 
   features.each do |filename|
     if filename.include?('generic')
       tex_envs.each do |k, v|
-        hash = Digest::MD5.hexdigest(k+filename).to_sym
+        hash = Digest::MD5.hexdigest(k + filename).to_sym
         filtered_features_syms <<= hash
         Cucumber::Rake::Task.new(hash) do |task|
           task.cucumber_opts = options + [
@@ -204,14 +195,14 @@ task :features, :features_regexp, :tex_envs_regexp do |_task, args|
     end
   end
 
-  task :filtered_features => filtered_features_syms
+  task filtered_features: filtered_features_syms
   Rake::Task[:filtered_features].invoke
 end
 
 #==[ install ]==================================================================
 
 desc 'install'
-task :install do
+task install: [:tds] do
   print_title 'install locally'
 
   print "Moving files from the built TDS...\n"
@@ -229,7 +220,7 @@ task :uninstall do
   print "Removing files from the $TEXMFHOME...\n"
   basedir = `kpsexpand '$TEXMFHOME'`.chomp
 
-  puts @meta['filemap'].values.uniq.each do |subfolder|
+  @meta['filemap'].values.uniq.each do |subfolder|
     rm_rf "#{basedir}/#{subfolder}"
   end
   print "Done.\n"
@@ -245,7 +236,7 @@ task reinstall: [:uninstall, :install]
 desc 'dump minimal koDi/standalone format'
 task format: :install do
   mkdir_p 'dist'
-  stdout, stderr, status = Open3.capture3(
+  stdout, stderr, _status = Open3.capture3(
     'pdftex',
     '-ini',
     '&latex kodi-livedemo.tex\dump',
@@ -255,4 +246,3 @@ task format: :install do
   rm('kodi-livedemo.log')
   mv('kodi-livedemo.fmt', 'dist')
 end
-
