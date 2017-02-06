@@ -1,10 +1,8 @@
-# oberdiek -> atbegshi
-# ms -> everyshi
-# graphics -> graphicx
 language: ruby
 rvm:
 - 2.2.5
 install:
+  # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
   - source travis/texlive/install
   - bundle install
 script: 
@@ -14,4 +12,3 @@ script:
 branches:
   only:
   - master
-# sudo: false

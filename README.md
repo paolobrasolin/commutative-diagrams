@@ -1,7 +1,14 @@
 # koDi:  kommutative Diagramme
 
-[![Build Status](https://travis-ci.org/paolobrasolin/kodi.svg?branch=master)](https://travis-ci.org/paolobrasolin/kodi)
-[![Latest release](https://img.shields.io/badge/release-unreleased-lightgrey.svg)](https://github.com/paolobrasolin/kodi)
+[![Build Status]
+  (https://travis-ci.org/paolobrasolin/kodi.svg?branch=master)]
+  (https://travis-ci.org/paolobrasolin/kodi)
+[![Latest release]
+  (https://img.shields.io/badge/latest-unreleased-lightgrey.svg)]
+  (https://github.com/paolobrasolin/kodi)
+[![CTAN version]
+  (https://img.shields.io/ctan/v/kodi.svg)]
+  (https://ctan.org/pkg/kodi)
 
   koDi is a TikZ library.  Its
 purpose is  making commutative
