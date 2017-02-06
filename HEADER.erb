@@ -1,6 +1,9 @@
 %% <%= @filename %>
 %% Copyright <%= Time.now.strftime('%Y') %> <%= @meta['author'] %>
 %
+% This file is part of '<%= @meta['name'] %>', hereafter referred as 'this work'.
+% This file belongs to version <%= @meta['version']%> of this work.
+%
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
 % of this license or (at your option) any later version.
@@ -14,16 +17,30 @@
 % The Current Maintainer of this work is <%= @meta['author'] %>
 % who can be contacted at <<%= @meta['email'] %>>.
 %
-% This work consists of the following files:
-<%  @meta['filemap'].each do |path, globs|
-      filelist = Dir[*Array[globs].flatten.map { |f| "build/#{f}" }]
-      next if filelist.empty? -%>
+% This work consists of the following files, typically distributed in either
+% a flat directory structure or the tree directory structure described below:
+%
+<%@meta['filemap'].each do |path, globs|
+    relative_globs = Array[globs].flatten.map { |f| "build/#{f}" }
+    filelist = Dir[*relative_globs].map { |f| File.basename(f) }
+    next if filelist.empty? -%>
 %   <%= path %>
-<%    filelist[0..-2].each do |filename| -%>
-%     |- <%= filename %>
-<%    end -%>
-%     '- <%= filelist[-1] %>
+<%  filelist[0..-2].each do |filename| -%>
+%    ├╴<%= filename %>
 <%  end -%>
+%    ╰╴<%= filelist[-1] %>
+<%end -%>
+%
+% Further informations about this work can be found at the following links:
+%
+%   https://ctan.org/pkg/<%= @meta['plain_name']%>
+%    ╰╴download, read generalities
+%   http://mirror.ctan.org<%= @meta['ctanupload']['DIRECTORY']%>
+%    ╰╴download, browse the files
+%   https://paolobrasolin.github.io/<%= @meta['plain_name']%>
+%    ╰╴homepage
+%   https://github.com/paolobrasolin/<%= @meta['plain_name']%>
+%    ╰╴Github repository
 %
 
 <%= @source %>

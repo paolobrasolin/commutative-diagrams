@@ -1,4 +1,5 @@
-name: &name kodi
+name: &name koDi
+plain_name: &plain_name kodi
 version: &version v0.0.0
 status: maintained
 author: &author Paolo Brasolin
@@ -12,7 +13,7 @@ filemap: # TDS subfolder to PKG glob list
   doc/generic/kodi/: ["kodi-doc.{tex,pdf}", "README"]
 
 ctanupload:
-  CONTRIBUTION: *name
+  CONTRIBUTION: *plain_name
   VERSION: *version
   NAME: *author
   EMAIL: *email
