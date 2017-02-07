@@ -1,0 +1,28 @@
+The first of the two macros that \koDi\ offers is \lstinline|\obj|.
+It is polymorphic and can draw both single objects and layouts.
+
+\begin{lstlisting}
+\obj@opt@ <object options> @/opt@{<math>};(@
+  \marginpar{\scriptsize Orange denotes optional fragments.}@)
+\obj@opt@ <layout options> @/opt@{<layout>};
+\end{lstlisting}
+
+Layouts are described using the customary tabular syntax.
+
+\begin{lstlisting}
+<layout>         := (@\itshape\underbar{<row> <row separator>}@)(@
+  \marginpar{\scriptsize Underlined fragments are repeated one or more times.}@)
+<row>            := <cell> (@\itshape\color{orange!80!black}\underbar{<cell separator> <cell>}@)
+<row separator>  := \\ @opt@[<length>]@/opt@
+<cell>           := @opt@|<object options>| @/opt@<math>
+<cell separator> := & @opt@[<length>]@/opt@
+\end{lstlisting}
+
+The discretionary options are analogous to, respectively,
+\TikZ's standard nodes and matrices.
+
+\begin{lstlisting}
+<object options> := (@\itshape\color{orange!80!black}\underbar{[object keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
+<layout options> := (@\itshape\color{orange!80!black}\underbar{[layout keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
+\end{lstlisting}
+

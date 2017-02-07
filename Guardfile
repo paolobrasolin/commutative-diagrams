@@ -37,10 +37,14 @@ end
 
 #==[ doc compilation ]==========================================================
 
-guard :shell do
-  watch(%r{doc/(kodi-doc.tex)}) do |m|
-    commandline = ['latexmk', '-pdf', m[1]]
-    _stdout, _stderr, status = Open3.capture3(*commandline, chdir: './doc')
-    # return false unless status.success?
-  end
+guard 'rake', :task => 'doc' do
+  watch(%r{^doc/.+*\.tex})
 end
+
+# guard :shell do
+#   watch(%r{doc/(kodi-doc.tex)}) do |m|
+#     commandline = ['latexmk', '-pdf', m[1]]
+#     _stdout, _stderr, status = Open3.capture3(*commandline, chdir: './doc')
+#     # return false unless status.success?
+#   end
+# end

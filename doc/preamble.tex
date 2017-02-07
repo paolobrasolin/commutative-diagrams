@@ -1,7 +1,13 @@
-\documentclass[12pt]{scrbook}
-\usepackage[british]{babel}
+%==[ document class ]===========================================================
 
+\documentclass[12pt]{scrbook}
+
+%==[ languages ]================================================================
+
+\usepackage[british]{babel}
 % \hyphenation{Fortran hy-phen-ation}
+
+%==[ fonts, encoding ]==========================================================
 
 \usepackage{libertine}
 \usepackage{libertinust1math}
@@ -10,16 +16,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-% \def\id{{\mathbf 1}}
-% \DeclareUnicodeCharacter{0131}{{\noexpand\mathbf R}}
-% \DeclareUnicodeCharacter{00D7}{{\otimes}}
-% \catcode`ı=\active \letı\id
-% \catcode`×=\active \let×\otimes
-% \usepackage{newunicodechar}
-% \newunicodechar{ı}{\mathbf 1}
-% \newunicodechar{×}{\otimes}
-
-\setkomafont{disposition}{\rmfamily\scshape}
+%==[ page geometry ]============================================================
 
 \usepackage{geometry}
 
@@ -36,19 +33,12 @@
 }
 %\savegeometry{main}
 
+%==[ page layout ]==============================================================
+
 %\usepackage{multicol}
 %\usepackage{tabularx}
 %\usepackage{verbatimbox}
-% \usepackage{wrapfig}
-
-\usepackage{parskip}
-
-\usepackage{mathtools}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-
-
-\DeclareMathOperator{\coker}{coker}
+%\usepackage{wrapfig}
 
 \usepackage{float}
 % \usepackage{framed}
@@ -59,36 +49,10 @@
 % \usepackage{caption}
 \usepackage{sidenotes}
 
-% \DeclareCaptionStyle{sidecaption}%
-% {font=footnotesize,labelfont=sc}
-
-% \usepackage{csquotes}
-
-\usepackage{graphicx}
-% \usepackage[makeroom]{cancel}
-
-\usepackage{etoolbox}
+% \DeclareCaptionStyle{sidenote}{font=scriptsize}
 
 % \usepackage{todonotes}
 % \usepackage{marginnote}
-
-% \usepackage[lastpage,user]{zref}
-% \usepackage[hidelinks]{hyperref}
-
-\usepackage{xcolor}
-\usepackage{tikz}
-% \usetikzlibrary{cd}
-% \usetikzlibrary{quotes}
-% \pgfkeys{/handlers/first char syntax=false}
-
-\usetikzlibrary{kodi}
-\usetikzlibrary{positioning}
-
-% \usepackage[all]{xy}
-% \usepackage{pstricks,pst-node}
-
-
-\usepackage{xparse}
 
 \usepackage[
   headwidth=textwithmarginpar,
@@ -103,9 +67,72 @@
 % \cohead{}
 % \rohead{\thepage}
 
-%\usepackage{multicol}
+%==[ page style ]===============================================================
 
-\usepackage{microtype}
+\setkomafont{disposition}{\rmfamily\scshape}
+
+\usepackage{parskip}
+
+% \usepackage{csquotes}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\captionsetup[marginfigure]{
+  textfont=bf,
+  justification=centering
+}
+
+\captionsetup[subfigure]{
+  textfont=normalfont,
+  singlelinecheck=off,
+  justification=centering
+}
+
+%==[ commonplace math ]=========================================================
+
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\DeclareMathOperator{\coker}{coker}
+
+% \def\id{{\mathbf 1}}
+% \DeclareUnicodeCharacter{0131}{{\noexpand\mathbf R}}
+% \DeclareUnicodeCharacter{00D7}{{\otimes}}
+% \catcode`ı=\active \letı\id
+% \catcode`×=\active \let×\otimes
+% \usepackage{newunicodechar}
+% \newunicodechar{ı}{\mathbf 1}
+% \newunicodechar{×}{\otimes}
+
+%==[ graphics ]=================================================================
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+% TODO: what did I need soul for again?
+\usepackage{color,soul}
+
+%==[ koDi ]=====================================================================
+
+\usepackage{tikz}
+\usetikzlibrary{kodi}
+\usetikzlibrary{positioning}
+
+%==[ alternatives to koDi ]=====================================================
+
+% \usepackage[all]{xy}
+% \usepackage{pstricks,pst-node}
+% \usetikzlibrary{cd}
+% \usetikzlibrary{quotes}
+% \pgfkeys{/handlers/first char syntax=false}
+
+%==[ utilities and custom macros ]==============================================
+
+\usepackage{etoolbox}
+\usepackage{xparse}
+
+%==[ sourcecode and examples ]==================================================
 
 \usepackage{listings}
 
@@ -117,9 +144,8 @@
   {\def\lst@lastline{#1\relax}}}
 \makeatother
 
-
-
 \usepackage{showexpl}
+
 \makeatletter
 \lst@Key{postset}\relax{\def\SX@postset{#1}}
 \newcommand\SX@postset{}
@@ -151,19 +177,15 @@
 }
 \makeatother
 
-\lstdefinelanguage{TikZ}
-{morekeywords={for},
-sensitive=false,
-morecomment=[l]{//},
-morecomment=[s]{/*}{*/},
-morestring=[b]",
-}
+% \lstdefinelanguage{TikZ}{
+%   morekeywords={for},
+%   sensitive=false,
+%   morecomment=[l]{//},
+%   morecomment=[s]{/*}{*/},
+%   morestring=[b]",
+% }
 
-\usepackage{color,soul}
-\definecolor{darkblue}{rgb}{0,0,0.5}
-\setulcolor{darkblue}
-
-\lstset{
+\lstdefinestyle{TeX}{
   language=[LaTeX]TeX,
   basicstyle=\ttfamily\lst@ifdisplaystyle\scriptsize\fi,
   backgroundcolor=\color{teal!5},
@@ -181,17 +203,22 @@ morestring=[b]",
     \lay,\obj,\mor,
     \bye
   },
-  texcsstyle=*\textbf,
+  texcsstyle=*\bfseries,
   % morestring=[b]",
-  commentstyle=\itshape,
+  commentstyle=\itshape\color{black!60},
   frame=none,
   % extendedchars=false,
   % inputencoding=utf8,
   escapeinside={(@}{@)},
   moredelim=**[is][\color{orange!80!black}]{@opt@}{@/opt@},
+  moredelim=**[is][\color{blue!80!black}]{@nws@}{@/nws@},
+  % moredelim=**[is][\color\underbar]{@rep@}{@/rep@},
   moredelim=**[s][\itshape]{<}{>},
-  literate={:=}{{$\equiv$}}1 {~}{{\textvisiblespace}}1,
+  literate={~}{{\textvisiblespace}}1 {XOR}{{$\vert$}}1 {:}{{\textbf{:}}}1 {:=}{{$\equiv$}}1 ,
 }
+
+\lstset{style=TeX}
+% \lstMakeShortInline[style=TeX]"
 
 % \makeatletter
 % \newcount\ublvl\ublvl=0
@@ -210,25 +237,6 @@ morestring=[b]",
   preset={\centering\tikzpicture[kodi]},
   postset={\endtikzpicture}
 }}
-
-\usepackage{lipsum}
-\usepackage{caption}
-\usepackage{subcaption}
-
-\captionsetup[marginfigure]{
-  textfont=bf,
-  justification=centering
-}
-\captionsetup[subfigure]{
-  textfont=normalfont,
-  singlelinecheck=off,
-  justification=centering
-}
-
-\usepackage{hologo}
-\def\ConTeXt{\hologo{ConTeXt}}
-\def\koDi{{\scshape koDi}}
-\def\TikZ{{\scshape TikZ}}
 
 \usepackage{tcolorbox}
 \tcbuselibrary{listingsutf8}
@@ -278,6 +286,20 @@ morestring=[b]",
   sidebyside gap=\marginparsep,
 }}
 
-
-
 \def\nilstrut{\rule{0sp}{0sp}}
+
+%==[ extra stuff ]==============================================================
+
+% \usepackage{lipsum}
+
+\usepackage{hologo}
+\def\ConTeXt{\hologo{ConTeXt}}
+\def\koDi{{\scshape koDi}}
+\def\TikZ{{\scshape TikZ}}
+
+% \usepackage[lastpage,user]{zref}
+% \usepackage[hidelinks]{hyperref}
+
+%==[ microtype ]================================================================
+
+\usepackage{microtype}

@@ -1,0 +1,31 @@
+The second and last macro that \koDi\ offers is \lstinline|\mor|.
+It can draw single or chained morphisms.
+
+\begin{lstlisting}
+\mor@opt@ <chain options> @/opt@<object>(@
+  \itshape\underbar{\textvisiblespace<morphism>\textvisiblespace<object>}@);(@
+  \marginpar{\scriptsize Whitespace marked as \textvisiblespace\ is mandatory.}@)
+\end{lstlisting}
+
+Source and target objects are referred to by their name.
+  
+\begin{lstlisting}
+<object>   := @nws@(<name>)@/nws@ (@
+  \marginpar{\scriptsize Blue fragments can be either enclosed in the shown delimiters, a \TeX\ group, or simply devoid of whitespace.}@)
+\end{lstlisting}
+
+Morphisms consist of one or more optional labels and an arrow.
+  
+\begin{lstlisting}
+<morphism> := @opt@<labels> : @/opt@<arrow>
+<labels>   := @nws@"<math>"@/nws@ XOR (@\underbar{[{\itshape "<math>", <label keylist>}]}@) (@
+  \marginpar{\scriptsize Alternatives are separated by $\vert$s.}@)
+<arrow>    := @nws@[<arrow keylist>]@/nws@
+\end{lstlisting}
+% <labels>   := @nws@"<math>"@/nws@ XOR @nws@[<label keylist>]@/nws@ XOR (@\underbar{[{\itshape <label keylist>}]}@)
+
+Global options can be given to both labels and arrows.
+
+\begin{lstlisting}
+<chain options> := [<label keylist>] @opt@: [<arrow keylist>]@/opt@
+\end{lstlisting}

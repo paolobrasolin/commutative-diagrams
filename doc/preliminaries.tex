@@ -1,86 +1,88 @@
-\TikZ\ is the only requirement of \koDi.  This ensures compatibility with
-most \TeX\ flavours.  Here are minimal working examples for the main dialects:
+\TikZ\ is the only dependency of \koDi.
+This ensures compatibility with most \TeX\ flavours.
+Furthermore, it can be invoked as a standalone as well as a \TikZ\ library.
+Below are minimal working examples for the main dialects.
 
 \begin{figure}[H]
   \begin{adjustwidth}{0sp}{-\marginparwidth-\marginparsep}
     \begin{subfigure}{\marginparwidth}
-      \caption*{\TeX}
-      \begin{lstlisting}
+      \caption*{\TeX\ package}
+      \begin{lstlisting}[gobble=8]
 
-\input kodi
+        \input kodi
 
-\kodi
-  % diagram here
-\endkodi
-\bye
+        \kodi
+          % diagram here
+        \endkodi
+        \bye
       \end{lstlisting}
     \end{subfigure}
     \hfill
     \begin{subfigure}{\marginparwidth}
       \caption*{\ConTeXt\ module}
-      \begin{lstlisting}
+      \begin{lstlisting}[gobble=8]
 
-\usemodule[kodi]
-\starttext
-\startkodi
-  % diagram here
-\stopkodi
-\stoptext
+        \usemodule[kodi]
+        \starttext
+        \startkodi
+          % diagram here
+        \stopkodi
+        \stoptext
       \end{lstlisting}
     \end{subfigure}
     \hfill
     \begin{subfigure}{\marginparwidth}
       \caption*{\LaTeX\ package}
-      \begin{lstlisting}
-\documentclass{article}
-\usepackage{kodi}
-\begin{document}
-\begin{kodi}
-  % diagram here
-\end{kodi}
-\end{document}
+      \begin{lstlisting}[gobble=8]
+        \documentclass{article}
+        \usepackage{kodi}
+        \begin{document}
+        \begin{kodi}
+          % diagram here
+        \end{kodi}
+        \end{document}
       \end{lstlisting}
     \end{subfigure}
     \par
     \begin{subfigure}{\marginparwidth}
       \caption*{\TeX\ (\TikZ\ library)}
-      \begin{lstlisting}
+      \begin{lstlisting}[gobble=8]
 
-\input tikz
-\usetikzlibrary kodi
+        \input tikz
+        \usetikzlibrary kodi
 
-\tikzpicture[kodi]
-  % diagram here
-\endtikzpicture
-\bye
+        \tikzpicture[kodi]
+          % diagram here
+        \endtikzpicture
+        \bye
       \end{lstlisting}
     \end{subfigure}
     \hfill
     \begin{subfigure}{\marginparwidth}
       \caption*{\ConTeXt\ (\TikZ\ library)}
-      \begin{lstlisting}
+      \begin{lstlisting}[gobble=8]
 
-\usemodule[tikz]
-\usetikzlibrary[kodi]
-\starttext
-\starttikzpicture[kodi]
-  % diagram here
-\stoptikzpicture
-\stoptext
+        \usemodule[tikz]
+        \usetikzlibrary[kodi]
+        \starttext
+        \starttikzpicture[kodi]
+          % diagram here
+        \stoptikzpicture
+        \stoptext
       \end{lstlisting}
     \end{subfigure}
     \hfill
     \begin{subfigure}{\marginparwidth}
       \caption*{\LaTeX\ (\TikZ\ library)}
-      \begin{lstlisting}
-\documentclass{article}
-\usepackage{tikz}
-\usetikzlibrary{kodi}
-\begin{document}
-\begin{tikzpicture}[kodi]
-  % diagram here
-\end{tikzpicture}
-\end{document}
+      \begin{lstlisting}[gobble=8]
+        \documentclass{article}
+        \usepackage{tikz}
+        \usetikzlibrary{kodi}
+        \begin{document}
+        \begin{tikzpicture}[kodi]
+          % diagram here
+        \end{tikzpicture}
+        \end{document}
       \end{lstlisting}
     \end{subfigure}
   \end{adjustwidth}
@@ -88,19 +90,20 @@ most \TeX\ flavours.  Here are minimal working examples for the main dialects:
 
 A useful \TikZ\ feature exclusive to \LaTeX\ is externalization.
 A small expedient is necessary to use it with \koDi.
+
 \begin{marginfigure}[-2em]
   \caption*{\TikZ\ externalization}
-  \begin{lstlisting}
-\documentclass{article}
-\usepackage{tikz}
-\usetikzlibrary{kodi}
-\usetikzlibrary{external}
-\tikzexternalize
-  [prefix=tikzpicfolder/]
-\begin{document}
-\begin{tikzpicture}[kodi]
-  % diagram here
-\end{tikzpicture}
-\end{document}
+  \begin{lstlisting}[gobble=4]
+    \documentclass{article}
+    \usepackage{tikz}
+    \usetikzlibrary{kodi}
+    \usetikzlibrary{external}
+    \tikzexternalize
+      [prefix=tikzpicfolder/]
+    \begin{document}
+    \begin{tikzpicture}[kodi]
+      % diagram here
+    \end{tikzpicture}
+    \end{document}
   \end{lstlisting}
 \end{marginfigure}
