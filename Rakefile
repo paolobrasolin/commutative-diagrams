@@ -35,7 +35,15 @@ task :doc do
   Dir.chdir target_dir do
     print 'Compiling main doc sourcecode to PDF... '
     _stdout, stderr, status = Open3.capture3(
-      'latexmk', '-pdf', '-gg', 'kodi-doc.tex'
+      'latexmk', '-gg', 'kodi-doc.tex'
+    )
+    raise StandardError, stderr unless status.success?
+    _stdout, stderr, status = Open3.capture3(
+      'dvips', 'kodi-doc.dvi'
+    )
+    raise StandardError, stderr unless status.success?
+    _stdout, stderr, status = Open3.capture3(
+      'ps2pdf', 'kodi-doc.ps'
     )
     raise StandardError, stderr unless status.success?
     print "Done.\n"

@@ -118,14 +118,16 @@
 %==[ koDi ]=====================================================================
 
 \usepackage{tikz}
-\usetikzlibrary{kodi}
+% \usetikzlibrary{kodi}
+\usepackage{kodi}
 \usetikzlibrary{positioning}
 
 %==[ alternatives to koDi ]=====================================================
 
 \usepackage[all]{xy}
 
-% \usepackage{pstricks,pst-node}
+\usepackage{pstricks,pst-node}
+
 % TODO: DANGER! tikz-cd is writing global styles!!
 %   I think it's only arrows.meta though. Investigate!
 % \usetikzlibrary{arrows.meta}
@@ -270,7 +272,7 @@
   }
 }}
 
-\tcbset{xy snippet/.style={
+\tcbset{snippet/.style={
   size=tight,
   colback=white,
   colframe=white,
