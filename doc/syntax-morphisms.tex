@@ -11,7 +11,7 @@ Source and target objects are referred to by their name.
   
 \begin{lstlisting}
 <object>   := @nws@(<name>)@/nws@ (@
-  \marginpar{\scriptsize Blue fragments can be either enclosed in the shown delimiters, a \TeX\ group, or simply devoid of whitespace.}@)
+  \marginpar{\scriptsize Blue fragments can be either enclosed in the shown delimiters, or a \TeX\ group (not idiomatic), or simply devoid of whitespace.}@)
 \end{lstlisting}
 
 Morphisms consist of one or more optional labels and an arrow.
@@ -29,3 +29,32 @@ Global options can be given to both labels and arrows.
 \begin{lstlisting}
 <chain options> := [<label keylist>] @opt@: [<arrow keylist>]@/opt@
 \end{lstlisting}
+
+These rules allow for a label syntax that sprouts gracefully
+from the simplest to the most complex arrow.
+
+\begin{tcblisting}{kodi snippet}
+\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\obj { A & B & C \\ F & E & D \\ };
+\mor A -> B;
+\mor B f:-> C;
+\mor C \hat g:-> D;
+\mor D "h i":-> E;
+\mor E ["L", above]:-> F;
+\mor F ["m", near start]["n", swap]["o", near end]:-> A;
+\endtikzpicture}
+\end{tcblisting}
+
+% A.
+
+% \begin{tcblisting}{kodi snippet}
+% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+% \obj { A & B & C \\ F & E & D \\ };
+% \mor A -> B;
+% \mor B -> C -> D;
+% \mor D [->, dashed] E >-> F [>-, bend left] A;
+% \endtikzpicture}
+% \end{tcblisting}
+
+% \vfill
+% wot

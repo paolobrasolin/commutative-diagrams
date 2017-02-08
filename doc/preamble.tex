@@ -89,6 +89,8 @@
   justification=centering
 }
 
+\setcounter{secnumdepth}{0}
+
 %==[ commonplace math ]=========================================================
 
 \usepackage{mathtools}
@@ -121,11 +123,13 @@
 
 %==[ alternatives to koDi ]=====================================================
 
-% \usepackage[all]{xy}
+\usepackage[all]{xy}
+
 % \usepackage{pstricks,pst-node}
+% TODO: DANGER! tikz-cd is writing global styles!!
+%   I think it's only arrows.meta though. Investigate!
+% \usetikzlibrary{arrows.meta}
 % \usetikzlibrary{cd}
-% \usetikzlibrary{quotes}
-% \pgfkeys{/handlers/first char syntax=false}
 
 %==[ utilities and custom macros ]==============================================
 

@@ -56,11 +56,28 @@
     },
 %=[ objects styles ]============================================================
   /kD/objects/.cd,
+    % TODO: reflect on these styles
+    % rectangular/.style 2 args={
+    %   /tikz/node distance=#2 and #1
+    % },
+    % square/.style={
+    %   /kD/objects/rectangular={#1}{#1}
+    % },
+    % golden/.style={
+    %   /kD/objects/rectangular={#1}{0.618*#1}
+    % },
+    % % comb/.style={
+    % %   /kD/objects/rectangular={#1}{sqrt(3/4)*#1},
+    % % },
+    % % comb/.default=4em,
+    % square/.default=4em,
+    % golden/.default=4em,
 %=[ lattice styles ]============================================================
   /kD/layouts/.cd,
     rectangular/.style 2 args={
       /tikz/column sep={#1,between origins},
-      /tikz/row sep={#2,between origins}
+      /tikz/row sep={#2,between origins},
+      /tikz/node distance=#1 and #2
     },
     square/.style={
       /kD/layouts/rectangular={#1}{#1}

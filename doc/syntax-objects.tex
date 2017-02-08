@@ -7,7 +7,7 @@ It is polymorphic and can draw both single objects and layouts.
 \obj@opt@ <layout options> @/opt@{<layout>};
 \end{lstlisting}
 
-Layouts are described using the customary tabular syntax.
+Layouts are described using the customary \TeX\ tabular syntax.
 
 \begin{lstlisting}
 <layout>         := (@\itshape\underbar{<row> <row separator>}@)(@
@@ -25,4 +25,42 @@ The discretionary options are analogous to, respectively,
 <object options> := (@\itshape\color{orange!80!black}\underbar{[object keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
 <layout options> := (@\itshape\color{orange!80!black}\underbar{[layout keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
 \end{lstlisting}
+
+
+
+% \begin{tcblisting}{kodi snippet}
+% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi,overlay,remember picture]
+% \obj [above right] at (current page.south west) {\mathfrak P};
+% \endtikzpicture}
+% \end{tcblisting}
+
+% \null
+
+% \begin{tcblisting}{kodi snippet}
+% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+% \obj {\mathfrak P};
+% \endtikzpicture}
+% \end{tcblisting}
+
+% \null
+
+% \begin{tcblisting}{kodi snippet}
+% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+% \obj {
+%   A & B &[-2em]   C \\
+%   D & E &         F \\[-2em]
+%   G & H & |[red]| I \\
+% };
+% \endtikzpicture}
+% \end{tcblisting}
+
+
+
+
+% \begin{lstlisting}
+% <object keylist> <- /kD/objects
+% <layout keylist>
+% \end{lstlisting}
+
+
 

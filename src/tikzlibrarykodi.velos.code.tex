@@ -6,13 +6,17 @@
 % Velos is a parsing mechanism for arrow chains.
 
 \usetikzlibrary{kodi.koinos}
+% \usetikzlibrary{quotes}
 
 %==[ handlers ]=================================================================
 
 \pgfkeys{
   /velos/install quote handler/.style={
     /handlers/first char syntax=true,
+    % TODO: verify if I can actually work w/quotes instead of against it
     /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler
+    % node quotes mean={node contents={#1}},
+    % edge quotes mean={node contents={#1}}
   }
 }
 
