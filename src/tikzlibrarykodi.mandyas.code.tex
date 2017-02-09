@@ -15,9 +15,8 @@
 
 \pgfqkeys{/kD}{
 %==[ universal styles ]=========================================================
-  every layout/.append style={
-    square
-  },
+  every diagram/.append style={},
+  every layout/.append style={square},
   every object/.append style={},
   every arrow/.append style={},
   every label/.append style={
@@ -91,5 +90,21 @@
     },
     comb/.default=4.5em,
     square/.default=4.5em,
-    golden/.default=4.5em
+    golden/.default=4.5em,
+%=[ diagram styles ]============================================================
+  /kD/diagrams/.cd,
+    square/.style={
+      /kD/every layout/.append style={square={#1}},
+      /kD/every object/.append style={/tikz/node distance={#1}}
+    },
+    square/.default=4.5em,
+    golden/.style={
+      /kD/every layout/.append style={golden={#1}},
+      /kD/every object/.append style={
+        /tikz/node distance=0.618*#1 and #1,
+        % /tikz/centered,
+        /tikz/on grid,
+      }
+    },
+    golden/.default=4.5em,
 }

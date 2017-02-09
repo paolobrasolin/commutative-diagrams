@@ -3,40 +3,21 @@
 This is \Xy. It is\ldots\ something.
 
 \begin{tcblisting}{snippet}
-\xymatrix{
+a\nilstrut\smash{a\xymatrix{
  U \ar@/_/[ddr]_y \ar[dr] \ar@/^/[drr]^x \\
   & X \times_Z Y \ar[d]^q \ar[r]_p
                  & X \ar[d]_f            \\
-  & Y \ar[r]^g & Z                       }
+  & Y \ar[r]^g & Z                       }}
 \end{tcblisting}
 
 \null
 
-
 \begin{tcblisting}{snippet}
-\begin{tikzpicture}[kodi][/kD/every object/.append style={node distance=6cm}]
-\obj { |(pb)| X \times_Z Y & X \\
-                         Y & Z \\ };
-\obj [above left=of pb] {U};
-%
-\mor[swap] pb p:-> X f:-> Z;
-\mor        * q:-> Y g:-> *;
-%
-\mor                       U   -> pb;
-\mor      :[bend left=10]  * x:-> X;
-\mor[swap]:[bend right=10] * y:-> Y;
-\end{tikzpicture}
-\end{tcblisting}
-
-\null
-
-
-\begin{tcblisting}{snippet}
-\psset{arrows=->, nodesep=3pt, linewidth=0.4pt, colsep=2em, rowsep=2em}
 $\begin{psmatrix}
 U \\
 & X\times_Z Y & X \\
 & Y & Z
+\psset{arrows=->, nodesep=3pt}
 \everypsbox{\scriptstyle}
 \ncline{1,1}{2,2}
 \ncarc[arcangle=-10]{1,1}{3,2}_{y}
@@ -50,18 +31,35 @@ U \\
 
 
 
-% \begin{tcblisting}{kodi snippet}
-% %\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
-% \begin{tikzcd}
-% U
-% \arrow[drr, bend left, "x"]
-% \arrow[ddr, bend right, "y"]
-% \arrow[dr, dotted, "{(x,y)}" description] & & \\
-% & X \times_Z Y \arrow[r, "p"] \arrow[d, "q"]
-% & X \arrow[d, "f"] \\
-% & Y \arrow[r, "g"]
-% & Z
-% \end{tikzcd}
-% %}
-% \end{tcblisting}
+\begin{tcblisting}{kodi snippet}
+%\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tikzcd}
+U
+\arrow[drr, bend left=10, "x"]
+\arrow[ddr, bend right=10, swap, "y"]
+\arrow[dr] & & \\
+& X \times_Z Y \arrow[r, swap, "p"] \arrow[d, "q"]
+& X \arrow[d, swap, "f"] \\
+& Y \arrow[r, "g"]
+& Z
+\end{tikzcd}
+%}
+\end{tcblisting}
 
+\null
+
+\begin{tcblisting}{snippet,listing options={firstline=2}}
+\tikzset{/kD/diagrams/golden=5em}
+\begin{kodi}
+  \obj { |(pb)| X \times_Z Y & X \\
+                           Y & Z \\ };
+  \obj [above left=of pb] {U};
+
+  \mor[swap] pb p:-> X f:-> Z;
+  \mor        * q:-> Y g:-> *;
+
+  \mor                       U   -> pb;
+  \mor      :[bend left=10]  * x:-> X;
+  \mor[swap]:[bend right=10] * y:-> Y;
+\end{kodi}
+\end{tcblisting}

@@ -26,6 +26,9 @@
 % Some mischief with handlers and baseline math/labeling functionality.
 
 \pgfqkeys{/kD}{
+  every diagram/.style={
+    /ektropi/add=/kD/diagrams,
+  },
   every layout/.style={
     % /ektropi/restore,% unnecessary
     /ektropi/add=/kD/layouts,
@@ -94,5 +97,6 @@
     \catcode`\|=12% ConTeXt hack TODO: is it sufficient? investigate
     \let\obj\kDObj
     \let\mor\kDVelos
-  }
+  },
+  kodi/.append style={/kD/every diagram}
 }

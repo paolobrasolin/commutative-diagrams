@@ -6,7 +6,6 @@
 % Velos is a parsing mechanism for arrow chains.
 
 \usetikzlibrary{kodi.koinos}
-% \usetikzlibrary{quotes}
 
 %==[ handlers ]=================================================================
 
@@ -145,7 +144,9 @@
   \Act}
 
 \def\kDVelosFEEdgePrependNode#1%
-  {\kDVelosFEEdgePrepend{edge node={node[every edge quotes][#1]}}}
+  {\kDVelosFEEdgePrepend{edge node={node[every edge quotes][/velos/install quote handler,#1]}}}
+% TODO: install quote handler is maximally local to avoid conflict with quotes library;
+%   is this the best handling of the situation?
 
 \def\kDVelosFEThinkThen#1{%
   \def\kDVelosFELoop{\kDVelosFEThinkThen{#1}}%

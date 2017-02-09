@@ -131,7 +131,7 @@
 % TODO: DANGER! tikz-cd is writing global styles!!
 %   I think it's only arrows.meta though. Investigate!
 % \usetikzlibrary{arrows.meta}
-% \usetikzlibrary{cd}
+\usetikzlibrary{cd}
 
 %==[ utilities and custom macros ]==============================================
 
@@ -198,6 +198,7 @@
   % keywordstyle=*\color{blue},
   % identifierstyle=\color{orange}\bfseries,
   % morekeywords={\path},
+  alsoother={@},
   moretexcs={
     \starttext,\stoptext,\usemodule,
     \tikzpicture,\endtikzpicture,
@@ -207,7 +208,11 @@
     \kodi,\endkodi,
     \startkodi,\stopkodi,
     \lay,\obj,\mor,
-    \bye
+    \bye,
+    \draw,
+    \ar,
+    \psset,\everypsbox,\ncline,\ncarc,
+    \xymatrix,
   },
   texcsstyle=*\bfseries,
   % morestring=[b]",
@@ -248,30 +253,6 @@
 \tcbuselibrary{listingsutf8}
 \tcbset{listing utf8=latin1}
 
-\tcbset{kodi snippet/.style={
-  size=tight,
-  colback=white,
-  colframe=white,
-  if odd page={
-    listing side text,
-    lefthand width=\textwidth,
-    righthand width=\marginparwidth,
-    halign lower=center,
-  }{
-    text side listing,
-    righthand width=\textwidth,
-    lefthand width=\marginparwidth,
-    halign upper=center,
-  },
-  toggle enlargement,
-  grow to right by=\marginparsep+\marginparwidth,
-  sidebyside gap=\marginparsep,
-  listing options={
-    firstline=2,
-    lastline=-1
-  }
-}}
-
 \tcbset{snippet/.style={
   size=tight,
   colback=white,
@@ -290,6 +271,15 @@
   toggle enlargement,
   grow to right by=\marginparsep+\marginparwidth,
   sidebyside gap=\marginparsep,
+  listing options={}
+}}
+
+\tcbset{kodi snippet/.style={
+  snippet,
+  listing options={
+    firstline=2,
+    lastline=-1
+  }
 }}
 
 \def\nilstrut{\rule{0sp}{0sp}}
