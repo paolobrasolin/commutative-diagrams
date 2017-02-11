@@ -1,0 +1,19 @@
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}
+  \pgfkeys{/katharizo/expand=full}
+  \foreach [count=\r] \l in {A,B,C}
+    \foreach [count=\c] \n in {n-1,n,n+1}
+      \obj at ({3em*\c,-3em*\r}) {\l_{\n}};
+  \mor (C_{n+1}) -> (B_{n-1});
+  \mor (B_{n+1}) -> (A_{n-1});
+\end{kodi}}
+\end{tcblisting}
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}
+  \obj{
+    A & B & C \\
+  };
+  \mor B -> C;
+\end{kodi}}
+\end{tcblisting}

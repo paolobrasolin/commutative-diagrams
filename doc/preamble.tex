@@ -104,9 +104,9 @@
 % \DeclareUnicodeCharacter{00D7}{{\otimes}}
 % \catcode`ı=\active \letı\id
 % \catcode`×=\active \let×\otimes
-% \usepackage{newunicodechar}
-% \newunicodechar{ı}{\mathbf 1}
-% \newunicodechar{×}{\otimes}
+\usepackage{newunicodechar}
+\newunicodechar{ı}{\mathbf 1}
+\newunicodechar{×}{\otimes}
 
 %==[ graphics ]=================================================================
 
@@ -137,6 +137,12 @@
 
 \usepackage{etoolbox}
 \usepackage{xparse}
+
+\NewDocumentCommand{\SmashAndCenter}{m}{%
+\begingroup\setbox0=\hbox{#1}%
+\newdimen\tmp\tmp=\dimexpr-.5\ht0+.5\dp0\relax%
+\hfill\smash{\raisebox{\the\tmp}{\box0}}\hfill\null\endgroup%
+}
 
 %==[ sourcecode and examples ]==================================================
 
@@ -238,49 +244,58 @@
 % \def\underbra#1{\underline {\sbox \tw@ {\global\advance\ubdpt1\advance\ublvl1#1}\dp \tw@ \dimexpr\ubgap*(\ubdpt-\ublvl-1)\relax \box \tw@ }\ifnum\ublvl=0\ubdpt=0\fi}
 % \makeatother
 
-\lstset{explpreset={
-  wide,
-  basicstyle=\ttfamily\scriptsize,
-  pos=o,
-  width=\marginparwidth,
-  hsep=\marginparsep,
-  rframe={},
-  preset={\centering\tikzpicture[kodi]},
-  postset={\endtikzpicture}
-}}
+% \lstset{explpreset={
+%   wide,
+%   basicstyle=\ttfamily\scriptsize,
+%   pos=o,
+%   width=\marginparwidth,
+%   hsep=\marginparsep,
+%   rframe={},
+%   preset={\centering\tikzpicture[kodi]},
+%   postset={\endtikzpicture}
+% }}
 
 \usepackage{tcolorbox}
 \tcbuselibrary{listingsutf8}
 \tcbset{listing utf8=latin1}
 
-\tcbset{snippet/.style={
-  size=tight,
-  colback=white,
-  colframe=white,
-  if odd page={
-    listing side text,
-    lefthand width=\textwidth,
-    righthand width=\marginparwidth,
-    halign lower=center,
-  }{
-    text side listing,
-    righthand width=\textwidth,
-    lefthand width=\marginparwidth,
-    halign upper=center,
+\tcbset{
+  snippet/.style={
+    size=tight,
+    colback=white,
+    colframe=white,
+    if odd page={
+      listing side text,
+      lefthand width=\textwidth,
+      righthand width=\marginparwidth,
+      halign lower=center,
+    }{
+      text side listing,
+      righthand width=\textwidth,
+      lefthand width=\marginparwidth,
+      halign upper=center,
+    },
+    toggle enlargement,
+    grow to right by=\marginparsep+\marginparwidth,
+    sidebyside gap=\marginparsep,
+    listing options={}
   },
-  toggle enlargement,
-  grow to right by=\marginparsep+\marginparwidth,
-  sidebyside gap=\marginparsep,
-  listing options={}
-}}
-
-\tcbset{kodi snippet/.style={
-  snippet,
-  listing options={
-    firstline=2,
-    lastline=-1
+  alternatives/.style={
+    listing options={
+      basicstyle=\tiny\ttfamily,
+      firstline=2,
+      lastline=-1
+    }
+  },
+  trim/.style={
+    listing options={
+      firstline=2,
+      lastline=-1
+    }
   }
-}}
+}
+
+\tcbset{kodi snippet/.style={snippet, trim}}
 
 \def\nilstrut{\rule{0sp}{0sp}}
 
@@ -294,7 +309,13 @@
 \def\TikZ{{\scshape TikZ}}
 
 % \usepackage[lastpage,user]{zref}
-% \usepackage[hidelinks]{hyperref}
+\usepackage[
+  % colorlinks=false,
+  % urlcolor=blue,
+  % linkbordercolor=black,
+  % pdfborderstyle={/S/U/W .4}% border style will be underline of width 1pt
+  hidelinks
+]{hyperref}
 
 %==[ microtype ]================================================================
 

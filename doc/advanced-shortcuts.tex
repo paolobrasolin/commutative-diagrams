@@ -1,0 +1,95 @@
+\begingroup
+\tcbset{
+  trim/.style={
+    listing options={
+      firstline=3,
+      lastline=-1
+    }
+  }
+}
+
+Two special labels exist: {\ttfamily *} and {\ttfamily +}.
+
+As a source, {\ttfamily *} evaluates to the head of the previous chain.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { A & B & C & \phantom{D} \\ };
+\mor B -> C;
+\mor * -> A;
+\end{kodi}}
+\end{tcblisting}
+
+As a target, {\ttfamily *} evaluates to the tail of the previous chain.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { \phantom{A} & B & C & D \\ };
+\mor B -> C;
+\mor D -> *;
+\end{kodi}}
+\end{tcblisting}
+
+The natural use case for {\ttfamily *} is chain gluing.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { A & B \\ D & C \\ };
+\mor A -> B -> C;
+\mor * -> D -> *;
+\end{kodi}}
+\end{tcblisting}
+
+As a source, {\ttfamily +} evaluates to the tail of the previous chain.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { \phantom{A} & B & C & D \\ };
+\mor B -> C;
+\mor + -> D;
+\end{kodi}}
+\end{tcblisting}
+
+As a target, {\ttfamily +} evaluates to the head of the previous chain.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { A & B & C & \phantom{D} \\ };
+\mor B -> C;
+\mor A -> +;
+\end{kodi}}
+\end{tcblisting}
+
+The natural use case for {\ttfamily +} is chain extension.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { A & B & C & D \\ };
+\mor B -> C;
+\mor A -> + -> D;
+\end{kodi}}
+\end{tcblisting}
+
+The meanings of {\ttfamily *} and {\ttfamily +} swap on opposite chains.
+
+Chain extension can be obtained using {\ttfamily *}.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { A & B & C & D \\ };
+\mor B <- C;
+\mor D -> * -> A;
+\end{kodi}}
+\end{tcblisting}
+
+Chain gluing can be obtained using {\ttfamily +}.
+
+\begin{tcblisting}{kodi snippet, trim}
+\SmashAndCenter{\begin{kodi}
+\obj [square=2.5em] { A & B \\ D & C \\ };
+\mor A <- B <- C;
+\mor + -> D -> +;
+\end{kodi}}
+\end{tcblisting}
+
+\endgroup

@@ -1,23 +1,29 @@
-% http://texdoc.net/texmf-dist/doc/generic/xypic/xyrefer.pdf
+It is only fair to offer a comparison with other standard packages,
+and showcase the idiomatic code for the same diagram.
 
-This is \Xy. It is\ldots\ something.
+Let {\bfseries\Xy-pic} set the bar with a \emph{verbatim} extract from its manual%
+\footnote{\scriptsize\url{http://texdoc.net/texmf-dist/doc/generic/xypic/xyrefer.pdf\#page=1}}.
 
-\begin{tcblisting}{snippet}
-a\nilstrut\smash{a\xymatrix{
+\begin{tcblisting}{snippet, alternatives}
+\SmashAndCenter{%
+\xymatrix{
  U \ar@/_/[ddr]_y \ar[dr] \ar@/^/[drr]^x \\
   & X \times_Z Y \ar[d]^q \ar[r]_p
                  & X \ar[d]_f            \\
-  & Y \ar[r]^g & Z                       }}
+  & Y \ar[r]^g & Z                       }
+}%
 \end{tcblisting}
 
-\null
+Then an example adapted from {\ttfamily\bfseries\small pst-node}'s documentation%
+\footnote{\scriptsize\url{http://texdoc.net/texmf-dist/doc/generic/pst-node/pst-node-doc.pdf\#page=23}}.
 
-\begin{tcblisting}{snippet}
-$\begin{psmatrix}
+\begin{tcblisting}{snippet, alternatives}
+%
+$\psset{arrows=->, nodesep=3pt, colsep=2.5em, rowsep=2em}
+\begin{psmatrix}
 U \\
 & X\times_Z Y & X \\
 & Y & Z
-\psset{arrows=->, nodesep=3pt}
 \everypsbox{\scriptstyle}
 \ncline{1,1}{2,2}
 \ncarc[arcangle=-10]{1,1}{3,2}_{y}
@@ -27,13 +33,16 @@ U \\
 \ncline{2,3}{3,3}<{f}
 \ncline{3,2}{3,3}^{g}
 \end{psmatrix}$
+%
 \end{tcblisting}
 
+Next is an adaptation from the manual%
+\footnote{\scriptsize\url{http://texdoc.net/texmf-dist/doc/latex/tikz-cd/tikz-cd-doc.pdf\#page=3}}%
+of {\ttfamily\bfseries\small\{tikz-cd\}}.%
 
-
-\begin{tcblisting}{kodi snippet}
-%\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
-\begin{tikzcd}
+\begin{tcblisting}{snippet, alternatives}
+%
+\begin{tikzcd}[column sep=scriptsize, row sep=scriptsize]
 U
 \arrow[drr, bend left=10, "x"]
 \arrow[ddr, bend right=10, swap, "y"]
@@ -43,13 +52,13 @@ U
 & Y \arrow[r, "g"]
 & Z
 \end{tikzcd}
-%}
+%
 \end{tcblisting}
 
-\null
+And finally there is \textbf{\koDi}.
 
-\begin{tcblisting}{snippet,listing options={firstline=2}}
-\tikzset{/kD/diagrams/golden=5em}
+\begin{tcblisting}{snippet, alternatives}
+\tikzset{/kD/diagrams/golden=4.5em}
 \begin{kodi}
   \obj { |(pb)| X \times_Z Y & X \\
                            Y & Z \\ };
@@ -62,4 +71,5 @@ U
   \mor      :[bend left=10]  * x:-> X;
   \mor[swap]:[bend right=10] * y:-> Y;
 \end{kodi}
+%
 \end{tcblisting}
