@@ -1,0 +1,59 @@
+\input kodi
+
+\newtoks\kDTok
+
+\pgfkeys{
+  /katharizo/replace character/.code args={#1 with #2}{%
+    \edef\kDFoo{\expandafter\meaning\string#1}
+    \pgfkeys{/katharizo/replace/\kDFoo/.initial={#2}}
+  },
+}
+
+\begingroup\catcode`\@=0\catcode`\\=11
+@def@kDAct{@pgfkeys{/katharizo/replace/the character \/.initial={}}}
+@expandafter@endgroup@kDAct
+
+\pgfkeys{
+  /katharizo/replace character={ } with {\space},
+  /katharizo/replace character={$} with {},
+  /katharizo/replace character={(} with {},
+  /katharizo/replace character={)} with {},
+  /katharizo/replace character={,} with {},
+  /katharizo/replace character={.} with {},
+  /katharizo/replace character={:} with {},
+  /katharizo/replace character={_} with {_},
+}
+
+
+% \begingroup\catcode`\ =11
+% \def\kDAct{\pgfkeys{/katharizo/replace/blank space  /.initial={\space}}}
+% \expandafter\endgroup\kDAct
+
+
+% \begingroup\catcode`\ =11
+% \pgfkeysifdefined{/katharizo/replace/blank space  }{\RELAX}{\FAIL}
+% \endgroup
+
+\begingroup\catcode`\ =11
+\gdef\fetchspace{\pgfkeysvalueof{/katharizo/replace/blank space  }}
+\endgroup
+
+\def\kDKatharizoSanitizeString#1 #2\kD{%
+  \ifx\relax#1\else\kDKatharizoReplaceWord#1\kD\fi
+  \ifx\relax#1\else\if#2\space\else\ifx\relax#2\else
+  \fetchspace\fi\fi\fi
+  \ifx\relax#2\else\kDKatharizoSanitizeString#2\kD\fi
+}
+
+\def\kDKatharizoReplaceCharacter#1\kD{%
+  % \message{\meaning#1}%
+  \pgfkeysifdefined{/katharizo/replace/\meaning#1}%
+    {\pgfkeysvalueof{/katharizo/replace/\meaning#1}}%
+    {#1}}
+
+
+\kDKatharizoSanitize some $(),.:\_uff\kDInto OUT\kD
+
+\show\OUT
+
+Hello world\bye
