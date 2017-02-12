@@ -1,82 +1,16 @@
 \input kodi
 
-\pgfkeys{
-  /katharizo/replace/.code args={#1 with #2}{%
-    \edef\kDFoo{\expandafter\meaning\string#1}
-    \pgfkeys{/katharizo/replace/\kDFoo/.initial={#2}}
-  },
-}
+\kodi
+\obj{ A_C &
+      ABC \\ };
+\mor AuC -> AYC;
+\endkodi
 
-\begingroup\catcode`\@=0\catcode`\\=11
-@def@kDAct{@pgfkeys{/katharizo/replace/the character \/.initial={}}}
-@expandafter@endgroup@kDAct
-
-\pgfkeys{
-  /katharizo/replace={ } with {\space},
-  /katharizo/replace={$} with {},
-  /katharizo/replace={(} with {},
-  /katharizo/replace={)} with {},
-  /katharizo/replace={,} with {},
-  /katharizo/replace={.} with {},
-  /katharizo/replace={:} with {},
-  /katharizo/replace={_} with {_},
-}
-
-\begingroup\catcode`\ =11
-\gdef\fetchspace{\pgfkeysvalueof{/katharizo/replace/blank space  }}
-\endgroup
-
-\def\kDKatharizoSanitizeString#1 #2\kD{%
-  \ifx\relax#1\else\kDKatharizoReplaceWord#1\kD\fi
-  \ifx\relax#1\else\if#2\space\else\ifx\relax#2\else
-  \fetchspace\fi\fi\fi
-  \ifx\relax#2\else\kDKatharizoSanitizeString#2\kD\fi
-}
-
-\def\kDKatharizoReplaceCharacter#1\kD{%
-  % \message{\meaning#1}%
-  \pgfkeysifdefined{/katharizo/replace/\meaning#1}%
-    {\pgfkeysvalueof{/katharizo/replace/\meaning#1}}%
-    {#1}}
-
-
-\kDKatharizoSanitize some $(),.:\_uff\kDInto OUT\kD
-\show\OUT
-
-% \tracingonline=1
-% \tracingmacros=1
-
-% \pgfkeys{
-%   /katharizo/replace token/.code args={#1 with #2}{%
-%     \edef\kDFoo{\string#1}
-%     \pgfkeys{/katharizo/replace/toks/\kDFoo/.initial={#2}}
-%   },
+% \pgfqkeys{/katharizo}{
+%   output/.store in=\OUTPUT,
+%   input=A
 % }
 
-% \pgfkeys{
-%   /katharizo/replace token={\cool} with {X}
-% }
-
-% \newtoks\TOKS
-% \TOKS={abc \cool{de}f}
-% \message{\the\TOKS}
-
-% \def\PRINT#1#2\STOP{%
-% \pgfkeysifdefined{/katharizo/replace/toks/\string#1}%
-%   {\pgfkeysvalueof{/katharizo/replace/toks/\string#1}}%
-%   {#1}%
-% \ifx#2\STOP\else{\PRINT#2\STOP}\fi%
-% }
-
-% \expandafter\PRINT\the\TOKS\STOP
-
-
-
-
-
-
-
-
-
+% \show\OUTPUT
 
 Hello world\bye

@@ -3,6 +3,8 @@
 %   2. peel, descale
 %   3. (slang) kill
 
+% TODO: clean this up when new code is solid
+
 % Katharizo is a detokenization/sanitation mechanism.
 % It produces "safe" strings from tokens.
 
@@ -36,17 +38,41 @@
 
 %==[ sanitation stage ]=========================================================
 
-\pgfqkeys{/katharizo/replace}{.cd,
-  space/.initial=\space,
-  dollar/.initial={},
-  left round brace/.initial={},
-  right round brace/.initial={},
-  comma/.initial={},
-  full stop/.initial={},
-  colon/.initial={},
-  backslash/.initial={},
-  underscore/.initial={_}
+% NOTE: old implementation
+% \pgfqkeys{/katharizo/replace}{.cd,
+%   space/.initial=\space,
+%   dollar/.initial={},
+%   left round brace/.initial={},
+%   right round brace/.initial={},
+%   comma/.initial={},
+%   full stop/.initial={},
+%   colon/.initial={},
+%   backslash/.initial={},
+%   underscore/.initial={_}
+% }
+
+\pgfkeys{
+  /katharizo/replace/.code args={#1 with #2}{%
+    \edef\kDFoo{\expandafter\meaning\string#1}%
+    \pgfkeys{/katharizo/replace/\kDFoo/.initial={#2}}%
+  }
 }
+
+\begingroup\catcode`\@=0\catcode`\\=11
+@def@kDAct{@pgfkeys{/katharizo/replace/the character \/.initial={}}}
+@expandafter@endgroup@kDAct
+
+\pgfkeys{
+  /katharizo/replace={ } with {\space},
+  /katharizo/replace={$} with {},
+  /katharizo/replace={(} with {},
+  /katharizo/replace={)} with {},
+  /katharizo/replace={,} with {},
+  /katharizo/replace={.} with {},
+  /katharizo/replace={:} with {},
+  /katharizo/replace={_} with {_},
+}
+
 
 \pgfqkeys{/katharizo/sanitizer}{
   .code={
@@ -83,13 +109,21 @@
   \expandafter\edef\csname#2\endcsname{\expandafter\kDAct\kDBar\kD}
 }
 
+% This macro is a convenient shortcut. Inputting literal spaces in code is hard.
+\begingroup\catcode`\ =11
+\gdef\kDKatharizoBlankSpaceReplacement%
+{\pgfkeysvalueof{/katharizo/replace/blank space  }}
+\endgroup
+
 % This macro sanitizes a string in place by replacing words while trimming
 % and replacing spaces. {#1 #2} must be a string, i.e. a series of words
 % separated by spaces and it must be terminated by a space.
 \def\kDKatharizoSanitizeString#1 #2\kD{%
   \ifx\relax#1\else\kDKatharizoReplaceWord#1\kD\fi
   \ifx\relax#1\else\if#2\space\else\ifx\relax#2\else
-  \pgfkeysvalueof{/katharizo/replace/space}\fi\fi\fi
+  \kDKatharizoBlankSpaceReplacement\fi\fi\fi
+  % NOTE: old implementation
+  % \pgfkeysvalueof{/katharizo/replace/space}\fi\fi\fi
   \ifx\relax#2\else\kDKatharizoSanitizeString#2\kD\fi
 }
 
@@ -102,15 +136,20 @@
 % This macro substitutes a character in place by applying replacement rules.
 % {#1} must be a character, i.e. a single token.
 \def\kDKatharizoReplaceCharacter#1\kD{%
-  % NOTE: spaces after number are there to avoid a stray \relax.
-  % TODO: really think of all the dangerous characters cross-format-wise
-  \ifnum`#1=36 \pgfkeysvalueof{/katharizo/replace/dollar}\else
-  \ifnum`#1=40 \pgfkeysvalueof{/katharizo/replace/left round brace}\else
-  \ifnum`#1=41 \pgfkeysvalueof{/katharizo/replace/right round brace}\else
-  \ifnum`#1=44 \pgfkeysvalueof{/katharizo/replace/comma}\else
-  \ifnum`#1=46 \pgfkeysvalueof{/katharizo/replace/full stop}\else
-  \ifnum`#1=58 \pgfkeysvalueof{/katharizo/replace/colon}\else
-  \ifnum`#1=92 \pgfkeysvalueof{/katharizo/replace/backslash}\else
-  \ifnum`#1=95 \pgfkeysvalueof{/katharizo/replace/underscore}\else
-  #1\fi\fi\fi\fi\fi\fi\fi\fi
-}
+  \pgfkeysifdefined{/katharizo/replace/\meaning#1}%
+    {\pgfkeysvalueof{/katharizo/replace/\meaning#1}}%
+    {#1}}
+
+% NOTE: old implementation
+%   % NOTE: spaces after number are there to avoid a stray \relax.
+%   % TODO: really think of all the dangerous characters cross-format-wise
+%   \ifnum`#1=36 \pgfkeysvalueof{/katharizo/replace/dollar}\else
+%   \ifnum`#1=40 \pgfkeysvalueof{/katharizo/replace/left round brace}\else
+%   \ifnum`#1=41 \pgfkeysvalueof{/katharizo/replace/right round brace}\else
+%   \ifnum`#1=44 \pgfkeysvalueof{/katharizo/replace/comma}\else
+%   \ifnum`#1=46 \pgfkeysvalueof{/katharizo/replace/full stop}\else
+%   \ifnum`#1=58 \pgfkeysvalueof{/katharizo/replace/colon}\else
+%   \ifnum`#1=92 \pgfkeysvalueof{/katharizo/replace/backslash}\else
+%   \ifnum`#1=95 \pgfkeysvalueof{/katharizo/replace/underscore}\else
+%   #1\fi\fi\fi\fi\fi\fi\fi\fi
+% }
