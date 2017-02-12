@@ -1,28 +1,28 @@
 \begin{tikzpicture}[kodi]
-\obj[golden] { & \ker a   & \ker b   & \ker c   &   \\
-               & A        & B        & C        & 0 \\
-      |(0')| 0 & A'       & B'       & C'       &   \\
-               & \coker a & \coker b & \coker c &   \\ };
-% horizontal chains
-\mor   (ker a) ->   (ker b) ->   (ker c);
-\mor (coker a) -> (coker b) -> (coker c);
-\mor       A  f :-> B  g :-> C -> 0;
-\mor 0' -> A' f':-> B' g':-> C';
-% vertical chains
-\mor[near start] (ker a) -> A a:-> A' -> (coker a);
-\mor[near start] (ker b) -> B b:-> B' -> (coker b);
-\mor[near start] (ker c) -> C c:-> C' -> (coker c);
-% the snake
-\coordinate (tail) at ($(ker b)!9/4!(ker c)$);
-\coordinate (head) at ($(coker b)!9/4!(coker a)$);
-\coordinate (belly) at ($(B)!9/16!(B')$);
-\draw[/kD/arrows/crossing over, ->, rounded corners]
-  (ker c) -- (tail) -- (tail|-belly)
-          -- (belly-|head) -- (head) -- (coker a);
+  \obj[golden] { & \ker a   & \ker b   & \ker c   &   \\
+                 & A        & B        & C        & 0 \\
+        |(0')| 0 & A'       & B'       & C'       &   \\
+                 & \coker a & \coker b & \coker c &   \\ };
 
+  \mor   (ker a) ->   (ker b) ->   (ker c);
+  \mor (coker a) -> (coker b) -> (coker c);
+  \mor       A  f :-> B  g :-> C -> 0;
+  \mor 0' -> A' f':-> B' g':-> C';
+
+  \mor[near start] (ker a) -> A a:-> A' -> (coker a);
+  \mor[near start] (ker b) -> B b:-> B' -> (coker b);
+  \mor[near start] (ker c) -> C c:-> C' -> (coker c);
+
+  \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
+  \coordinate (head) at ($(coker b)!9/4!(coker a)$);
+  \coordinate (belly) at ($(B)!9/16!(B')$);
+  \draw[/kD/arrows/crossing over, ->, rounded corners]
+    (ker c) -- (tail) -- (tail|-belly)
+            -- (belly-|head) -- (head) -- (coker a);
 \end{tikzpicture}
 
 \begin{tikzpicture}[kodi]
+% From the LaTeX preamble:
 % \usepackage{newunicodechar}
 % \newunicodechar{ı}{\mathbf 1}
 % \newunicodechar{×}{\otimes}
@@ -56,6 +56,9 @@
   \mor [mid]:[dashed]     *   u:-> P;
 \end{kodi}
 
+
+
+
 \begin{kodi}
   \pgfkeys{/katharizo/expand=full}
 
@@ -68,59 +71,17 @@
 
 
 \begin{kodi}
-  \obj{
-    H_{q+2}(X)   &  H_{q+2}(X,Y) & H_{q+1}(Y,Z) & H_{q  }(Z)   \\
-    H_{q+2}(Y)   &  H_{q+2}(X,Z) & H_{q+1}(Y)   & H_{q+1}(X,Z) \\
-    H_{q+2}(Y,Z) &  H_{q+1}(Z) & H_{q+1}(X) &  \\
-  };
-\end{kodi}
+  \obj (M) {   & \vdots  & \vdots  & \vdots  &   \\
+             0 & A_{n+1} & B_{n+1} & C_{n+1} & 0 \\
+             0 & A_{n}   & B_{n}   & C_{n}   & 0 \\
+             0 & A_{n-1} & B_{n-1} & C_{n-1} & 0 \\
+               & \vdots  & \vdots  & \vdots  &   \\ };
 
-\begin{kodi}
-  \obj{        & |(A)|  \vdots  & |(B)|  \vdots  & |(C)|  \vdots  &               \\
-  |(0{n+1})| 0 &        A_{n+1} &        B_{n+1} &        C_{n+1} & |(0'{n+1})| 0 \\
-  |(0{n})  | 0 &        A_{n}   &        B_{n}   &        C_{n}   & |(0'{n})  | 0 \\
-  |(0{n-1})| 0 &        A_{n-1} &        B_{n-1} &        C_{n-1} & |(0'{n-1})| 0 \\
-               & |(A')| \vdots  & |(B')| \vdots  & |(C')| \vdots  &               \\};
+  \foreach \n/\row in {n+1/2, n/3, n-1/4}
+    \mor (M-\row-1) -> (A_{\n}) "\alpha_{\n}":-> (B_{\n})
+                                 "\beta_{\n}":-> (C_{\n}) -> (M-\row-5);
 
-  \foreach \n in {n+1,n,n-1}
-    \mor (0{\n}) -> (A_{\n}) "\alpha_{\n}":-> (B_{\n})
-                              "\beta_{\n}":-> (C_{\n}) -> (0'{\n});
-
-  \foreach \l/\q in {A/,B/',C/''}
-    \mor (\l) -> (\l_{n+1}) "\partial\q_{n+1}":-> (\l_{n})
-                            "\partial\q_{n}"  :-> (\l_{n-1}) -> (\l');
-\end{kodi}
-
-\begin{kodi}
-\obj[square]{A&B&C&D\\E&F&G&H\\I&L&M&N\\};
-
-\mor:                     B -> C;
-
-% * src = prv first src
-\mor:[draw=none]          B -> C;
-\mor:[bend right, green]  * -> D;
-
-% * tar = prv last tar
-\mor:[draw=none]          B -> C;
-\mor:[bend right, blue]   A -> *;
-
-\mor:[draw=none]          B -> C;
-\mor:[bend left, red]     A -> * -> D;
-
-\mor:                     F -> G;
-
-% + src = prv last tar
-\mor:[draw=none]          F -> G;
-\mor:[bend right, green]  + -> H;
-
-% + tar = prv first src
-\mor:[draw=none]          F -> G;
-\mor:[bend right, blue]   E -> +;
-
-\mor:[draw=none]          F -> G;
-\mor:[bend left, red]     E -> + -> H;
-
-% so, basically, * is the opposite of +
-\mor:      M -> L;
-\mor:[red] I <- * <- N;
+  \foreach \l/\col/\q in {A/2/, B/3/', C/4/''}
+    \mor (M-1-\col) -> (\l_{n+1}) "\partial\q_{n+1}":-> (\l_{n})
+                                  "\partial\q_{n}"  :-> (\l_{n-1}) -> (M-5-\col);
 \end{kodi}

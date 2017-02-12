@@ -18,49 +18,76 @@ Layouts are described using the customary \TeX\ tabular syntax.
 <cell separator> := & @opt@[<length>]@/opt@
 \end{lstlisting}
 
-The discretionary options are analogous to, respectively,
-\TikZ's standard nodes and matrices.
+The discretionary options syntax is analogous to standard \TikZ\ nodes and
+matrices, respectively.
 
 \begin{lstlisting}
 <object options> := (@\itshape\color{orange!80!black}\underbar{[object keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
 <layout options> := (@\itshape\color{orange!80!black}\underbar{[layout keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
 \end{lstlisting}
 
-
+\hfill$\therefore$\hfill\null
 
 % \begin{tcblisting}{kodi snippet}
-% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi,overlay,remember picture]
-% \obj [above right] at (current page.south west) {\mathfrak P};
-% \endtikzpicture}
+% \tikzpicture[kodi, overlay, remember picture]
+% \obj (it) {A};
+% \endtikzpicture
 % \end{tcblisting}
 
+% \begin{tcblisting}{kodi snippet}
+% \tikzpicture[kodi, overlay, remember picture]
+% \obj [below right] at (it) {B};
+% \endtikzpicture
+% \end{tcblisting}
+
+% \begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
+% \tikzpicture[kodi,overlay,remember picture]
+% \pgfkeys{/kD/every object/.append style={above right=.25in}}
+% \obj [red] (kD) at (current page.south west) {\heartsuit kD};
+% \endtikzpicture
+% \end{tcblisting}
+
+% \begin{tcblisting}{kodi snippet}
+% \tikzpicture[kodi,overlay,remember picture]
+% \draw (kD) circle (1.5em);
+% \endtikzpicture
+% \end{tcblisting}
 % \null
 
-% \begin{tcblisting}{kodi snippet}
-% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
-% \obj {\mathfrak P};
-% \endtikzpicture}
-% \end{tcblisting}
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2em]
+\obj { A & B &[-1em] C \\
+       D & E &       F \\[-1em]
+       G & H &       I \\ };
+\endtikzpicture}
+\end{tcblisting}
 
-% \null
+Objects are automagically named; the latest homonymous prevails.
 
-% \begin{tcblisting}{kodi snippet}
-% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
-% \obj {
-%   A & B &[-2em]   C \\
-%   D & E &         F \\[-2em]
-%   G & H & |[red]| I \\
-% };
-% \endtikzpicture}
-% \end{tcblisting}
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
+\obj { A & A \\ };
+\draw (A) circle (1em);
+\endtikzpicture}
+\end{tcblisting}
 
+Naming an object avoids its automatic labeling.
 
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
+\obj { A & |(A')| A \\ };
+\draw [red]   (A)  circle (1em);
+\draw [green] (A') circle (1em);
+\endtikzpicture}
+\end{tcblisting}
 
+Naming a layout lets you refer to objects by row and column.
 
-% \begin{lstlisting}
-% <object keylist> <- /kD/objects
-% <layout keylist>
-% \end{lstlisting}
-
-
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
+\obj (M) { A & A \\ A & A \\ };
+\draw [red]   (M-1-2) circle (1em);
+\draw [green] (M-2-1) circle (1em);
+\endtikzpicture}
+\end{tcblisting}
 

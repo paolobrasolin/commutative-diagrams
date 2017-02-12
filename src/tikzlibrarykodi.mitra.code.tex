@@ -173,8 +173,8 @@
       \noexpand\node
         [/mitra/every node]%
         \the\kDMitraCelOptTok
-        [node contents={\the\kDMitraCelCntTok}]%
-        [/mitra/matrix coordinates alias];%
+        [node contents={\the\kDMitraCelCntTok},%
+        /mitra/matrix coordinates alias];% NOTE: be careful about placement
       \kDMitraMaybeDumpCell}}%
   \kDAct
   \kDAppend\kDMitraTmpTok\kDMitraMatOutTok

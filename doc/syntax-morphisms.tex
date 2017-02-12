@@ -30,11 +30,13 @@ Global options can be given to both labels and arrows.
 <chain options> := [<label keylist>] @opt@: [<arrow keylist>]@/opt@
 \end{lstlisting}
 
+\hfill$\therefore$\hfill\null
+
 These rules allow for a label syntax that sprouts gracefully
 from the simplest to the most complex arrow.
 
-\begin{tcblisting}{kodi snippet}
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
+\SmashAndCenter{\tikzpicture[kodi]
 \obj { A & B & C \\ F & E & D \\ };
 \mor A -> B;
 \mor B f:-> C;
@@ -45,16 +47,23 @@ from the simplest to the most complex arrow.
 \endtikzpicture}
 \end{tcblisting}
 
-% A.
+The same holds for arrow syntax.
 
-% \begin{tcblisting}{kodi snippet}
-% \nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
-% \obj { A & B & C \\ F & E & D \\ };
-% \mor A -> B;
-% \mor B -> C -> D;
-% \mor D [->, dashed] E >-> F [>-, bend left] A;
-% \endtikzpicture}
-% \end{tcblisting}
+\begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
+\SmashAndCenter{\tikzpicture[kodi]
+\obj { A & B & C \\ };
+\mor A -> B;
+\mor B [>-, dashed] C;
+\endtikzpicture}
+\end{tcblisting}
 
-% \vfill
-% wot
+Blah.
+
+\begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
+\SmashAndCenter{\tikzpicture[kodi]
+\obj { A & B & C \\ F & E & D \\ };
+\mor A -> B;
+\mor [swap]:[bend left] B f:-> C g:>-> D h:>- E;
+\endtikzpicture}
+\end{tcblisting}
+

@@ -38,7 +38,7 @@ end
 #==[ doc compilation ]==========================================================
 
 guard 'rake', :task => 'doc' do
-  watch(%r{^doc/.+*\.tex})
+  watch(%r{^doc/.+\.tex})
 end
 
 # guard :shell do
