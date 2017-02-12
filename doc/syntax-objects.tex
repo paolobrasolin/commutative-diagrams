@@ -28,37 +28,17 @@ matrices, respectively.
 
 \hfill$\therefore$\hfill\null
 
-% \begin{tcblisting}{kodi snippet}
-% \tikzpicture[kodi, overlay, remember picture]
-% \obj (it) {A};
-% \endtikzpicture
-% \end{tcblisting}
+Very little of the given syntax is specific to \koDi.
+\TikZ\ options are easy to pick up on the way,
+blah blah blah.
 
-% \begin{tcblisting}{kodi snippet}
-% \tikzpicture[kodi, overlay, remember picture]
-% \obj [below right] at (it) {B};
-% \endtikzpicture
-% \end{tcblisting}
-
-% \begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
-% \tikzpicture[kodi,overlay,remember picture]
-% \pgfkeys{/kD/every object/.append style={above right=.25in}}
-% \obj [red] (kD) at (current page.south west) {\heartsuit kD};
-% \endtikzpicture
-% \end{tcblisting}
-
-% \begin{tcblisting}{kodi snippet}
-% \tikzpicture[kodi,overlay,remember picture]
-% \draw (kD) circle (1.5em);
-% \endtikzpicture
-% \end{tcblisting}
-% \null
+Here is a kitchen sink for tabular syntax:
 
 \begin{tcblisting}{kodi snippet}
 \SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2em]
-\obj { A & B &[-1em] C \\
-       D & E &       F \\[-1em]
-       G & H &       I \\ };
+\obj { A & B &[1em] C \\
+       D & E &      F \\[-1em]
+       G & H &      I \\ };
 \endtikzpicture}
 \end{tcblisting}
 
@@ -71,7 +51,7 @@ Objects are automagically named; the latest homonymous prevails.
 \endtikzpicture}
 \end{tcblisting}
 
-Naming an object avoids its automatic labeling.
+Naming a specific object avoids its automatic labeling.
 
 \begin{tcblisting}{kodi snippet}
 \SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
@@ -81,7 +61,7 @@ Naming an object avoids its automatic labeling.
 \endtikzpicture}
 \end{tcblisting}
 
-Naming a layout lets you refer to objects by row and column.
+Naming a layout lets you refer to its objects by row and column.
 
 \begin{tcblisting}{kodi snippet}
 \SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
@@ -90,4 +70,3 @@ Naming a layout lets you refer to objects by row and column.
 \draw [green] (M-2-1) circle (1em);
 \endtikzpicture}
 \end{tcblisting}
-

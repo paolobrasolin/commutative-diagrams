@@ -1,9 +1,7 @@
 \input kodi
 
-\newtoks\kDTok
-
 \pgfkeys{
-  /katharizo/replace character/.code args={#1 with #2}{%
+  /katharizo/replace/.code args={#1 with #2}{%
     \edef\kDFoo{\expandafter\meaning\string#1}
     \pgfkeys{/katharizo/replace/\kDFoo/.initial={#2}}
   },
@@ -14,25 +12,15 @@
 @expandafter@endgroup@kDAct
 
 \pgfkeys{
-  /katharizo/replace character={ } with {\space},
-  /katharizo/replace character={$} with {},
-  /katharizo/replace character={(} with {},
-  /katharizo/replace character={)} with {},
-  /katharizo/replace character={,} with {},
-  /katharizo/replace character={.} with {},
-  /katharizo/replace character={:} with {},
-  /katharizo/replace character={_} with {_},
+  /katharizo/replace={ } with {\space},
+  /katharizo/replace={$} with {},
+  /katharizo/replace={(} with {},
+  /katharizo/replace={)} with {},
+  /katharizo/replace={,} with {},
+  /katharizo/replace={.} with {},
+  /katharizo/replace={:} with {},
+  /katharizo/replace={_} with {_},
 }
-
-
-% \begingroup\catcode`\ =11
-% \def\kDAct{\pgfkeys{/katharizo/replace/blank space  /.initial={\space}}}
-% \expandafter\endgroup\kDAct
-
-
-% \begingroup\catcode`\ =11
-% \pgfkeysifdefined{/katharizo/replace/blank space  }{\RELAX}{\FAIL}
-% \endgroup
 
 \begingroup\catcode`\ =11
 \gdef\fetchspace{\pgfkeysvalueof{/katharizo/replace/blank space  }}
@@ -53,7 +41,42 @@
 
 
 \kDKatharizoSanitize some $(),.:\_uff\kDInto OUT\kD
-
 \show\OUT
+
+% \tracingonline=1
+% \tracingmacros=1
+
+% \pgfkeys{
+%   /katharizo/replace token/.code args={#1 with #2}{%
+%     \edef\kDFoo{\string#1}
+%     \pgfkeys{/katharizo/replace/toks/\kDFoo/.initial={#2}}
+%   },
+% }
+
+% \pgfkeys{
+%   /katharizo/replace token={\cool} with {X}
+% }
+
+% \newtoks\TOKS
+% \TOKS={abc \cool{de}f}
+% \message{\the\TOKS}
+
+% \def\PRINT#1#2\STOP{%
+% \pgfkeysifdefined{/katharizo/replace/toks/\string#1}%
+%   {\pgfkeysvalueof{/katharizo/replace/toks/\string#1}}%
+%   {#1}%
+% \ifx#2\STOP\else{\PRINT#2\STOP}\fi%
+% }
+
+% \expandafter\PRINT\the\TOKS\STOP
+
+
+
+
+
+
+
+
+
 
 Hello world\bye
