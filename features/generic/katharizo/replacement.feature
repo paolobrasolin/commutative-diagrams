@@ -33,16 +33,16 @@ Feature: katharizo controls dangerous characters replacement
   Scenario Outline: using custom replacements
     Given the body is
     """
-    \pgfqkeys{/katharizo/replace}{.cd,
-      space={1},
-      dollar={2},
-      left round brace={3},
-      right round brace={4},
-      comma={5},
-      full stop={6},
-      colon={7},
-      backslash={8},
-      underscore={9}
+    \pgfqkeys{/katharizo}{
+      replace character={ } with {1},
+      replace character={$} with {2},
+      replace character={(} with {3},
+      replace character={)} with {4},
+      replace character={,} with {5},
+      replace character={.} with {6},
+      replace character={:} with {7},
+      replacements/characters/92/.initial={8},
+      replace character={_} with {9}
     }
     \pgfqkeys{/katharizo}{
       output/.store in=\OUTPUT,
