@@ -29,14 +29,14 @@ Expansion behaviour.
 \end{tcblisting}
 
 Replacement behaviour.
-{\ttfamily \$(),.:\textbackslash} expunged by default.
+{\ttfamily \$(),.:\textbackslash} removed by default.
 
 \begin{tcblisting}{kodi snippet}
 \SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
-\obj{ |[replace character=F with G]| \lim F &
-      |[remove character=F]|         \lim F \\
-      |[replace charcode=92 with /]| \lim F &
-      |[remove charcode=32]|         \lim F \\ };
+\obj{ |[replace character=F with G]| \lim F &     % name: lim G
+      |[remove character=F]|         \lim F \\    % name: lim
+      |[replace charcode=92 with /]| \lim F &     % name: /lim F
+      |[remove charcode=32]|         \lim F \\ }; % name: limF
 \mor (lim G) -> (lim) -> (/lim F) -> (limF);
 \end{kodi}}
 \end{tcblisting}
