@@ -42,13 +42,19 @@
     % TODO: would a \string be of any use? or at least a stringification?
     \pgfkeys{/katharizo/replacements/characters/\kDFoo/.initial={#2}}%
   },
-  replace character={(} with {},
-  replace character={)} with {},
-  replace character={,} with {},
-  replace character={.} with {},
-  replace character={:} with {},
-  replacements/characters/36/.initial={}, % $ dollar sign
-  replacements/characters/92/.initial={}, % \ backslash
+  replace charcode/.code args={#1 with #2}{%
+    % TODO: would a \string be of any use? or at least a stringification?
+    \pgfkeys{/katharizo/replacements/characters/#1/.initial={#2}}%
+  },
+  remove character/.style={/katharizo/replace character={{#1} with {}}},
+  remove charcode/.style={/katharizo/replace charcode={{#1} with {}}},
+  replace character=( with {},
+  replace character=) with {},
+  replace charcode=44 with {}, % , comma
+  replace character=. with {},
+  replace character=: with {},
+  replace charcode=36 with {}, % $ dollar sign
+  replace charcode=92 with {}, % \ backslash
 }
 
 
