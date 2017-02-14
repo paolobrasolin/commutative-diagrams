@@ -11,31 +11,31 @@ Feature: katharizo can sanitize tokens to safe strings
     """
     \pgfqkeys{/katharizo}{
       output/.store in=\OUTPUT,
-      input=<input>
+      input={<input>}
     }
     \message{the output: [\OUTPUT]}
     """
     Then compilation succeeds
-    And the log includes the output: <output>
+    And the log includes the output: [<output>]
 
     Examples:
-      | input    | output   |
-      | {}       | []       |
-      | { }      | []       |
-      | {  }     | []       |
-      | {X}      | [X]      |
-      | {X }     | [X]      |
-      | {X  }    | [X]      |
-      | { X}     | [X]      |
-      | {  X}    | [X]      |
-      | {XY}     | [XY]     |
-      | {X Y}    | [X Y]    |
-      | {X  Y}   | [X Y]    |
-      | {\X}     | [X]      |
-      | {\X }    | [X]      |
-      | {\X  }   | [X]      |
-      | { \X}    | [X]      |
-      | {  \X}   | [X]      |
-      | {\X\Y}   | [X Y]    |
-      | {\X \Y}  | [X Y]    |
-      | {\X  \Y} | [X Y]    |
+      | input    | output |
+      | «»       | «»     |
+      | « »      | «»     |
+      | «  »     | «»     |
+      | «X»      | «X»    |
+      | «X »     | «X»    |
+      | «X  »    | «X»    |
+      | « X»     | «X»    |
+      | «  X»    | «X»    |
+      | «XY»     | «XY»   |
+      | «X Y»    | «X Y»  |
+      | «X  Y»   | «X Y»  |
+      | «\X»     | «X»    |
+      | «\X »    | «X»    |
+      | «\X  »   | «X»    |
+      | « \X»    | «X»    |
+      | «  \X»   | «X»    |
+      | «\X\Y»   | «X Y»  |
+      | «\X \Y»  | «X Y»  |
+      | «\X  \Y» | «X Y»  |

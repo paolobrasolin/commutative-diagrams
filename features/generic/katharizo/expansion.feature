@@ -1,5 +1,5 @@
 # features/katharizo/expansion.feature
-Feature: katharizo can control macro expansion
+Feature: katharizo controls macro expansion
 
   Background: testing katharizo
     Given I'm using any TeX flavour

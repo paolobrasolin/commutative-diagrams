@@ -37,14 +37,14 @@
 %==[ sanitation stage ]=========================================================
 
 \pgfqkeys{/katharizo}{
+  replace charcode/.code args={#1 with #2}{%
+    % TODO: would a \string be of any use? or at least a stringification?
+    \pgfkeys{/katharizo/replacements/characters/#1/.initial={#2}}%
+  },
   replace character/.code args={#1 with #2}{%
     \edef\kDFoo{\number`#1}% TODO: can I inline this?
     % TODO: would a \string be of any use? or at least a stringification?
     \pgfkeys{/katharizo/replacements/characters/\kDFoo/.initial={#2}}%
-  },
-  replace charcode/.code args={#1 with #2}{%
-    % TODO: would a \string be of any use? or at least a stringification?
-    \pgfkeys{/katharizo/replacements/characters/#1/.initial={#2}}%
   },
   remove character/.style={/katharizo/replace character={{#1} with {}}},
   remove charcode/.style={/katharizo/replace charcode={{#1} with {}}},

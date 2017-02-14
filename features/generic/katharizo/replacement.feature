@@ -1,5 +1,5 @@
 # features/katharizo/replacement.feature
-Feature: katharizo controls dangerous characters replacement
+Feature: katharizo replaces arbitrary characters
 
   Background: testing katharizo
     Given I'm using any TeX flavour
@@ -11,56 +11,56 @@ Feature: katharizo controls dangerous characters replacement
     """
     \pgfqkeys{/katharizo}{
       output/.store in=\OUTPUT,
-      input=<input>
+      input={<input>}
     }
     \message{the output: [\OUTPUT]}
     """
     Then compilation succeeds
-    And the log includes the output: <output>
+    And the log includes the output: [<output>]
 
   Examples:
     | input  | output |
-    | {A Z}  | [A Z]  |
-    | {$}    | []     |
-    | {(}    | []     |
-    | {)}    | []     |
-    | {,}    | []     |
-    | {.}    | []     |
-    | {:}    | []     |
-    | {\foo} | [foo]  |
-    | {_}    | [_]    |
+    | «A Z»  | «A Z»  |
+    | «$»    | «»     |
+    | «(»    | «»     |
+    | «)»    | «»     |
+    | «,»    | «»     |
+    | «.»    | «»     |
+    | «:»    | «»     |
+    | «\foo» | «foo»  |
+    | «_»    | «_»    |
 
   Scenario Outline: using custom replacements
     Given the body is
     """
     \pgfqkeys{/katharizo}{
-      replace character={ } with {1},
-      replace character={$} with {2},
-      replace character={(} with {3},
-      replace character={)} with {4},
-      replace character={,} with {5},
-      replace character={.} with {6},
-      replace character={:} with {7},
-      replacements/characters/92/.initial={8},
-      replace character={_} with {9}
+      replace charcode=32 with {1},
+      replace character=$ with {2},
+      replace character=( with {3},
+      replace character=) with {4},
+      replace charcode=44 with {5},
+      replace character=. with {6},
+      replace character=: with {7},
+      replace charcode=92 with {8},
+      replace character=_ with {9}
     }
     \pgfqkeys{/katharizo}{
       output/.store in=\OUTPUT,
-      input=<input>
+      input={<input>}
     }
     \message{the output: [\OUTPUT]}
     """
     Then compilation succeeds
-    And the log includes the output: <output>
+    And the log includes the output: [<output>]
 
   Examples:
     | input  | output |
-    | {A Z}  | [A1Z]  |
-    | {$}    | [2]    |
-    | {(}    | [3]    |
-    | {)}    | [4]    |
-    | {,}    | [5]    |
-    | {.}    | [6]    |
-    | {:}    | [7]    |
-    | {\foo} | [8foo] |
-    | {_}    | [9]    |
+    | «A Z»  | «A1Z»  |
+    | «$»    | «2»    |
+    | «(»    | «3»    |
+    | «)»    | «4»    |
+    | «,»    | «5»    |
+    | «.»    | «6»    |
+    | «:»    | «7»    |
+    | «\foo» | «8foo» |
+    | «_»    | «9»    |
