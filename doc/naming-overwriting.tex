@@ -1,0 +1,47 @@
+The name overwriting behaviour of the naming routine can be configured
+inside any \koDi\ scope using the \lstinline!overwrite! key.
+
+\begin{lstlisting}
+/kD/overwrite = false | alias | true
+\end{lstlisting}
+
+The three available settings correspond to different naming priorities.
+A side by side comparison completely illustrates their meanings.
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}
+\obj{ |[overwrite=false] (A')| A &     % names: A'    (default)
+      |[overwrite=alias] (B')| B &     % names: B', B
+      |[overwrite=true]  (C')| C \\ }; % names:     C
+\mor A' -> B';
+\mor B  -> C;
+\end{kodi}}
+\end{tcblisting}
+
+\hfill$\therefore$\hfill\null
+
+The default behaviour is the ideal for manually solving automatic names
+conflicts.
+
+Why is false useful? conflict solving.
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
+\obj {        A & |(A')| A \\
+       |(Z')| Z &        Z \\ };
+\mor A -> A';
+\mor Z -> Z';
+\end{kodi}}
+\end{tcblisting}
+
+Why is alias useful? semantic aliasing
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}
+\obj [overwrite=alias] { A & |(center)| B & |(right)| C \\ };
+\mor A -> B;
+\mor center -> right;
+\end{kodi}}
+\end{tcblisting}
+
+Why is true useful? \ldots completeness?

@@ -21,7 +21,6 @@ Feature: katharizo replaces arbitrary characters
   Examples:
     | input  | output |
     | «A Z»  | «A Z»  |
-    | «$»    | «»     |
     | «(»    | «»     |
     | «)»    | «»     |
     | «,»    | «»     |
@@ -35,14 +34,13 @@ Feature: katharizo replaces arbitrary characters
     """
     \pgfqkeys{/katharizo}{
       replace charcode=32 with {1},
-      replace character=$ with {2},
-      replace character=( with {3},
-      replace character=) with {4},
-      replace charcode=44 with {5},
-      replace character=. with {6},
-      replace character=: with {7},
-      replace charcode=92 with {8},
-      replace character=_ with {9}
+      replace character=( with {2},
+      replace character=) with {3},
+      replace charcode=44 with {4},
+      replace character=. with {5},
+      replace character=: with {6},
+      replace charcode=92 with {7},
+      replace character=_ with {8}
     }
     \pgfqkeys{/katharizo}{
       output/.store in=\OUTPUT,
@@ -56,11 +54,10 @@ Feature: katharizo replaces arbitrary characters
   Examples:
     | input  | output |
     | «A Z»  | «A1Z»  |
-    | «$»    | «2»    |
-    | «(»    | «3»    |
-    | «)»    | «4»    |
-    | «,»    | «5»    |
-    | «.»    | «6»    |
-    | «:»    | «7»    |
-    | «\foo» | «8foo» |
-    | «_»    | «9»    |
+    | «(»    | «2»    |
+    | «)»    | «3»    |
+    | «,»    | «4»    |
+    | «.»    | «5»    |
+    | «:»    | «6»    |
+    | «\foo» | «7foo» |
+    | «_»    | «8»    |

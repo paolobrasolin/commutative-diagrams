@@ -12,33 +12,3 @@ Each one can be configured in any \koDi\ scope with the keys.
 You can control the degree of expansion; the default behaviour (no expansion)
 shields you from problems with unsafe macros.
 
-You can set up a replacement for any character, using the character code for
-the hardest to type, like {\ttfamily \textvisiblespace} or {\ttfamily \textbackslash}.
-The default behaviour removes {\ttfamily \$(),.:\textbackslash} since they
-are generally dangerous in \TikZ.
-
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
-\obj{ |[replace character=F with G]| \lim F &     % name: lim G
-      |[remove character=F]|         \lim F \\    % name: lim
-      |[replace charcode=92 with /]| \lim F &     % name: /lim F
-      |[remove charcode=32]|         \lim F \\ }; % name: limF
-\mor (lim G) -> (lim) -> (/lim F) -> (limF);
-\end{kodi}}
-\end{tcblisting}
-
-Overwriting behaviour can also be configured. The default setting is the ideal
-for manually solving automatic names conflicts.
-
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\begin{kodi}
-\obj{ |[overwrite=false] (A')| A &     % names: A'    (default)
-      |[overwrite=alias] (B')| B &     % names: B', B
-      |[overwrite=true]  (C')| C \\ }; % names:     C
-\mor A' -> B';
-\mor B  -> C;
-\end{kodi}}
-\end{tcblisting}
-
-\hfill$\therefore$\hfill\null
-

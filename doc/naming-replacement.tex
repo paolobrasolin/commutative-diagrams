@@ -13,8 +13,6 @@ inside any \koDi\ scope using various keys.
 
 You can set up a replacement for any character, using the character code for
 the hardest to type, like {\ttfamily \textvisiblespace} or {\ttfamily \textbackslash}.
-The default behaviour removes {\ttfamily \$(),.:\textbackslash} since they
-are generally dangerous in \TikZ.
 
 \begin{tcblisting}{kodi snippet}
 \SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
@@ -28,15 +26,40 @@ are generally dangerous in \TikZ.
 
 \hfill$\therefore$\hfill\null
 
-Wooot.
+The default behaviour is removal of the minimal set of universally annoying%
+\footnote{The difficult part is not creating the names but having to type them.}
+characters: {\ttfamily (),.:}  have special meanings to \TikZ\ while
+{\ttfamily \textbackslash} is impossible to type by ordinary means, so they're \emph{kaput}.
+
+Each one can be restored by replacing it with itself. Don't.
+
+Another egregiously bad idea is replacing characters with spaces.
+It's tempting because it solves a somewhat common edge case.
 
 \begin{tcblisting}{kodi snippet}
 \SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
-\obj{ |[replace character=F with G]| \lim F &     % name: lim G
-      |[remove character=F]|         \lim F \\    % name: lim
-      |[replace charcode=92 with \space]| x\lim F &     % name: /lim F
-      |[remove charcode=32]|         \lim F \\ }; % name: limF
-\mor (lim G) -> (lim) -> (x lim F) -> (limF);
+\obj{ \beta & F & b\eta \\ };
+\mor F -> beta;
+\end{kodi}}
+\end{tcblisting}
+
+Since characters in names are literal, this causes whitespace
+duplication and names become inaccessible by ordinary means.
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
+\obj [replace charcode=92 with \space]
+  { \beta & b\eta & \beta \eta \\ };
+\mor beta -> (b eta) -> (beta \space eta);
+\end{kodi}}
+\end{tcblisting}
+
+The wise solution is writing better code.
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
+\obj{ \beta & F & b \eta \\ };
+\mor F -> beta;
 \end{kodi}}
 \end{tcblisting}
 

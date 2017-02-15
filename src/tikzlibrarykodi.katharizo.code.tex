@@ -53,7 +53,7 @@
   replace charcode=44 with {}, % , comma
   replace character=. with {},
   replace character=: with {},
-  replace charcode=36 with {}, % $ dollar sign
+  % replace charcode=36 with {}, % $ dollar sign
   replace charcode=92 with {}, % \ backslash
 }
 
@@ -64,7 +64,7 @@
     \kDKatharizoStringify#1\kD
     \expandafter\kDKatharizoSanitize\the\kDKatharizoStringified\kD
     \pgfkeysalso{/katharizo/sanitized/.expanded=\the\kDKatharizoSanitized}
-    % \message{^^J:::\the\kDKatharizoSanitized:::^^J}
+    \message{^^J:::\the\kDKatharizoSanitized:::^^J}
   }
 }
 
