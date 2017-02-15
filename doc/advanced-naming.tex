@@ -12,16 +12,6 @@ Each one can be configured in any \koDi\ scope with the keys.
 You can control the degree of expansion; the default behaviour (no expansion)
 shields you from problems with unsafe macros.
 
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\begin{kodi}
-\def\B{Z} \def\A{\B}
-\obj{ |[expand=none]| \A &     % name: A (default)
-      |[expand=once]| \A &     % name: B
-      |[expand=full]| \A \\ }; % name: Z
-\mor A -> B -> Z;
-\end{kodi}}
-\end{tcblisting}
-
 You can set up a replacement for any character, using the character code for
 the hardest to type, like {\ttfamily \textvisiblespace} or {\ttfamily \textbackslash}.
 The default behaviour removes {\ttfamily \$(),.:\textbackslash} since they
@@ -51,15 +41,4 @@ for manually solving automatic names conflicts.
 \end{tcblisting}
 
 \hfill$\therefore$\hfill\null
-
-Expansion control is mainly useful for procedural drawing.
-
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\begin{kodi}
-\foreach [count=\r] \l in {A,B,C}
-  \foreach [count=\c] \n in {n-1,n,n+1}
-    \obj [expand=full] at (3em*\c,-1.6em*\r) {\l_{\n}};
-\mor (A_{n}) -> (B_{n+1}) -> (C_{n}) -> (B_{n-1}) -> (A_{n});
-\end{kodi}}
-\end{tcblisting}
 

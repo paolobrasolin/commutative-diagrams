@@ -1,0 +1,42 @@
+The character replacement behaviour of the naming routine can be configured
+inside any \koDi\ scope using various keys.
+
+\begin{lstlisting}
+/kD/replace character = <character> with <character>
+/kD/replace charcode = <charcode> with <character>
+/kD/remove character = <character>
+/kD/remove charcode = <charcode>
+\end{lstlisting}
+
+
+
+
+You can set up a replacement for any character, using the character code for
+the hardest to type, like {\ttfamily \textvisiblespace} or {\ttfamily \textbackslash}.
+The default behaviour removes {\ttfamily \$(),.:\textbackslash} since they
+are generally dangerous in \TikZ.
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
+\obj{ |[replace character=F with G]| \lim F &     % name: lim G
+      |[remove character=F]|         \lim F \\    % name: lim
+      |[replace charcode=92 with /]| \lim F &     % name: /lim F
+      |[remove charcode=32]|         \lim F \\ }; % name: limF
+\mor (lim G) -> (lim) -> (/lim F) -> (limF);
+\end{kodi}}
+\end{tcblisting}
+
+\hfill$\therefore$\hfill\null
+
+Wooot.
+
+\begin{tcblisting}{kodi snippet}
+\SmashAndCenter{\begin{kodi}\pgfkeys{/kD/diagrams/golden}
+\obj{ |[replace character=F with G]| \lim F &     % name: lim G
+      |[remove character=F]|         \lim F \\    % name: lim
+      |[replace charcode=92 with \space]| x\lim F &     % name: /lim F
+      |[remove charcode=32]|         \lim F \\ }; % name: limF
+\mor (lim G) -> (lim) -> (x lim F) -> (limF);
+\end{kodi}}
+\end{tcblisting}
+
