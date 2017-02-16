@@ -46,6 +46,10 @@
     % TODO: would a \string be of any use? or at least a stringification?
     \pgfkeys{/katharizo/replacements/characters/\kDFoo/.initial={#2}}%
   },
+  remove characters/.code args={#1#2}{
+    \ifx\relax#1\else\pgfkeys{/katharizo/remove character={#1}}\fi
+    \ifx\relax#2\else\pgfkeys{/katharizo/remove characters={#2}}\fi
+  },
   remove character/.style={/katharizo/replace character={{#1} with {}}},
   remove charcode/.style={/katharizo/replace charcode={{#1} with {}}},
   replace character=( with {},

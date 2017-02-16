@@ -85,3 +85,31 @@
     \mor (M-1-\col) -> (\l_{n+1}) "\partial\q_{n+1}":-> (\l_{n})
                                   "\partial\q_{n}"  :-> (\l_{n-1}) -> (M-5-\col);
 \end{kodi}
+
+
+
+
+
+
+\tikzset{ l/.style={bend left}, r/.style={bend right} }
+
+\begin{kodi}
+  \obj [comb=6em, remove characters=H_\{q+\} ] {
+    H_{q+2}(X)   & H_{q+2}(X,Y) & H_{q+1}(Y,Z) & H_{q}(Z)     \\
+    H_{q+2}(Y)   & H_{q+2}(X,Z) & H_{q+1}(Y)   & H_{q+1}(X,Z) \\
+    H_{q+2}(Y,Z) & H_{q+1}(Z)   & H_{q+1}(X)   &              \\
+  };
+  \mor :[blue!50]  2Y  -> 2X  l,-> 2XY   -> 1Y  -> 1X;
+  \mor :[green!50] 2Y  -> 2YZ r,-> 1Z    -> 1Y  -> 1YZ l,-> Z;
+  \mor :[cyan!50]  2X  -> 2XZ   -> 1Z  r,-> 1X  -> 1XZ   -> Z;
+  \mor :[red]      2YZ -> 2XZ   -> 2XY l,-> 1YZ -> 1XZ;
+\end{kodi}
+
+
+
+
+
+
+
+
+

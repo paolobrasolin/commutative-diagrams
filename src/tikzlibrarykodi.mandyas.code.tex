@@ -84,9 +84,9 @@
     golden/.style={
       /kD/layouts/rectangular={#1}{0.618*#1}
     },
-    comb/.style={
+    comb/.style={% TODO: double check the damn trig
       /kD/layouts/rectangular={#1}{sqrt(3/4)*#1},
-      /tikz/every odd row/.append style={/tikz/xshift=tan(30)*#1}
+      /tikz/every odd row/.append style={/tikz/xshift=1/2*#1}
     },
     comb/.default=4.5em,
     square/.default=4.5em,
