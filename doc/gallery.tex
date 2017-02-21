@@ -2,10 +2,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{kodi}
-  \obj[golden] { & \ker a   & \ker b   & \ker c   &   \\
-                 & A        & B        & C        & 0 \\
-        |(0')| 0 & A'       & B'       & C'       &   \\
-                 & \coker a & \coker b & \coker c &   \\ };
+  \obj[golden] {          & \ker a   & \ker b   & \ker c   &   \\
+                          & A        & B        & C        & 0 \\
+                 |(0')| 0 & A'       & B'       & C'       &   \\
+                          & \coker a & \coker b & \coker c &   \\ };
 
   \mor   (ker a) ->   (ker b) ->   (ker c);
   \mor (coker a) -> (coker b) -> (coker c);
@@ -28,51 +28,53 @@
 
 \begin{kodi}
 % From the LaTeX preamble:
-% \usepackage{newunicodechar}
-% \newunicodechar{ı}{\mathbf 1}
-% \newunicodechar{×}{\otimes}
+%   \usepackage{newunicodechar}
+%   \newunicodechar{ı}{\mathbf 1}
+%   \newunicodechar{×}{\otimes}
 
-\foreach [count=\n] \o in
-    {((w×x)×y)×x,
-     (w×(x×y))×x,
-     w×((x×y)×x),
-     w×(x×(y×x)),
-     (w×x)×(y×x)}
-  \obj (\n) at ({72*\n:7em}) {\o};
+  \foreach [count=\n] \o in {%
+      ((w×x)×y)×x,
+      (w×(x×y))×x,
+      w×((x×y)×x),
+      w×(x×(y×x)),
+      (w×x)×(y×x)%
+    } \obj (\n) at (72*\n:7em) {\o};
 
-\mor 1 "a_{w,x,y}×ı_z": -> 2
-         "a_{w,x×y,z}": -> 3
-       "ı_w×a_{x,y,z}": -> 4;
-\mor *   "a_{w×x,y,z}": -> 5
-         "a_{w,x,y×z}": -> *;
-
+  \mor 1 "a_{w,x,y}×ı_z": -> 2
+           "a_{w,x×y,z}": -> 3
+         "ı_w×a_{x,y,z}": -> 4;
+  \mor *   "a_{w×x,y,z}": -> 5
+           "a_{w,x,y×z}": -> *;
 \end{kodi}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{kodi}
-  \obj[comb]{ |(P)| A \times_Z B & B \\
-                    A            & Z \\ };
-  \obj at ($(Z)!2!(P)$) {Q};
+  \obj[comb]{ |(pb)| A \times_Z B & B \\
+                     A            & Z \\ };
+  \obj at ($(Z)!2!(pb)$) {Q};
 
-  \mor[swap] P p_1:-> A f:-> Z;
-  \mor       * p_2:-> B g:-> *;
+  \mor[swap] pb p_1:-> A f:-> Z;
+  \mor        * p_2:-> B g:-> *;
 
   \mor[swap]:[bend right] Q q_1:-> A;
   \mor      :[bend left]  * q_2:-> B;
-  \mor [mid]:[dashed]     *   u:-> P;
+  \mor [mid]:[dashed]     *   u:-> pb;
 \end{kodi}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%
+\hfill
+%
 \begin{kodi}
-  \pgfkeys{/katharizo/expand=full}
+  \obj[comb]{ Z &                   B \\
+              A & |(po)| A \sqcup_Z B \\ };
+  \obj at ($(Z)!2!(po)$) {Q};
 
-  \foreach [count=\m] \a in {A,B,C}
-    \foreach [count=\n] \i in {n-2,n-1,n,n+1,n+2}
-      \obj at ({5em*\n,-3em*\m}) {\a_{\i}};
+  \mor[swap] Z f:-> A i_1:-> po;
+  \mor       * g:-> B i_2:-> *;
 
-  \mor (C_{n+1}) -> (B_{n-1});
+  \mor[swap]:[bend right]  A j_1:-> Q;
+  \mor      :[bend left]   B j_2:-> *;
+  \mor [mid]:[dashed]     po   u:-> *;
 \end{kodi}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
