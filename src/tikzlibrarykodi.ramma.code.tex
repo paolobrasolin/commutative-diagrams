@@ -136,10 +136,9 @@
 \def\kDRammaOutput{%
   \edef\kDAct{%
     \noexpand\kDRammaTmpTok={%
-      \noexpand\tikzpicture[kodi, /kD/every diagram,\the\kDRammaOptTok]}}%
+      \noexpand\tikzpicture[kodi, \the\kDRammaOptTok]}}%
   \kDAct
   \the\kDRammaTmpTok}
 
-\let\kDkoDi\kDRamma
-
-
+\let\kDkoDiOpen\kDRamma
+\let\kDkoDiShut\endtikzpicture
