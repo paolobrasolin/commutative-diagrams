@@ -15,6 +15,6 @@ Feature: bapto's self naming key
     Then compilation succeeds
 
   Examples:
-    | contents     | label   |
-    | {foo}        | foo     |
-    | {$\sum x_i$} | sum x_i |
+    | contents     | label     |
+    | {foo}        | foo       |
+    | {$\sum x_i$} | $sum x_i$ |

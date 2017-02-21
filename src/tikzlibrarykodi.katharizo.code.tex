@@ -41,24 +41,27 @@
     % TODO: would a \string be of any use? or at least a stringification?
     \pgfkeys{/katharizo/replacements/characters/#1/.initial={#2}}%
   },
+  remove charcode/.style={/katharizo/replace charcode={{#1} with {}}},
+  remove charcodes/.style args={#1}{%
+    /katharizo/remove charcodes loop={#1 \kD},
+  },
+  remove charcodes loop/.code args={#1 #2\kD}{%
+    \message{|||#1|#2|||}
+    \ifx\relax#1\else\pgfkeys{/katharizo/remove charcode={#1}}\fi
+    \ifx\relax#2\else\pgfkeys{/katharizo/remove charcodes loop={#2\kD}}\fi
+  },
   replace character/.code args={#1 with #2}{%
     \edef\kDFoo{\number`#1}% TODO: can I inline this?
     % TODO: would a \string be of any use? or at least a stringification?
     \pgfkeys{/katharizo/replacements/characters/\kDFoo/.initial={#2}}%
   },
-  remove characters/.code args={#1#2}{
+  remove character/.style={/katharizo/replace character={{#1} with {}}},
+  remove characters/.code args={#1#2}{%
     \ifx\relax#1\else\pgfkeys{/katharizo/remove character={#1}}\fi
     \ifx\relax#2\else\pgfkeys{/katharizo/remove characters={#2}}\fi
   },
-  remove character/.style={/katharizo/replace character={{#1} with {}}},
-  remove charcode/.style={/katharizo/replace charcode={{#1} with {}}},
-  replace character=( with {},
-  replace character=) with {},
-  replace charcode=44 with {}, % , comma
-  replace character=. with {},
-  replace character=: with {},
-  % replace charcode=36 with {}, % $ dollar sign
-  replace charcode=92 with {}, % \ backslash
+  remove characters={(),.:},
+  remove charcode=92,% \ backslash
 }
 
 
