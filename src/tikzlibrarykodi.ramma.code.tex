@@ -76,36 +76,39 @@
 
 % I merge the macro syntax for objects and matrices. Convenient!
 
-\newif\ifkDObjIsMatrix
+\newif\ifkDRammaObjIsMatrix
 
-\def\kDObjDecideWhetherIsMatrixThen#1{%
-  \def\kDObjDWIM{\kDObjDWIMSightThen{\kDObjDWIMGobThen{#1}}}%
-  \expandafter\kDObjDWIM\the\kDGrpTok\\\kD}
+\def\kDRammaObjDecideWhetherIsMatrixThen#1{%
+  \def\kDRammaObjDWIM{\kDRammaObjDWIMSightThen{\kDRammaObjDWIMGobThen{#1}}}%
+  \expandafter\kDRammaObjDWIM\the\kDGrpTok\\\kD}
 
-\def\kDObjDWIMSightThen#1#2\\%
+\def\kDRammaObjDWIMSightThen#1#2\\%
   {\kDIfNextHardCh\kD
-    {\kDObjIsMatrixfalse#1}%
-    {\kDObjIsMatrixtrue#1}}
+    {\kDRammaObjIsMatrixfalse#1}%
+    {\kDRammaObjIsMatrixtrue#1}}
 
-\def\kDObjDWIMGobThen#1#2\kD{#1}
+\def\kDRammaObjDWIMGobThen#1#2\kD{#1}
 
-\def\kDObjOutput
-  {\ifkDObjIsMatrix
+\def\kDRammaObjOutput
+  {\ifkDRammaObjIsMatrix
     \kDMitraParseMatrixTableThen\kDMitraOutput\else
     \kDOzosOutput\fi}
 
-\def\kDObj
+\def\kDRammaObj
   {\kDFetchOptAndGrpThen
-  {\kDObjDecideWhetherIsMatrixThen
-   \kDObjOutput}}
+  {\kDRammaObjDecideWhetherIsMatrixThen
+   \kDRammaObjOutput}}
+
+% Just an identity.
+\let\kDRammaMor\kDVelos
 
 % I envelope the koDi main macros in a simple key for maximal flexibility.
 
 \tikzset{
   kodi/.code={%
     \catcode`\|=12% ConTeXt hack TODO: is it sufficient? investigate
-    \let\obj\kDObj
-    \let\mor\kDVelos
+    \let\obj\kDRammaObj
+    \let\mor\kDRammaMor
   },
   kodi/.append style={/kD/every diagram}
 }
@@ -140,5 +143,5 @@
   \kDAct
   \the\kDRammaTmpTok}
 
-\let\kDkoDiOpen\kDRamma
-\let\kDkoDiShut\endtikzpicture
+\let\kDRammaOpen\kDRamma
+\let\kDRammaShut\endtikzpicture

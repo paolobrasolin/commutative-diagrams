@@ -111,3 +111,34 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\catcode`~=12
+
+\begin{kodi}[x=4em, y=-3em, node distance=1,
+    sim/.style={sloped, auto,
+      edge node={node[every edge quotes][/velos/install quote
+        handler,"\sim",anchor=south, outer sep=-.15em]}
+    },
+    ~>/.style={->, sim},
+    <~/.style={<-, sim},
+  ]
+  \foreach [count=\c] \col in {1,2,3,n} {
+    \foreach [count=\r] \row in {K_{\col}, C_{0\col}, \vdots, C_{m\col}, L_{\col}}
+      \obj (\r-\c) at (\c,\r) {\row};
+    \mor (1-\c) ~> (2-\c) ~> (3-\c) ~> (4-\c) ~> (5-\c);
+  }
+  \obj [left =of 3-1] {X};
+  \obj [right=of 3-4] {Y};
+
+  \foreach \r in {1,2,4,5} {
+    \mor (\r-1) -> (\r-2) <~ (\r-3) thick,dotted (\r-4);
+    \mor X <~ + -> Y;
+  }
+\end{kodi}
+
+% \begin{tikzpicture}
+%   \node (A) {A};
+%   \node [below right=of A] (B) {B};
+%   \path (A) edge[sloped, auto, edge node={node[anchor=south]{$\sim$}}] (B);
+%   \end{tikzpicture}
+
+  
