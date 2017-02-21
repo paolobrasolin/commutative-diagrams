@@ -109,3 +109,37 @@
   },
   kodi/.append style={/kD/every diagram}
 }
+
+% TODO: not convinced by the structure of what follows
+
+%==[ main macro ]===============================================================
+
+\def\kDRamma
+  {\kDRammaMaybeFetchOptionsThen
+   \kDRammaOutput}
+
+%==[ fetching routine ]=========================================================
+
+\newtoks\kDRammaOptTok
+\newtoks\kDRammaTmpTok
+
+\def\kDRammaMaybeFetchOptionsThen#1{%
+  \kDRammaOptTok={}%
+  \kDIfNextHardCh[%
+    {\kDRammaFetchOptionsThen{#1}}%
+    {#1}}
+
+\def\kDRammaFetchOptionsThen#1[#2]{\kDRammaOptTok={#2}#1}
+
+%==[ output routine ]===========================================================
+
+\def\kDRammaOutput{%
+  \edef\kDAct{%
+    \noexpand\kDRammaTmpTok={%
+      \noexpand\tikzpicture[kodi, /kD/every diagram,\the\kDRammaOptTok]}}%
+  \kDAct
+  \the\kDRammaTmpTok}
+
+\let\kDkoDi\kDRamma
+
+

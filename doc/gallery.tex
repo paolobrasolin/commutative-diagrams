@@ -1,4 +1,7 @@
-\begin{tikzpicture}[kodi]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{kodi}
   \obj[golden] { & \ker a   & \ker b   & \ker c   &   \\
                  & A        & B        & C        & 0 \\
         |(0')| 0 & A'       & B'       & C'       &   \\
@@ -19,9 +22,11 @@
   \draw[/kD/arrows/crossing over, ->, rounded corners]
     (ker c) -- (tail) -- (tail|-belly)
             -- (belly-|head) -- (head) -- (coker a);
-\end{tikzpicture}
+\end{kodi}
 
-\begin{tikzpicture}[kodi]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{kodi}
 % From the LaTeX preamble:
 % \usepackage{newunicodechar}
 % \newunicodechar{ı}{\mathbf 1}
@@ -41,7 +46,9 @@
 \mor *   "a_{w×x,y,z}": -> 5
          "a_{w,x,y×z}": -> *;
 
-\end{tikzpicture}
+\end{kodi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{kodi}
   \obj[comb]{ |(P)| A \times_Z B & B \\
@@ -56,8 +63,7 @@
   \mor [mid]:[dashed]     *   u:-> P;
 \end{kodi}
 
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{kodi}
   \pgfkeys{/katharizo/expand=full}
@@ -69,6 +75,7 @@
   \mor (C_{n+1}) -> (B_{n-1});
 \end{kodi}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{kodi}
   \obj (M) {   & \vdots  & \vdots  & \vdots  &   \\
@@ -86,30 +93,19 @@
                                   "\partial\q_{n}"  :-> (\l_{n-1}) -> (M-5-\col);
 \end{kodi}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-
-
-\tikzset{ l/.style={bend left}, r/.style={bend right} }
-
-\begin{kodi}
-  \obj [comb=6em, remove characters=H_\{q+\} ] {
+\begin{kodi}[ l/.style={bend left}, r/.style={bend right} ]
+  \obj [ comb=base 6em angle 45, remove characters=H_\{q+\} ] {
     H_{q+2}(X)   & H_{q+2}(X,Y) & H_{q+1}(Y,Z) & H_{q}(Z)     \\
     H_{q+2}(Y)   & H_{q+2}(X,Z) & H_{q+1}(Y)   & H_{q+1}(X,Z) \\
     H_{q+2}(Y,Z) & H_{q+1}(Z)   & H_{q+1}(X)   &              \\
   };
-  \mor :[blue!50]  2Y  -> 2X  l,-> 2XY   -> 1Y  -> 1X;
-  \mor :[green!50] 2Y  -> 2YZ r,-> 1Z    -> 1Y  -> 1YZ l,-> Z;
-  \mor :[cyan!50]  2X  -> 2XZ   -> 1Z  r,-> 1X  -> 1XZ   -> Z;
-  \mor :[red]      2YZ -> 2XZ   -> 2XY l,-> 1YZ -> 1XZ;
+  \mor :[blue]  2Y  -> 2X  l,-> 2XY   -> 1Y  -> 1X;
+  \mor :[green] 2Y  -> 2YZ r,-> 1Z    -> 1Y  -> 1YZ l,-> Z;
+  \mor :[cyan]  2X  -> 2XZ   -> 1Z  r,-> 1X  -> 1XZ   -> Z;
+  \mor :[red]   2YZ -> 2XZ   -> 2XY l,-> 1YZ -> 1XZ;
 \end{kodi}
 
-
-
-
-
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
