@@ -113,25 +113,30 @@
 
 \catcode`~=12
 
-\begin{kodi}[x=4em, y=-3em, node distance=1,
+\begin{kodi}[x=4em, y=-3em, node distance=1 and 1,
     sim/.style={sloped, auto,
       edge node={node[every edge quotes][/velos/install quote
         handler,"\sim",anchor=south, outer sep=-.15em]}
     },
     ~>/.style={->, sim},
     <~/.style={<-, sim},
+    --/.style={thick, dotted},
+    remove characters=_\{\},
+    expand=full
   ]
-  \foreach [count=\c] \col in {1, 2, 3, n} {
-    \foreach [count=\r] \row in {K_{\col}, C_{0\col}, \vdots, C_{m\col}, L_{\col}}
-      \obj [ name/.expanded={\ifnum\r=3 vdots\col\fi},
-             expand=full, remove characters=_\{\}      ] at (\c,\r) {\row};
-    \mor (K\col) ~> (C0\col) ~> (vdots\col) ~>  (Cm\col) ~> (L\col);
-  }
-  \obj [left =of vdots1] {X};
+    
+  \foreach [count=\c] \col in {1, 2, 3, n}
+  \foreach [count=\r] \row in {K_{\col}, C_{0\col}, \vdots, C_{m\col}, L_{\col}}
+    \obj [name/.expanded={\ifnum\r=3 vdots\col\fi}] at (\c,\r) {\row};
+
+  \obj  [left=of vdots1] {X};
   \obj [right=of vdotsn] {Y};
 
-  \foreach \row in {K,C0,Cm,L} {
-    \mor (\row1) -> (\row2) <~ (\row3) thick,dotted (\row n);
+  \foreach \col in {1, 2, 3, n}
+    \mor (K\col) ~> (C0\col) ~> (vdots\col) ~>  (Cm\col) ~> (L\col);
+  
+  \foreach \row in {K, C0, Cm, L} {
+    \mor (\row1) -> (\row2) <~ (\row3) -- (\row n);
     \mor X <~ + -> Y;
   }
 \end{kodi}
