@@ -14,15 +14,19 @@
 %==[ input stage ]==============================================================
 
 \pgfqkeys{/bapto/input}{
-  .forward to=/bapto/dispatcher,
+  .forward to=/bapto/controller,
 }
 
 %==[ dispatching stage ]========================================================
 
 \pgfqkeys{/bapto/overwrite}{.is choice,
-  false/.style={/bapto/dispatcher/.code=
-    {\tikz@fig@name\ifx\tikz@fig@name\empty\pgfqkeys{/tikz}{name=##1}\fi}},
-  alias/.style={/bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
-  true/.style= {/bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
+  false/.style={/bapto/controller/.code={\tikz@fig@name\ifx\tikz@fig@name\empty
+                                         \pgfqkeys{/bapto}{trigger={##1}}\fi},
+                /bapto/dispatcher/.code={\tikz@fig@name\ifx\tikz@fig@name\empty
+                                         \pgfqkeys{/tikz}{name=##1}\fi}},
+  alias/.style={/bapto/controller/.code={\pgfqkeys{/bapto}{trigger={##1}}},
+                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
+  true/.style= {/bapto/controller/.code={\pgfqkeys{/bapto}{trigger={##1}}},
+                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
   false, % default is no name overwriting and no aliasing
 }

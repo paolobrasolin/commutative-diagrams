@@ -18,8 +18,9 @@
 
 \pgfqkeys{/tikz}{% TODO: is this the best scope to put the key into?
   self naming/.style={
-    /tikz/node contents/.forward to=/katharizo/input,
-    /katharizo/output/.forward to=/bapto/input
+    /tikz/node contents/.forward to=/bapto/input,
+    /bapto/trigger/.forward to=/katharizo/input,
+    /katharizo/output/.forward to=/bapto/dispatcher
   }
 }
 

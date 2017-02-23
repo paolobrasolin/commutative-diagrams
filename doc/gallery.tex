@@ -121,16 +121,17 @@
     ~>/.style={->, sim},
     <~/.style={<-, sim},
   ]
-  \foreach [count=\c] \col in {1,2,3,n} {
+  \foreach [count=\c] \col in {1, 2, 3, n} {
     \foreach [count=\r] \row in {K_{\col}, C_{0\col}, \vdots, C_{m\col}, L_{\col}}
-      \obj (\r-\c) at (\c,\r) {\row};
-    \mor (1-\c) ~> (2-\c) ~> (3-\c) ~> (4-\c) ~> (5-\c);
+      \obj [ name/.expanded={\ifnum\r=3 vdots\col\fi},
+             expand=full, remove characters=_\{\}      ] at (\c,\r) {\row};
+    \mor (K\col) ~> (C0\col) ~> (vdots\col) ~>  (Cm\col) ~> (L\col);
   }
-  \obj [left =of 3-1] {X};
-  \obj [right=of 3-4] {Y};
+  \obj [left =of vdots1] {X};
+  \obj [right=of vdotsn] {Y};
 
-  \foreach \r in {1,2,4,5} {
-    \mor (\r-1) -> (\r-2) <~ (\r-3) thick,dotted (\r-4);
+  \foreach \row in {K,C0,Cm,L} {
+    \mor (\row1) -> (\row2) <~ (\row3) thick,dotted (\row n);
     \mor X <~ + -> Y;
   }
 \end{kodi}
