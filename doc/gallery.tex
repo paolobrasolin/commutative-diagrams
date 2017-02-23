@@ -1,11 +1,11 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{kodi}
-  \obj[golden] {          & \ker a   & \ker b   & \ker c   &   \\
-                          & A        & B        & C        & 0 \\
-                 |(0')| 0 & A'       & B'       & C'       &   \\
-                          & \coker a & \coker b & \coker c &   \\ };
+\begin{kodi}[golden]
+  \obj{          & \ker a   & \ker b   & \ker c   &   \\
+                 & A        & B        & C        & 0 \\
+        |(0')| 0 & A'       & B'       & C'       &   \\
+                 & \coker a & \coker b & \coker c &   \\ };
 
   \mor   (ker a) ->   (ker b) ->   (ker c);
   \mor (coker a) -> (coker b) -> (coker c);
@@ -16,13 +16,14 @@
   \mor[near start] (ker b) -> B b:-> B' -> (coker b);
   \mor[near start] (ker c) -> C c:-> C' -> (coker c);
 
-  \coordinate (tail) at ($(ker b)!9/4!(ker c)$);
-  \coordinate (head) at ($(coker b)!9/4!(coker a)$);
-  \coordinate (belly) at ($(B)!9/16!(B')$);
-  \draw[/kD/arrows/crossing over, ->, rounded corners]
-    (ker c) -- (tail) -- (tail|-belly)
-            -- (belly-|head) -- (head) -- (coker a);
+  \draw[/kD/arrows/crossing over, ->, rounded corners, >=stealth]
+    (ker c) -- ++(  .6,0) -- ++(0,-1.6)
+            -- ++(-3.2,0) -- ++(0,-1.4) -- (coker a);
 \end{kodi}
+
+% \makeatletter
+% \newcommand\prev{\the\tikz@lastxsaved,\the\tikz@lastysaved}
+% \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -120,7 +121,7 @@
     },
     ~>/.style={->, sim},
     <~/.style={<-, sim},
-    ../.style={line width=1pt, dash pattern=on 0sp off 1ex, line cap=round},
+    ../.style={line width=.25ex, dash pattern=on 0sp off .75ex, line cap=round},
     remove characters=_\{\},
     expand=full,
   ]
@@ -140,11 +141,3 @@
     \mor X <~ + -> Y;
   }
 \end{kodi}
-
-% \begin{tikzpicture}
-%   \node (A) {A};
-%   \node [below right=of A] (B) {B};
-%   \path (A) edge[sloped, auto, edge node={node[anchor=south]{$\sim$}}] (B);
-%   \end{tikzpicture}
-
-  

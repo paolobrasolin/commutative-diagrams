@@ -46,7 +46,7 @@
     /katharizo/remove charcodes loop={#1 \kD},
   },
   remove charcodes loop/.code args={#1 #2\kD}{%
-    \message{|||#1|#2|||}
+    % \message{|||#1|#2|||}
     \ifx\relax#1\else\pgfkeys{/katharizo/remove charcode={#1}}\fi
     \ifx\relax#2\else\pgfkeys{/katharizo/remove charcodes loop={#2\kD}}\fi
   },
@@ -71,7 +71,7 @@
     \kDKatharizoStringify#1\kD
     \expandafter\kDKatharizoSanitize\the\kDKatharizoStringified\kD
     \pgfkeysalso{/katharizo/sanitized/.expanded=\the\kDKatharizoSanitized}
-    \message{^^J:::\the\kDKatharizoSanitized:::^^J}
+    % \message{^^J:::\the\kDKatharizoSanitized:::^^J}
   }
 }
 
