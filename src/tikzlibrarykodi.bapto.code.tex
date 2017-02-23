@@ -6,6 +6,7 @@
 % Bapto is a node labeling mechanism.
 % It allows for non-invasive relabeling.
 
+% TODO: update circuitry diagram
 % ,-- input             input hook
 % `-> dispatcher ----.  forwards according to
 % ,---[overwrite]----'    label overwriting configuration
@@ -19,6 +20,8 @@
 
 %==[ dispatching stage ]========================================================
 
+% TODO: write feature test to verify trigger is protected by controller
+%   from undue forwards.
 \pgfqkeys{/bapto/overwrite}{.is choice,
   false/.style={/bapto/controller/.code={\tikz@fig@name\ifx\tikz@fig@name\empty
                                          \pgfqkeys{/bapto}{trigger={##1}}\fi},

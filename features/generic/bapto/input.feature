@@ -7,6 +7,7 @@ Feature: bapto input key labels nodes
     And I use the "kodi.bapto" TikZ library
 
   Scenario Outline: verifying default behaviour (no overwriting, no aliasing)
+    Given I code \pgfkeys{/bapto/trigger/.forward to=/bapto/dispatcher}
     Given I code \tikz\node[<options>]{};
     And I expect a node labeled "foo" to <foo label>
     And I expect a node labeled "bar" to <bar label>

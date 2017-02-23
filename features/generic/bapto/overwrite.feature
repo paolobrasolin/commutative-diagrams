@@ -7,7 +7,8 @@ Feature: bapto overwrite key controls behaviour
     And I use the "kodi.bapto" TikZ library
 
   Scenario Outline: testing overwriting behaviours
-    Given I code \pgfqkeys{/bapto}{overwrite=<overwrite>}
+    Given I code \pgfkeys{/bapto/trigger/.forward to=/bapto/dispatcher}
+    And I code \pgfqkeys{/bapto}{overwrite=<overwrite>}
     And I code \tikz\node[<options>]{};
     And I expect a node labeled "foo" to <foo label>
     And I expect a node labeled "bar" to <bar label>
