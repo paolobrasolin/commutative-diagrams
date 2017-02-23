@@ -116,13 +116,13 @@
 \begin{kodi}[x=4em, y=-3em, node distance=1 and 1,
     sim/.style={sloped, auto,
       edge node={node[every edge quotes][/velos/install quote
-        handler,"\sim",anchor=south, outer sep=-.15em]}
+        handler,"\sim", anchor=south, outer sep=-.15em]}
     },
     ~>/.style={->, sim},
     <~/.style={<-, sim},
-    --/.style={thick, dotted},
+    ../.style={line width=1pt, dash pattern=on 0sp off 1ex, line cap=round},
     remove characters=_\{\},
-    expand=full
+    expand=full,
   ]
     
   \foreach [count=\c] \col in {1, 2, 3, n}
@@ -136,7 +136,7 @@
     \mor (K\col) ~> (C0\col) ~> (vdots\col) ~>  (Cm\col) ~> (L\col);
   
   \foreach \row in {K, C0, Cm, L} {
-    \mor (\row1) -> (\row2) <~ (\row3) -- (\row n);
+    \mor (\row1) -> (\row2) <~ (\row3) .. (\row n);
     \mor X <~ + -> Y;
   }
 \end{kodi}
