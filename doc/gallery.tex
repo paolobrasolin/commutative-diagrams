@@ -33,12 +33,12 @@
 %   \newunicodechar{ı}{\mathbf 1}
 %   \newunicodechar{×}{\otimes}
 
-  \foreach [count=\n] \o in {%
+  \foreach [count=\n] \o in {
       ((w×x)×y)×x,
       (w×(x×y))×x,
       w×((x×y)×x),
       w×(x×(y×x)),
-      (w×x)×(y×x)%
+      (w×x)×(y×x)
     } \obj (\n) at (72*\n:7em) {\o};
 
   \mor 1 "a_{w,x,y}×ı_z": -> 2
