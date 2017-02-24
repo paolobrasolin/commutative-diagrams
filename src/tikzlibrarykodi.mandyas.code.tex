@@ -114,14 +114,15 @@
       /tikz/node distance=1 and 1,
       /tikz/on grid,
     },
-    comb/.style={
+    comb/.style args={base #1 angle #2}{
       /kD/every layout/.append style={/kD/layouts/comb},
-      /tikz/x={4.5em*0.5},
-      /tikz/y={4.5em*tan(60)*0.5},
+      /tikz/x={#1*0.5},
+      /tikz/y={#1*tan(#2)*0.5},
       /tikz/node distance=2,
       /tikz/on grid,
       /kD/diagrams/manhattan,
     },
+    comb/.default=base 4.5em angle 60,
     rectangular/.default={6em}{4em},
     square/.default=4.5em,
     golden/.default=4.5em,
