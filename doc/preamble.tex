@@ -25,13 +25,22 @@
   portrait,
   marginparwidth=4.25cm,
   marginparsep=.75cm,
-  % showframe,
+  showframe,
   width=11cm,
   hmarginratio=10:25,
+  height=23cm,
   vmarginratio=20:30,
-%  footskip=.5in,
 }
-%\savegeometry{main}
+
+\makeatletter
+\let\org@Gm@pageframes\Gm@pageframes
+\renewcommand*{\Gm@pageframes}{%
+  \begingroup
+    \color{gray}%
+    \org@Gm@pageframes
+  \endgroup
+}
+\makeatother
 
 %==[ page layout ]==============================================================
 
@@ -138,10 +147,20 @@
 \usepackage{etoolbox}
 \usepackage{xparse}
 
-\NewDocumentCommand{\SmashAndCenter}{m}{%
-\begingroup\setbox0=\hbox{#1}%
-\newdimen\tmp\tmp=\dimexpr-.5\ht0+.5\dp0\relax%
-\hfill\smash{\raisebox{\the\tmp}{\box0}}\hfill\null\endgroup%
+% \NewDocumentCommand{\SmashAndCenter}{m}{%
+% \begingroup\setbox0=\hbox{#1}%
+% \newdimen\tmp\tmp=\dimexpr-.5\ht0+.5\dp0\relax%
+% \hfill\smash{\raisebox{\the\tmp}{\box0}}\hfill\null\endgroup%
+% }
+
+\newsavebox\SmashAndCenterBox
+\newdimen\SmashandCenterRaise
+
+\NewDocumentEnvironment{smashAndCenter}{}{%
+\begin{lrbox}{\SmashAndCenterBox}}{%
+\end{lrbox}%
+\SmashandCenterRaise=\dimexpr-.5\ht\SmashAndCenterBox+.5\dp\SmashAndCenterBox\relax%
+\hfill\smash{\raisebox{\the\SmashandCenterRaise}{\usebox\SmashAndCenterBox}}\hfill\null%
 }
 
 %==[ sourcecode and examples ]==================================================
@@ -260,6 +279,19 @@
 \tcbset{listing utf8=latin1}
 
 \tcbset{
+  smash and center/.style={
+    if odd page={
+      before lower=\begin{smashAndCenter},
+      after lower=\end{smashAndCenter}
+    }{
+      before upper=\begin{smashAndCenter},
+      after upper=\end{smashAndCenter}
+    }},
+  trim/.style args={#1 and #2}{
+    listing options={
+      firstline=#1,
+      lastline=#2}},
+  trim/.default={2 and -1},
   snippet/.style={
     size=tight,
     colback=white,
@@ -278,28 +310,39 @@
     toggle enlargement,
     grow to right by=\marginparsep+\marginparwidth,
     sidebyside gap=\marginparsep,
+    smash and center,
     listing options={}
   },
-  alternatives/.style={
-    listing options={
-      basicstyle=\tiny\ttfamily,
-      firstline=2,
-      lastline=-1
-    }
-  },
-  trim/.style={
-    listing options={
-      firstline=2,
-      lastline=-1
-    }
+  gallery/.style={
+    size=tight,
+    colback=white,
+    colframe=white,
+    if odd page={
+      % listing side text,
+      % lefthand width=\textwidth,
+      % righthand width=\marginparwidth,
+      grow to right by=\marginparsep+\marginparwidth,
+    }{
+      grow to right by=\marginparsep+\marginparwidth,
+      % text side listing,
+      % righthand width=\textwidth,
+      % lefthand width=\marginparwidth,
+    },
+    toggle enlargement,
+    % grow to right by=\marginparsep+\marginparwidth,
+    halign lower=center,
+    text above listing,
+    listing options={}
   }
 }
 
-\tcbset{kodi snippet/.style={snippet, trim}}
+% \tcbset{kodi snippet/.style={snippet, trim, smash and center}}
 
 \def\nilstrut{\rule{0sp}{0sp}}
 
 %==[ extra stuff ]==============================================================
+
+\usepackage{soul}
 
 % \usepackage{lipsum}
 
@@ -310,10 +353,11 @@
 
 % \usepackage[lastpage,user]{zref}
 \usepackage[
-  % colorlinks=false,
+  % colorlinks=true,
   % urlcolor=blue,
   % linkbordercolor=black,
   % pdfborderstyle={/S/U/W .4}% border style will be underline of width 1pt
+  % urlbordercolor=cyan        % color of external links
   hidelinks
 ]{hyperref}
 

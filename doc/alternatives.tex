@@ -1,64 +1,60 @@
-It is only fair to offer a comparison with other standard packages,
-and showcase the idiomatic code for the same diagram.
+\def\NiceURL#1#2{\href{#2}{\color{blue}\ul{#1}}}
 
-Let {\bfseries\Xy-pic} set the bar with a \emph{verbatim} extract from its manual%
-\footnote{\scriptsize\url{http://texdoc.net/texmf-dist/doc/generic/xypic/xyrefer.pdf\#page=1}}.
+It is only fair to mutely offer a comparison with mainstream packages,
+showing idiomatic code to draw the same diagram.
 
-\begin{tcblisting}{snippet, alternatives}
-\SmashAndCenter{%
+Let {\bfseries\Xy-pic} set the bar with a \emph{verbatim} extract from its
+\NiceURL{manual}{http://texdoc.net/texmf-dist/doc/generic/xypic/xyrefer.pdf\#page=1}.
+
+\begin{tcblisting}{snippet}
 \xymatrix{
  U \ar@/_/[ddr]_y \ar[dr] \ar@/^/[drr]^x \\
   & X \times_Z Y \ar[d]^q \ar[r]_p
                  & X \ar[d]_f            \\
   & Y \ar[r]^g & Z                       }
-}%
 \end{tcblisting}
 
-Then an example adapted from {\ttfamily\bfseries\small pst-node}'s documentation%
-\footnote{\scriptsize\url{http://texdoc.net/texmf-dist/doc/generic/pst-node/pst-node-doc.pdf\#page=23}}.
+Then an example adapted from {\ttfamily\bfseries\small pst-node}'s
+\NiceURL{documentation}{http://texdoc.net/texmf-dist/doc/generic/pst-node/pst-node-doc.pdf\#page=23}.
 
-\begin{tcblisting}{snippet, alternatives}
-%
-$\psset{arrows=->, nodesep=3pt, colsep=2.5em, rowsep=2em}
-\begin{psmatrix}
-U \\
-& X\times_Z Y & X \\
-& Y & Z
-\everypsbox{\scriptstyle}
-\ncline{1,1}{2,2}
-\ncarc[arcangle=-10]{1,1}{3,2}_{y}
-\ncarc[arcangle=10]{1,1}{2,3}^{x}
-\ncline{2,2}{3,2}>{q}
-\ncline{2,2}{2,3}_{p}
-\ncline{2,3}{3,3}<{f}
-\ncline{3,2}{3,3}^{g}
-\end{psmatrix}$
-%
+\begin{tcblisting}{snippet}
+$ \psset{colsep=2.5em, rowsep=2em}
+ \begin{psmatrix}
+  U \\
+ & X\times_Z Y & X \\
+ & Y & Z
+ \psset{arrows=->, nodesep=3pt}
+ \everypsbox{\scriptstyle}
+ \ncline{1,1}{2,2}
+ \ncarc[arcangle=-10]{1,1}{3,2}_{y}
+ \ncarc[arcangle=10]{1,1}{2,3}^{x}
+ \ncline{2,2}{3,2}>{q}
+ \ncline{2,2}{2,3}_{p}
+ \ncline{2,3}{3,3}<{f}
+ \ncline{3,2}{3,3}^{g}
+ \end{psmatrix}$
 \end{tcblisting}
 
-Next is an adaptation from the manual%
-\footnote{\scriptsize\url{http://texdoc.net/texmf-dist/doc/latex/tikz-cd/tikz-cd-doc.pdf\#page=3}}%
-of {\ttfamily\bfseries\small\{tikz-cd\}}.%
+Next is an adaptation from the
+\NiceURL{manual}{http://texdoc.net/texmf-dist/doc/latex/tikz-cd/tikz-cd-doc.pdf\#page=3}
+of {\ttfamily\bfseries\small\{tikz-cd\}}.
 
-\begin{tcblisting}{snippet, alternatives}
-%
+\begin{tcblisting}{snippet}
 \begin{tikzcd}[column sep=scriptsize, row sep=scriptsize]
-U
-\arrow[drr, bend left=10, "x"]
-\arrow[ddr, bend right=10, swap, "y"]
-\arrow[dr] & & \\
-& X \times_Z Y \arrow[r, swap, "p"] \arrow[d, "q"]
-& X \arrow[d, swap, "f"] \\
-& Y \arrow[r, "g"]
-& Z
+  U
+  \arrow[drr, bend left=10, "x"]
+  \arrow[ddr, bend right=10, swap, "y"]
+  \arrow[dr] & & \\
+    & X \times_Z Y \arrow[r, swap, "p"] \arrow[d, "q"]
+      & X \arrow[d, swap, "f"] \\
+    & Y \arrow[r, "g"]
+      & Z
 \end{tikzcd}
-%
 \end{tcblisting}
 
 And finally there is \textbf{\koDi}.
 
-\begin{tcblisting}{snippet, alternatives}
-\tikzset{/kD/diagrams/golden=4.5em}
+\begin{tcblisting}{snippet}
 \begin{kodi}
   \obj { |(pb)| X \times_Z Y & X \\
                            Y & Z \\ };
@@ -71,5 +67,4 @@ And finally there is \textbf{\koDi}.
   \mor      :[bend left=10]  * x:-> X;
   \mor[swap]:[bend right=10] * y:-> Y;
 \end{kodi}
-%
 \end{tcblisting}

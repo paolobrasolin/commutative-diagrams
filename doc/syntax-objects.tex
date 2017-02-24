@@ -34,39 +34,39 @@ blah blah blah.
 
 Here is a kitchen sink for tabular syntax:
 
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2em]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}[square=3em]
 \obj { A & B &[1em] C \\
        D & E &      F \\[-1em]
        G & H &      I \\ };
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Objects are automagically named; the latest homonymous prevails.
 
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}[square=3em]
 \obj { A & A \\ };
 \draw (A) circle (1em);
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Naming a specific object avoids its automatic labeling.
 
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}[square=3em]
 \obj { A & |(A')| A \\ };
 \draw [red]   (A)  circle (1em);
 \draw [green] (A') circle (1em);
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Naming a layout lets you refer to its objects by row and column.
 
-\begin{tcblisting}{kodi snippet}
-\SmashAndCenter{\tikzpicture[kodi, /kD/diagrams/square=2.125em]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}[square=3em]
 \obj (M) { A & A \\ A & A \\ };
 \draw [red]   (M-1-2) circle (1em);
 \draw [green] (M-2-1) circle (1em);
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}

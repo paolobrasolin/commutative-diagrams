@@ -78,7 +78,6 @@
     rectangular/.style 2 args={
       /tikz/column sep={#1,between origins},
       /tikz/row sep={#2,between origins},
-      % /kD/every object/.append style={/tikz/node distance=#1 and #2}
     },
     square/.style={
       /kD/layouts/rectangular={#1}{#1}
@@ -95,20 +94,37 @@
     golden/.default=4.5em,
 %=[ diagram styles ]============================================================
   /kD/diagrams/.cd,
-    square/.style={
-      /kD/every layout/.append style={square={#1}},
-      /kD/every object/.append style={/tikz/node distance={#1}}
-    },
-    square/.default=4.5em,
-    golden/.style={
-      /kD/every layout/.append style={golden={#1}},
-      /kD/every object/.append style={
-        /tikz/node distance=0.618*#1 and #1,
-        % /tikz/centered,
-        /tikz/on grid,
-      },
-      /tikz/y=0.618*#1,
+    rectangular/.style 2 args={
+      /kD/every layout/.append style={/kD/layouts/rectangular={#1}{#2}},
+      % TODO: how much of the following is necessary in layouts?
+      /tikz/on grid,
       /tikz/x=#1,
+      /tikz/y=#2,
+      /tikz/node distance=#1 and #2,
     },
+    square/.style={
+      /kD/every layout/.append style={/kD/layouts/square={#1}},
+      /kD/diagrams/rectangular={#1}{#1},
+    },
+    golden/.style={
+      /kD/every layout/.append style={/kD/layouts/golden={#1}},
+      /kD/diagrams/rectangular={#1}{0.618*#1},
+    },
+    comb/.style={
+      /kD/every layout/.append style={/kD/layouts/comb},
+      /tikz/x=4.5em*0.5,
+      /tikz/y={4.5em*tan(60)*0.5},
+      /tikz/node distance=2,
+      /tikz/on grid,
+      /kD/diagrams/manhattan,
+    },
+    rectangular/.default={6em}{4em},
+    square/.default=4.5em,
     golden/.default=4.5em,
+    manhattan/.style={
+      /tikz/above left/.code={\tikz@lib@place@handle@{##1}{south east}{-1}{1}{north west}{0.5}},
+      /tikz/above right/.code={\tikz@lib@place@handle@{##1}{south west}{1}{1}{north east}{0.5}},
+      /tikz/below left/.code={\tikz@lib@place@handle@{##1}{north east}{-1}{-1}{south west}{0.5}},
+      /tikz/below right/.code={\tikz@lib@place@handle@{##1}{north west}{1}{-1}{south east}{0.5}}
+    }
 }

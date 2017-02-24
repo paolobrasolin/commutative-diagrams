@@ -1,51 +1,51 @@
 Objects are typeset using the \lstinline|\obj| macro.
 
-\begin{tcblisting}{kodi snippet}
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj {X};
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Almost every diagram is laid along a regular grid,
 so the customary tabular syntax of \TeX\ is recognized.
 
-\begin{tcblisting}{kodi snippet}
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj {
   A & B \\
   C & D \\
 };
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 \koDi\ objects are self-aware and clever enough to name themselves
 so you can comfortably refer to them.
 
-\begin{tcblisting}{kodi snippet}
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj {\lim F};
 \draw (lim F) circle (4ex);
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Morphisms are typeset using the \lstinline!\mor! macro.
 
-\begin{tcblisting}{kodi snippet}
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj { A & B \\ };
 \mor A f:-> B;
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Commutative diagrams exist to illustrate composition and commutation,
 so \koDi\ allows arrow chaining and chain gluing.
 
-\begin{tcblisting}{kodi snippet}
-\nilstrut\smash{\tikzpicture[baseline=(current bounding box.center),kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj { A & B \\ C & D \\ };
 \mor A -> B -> D;
 \mor * -> C -> *;
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 

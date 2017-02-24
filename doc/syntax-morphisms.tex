@@ -1,3 +1,5 @@
+\begingroup\tcbset{trim/.default={3 and -1}}
+
 The second and last macro that \koDi\ offers is \lstinline|\mor|.
 It can draw single or chained morphisms.
 
@@ -35,8 +37,8 @@ Global options can be given to both labels and arrows.
 These rules allow for a label syntax that sprouts gracefully
 from the simplest to the most complex arrow.
 
-\begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
-\SmashAndCenter{\tikzpicture[kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj { A & B & C \\ F & E & D \\ };
 \mor A -> B;
 \mor B f:-> C;
@@ -44,26 +46,27 @@ from the simplest to the most complex arrow.
 \mor D "h i":-> E;
 \mor E ["L", above]:-> F;
 \mor F ["m", near start]["n", swap]["o", near end]:-> A;
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 The same holds for arrow syntax.
 
-\begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
-\SmashAndCenter{\tikzpicture[kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj { A & B & C \\ };
 \mor A -> B;
 \mor B [>-, dashed] C;
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
 Blah.
 
-\begin{tcblisting}{kodi snippet, listing options={firstline=3,lastline=-1}}
-\SmashAndCenter{\tikzpicture[kodi]
+\begin{tcblisting}{snippet, trim}
+\begin{kodi}
 \obj { A & B & C \\ F & E & D \\ };
 \mor A -> B;
 \mor [swap]:[bend left] B f:-> C g:>-> D h:>- E;
-\endtikzpicture}
+\end{kodi}
 \end{tcblisting}
 
+\endgroup
