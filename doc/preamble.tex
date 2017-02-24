@@ -156,6 +156,7 @@
 \newsavebox\SmashAndCenterBox
 \newdimen\SmashandCenterRaise
 
+% TODO: make overflow on left pages go left
 \NewDocumentEnvironment{smashAndCenter}{}{%
 \begin{lrbox}{\SmashAndCenterBox}}{%
 \end{lrbox}%
@@ -327,10 +328,10 @@
       % text side listing,
       % righthand width=\textwidth,
       % lefthand width=\marginparwidth,
+      % halign upper=center,
     },
     toggle enlargement,
     % grow to right by=\marginparsep+\marginparwidth,
-    halign lower=center,
     text above listing,
     listing options={}
   }
