@@ -109,10 +109,14 @@
     golden/.style={
       /kD/every layout/.append style={/kD/layouts/golden={#1}},
       /kD/diagrams/rectangular={#1}{0.618*#1},
+      /tikz/x={#1},
+      /tikz/y={0.618*#1},
+      /tikz/node distance=1 and 1,
+      /tikz/on grid,
     },
     comb/.style={
       /kD/every layout/.append style={/kD/layouts/comb},
-      /tikz/x=4.5em*0.5,
+      /tikz/x={4.5em*0.5},
       /tikz/y={4.5em*tan(60)*0.5},
       /tikz/node distance=2,
       /tikz/on grid,
