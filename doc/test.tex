@@ -2,77 +2,91 @@
 
 \null\vfill
 
-\marginpar{\begin{smashAndCenter}\begin{kodi}[comb=base 3.2em angle 60]
+\tikzset{
+  versor/.style={ultra thick, black, ->, >=latex, line cap=round},
+  checkers/.style={fill=teal!15},
+  measure/.style={decorate, decoration={brace, amplitude=4pt}},
+  label/.style={font=\scriptsize, outer sep=.5em, inner sep=0sp},
+  dots/.style={fill=teal!50},
+}
 
+\marginpar{\begin{SmashAndCenter}\begin{kodi}[comb=step 3.2em angle 60]
   \clip (-1.5,-1.5) rectangle (3.5,2.5);
       
-  \foreach \i/\j in {-2/-2,0/-2,2/-2,-3/-1,-1/-1,1/-1,3/-1,-2/0,0/0,2/0,-3/1,-1/1,1/1,3/1,-2/2,0/2,2/2}
-    \fill [gray!15] (\i,\j) -- +(1,1) -- +(2,0);
-  
-  \foreach \i in {-1, ..., 3} \foreach \j in {-1, ..., 2} {
-    \pgfmathsetmacro\dotsize{isodd(int(abs(\i)+abs(\j)))?1:2}
-    \fill [gray] (\i,\j) circle (\dotsize pt);
+  \foreach \i in {-3, ..., 3} \foreach \j in {-2, ..., 2} {
+    \pgfmathparse{int(1+abs(\i)+abs(\j))}
+    \ifodd\pgfmathresult \fill [checkers] (\i,\j) -- +(1,1) -- +(2,0);\fi
+    \pgfmathsetmacro\dotsize{isodd(\pgfmathresult)?2:1}
+    \fill [dots] (\i,\j) circle (\dotsize pt);
   }
+  
+  \draw [measure, decoration=mirror, yshift=-4pt]
+    (0,0) -- (2,0) node [label, midway, below]  {\strut base};
 
-  \draw [red, dashed, ultra thick] (0,0) -- (2,0);
-  \draw [red, decorate,decoration={brace,amplitude=4pt,mirror},yshift=-4pt]
-  (0,0) -- (2,0) node [below, midway, font=\tiny]  {base};
-  \draw [ultra thick, green, dashed]
-  (.75,.75) arc (60:30:2.4em) coordinate (wot) arc (30:0:2.4em);
-  \path [green, late options={name=wot,pin={[pin edge={green,thin,-}, inner sep=0, font=\tiny]30:angle}}];
-  \draw [thick, blue, ->, >=stealth] (0,0) -- (1,0);
-  \draw [thick, blue, ->, >=stealth] (0,0) -- (0,1);
-\end{kodi}\end{smashAndCenter}}
+  \draw (.75,.75) arc (60:30:2.4em) coordinate (wot) arc (30:0:2.4em);
+  \path [late options={name=wot,pin={[pin edge={thin, black}, label, right,
+    outer sep=.2em]30:angle}}];
+
+  \draw [versor] (0,0) -- (1,0);
+  \draw [versor] (0,0) -- (0,1);
+\end{kodi}\end{SmashAndCenter}}
 
 \vfill
 
-\marginpar{\begin{smashAndCenter}\begin{kodi}[rectangular={2em}{2.5em}]
+\marginpar{\begin{SmashAndCenter}\begin{kodi}[vcomb=step 3.2em angle 60]
+  \clip (-1.5,-1.5) rectangle (1.5,3.5);
 
+  \foreach \i in {-2, ..., 2} \foreach \j in {-3, ..., 3} {
+    \pgfmathparse{int(1+abs(\i)+abs(\j))}
+    \ifodd\pgfmathresult \fill [checkers] (\i,\j) -- +(1,1) -- +(0,2);\fi
+    \pgfmathsetmacro\dotsize{isodd(\pgfmathresult)?2:1}
+    \fill [dots] (\i,\j) circle (\dotsize pt);
+  }
+
+  \draw [measure, xshift=-4pt]
+    (0,0) -- (0,2) node [label, midway, left]  {\strut height};
+
+  \draw (.75,.75) arc (30:60:2.4em) coordinate (wot) arc (60:90:2.4em);
+  \path [late options={name=wot,pin={[pin edge={thin, black}, label, right,
+    outer sep=.2em]30:angle}}];
+
+  \draw [versor] (0,0) -- (1,0);
+  \draw [versor] (0,0) -- (0,1);
+\end{kodi}\end{SmashAndCenter}}
+
+\vfill
+
+\marginpar{\begin{SmashAndCenter}\begin{kodi}[rectangular={2em}{2.5em}]
   \clip (-1.5,-1.5) rectangle (2.5,2.5);
       
   \foreach \i in {-2, ..., 2} \foreach \j in {-2, ..., 2} {
     \pgfmathparse{int(1+abs(\i)+abs(\j))}
-    \ifodd\pgfmathresult
-      \fill [gray!15] (\i,\j) rectangle +(1,1);
-    \fi
+    \ifodd\pgfmathresult \fill [checkers] (\i,\j) rectangle +(1,1);\fi
+    \fill [dots] (\i,\j) circle (2pt);
   }
   
-  \foreach \i in {-1, ..., 2} \foreach \j in {-1, ..., 2}
-    \fill [gray] (\i,\j) circle (2pt);
+  \draw [measure, decoration=mirror, yshift=-4pt]
+    (0,0) -- (1,0) node [label, midway, below] {base};
+  
+  \draw [measure, xshift=-4pt]
+    (0,0) -- (0,1) node [label, midway, left] {height};
+  
+  \draw [versor] (0,0) -- (1,0);
+  \draw [versor] (0,0) -- (0,1);
+\end{kodi}\end{SmashAndCenter}}
 
-  \draw [red, dashed, ultra thick] (0,0) -- (1,0);
-  \draw [red, decorate,decoration={brace,amplitude=4pt,mirror},yshift=-4pt]
-  (0,0) -- (1,0) node [below, midway, font=\tiny]  {base};
-  
-  \draw [green, dashed, ultra thick] (0,0) -- (0,1);
-  \draw [green, decorate,decoration={brace,amplitude=4pt},xshift=-4pt]
-  (0,0) -- (0,1) node [left, midway, font=\tiny, inner sep=.5em]  {height};
-  
-  \draw [thick, blue, ->, >=stealth] (0,0) -- (1,0);
-  \draw [thick, blue, ->, >=stealth] (0,0) -- (0,1);
-\end{kodi}\end{smashAndCenter}}
+\begin{kodi}
+  \obj[comb] {A&B&\\D&E&F\\G&H&\\};
+\end{kodi}
+\begin{kodi}
+  \obj[comb=step 2em angle 70] {A&B&\\D&E&F\\G&H&\\};
+\end{kodi}
+\begin{kodi}
+  \obj[comb=horizontal step 2em angle 70] {A&B&\\D&E&F\\G&H&\\};
+\end{kodi}
+
+\begin{kodi}
+  \obj[comb=vertical step 2em angle 70] {A&B&C\\D&E&F\\&H&\\};
+\end{kodi}
 
 \vfill
-
-% \begin{kodi}[golden=3em]
-%   \fill [gray, opacity=.5] (0.309,0) -- (0.618,1) arc (63.43:0:1.31*1.6em) -- cycle;
-%   \fill [gray, opacity=.5] (0,0) -- (0,1) arc (90:0:0.62*3em) -- cycle;
-%   \draw [dashed] rectangle (0.618,1);
-
-  
-%   \foreach \i in {-1, ..., 2} \foreach \j in {-1, ..., 2} {
-%     \fill [gray] (\i,\j) circle (2 pt);
-%   }
-  
-%   \draw [red, dashed, ultra thick] (0,0) -- (1,0);
-%   \draw [red, decorate,decoration={brace,amplitude=4pt,mirror},yshift=-4pt]
-%   (0,0) -- (1,0) node [below, midway, font=\tiny]  {base};
-  
-%   \draw [green, dashed, ultra thick] (0,0) -- (0,1);
-%   \draw [green, decorate,decoration={brace,amplitude=4pt},xshift=-4pt]
-%   (0,0) -- (0,1) node [left, midway, font=\tiny]  {height};
-  
-%   \draw [thick, blue, ->, >=stealth] (0,0) -- (1,0);
-%   \draw [thick, blue, ->, >=stealth] (0,0) -- (0,1);
-  
-% \end{kodi}

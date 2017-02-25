@@ -85,11 +85,26 @@
     golden/.style={
       /kD/layouts/rectangular={#1}{0.618*#1}
     },
-    comb/.style args={base #1 angle #2}{
+    comb/.style args={step #1 angle #2}{
       /kD/layouts/rectangular={#1}{tan(#2)*#1*0.5},
       /tikz/every odd row/.append style={/tikz/xshift=#1*0.5}
     },
-    comb/.default=base 4.5em angle 60,
+    comb/.code args={#1step #2 angle #3}{
+      % TODO: write better option parser
+      \if\relax#1\pgfkeys{/kD/layouts/horizontal comb=step #2 angle #3}
+      \else\pgfkeys{/kD/layouts/#1comb=step #2 angle #3}\fi
+    },
+    horizontal comb/.style args={step #1 angle #2}{
+      /kD/layouts/rectangular={#1}{tan(#2)*#1*0.5},
+      /tikz/every odd row/.append style={/tikz/xshift=(#1)*0.5}
+    },
+    vertical comb/.style args={step #1 angle #2}{
+      /kD/layouts/rectangular={tan(#2)*#1*0.5}{#1},
+      /tikz/every odd column/.append style={/tikz/yshift=-1*(#1)*0.5}
+    },
+    comb/.default=step 4.5em angle 60,
+    horizontal comb/.default=step 4.5em angle 60,
+    vertical comb/.default=step 4.5em angle 60,
     square/.default=4.5em,
     golden/.default=4.5em,
 %=[ diagram styles ]============================================================
@@ -114,7 +129,7 @@
       /tikz/node distance=1 and 1,
       /tikz/on grid,
     },
-    comb/.style args={base #1 angle #2}{
+    comb/.style args={step #1 angle #2}{
       /kD/every layout/.append style={/kD/layouts/comb},
       /tikz/x={#1*0.5},
       /tikz/y={#1*tan(#2)*0.5},
@@ -122,7 +137,16 @@
       /tikz/on grid,
       /kD/diagrams/manhattan,
     },
-    comb/.default=base 4.5em angle 60,
+    comb/.default=step 4.5em angle 60,
+    vcomb/.style args={step #1 angle #2}{
+      /kD/every layout/.append style={/kD/layouts/comb},
+      /tikz/x={#1*tan(#2)*0.5},
+      /tikz/y={#1*0.5},
+      /tikz/node distance=2,
+      /tikz/on grid,
+      /kD/diagrams/manhattan,
+    },
+    vcomb/.default=step 4.5em angle 60,
     rectangular/.default={6em}{4em},
     square/.default=4.5em,
     golden/.default=4.5em,

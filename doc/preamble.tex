@@ -159,7 +159,7 @@
 \newdimen\SmashandCenterRaise
 
 % TODO: make overflow on left pages go left
-\NewDocumentEnvironment{smashAndCenter}{}{%
+\NewDocumentEnvironment{SmashAndCenter}{}{%
 \begin{lrbox}{\SmashAndCenterBox}}{%
 \end{lrbox}%
 \SmashandCenterRaise=\dimexpr-.5\ht\SmashAndCenterBox+.5\dp\SmashAndCenterBox\relax%
@@ -222,7 +222,7 @@
 \lstdefinestyle{TeX}{
   language=[LaTeX]TeX,
   basicstyle=\ttfamily\lst@ifdisplaystyle\scriptsize\fi,
-  backgroundcolor=\color{teal!5},
+  backgroundcolor=\color{teal!10},
   % keywordstyle=*\color{blue},
   % identifierstyle=\color{orange}\bfseries,
   % morekeywords={\path},
@@ -284,11 +284,11 @@
 \tcbset{
   smash and center/.style={
     if odd page={
-      before lower=\begin{smashAndCenter},
-      after lower=\end{smashAndCenter}
+      before lower=\begin{SmashAndCenter},
+      after lower=\end{SmashAndCenter}
     }{
-      before upper=\begin{smashAndCenter},
-      after upper=\end{smashAndCenter}
+      before upper=\begin{SmashAndCenter},
+      after upper=\end{SmashAndCenter}
     }},
   trim/.style args={#1 and #2}{
     listing options={
