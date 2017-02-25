@@ -75,20 +75,33 @@
   \draw [versor] (0,0) -- (0,1);
 \end{kodi}\end{SmashAndCenter}}
 
-\begin{kodi}
-  \obj[comb] {A&B&\\D&E&F\\G&H&\\};
-\end{kodi}
-\begin{kodi}
-  \obj[comb=step 2em angle 70] {A&B&\\D&E&F\\G&H&\\};
-\end{kodi}
-\begin{kodi}
-  \obj[comb=horizontal step 2em angle 70] {A&B&\\D&E&F\\G&H&\\};
-\end{kodi}
-
-\begin{kodi}
-  \obj[comb=vertical step 2em angle 70] {A&B&C\\D&E&F\\&H&\\};
-\end{kodi}
 
 
 \vfill
 
+\begin{kodi}[manhattan={2em}{2.5em}]
+  \foreach \i in {-1, ..., 5}
+  \foreach \j in {-1, ..., 5}
+    \fill (\i,\j) circle (1pt);  
+  
+  \draw [versor] (0,0) -- (1,0);
+  \draw [versor] (0,0) -- (1,1);
+  \draw [versor] (0,0) -- (0,1);
+
+  \node (O) {O};
+  \node [above      =  of O] {X};
+  \node [above right=  of O] {X};
+  \node [right      =  of O] {X};
+  \node [above      =1 of O] {1};
+  \node [above right=1 of O] {1};
+  \node [right      =1 of O] {1};
+  \node [above      =2 of O] {2};
+  \node [above right=2 of O] {2};
+  \node [right      =2 of O] {2};
+  \node [above      =3 of O] {3};
+  \node [above right=3 of O] {3};
+  \node [right      =3 of O] {3};
+  \node [above      =4 of O] {4};
+  \node [above right=4 of O] {4};
+  \node [right      =4 of O] {4};
+\end{kodi}
