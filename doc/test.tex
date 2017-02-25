@@ -10,7 +10,7 @@
   dots/.style={fill=teal!50},
 }
 
-\marginpar{\begin{SmashAndCenter}\begin{kodi}[comb=step 3.2em angle 60]
+\marginpar{\begin{SmashAndCenter}\begin{kodi}[comb=horizontal step 3.2em angle 60]
   \clip (-1.5,-1.5) rectangle (3.5,2.5);
       
   \foreach \i in {-3, ..., 3} \foreach \j in {-2, ..., 2} {
@@ -21,7 +21,7 @@
   }
   
   \draw [measure, decoration=mirror, yshift=-4pt]
-    (0,0) -- (2,0) node [label, midway, below]  {\strut base};
+    (0,0) -- (2,0) node [label, midway, below] {step};
 
   \draw (.75,.75) arc (60:30:2.4em) coordinate (wot) arc (30:0:2.4em);
   \path [late options={name=wot,pin={[pin edge={thin, black}, label, right,
@@ -33,7 +33,7 @@
 
 \vfill
 
-\marginpar{\begin{SmashAndCenter}\begin{kodi}[vcomb=step 3.2em angle 60]
+\marginpar{\begin{SmashAndCenter}\begin{kodi}[comb=vertical step 3.2em angle 60]
   \clip (-1.5,-1.5) rectangle (1.5,3.5);
 
   \foreach \i in {-2, ..., 2} \foreach \j in {-3, ..., 3} {
@@ -44,7 +44,7 @@
   }
 
   \draw [measure, xshift=-4pt]
-    (0,0) -- (0,2) node [label, midway, left]  {\strut height};
+    (0,0) -- (0,2) node [label, midway, left]  {step};
 
   \draw (.75,.75) arc (30:60:2.4em) coordinate (wot) arc (60:90:2.4em);
   \path [late options={name=wot,pin={[pin edge={thin, black}, label, right,
@@ -89,4 +89,6 @@
   \obj[comb=vertical step 2em angle 70] {A&B&C\\D&E&F\\&H&\\};
 \end{kodi}
 
+
 \vfill
+
