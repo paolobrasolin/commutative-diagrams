@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-- 2.2.5
+- 2.4.0
 install:
   # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
   - source travis/texlive/install
