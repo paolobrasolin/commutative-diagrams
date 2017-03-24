@@ -9,12 +9,12 @@ Feature: kDGobbleSoftTok gobbles all spaces from the token stream
   Scenario Outline: verifying the macro does gobble spaces
     Given the body is
     """
-    \newtoks\toks
-    \toks{<code>}
-    \message{the input token list: [\the\toks]}
-    \expandafter\toks\expandafter\expandafter
-      \expandafter{\expandafter\kDGobbleSoftTok\the\toks}
-    \message{the output token list: [\the\toks]}
+    \newtoks\TOKENS
+    \TOKENS{<code>}
+    \message{the input token list: [\the\TOKENS]}
+    \expandafter\TOKENS\expandafter\expandafter
+      \expandafter{\expandafter\kDGobbleSoftTok\the\TOKENS}
+    \message{the output token list: [\the\TOKENS]}
     """
     Then compilation succeeds
     And the log includes the input token list: [<input toks>]

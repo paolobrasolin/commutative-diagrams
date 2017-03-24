@@ -9,11 +9,11 @@ Feature: kDTrimTrailingSpace trims trailing spaces from a token list
   Scenario Outline: verifying the macro does trim trailing spaces
     Given the body is
     """
-    \newtoks\toks
-    \toks{<code>}
-    \message{the input token list: [\the\toks]}
-    \kDTrimTrailingSpace\toks
-    \message{the output token list: [\the\toks]}
+    \newtoks\TOKENS
+    \TOKENS{<code>}
+    \message{the input token list: [\the\TOKENS]}
+    \kDTrimTrailingSpace\TOKENS
+    \message{the output token list: [\the\TOKENS]}
     """
     Then compilation succeeds
     And the log includes the input token list: [<input toks>]

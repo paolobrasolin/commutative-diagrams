@@ -9,11 +9,11 @@ Feature: kDTrimLeadingSpace trims leading spaces from a token list
   Scenario Outline: verifying the macro does trim leading spaces
     Given the body is
     """
-    \newtoks\toks
-    \toks{<code>}
-    \message{the input token list: [\the\toks]}
-    \kDTrimLeadingSpace\toks
-    \message{the output token list: [\the\toks]}
+    \newtoks\TOKENS
+    \TOKENS{<code>}
+    \message{the input token list: [\the\TOKENS]}
+    \kDTrimLeadingSpace\TOKENS
+    \message{the output token list: [\the\TOKENS]}
     """
     Then compilation succeeds
     And the log includes the input token list: [<input toks>]
