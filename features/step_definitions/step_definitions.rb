@@ -3,10 +3,11 @@
 Before do |_scenario|
   @job = TeXWorld::Job.new
   FileUtils.mkdir_p '.tex-test'
+  # puts _scenario.marshal_dump.inspect
 end
 
 Given(/^I'm using any TeX flavour$/) do
-  unless ENV.has_key?('DIALECT') && ENV.has_key?('PIPELINE')
+  unless ENV.key?('DIALECT') && ENV.key?('PIPELINE')
     raise 'Both DIALECT and PIPELINE must be given through ENV.'
   end
   @job.document.load(ENV['DIALECT'])

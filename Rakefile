@@ -4,11 +4,12 @@ require 'fileutils'
 require 'open3'
 require 'rake/clean'
 require 'yaml'
+require 'colorize'
 
 @meta = YAML.load(File.read('metadata.yaml'))
 
 def print_title(title)
-  print ("\n#==[ #{title} ]" + '=' * 80)[0, 80] + "\n"
+  puts ("#==[ #{title} ]" + '=' * 80)[0, 80].white.on_black
 end
 
 #==[ doc: build documents ]=====================================================
@@ -29,7 +30,7 @@ task :doc do
     'latexpand', '--output=build/kodi-doc.tex', '--keep-comments', 'main.tex',
     chdir: 'doc'
   )
-  raise StandardError, stderr unless status.success?
+  raise StandardError, stderr.red unless status.success?
   print "Done.\n"
 
   Dir.chdir target_dir do
@@ -37,15 +38,15 @@ task :doc do
     _stdout, stderr, status = Open3.capture3(
       'latexmk', '-gg', 'kodi-doc.tex'
     )
-    raise StandardError, stderr unless status.success?
+    raise StandardError, stderr.red unless status.success?
     _stdout, stderr, status = Open3.capture3(
       'dvips', 'kodi-doc.dvi'
     )
-    raise StandardError, stderr unless status.success?
+    raise StandardError, stderr.red unless status.success?
     _stdout, stderr, status = Open3.capture3(
       'ps2pdf', 'kodi-doc.ps'
     )
-    raise StandardError, stderr unless status.success?
+    raise StandardError, stderr.red unless status.success?
     print "Done.\n"
   end
 end
@@ -162,50 +163,58 @@ end
 
 ################################################################################
 
+#==[ features ]=================================================================
+
 task :features, :features_regexp, :tex_envs_regexp do |_task, args|
   features_regexp = args[:features_regexp] || '.*'
   tex_envs_regexp = args[:tex_envs_regexp] || '.*'
 
-  options = [
+  cucumber_options = [
     '--format pretty',
     '--no-source'
   ]
 
-  tex_envs = YAML.safe_load(File.read('features/support/workflows.yaml'))
+  tex_envs = YAML.safe_load File.read('features/support/workflows.yaml')
   tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
   message = 'The provided TeX environment regexp has no matches.'
-  raise ArgumentError, message if tex_envs.empty?
+  raise ArgumentError, message.red if tex_envs.empty?
 
   features = Dir.glob('features/**/*.feature')
   features.select! { |f| f[/#{features_regexp}/] }
   message = 'The provided feature regexp has no matches.'
-  raise ArgumentError, message if features.empty?
+  raise ArgumentError, message.red if features.empty?
 
-  filtered_features_syms = []
+  filtered_features_tasks = []
 
-  features.each do |filename|
-    if filename.include?('generic')
-      tex_envs.each do |k, v|
-        hash = Digest::MD5.hexdigest(k + filename).to_sym
-        filtered_features_syms <<= hash
-        Cucumber::Rake::Task.new(hash) do |task|
-          task.cucumber_opts = options + [
-            "DIALECT=#{v['dialect']}",
-            "PIPELINE=#{v['pipeline']}"
-          ] + [filename]
-        end
-      end
-    else
-      hash = Digest::MD5.hexdigest(filename).to_sym
-      filtered_features_syms <<= hash
+  generic_features = features.group_by { |f| f.include? 'generic' }
+
+  if generic_features.key? true
+    generic_features_filenames = generic_features[true].join ' '
+    tex_envs.each do |k, v|
+      hash = Digest::MD5.hexdigest(k + generic_features_filenames).to_sym
+      filtered_features_tasks <<= hash
       Cucumber::Rake::Task.new(hash) do |task|
-        task.cucumber_opts = options + [filename]
+        task.cucumber_opts = cucumber_options + [
+          "DIALECT=#{v['dialect']}",
+          "PIPELINE=#{v['pipeline']}"
+        ] + [generic_features_filenames]
       end
     end
   end
 
-  task filtered_features: filtered_features_syms
-  Rake::Task[:filtered_features].invoke
+  if generic_features.key? false
+    non_generic_features_filenames = generic_features[false].join ' '
+    hash = Digest::MD5.hexdigest(non_generic_features_filenames).to_sym
+    filtered_features_tasks <<= hash
+    Cucumber::Rake::Task.new(hash) do |task|
+      task.cucumber_opts = cucumber_options + [non_generic_features_filenames]
+    end
+  end
+
+  unless filtered_features_tasks.empty?
+    task filtered_features: filtered_features_tasks
+    Rake::Task[:filtered_features].invoke
+  end
 end
 
 #==[ install ]==================================================================

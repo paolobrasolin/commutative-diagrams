@@ -8,4 +8,5 @@ group :development do
   gem 'guard-cucumber'
   gem 'guard-rake'
   gem 'guard-shell'
+  gem 'colorize'
 end
