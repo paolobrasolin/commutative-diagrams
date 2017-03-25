@@ -16,11 +16,11 @@
 \pgfqkeys{/kD}{
 %==[ universal styles ]=========================================================
   every diagram/.append style={},
-  every layout/.append style={square},
-  every object/.append style={
-    % TODO: should every object have this style, or only matrix ones?
-    shape=kD baseline centered rectangle
+  every layout/.append style={
+    square,
+    every object/.append style={shape=kD baseline centered rectangle}
   },
+  every object/.append style={},
   every arrow/.append style={
     >=stealth,
   },
