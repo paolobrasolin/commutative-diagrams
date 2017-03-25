@@ -17,7 +17,10 @@
 %==[ universal styles ]=========================================================
   every diagram/.append style={},
   every layout/.append style={square},
-  every object/.append style={},
+  every object/.append style={
+    % TODO: should every object have this style, or only matrix ones?
+    shape=kD baseline centered rectangle
+  },
   every arrow/.append style={
     >=stealth,
   },
@@ -156,3 +159,131 @@
     square/.default=4.5em,
     golden/.default=4.5em,
 }
+
+
+%==[ baseline centered rectangle shape ]========================================
+
+% The math formula axis height is recovered and stored as a pgf function.
+
+% NOTE: the LuaTeX version is needed just by ConTeXt
+\pgfutil@ifluatex
+  \directlua{tex.enableprimitives('kD', {'Umathaxis'})}
+  \pgfmathdeclarefunction{kD_math_formula_axis_height}{0}{%
+    \begingroup%
+      $\relax$% update fontdimens
+      % See TeX by Topic §23.5 for details.
+      \pgfmathreturn\the\kDUmathaxis\textstyle%
+    \endgroup}
+\else% if using (pdf)tex
+  \pgfmathdeclarefunction{kD_math_formula_axis_height}{0}{%
+    \begingroup%
+      $\relax$% update fontdimens
+      % See TeX by Topic §23.5 for details.
+      \pgfmathreturn\the\fontdimen22\textfont2%
+    \endgroup}
+\fi
+
+\pgfqkeys{/kD/baseline centered rectangle}{
+  center raise/.initial=kD_math_formula_axis_height
+}
+
+% Then the shape is defined by inheritance.
+
+\pgfdeclareshape{kD baseline centered rectangle} {
+  % Inherit the rectangle shape.
+  \inheritsavedanchors[from={rectangle}]
+  \inheritanchor[from={rectangle}]{base}
+  \inheritanchor[from={rectangle}]{north}
+  \inheritanchor[from={rectangle}]{south}
+  \inheritanchor[from={rectangle}]{base west}
+  \inheritanchor[from={rectangle}]{north west}
+  \inheritanchor[from={rectangle}]{south west}
+  \inheritanchor[from={rectangle}]{base east}
+  \inheritanchor[from={rectangle}]{north east}
+  \inheritanchor[from={rectangle}]{south east}
+  \inheritanchor[from={rectangle}]{mid}
+  \inheritanchor[from={rectangle}]{mid west}
+  \inheritanchor[from={rectangle}]{mid east}
+  \inheritbackgroundpath[from={rectangle}]
+  % Redefine west, center and east anchors
+  % setting their y coordinates to center raise.
+  \anchor{center}{\pgf@anchor@rectangle@center\pgfmathsetlength\pgf@y%
+    {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}}
+  \anchor{west}{\pgf@anchor@rectangle@west\pgfmathsetlength\pgf@y%
+    {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}}
+  \anchor{east}{\pgf@anchor@rectangle@east\pgfmathsetlength\pgf@y%
+    {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}}
+  % Save the original anchors as alternate "real" versions.
+  \anchor{real center}{\pgf@anchor@rectangle@center}
+  \anchor{real west}{\pgf@anchor@rectangle@west}
+  \anchor{real east}{\pgf@anchor@rectangle@east}
+  % Redefine the border anchor calculation.
+  \anchorborder{%
+    % (x,y) = target
+    % let tempdima = center raise
+    \pgfmathsetlength\pgfutil@tempdima%
+      {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}%
+    % let b = (x,y) = target
+    \pgf@xb=\pgf@x%
+    \pgf@yb=\pgf@y%
+    % let (x,y) = south west
+    \southwest%
+    % let a = (x,y) = south west
+    \pgf@xa=\pgf@x%
+    \pgf@ya=\pgf@y%
+    % let (x,y) = north east
+    \northeast%
+    % let (x,y) = (x,y) - a = north east - south west = (width, height)
+    \advance\pgf@x by-\pgf@xa%
+    \advance\pgf@y by-\pgf@ya%
+    % let c = (x,y)/2 = (width, height)/2 = (width/2, height/2)
+    \pgf@xc=.5\pgf@x%
+    \pgf@yc=.5\pgf@y%
+    % let a = a + c = south west + (width/2, height/2) = center
+    \advance\pgf@xa by\pgf@xc%
+    \advance\pgf@ya by\pgf@yc%
+    % if by = target y > 0
+    \ifdim\pgf@yb>0pt%
+      % let (x,y) = north east
+      \northeast%
+      % let cy = y = north east y
+      \pgf@yc=\pgf@y%
+      % let cy = cy - center raise = north east y - center raise
+      \advance\pgf@yc by-\pgfutil@tempdima%
+    \else%
+      % let (x,y) = south west
+      \southwest%
+      % let cy = y = - south west y
+      \pgf@yc=-\pgf@y%
+      % let cy = cy + center raise = - south west y + center raise
+      \advance\pgf@yc by\pgfutil@tempdima%
+    \fi
+    \edef\pgf@marshal{%
+      % calculate the intersection of the half line from the origin
+      \noexpand\pgfpointborderrectangle
+      % passing through target
+      {\noexpand\pgfqpoint{\the\pgf@xb}{\the\pgf@yb}}
+      % and the rectangle centered on the origin
+      % whose upper right corner is
+      % (width/2, +north east y - center raise) if target y > 0
+      % (width/2, -south west y + center raise) if target y < 0
+      {\noexpand\pgfqpoint{\the\pgf@xc}{\the\pgf@yc}}%
+    }%
+    % let (x,y) = the intersection
+    \pgf@process{\pgf@marshal}%
+    % let x = x + ax = width/2 + center x
+    \advance\pgf@x by\pgf@xa%
+    % let y = y + tempdima = ±(ne/sw y - center raise) + center raise
+    \advance\pgf@y by\pgfutil@tempdima%
+    % that is, y = + north east y                    if target y > 0
+    %          y = - south west y + 2 * center raise if target y < 0
+    %
+    % NOTE: in essence, we're just compensating for the redefinition
+    % of ne/sw anchors that shifted them by cr below the real center.
+    %                ┏━━━━━━┯━━━━━━┓  ╮╮              
+    %                ┃      │      ┃  ││ + ney - cr   
+    %            ╭╭  ┠──────┼──────┨ ╮│╯               y > 0
+    % - swy + cr │╰╭ ┣━━━━━━┿━━━━━━┫ ╯╯ ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+    %            ╰ ╰ ┗━━━━━━┷━━━━━━┛                   y < 0
+  }%
+}%
