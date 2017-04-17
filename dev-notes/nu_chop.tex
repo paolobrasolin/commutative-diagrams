@@ -1,0 +1,86 @@
+\documentclass[tikz]{standalone}
+
+
+\usetikzlibrary[decorations.pathreplacing]
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary[decorations.markings]
+\usetikzlibrary[arrows.meta]
+
+\edef\kDAct{\catcode`@=\the\catcode`@\relax}
+\catcode`@=11\relax
+
+
+\def\kDpgfpathcurvearclengthtotime#1#2#3#4#5{%
+  \pgfmathparse{#1}\let\kDpgf@arc@length=\pgfmathresult%
+  \pgfmathparse{0sp}\let\kDpgf@arc@length@sum=\pgfmathresult%
+
+  \pgfmathparse{0sp}\let\kDpgf@arc@length@total=\pgfmathresult%
+  \pgfextract@process\kDpgf@prev@point{\pgfpointcurveattime{0.0}{#2}{#3}{#4}{#5}}
+  \foreach \time in {0.0,0.1,...,1.0} {
+    \pgfextract@process\kDpgf@next@point{\pgfpointcurveattime{\time}{#2}{#3}{#4}{#5}}
+    \pgfpointdiff{\kDpgf@prev@point}{\kDpgf@next@point}
+    \pgfmathveclen{\pgf@x}{\pgf@y}
+    \pgfmathadd{\kDpgf@arc@length@total}{\pgfmathresult}
+    \global\let\kDpgf@prev@point\kDpgf@next@point
+    \global\let\kDpgf@arc@length@total=\pgfmathresult
+  }
+
+  \pgfextract@process\kDpgf@prev@point{\pgfpointcurveattime{0.0}{#2}{#3}{#4}{#5}}
+  \foreach \time in {0.0,0.1,...,1.0} {
+    \pgfextract@process\kDpgf@next@point{\pgfpointcurveattime{\time}{#2}{#3}{#4}{#5}}
+    \pgfpointdiff{\kDpgf@prev@point}{\kDpgf@next@point}
+    \pgfmathveclen{\pgf@x}{\pgf@y}
+    \let\kDpgf@arc@length@increment=\pgfmathresult
+
+    \pgfmathparse{and((\kDpgf@arc@length@sum-\kDpgf@arc@length) < 0, (\kDpgf@arc@length@sum+\kDpgf@arc@length@increment-\kDpgf@arc@length) > 0)}
+    \ifnum\pgfmathresult=1
+      \pgfmathparse{(\time - 0.1) + (\kDpgf@arc@length - \kDpgf@arc@length@sum) * (0.1) / (\kDpgf@arc@length@increment)}
+      \global\let\kDpgf@time\pgfmathresult
+    \fi
+
+    \global\let\kDpgf@prev@point\kDpgf@next@point
+    \pgfmathadd{\kDpgf@arc@length@sum}{\kDpgf@arc@length@increment}
+    \global\let\kDpgf@arc@length@sum=\pgfmathresult
+  }
+}
+
+\def\pgfpathcurvebetweenlength#1#2#3#4#5#6{%
+  \kDpgfpathcurvearclengthtotime{#1}{#3}{#4}{#5}{#6}
+  \pgfpathcurvebetweentime{\kDpgf@time}{1}{#3}{#4}{#5}{#6}
+}
+
+
+\tikzset{chop/.style 2 args={
+ decoration={
+   show path construction,
+   curveto code={
+     \pgfpathcurvebetweenlength{#1}{#2}
+     {\pgfpointdecoratedinputsegmentfirst}
+     {\pgfpointdecoratedinputsegmentsupporta}
+     {\pgfpointdecoratedinputsegmentsupportb}
+     {\pgfpointdecoratedinputsegmentlast}
+     },
+   lineto code={
+     \pgfpathcurvebetweentime{#1}{#2}
+     {\pgfpointdecoratedinputsegmentfirst}
+     {\pgfpointdecoratedinputsegmentfirst}
+     {\pgfpointdecoratedinputsegmentlast}
+     {\pgfpointdecoratedinputsegmentlast}
+     }
+ },decorate},
+}
+
+\kDAct
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{tikzpicture}
+
+\draw [blue!10!white, thick] (5pt,0) -- (40pt,0);
+\foreach \angle in {-170,-150,-120,...,150,170} {
+  \draw (0,0) edge[in=180, out=\angle, red, ultra thin] (40pt,0);
+  \draw (0,0) edge[opacity=0.6, in=180, out=\angle, chop={5pt}{}] (40pt,0);
+}
+
+\end{tikzpicture}
+\end{document}

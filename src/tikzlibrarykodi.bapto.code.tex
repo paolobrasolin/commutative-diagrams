@@ -23,13 +23,50 @@
 % TODO: write feature test to verify trigger is protected by controller
 %   from undue forwards.
 \pgfqkeys{/bapto/overwrite}{.is choice,
-  false/.style={/bapto/controller/.code={\tikz@fig@name\ifx\tikz@fig@name\empty
+  false/.style={/bapto/controller/.code={\def\kDTmp{##1}\ifx\kDTmp\empty\else
+                                         \tikz@fig@name\ifx\tikz@fig@name\empty
+                                         \pgfqkeys{/bapto}{trigger={##1}}\fi\fi},
+                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}%
+                                         \pgfqkeys{/bapto}{output=##1}}},
+  alias/.style={/bapto/controller/.code={\def\kDTmp{##1}\ifx\kDTmp\empty\else
                                          \pgfqkeys{/bapto}{trigger={##1}}\fi},
-                /bapto/dispatcher/.code={\tikz@fig@name\ifx\tikz@fig@name\empty
-                                         \pgfqkeys{/tikz}{name=##1}\fi}},
-  alias/.style={/bapto/controller/.code={\pgfqkeys{/bapto}{trigger={##1}}},
-                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}}},
-  true/.style= {/bapto/controller/.code={\pgfqkeys{/bapto}{trigger={##1}}},
-                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}}},
+                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{alias=##1}%
+                                         \pgfqkeys{/bapto}{output=##1}}},
+  true/.style= {/bapto/controller/.code={\def\kDTmp{##1}\ifx\kDTmp\empty\else
+                                         \pgfqkeys{/bapto}{trigger={##1}}\fi},
+                /bapto/dispatcher/.code={\pgfqkeys{/tikz}{name=##1}%
+                                         \pgfqkeys{/bapto}{output=##1}}},
   false, % default is no name overwriting and no aliasing
+}
+
+%==[ input stage ]==============================================================
+
+\pgfqkeys{/bapto/output}{
+  .code={}
+}
+
+% TODO: put this somewhere better
+
+\tikzset{
+  mylabel/.style={
+    inner sep=0sp,
+    font=\ttfamily\bfseries\tiny,
+    line width=1pt,
+    draw=violet,
+    fill=violet,
+    text=white,
+    overlay,
+    /tikz/label anchor/.style={tikz@label@post/.append style={anchor=##1}},
+    label anchor=north east,
+    label position=south east
+  },
+}
+
+\pgfqkeys{/kD}{
+  pinner/.style={
+    /tikz/draw=violet,
+    /tikz/line width=1sp,
+    /tikz/label={[mylabel]:#1},
+  },
+  training wheels/.style={/bapto/output/.forward to=/kD/pinner}
 }
