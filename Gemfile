@@ -9,4 +9,5 @@ group :development do
   gem 'guard-rake'
   gem 'guard-shell'
   gem 'colorize'
+  gem 'digest'
 end
