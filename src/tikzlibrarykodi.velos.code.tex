@@ -10,9 +10,11 @@
 %==[ handlers ]=================================================================
 
 \pgfkeys{
+  % NOTE: there might be some way to work w/ quotes library, but it's safer and
+  %   easier to just have a custom handler mounted in the maximally local scope
+  %   and avoid any conflict a priori.
   /velos/install quote handler/.style={
     /handlers/first char syntax=true,
-    % TODO: verify if I can actually work w/quotes instead of against it
     /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler
     % node quotes mean={node contents={#1}},
     % edge quotes mean={node contents={#1}}
@@ -136,7 +138,7 @@
       {\kDVelosFEAppendThen{\kDVelosFETOThen{#1}}}}}
 
 \def\kDVelosFEAppendThen#1#2{%
-  \kDVelosTemp=\expandafter{\the\kDVelosTemp#2}% TODO: wasn't the \ea redundant?
+  \kDVelosTemp=\expandafter{\the\kDVelosTemp#2}%
   #1}
 
 \def\kDVelosFEEdgePrepend#1{%
@@ -145,8 +147,6 @@
 
 \def\kDVelosFEEdgePrependNode#1%
   {\kDVelosFEEdgePrepend{edge node={node[every edge quotes][/velos/install quote handler,#1]}}}
-% TODO: install quote handler is maximally local to avoid conflict with quotes library;
-%   is this the best handling of the situation?
 
 \def\kDVelosFEThinkThen#1{%
   \def\kDVelosFELoop{\kDVelosFEThinkThen{#1}}%

@@ -114,8 +114,8 @@
       /tikz/on grid
     },
     metric/.style 2 args={
-      % {1 and 1}{1} is infty-norm, unit circle is unit square
-      % {2}{0.5} is 1-norm, circle of radius 2 is rhombus circumscribing base hexagon
+      % NOTE: {1 and 1}{1} is infty-norm, unit circle is unit square
+      % NOTE: {2}{0.5} is 1-norm, circle of radius 2 is rhombus circumscribing base hexagon
       /tikz/node distance={#1},
       % TODO: implement control to allow for explicit units on single factor specs
       /tikz/above left/.code={\tikz@lib@place@handle@{##1}{south east}{-1}{1}{north west}{#2}},

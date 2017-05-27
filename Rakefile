@@ -26,7 +26,7 @@ task :doc do
 
   print 'Flattening main doc sourcecode... '
   _stdout, stderr, status = Open3.capture3(
-    # TODO: this is suboptimal, given the bugs of latexpand. But... meh.
+    # NOTE: this is suboptimal, given the bugs of latexpand. But... meh.
     'latexpand', '--output=build/kodi-doc.tex', '--keep-comments', 'main.tex',
     chdir: 'doc'
   )

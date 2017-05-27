@@ -122,19 +122,17 @@
 
 \def\kDMitraFetchColOptionsThen#1[#2]{\kDMitraColOptTok={[#2]}#1}
 
-% TODO: make catcode change temporary with wrapping group and global defs
-%   making sure auxiliary macros aren't botched (and don't botch anything).
-\catcode`&=\active
-\def\kDMitraMaybePrintColEndThen#1{%
-  \kDIfNextHardCh\kD
-    {#1}%
-    {%
-      \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand&\the\kDMitraColOptTok}}%
-      \kDAct
-      \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
-      #1%
-    }}
-\catcode`&=4
+\begingroup\catcode`&=\active
+  \gdef\kDMitraMaybePrintColEndThen#1{%
+    \kDIfNextHardCh\kD
+      {#1}%
+      {%
+        \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand&\the\kDMitraColOptTok}}%
+        \kDAct
+        \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
+        #1%
+      }}
+\endgroup
 
 %==[ parsing routine: /table/row/column/cell ]==================================
 
@@ -207,4 +205,4 @@
 % the global scope isn't polluted by \csname defining the token.
 % \begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
 %   \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
-% \ifConTeXt\catcode`|=12 \fi% TODO: why was the space necessary again?
+% \ifConTeXt\catcode`|=12 \fi% NOTE: why was the space necessary again?
