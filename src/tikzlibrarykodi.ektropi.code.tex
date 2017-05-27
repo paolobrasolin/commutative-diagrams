@@ -14,10 +14,7 @@
 %==[ handler restoring procedure ]==============================================
 
 % The default handler's code is backed up as a token list at load time.
-% NOTE: this has implications on loading order!
-% TODO: figure out whether it safe or not to just assume no other package
-%   does this kind dangerous of stuff.
-% TODO: just in case, wrap the backup procedure inside a callable key.
+% NOTE: this has strong implications on loading order!
 
 \newtoks\kDEktropiDefaultToksBackup
 
