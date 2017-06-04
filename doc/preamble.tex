@@ -25,7 +25,7 @@
   portrait,
   marginparwidth=4.25cm,
   marginparsep=.75cm,
-  showframe,
+  % showframe,
   width=11cm,
   hmarginratio=10:25,
   height=23cm,
@@ -366,6 +366,8 @@
   % urlbordercolor=cyan        % color of external links
   hidelinks
 ]{hyperref}
+
+\def\NiceURL#1#2{\href{#2}{\color{blue}\ul{#1}}}
 
 %==[ microtype ]================================================================
 
