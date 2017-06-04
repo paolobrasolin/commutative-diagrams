@@ -28,40 +28,30 @@ matrices, respectively.
 
 \hfill$\therefore$\hfill\null
 
-Very little of the given syntax is specific to \koDi.
-\TikZ\ options are easy to pick up on the way,
-blah blah blah.
+Nothing of the given syntax is specific to \koDi.
+In fact, \lstinline|\obj| can draw both single objects and layouts
+by behaving like the standard \TikZ\ macros
+\lstinline|\node| and \lstinline|\matrix| respectively.
 
-Here is a kitchen sink for tabular syntax:
+Furthermore, layouts content is specified using the common \TeX\
+tabular syntax.
+The only catch is that row and column separators are always mandatory.
 
-\begin{tcblisting}{snippet, trim}
-\begin{kodi}[square=3em]
-\obj { A & B &[1em] C \\
-       D & E &      F \\[-1em]
-       G & H &      I \\ };
-\end{kodi}
-\end{tcblisting}
-
-Objects are automagically named; the latest homonymous prevails.
+Here is a kitchen sink that includes custom spacing:
 
 \begin{tcblisting}{snippet, trim}
 \begin{kodi}[square=3em]
-\obj { A & A \\ };
-\draw (A) circle (1em);
+\obj {
+  A & B &[1em] C \\
+  D & E &      F \\[-1em]
+  G & H &      I \\
+};
 \end{kodi}
 \end{tcblisting}
 
-Naming a specific object avoids its automatic labeling.
-
-\begin{tcblisting}{snippet, trim}
-\begin{kodi}[square=3em]
-\obj { A & |(A')| A \\ };
-\draw [red]   (A)  circle (1em);
-\draw [green] (A') circle (1em);
-\end{kodi}
-\end{tcblisting}
-
-Naming a layout lets you refer to its objects by row and column.
+A standard feature inherited from \TikZ\ worth a mention
+is the ability to name a layout and refer to cells
+by their row/column index pairs.
 
 \begin{tcblisting}{snippet, trim}
 \begin{kodi}[square=3em]
