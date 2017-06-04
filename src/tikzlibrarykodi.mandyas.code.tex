@@ -6,8 +6,8 @@
 % Mandias defines the aesthetics aspect of the user level functionality,
 % together with some baseline configuration.
 
-% TODO: clean these up
 \usetikzlibrary[calc]
+
 % \usetikzlibrary[decorations.pathreplacing]
 % \usetikzlibrary{decorations.pathmorphing}
 % \usetikzlibrary[decorations.markings]
@@ -160,7 +160,6 @@
     golden/.default=4.5em,
 }
 
-
 %==[ baseline centered rectangle shape ]========================================
 
 % The math formula axis height is recovered and stored as a pgf function.
@@ -288,11 +287,13 @@
   }%
 }%
 
+%==[ training wheels ]==========================================================
 
-% TRAINING WHEELS
+% This key is meant for visual assistance with the node labeling automation.
 
-\tikzset{
-  mylabel/.style={
+\pgfqkeys{/kD}{
+  training wheels label/.style={
+    /tikz/.cd,
     inner sep=0sp,
     font=\ttfamily\bfseries\tiny,
     line width=1pt,
@@ -300,17 +301,14 @@
     fill=violet,
     text=white,
     overlay,
-    /tikz/label anchor/.style={tikz@label@post/.append style={anchor=##1}},
+    label anchor/.style={tikz@label@post/.append style={anchor=##1}},
     label anchor=north east,
     label position=south east
   },
-}
-
-\pgfqkeys{/kD}{
-  pinner/.style={
+  training wheels pinner/.style={
     /tikz/draw=violet,
     /tikz/line width=1sp,
-    /tikz/label={[mylabel]:#1},
+    /tikz/label={[/kD/training wheels label]:#1},
   },
-  training wheels/.style={/bapto/output/.forward to=/kD/pinner}
+  training wheels/.style={/bapto/output/.forward to=/kD/training wheels pinner}
 }

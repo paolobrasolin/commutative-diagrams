@@ -14,15 +14,17 @@
 \usetikzlibrary[kodi.mitra]
 \usetikzlibrary[kodi.velos]
 
-% And here is the core idea of koDi itself:
+%==[ core concept ]=============================================================
 
-\pgfqkeys{/tikz}{% TODO: is this the best scope to put the key into?
+\pgfqkeys{/kD}{% TODO: is this the best scope to put the key into?
   self naming/.style={
     /tikz/node contents/.forward to=/bapto/input,
     /bapto/trigger/.forward to=/katharizo/input,
     /katharizo/output/.forward to=/bapto/dispatcher
   }
 }
+
+%==[ baseline setup ]===========================================================
 
 % Some mischief with handlers and baseline math/labeling functionality.
 
@@ -33,13 +35,13 @@
     /ektropi/restore,
     /ektropi/add=/kD,
     /ektropi/add=/bapto,
-    /ektropi/add=/katharizo,
+    /ektropi/add=/katharizo
   },
   every diagram/.style={% NOTE: restore hopefully unnecessary
     /kD/every thing,
-    /ektropi/add=/kD/diagrams,
+    /ektropi/add=/kD/diagrams
   },
-  every layout/.style={% NOTE: restore unnecessary
+  every layout/.style={% NOTE: restore actually unnecessary
     /kD/every thing,
     /ektropi/add=/kD/layouts,
     /mitra/every node/.append style={/kD/every object}
@@ -49,7 +51,7 @@
     /ektropi/add=/kD/objects,
     execute at begin node=$,%
     execute at end node=$,%
-    self naming,
+    /kD/self naming
   },
   every arrow/.style={% NOTE: restore unnecessary
     /kD/every thing,
@@ -60,7 +62,7 @@
     /ektropi/add=/kD/labels,
     execute at begin node=$,%
     execute at end node=$,%
-    self naming
+    /kD/self naming
   }
 }
 
@@ -103,6 +105,8 @@
 % Just an identity.
 \let\kDRammaMor\kDVelos
 
+%==[ TikZ/pgf layer ]===========================================================
+
 % I envelope the koDi main macros in a simple key for maximal flexibility.
 
 \tikzset{
@@ -114,13 +118,14 @@
   kodi/.append style={/kD/every diagram}
 }
 
-% TODO: not convinced by the structure of what follows
-
 %==[ main macro ]===============================================================
 
 \def\kDRamma
   {\kDRammaMaybeFetchOptionsThen
    \kDRammaOutput}
+
+\let\kDRammaOpen\kDRamma
+\let\kDRammaShut\endtikzpicture
 
 %==[ fetching routine ]=========================================================
 
@@ -143,6 +148,3 @@
       \noexpand\tikzpicture[kodi, \the\kDRammaOptTok]}}%
   \kDAct
   \the\kDRammaTmpTok}
-
-\let\kDRammaOpen\kDRamma
-\let\kDRammaShut\endtikzpicture
