@@ -12,17 +12,17 @@
 %==[ TikZ/pgf layer ]===========================================================
 
 \pgfkeys{
+  /mitra/every node/.style={},
   /mitra/every matrix/.style={
     /tikz/matrix,
     /tikz/cells={
       /tikz/anchor=base
     }
   },
-  /mitra/every node/.style={},
   % NOTE: the alias key *cannot* be put along with global node styles
-  %   because order of execution.
+  %   because of execution order.
   /mitra/matrix coordinates alias/.style={
-    /tikz/alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn,
+    /tikz/alias=\tikzmatrixname-\the\pgfmatrixcurrentrow-\the\pgfmatrixcurrentcolumn
   }
 }
 
@@ -171,10 +171,9 @@
   \edef\kDAct{%
     \noexpand\kDMitraTmpTok={%
       \noexpand\node
-        [/mitra/every node]%
+        [/mitra/every node]
         \the\kDMitraCelOptTok
-        [node contents={\the\kDMitraCelCntTok},%
-        /mitra/matrix coordinates alias];% NOTE: be careful about placement
+        [node contents={\the\kDMitraCelCntTok},/mitra/matrix coordinates alias];
       \kDMitraMaybeDumpCell}}%
   \kDAct
   \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
@@ -182,7 +181,6 @@
 
 %==[ dumping routine ]==========================================================
 
-% TODO: revise the mechanism
 \def\kDMitraMaybeDumpCell{\noexpand\pgfextra{%
   \noexpand\kDDump{'\noexpand\the\noexpand\pgfmatrixcurrentrow-\noexpand\the\noexpand\pgfmatrixcurrentcolumn':}%
   \noexpand\kDDump{\space\space options: '\the\kDMitraCelOptTok'}%

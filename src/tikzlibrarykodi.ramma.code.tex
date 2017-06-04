@@ -107,7 +107,7 @@
 
 \tikzset{
   kodi/.code={%
-    \catcode`\|=12% ConTeXt hack TODO: is it sufficient? investigate
+    \ifConTeXt\catcode`\|=12\fi% TODO: is it sufficient? investigate
     \let\obj\kDRammaObj
     \let\mor\kDRammaMor
   },

@@ -7,7 +7,7 @@
 
 \usetikzlibrary{kodi.koinos}
 
-%==[ handlers ]=================================================================
+%==[ TikZ/pgf layer ]===========================================================
 
 \pgfkeys{
   % NOTE: there might be some way to work w/ quotes library, but it's safer and
@@ -18,6 +18,9 @@
     /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler
     % node quotes mean={node contents={#1}},
     % edge quotes mean={node contents={#1}}
+  },
+  /velos/every path/.style={
+    /velos/install quote handler
   }
 }
 
@@ -235,12 +238,6 @@
       (\the\kDVelosDerefTar);}%
   \Act%
   #1}
-
-\pgfkeys{
-  /velos/every path/.style={
-    /velos/install quote handler
-  }
-}
 
 %==[ high level ]===============================================================
 
