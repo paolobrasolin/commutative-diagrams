@@ -67,9 +67,10 @@
   {\kDMitraParseRowEndThen
   {#1}}}}
 
-\begingroup\catcode`&=4 % ConTeXt hack
-\gdef\kDMitraMarkRowEndBefore#1#2\\{#1#2&\kD\\}
-\endgroup
+\kDStoreCatcodeOf &
+\ifConTeXt\catcode`&=12\else\catcode`&=4\fi
+\def\kDMitraMarkRowEndBefore#1#2\\{#1#2&\kD\\}
+\kDRestoreCatcodeOf &
 
 \def\kDMitraParseAllColsThen#1{%
   \def\kDExit{#1}%
@@ -122,17 +123,15 @@
 
 \def\kDMitraFetchColOptionsThen#1[#2]{\kDMitraColOptTok={[#2]}#1}
 
-\begingroup\catcode`&=\active
-  \gdef\kDMitraMaybePrintColEndThen#1{%
-    \kDIfNextHardCh\kD
-      {#1}%
-      {%
-        \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand&\the\kDMitraColOptTok}}%
-        \kDAct
-        \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
-        #1%
-      }}
-\endgroup
+\def\kDMitraMaybePrintColEndThen#1{%
+  \kDIfNextHardCh\kD
+    {#1}%
+    {% NOTE: we use \pgfmatrixnextcell instead of & to avoid catcode juggling
+      \edef\kDAct{\noexpand\kDMitraTmpTok={\noexpand\pgfmatrixnextcell\the\kDMitraColOptTok}}%
+      \kDAct
+      \kDAppend\kDMitraTmpTok\kDMitraMatOutTok
+      #1%
+    }}
 
 %==[ parsing routine: /table/row/column/cell ]==================================
 
@@ -154,11 +153,14 @@
 
 \newtoks\kDMitraCelCntTok
 
+\kDStoreCatcodeOf &
+\ifConTeXt\catcode`&=12\else\catcode`&=4\fi
 \def\kDMitraFetchCellContentThen#1#2&{%
   \kDMitraCelCntTok={#2}%
   \kDTrimLeadingSpace\kDMitraCelCntTok
   \kDTrimTrailingSpace\kDMitraCelCntTok
   #1}
+\kDRestoreCatcodeOf &
 
 \def\kDMitraMaybeDoCellThen#1{%
   \kDIfNextHardCh\kD
@@ -197,12 +199,3 @@
         {\the\kDMitraMatOutTok};}}%
   \kDAct
   \the\kDMitraTmpTok}
-
-%==[ notes ]====================================================================
-
-% \newif\ifConTeXt
-% Trick stolen from iftex. The second line is expanded inside the group so
-% the global scope isn't polluted by \csname defining the token.
-% \begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
-%   \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
-% \ifConTeXt\catcode`|=12 \fi% NOTE: why was the space necessary again?

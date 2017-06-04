@@ -133,3 +133,37 @@
 
 \def\kDDumpClose%
 {\ifkDDumping\closeout\kDDumpFile\fi}
+
+
+
+
+
+% catcode manipulation
+
+\newcount\kDEscapecharCounter
+
+\def\csarg#1#2{\expandafter#1\csname#2\endcsname}
+
+\def\kDEscapecharDisable{\kDEscapecharCounter\escapechar \escapechar=-1}
+\def\kDEscapecharEnable{\escapechar\kDEscapecharCounter}
+
+\def\kDStoreCatcodeOf#1%
+  {\kDEscapecharDisable
+   \csarg\edef{kDRestoreCatcodeOf\string#1}{\catcode`\string#1=\the\catcode\expandafter`\string#1}%
+   % \catcode\expandafter`\string#1=12\relax
+   \kDEscapecharEnable}
+
+\def\kDRestoreCatcodeOf#1%
+  {\kDEscapecharDisable
+   \csname kDRestoreCatcodeOf\string#1\endcsname
+   \kDEscapecharEnable}
+
+
+%==[ notes ]====================================================================
+
+\newif\ifConTeXt
+% Trick stolen from iftex. The second line is expanded inside the group so
+% the global scope isn't polluted by \csname defining the token.
+\begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
+  \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+% \ifConTeXt\catcode`|=12 \fi% NOTE: why was the space necessary again?
