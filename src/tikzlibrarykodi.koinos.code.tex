@@ -3,7 +3,30 @@
 %   2. common
 %   3. public
 
-% Koinos implements or aliases some commonplace macros.
+% Koinos implements or aliases commonplace macros.
+
+%==[ catcode manipulation ]=====================================================
+
+\newcount\kDEscapecharCounter
+
+\def\kDCSArg#1#2{\expandafter#1\csname#2\endcsname}
+
+\def\kDEscapecharDisable{\kDEscapecharCounter\escapechar \escapechar=-1}
+\def\kDEscapecharEnable{\escapechar\kDEscapecharCounter}
+
+\def\kDStoreCatcodeOf#1%
+  {\kDEscapecharDisable
+   \kDCSArg\edef{kDRestoreCatcodeOf\string#1}{\catcode`\string#1=\the\catcode\expandafter`\string#1}%
+   % NOTE: setting a default catcode is disabled; might come in handy someday, though.
+   % \catcode\expandafter`\string#1=12\relax
+   \kDEscapecharEnable}
+
+\def\kDRestoreCatcodeOf#1%
+  {\kDEscapecharDisable
+   \csname kDRestoreCatcodeOf\string#1\endcsname
+   \kDEscapecharEnable}
+
+%==[ forward checks and gobbling ]==============================================
 
 % This macro is the blank space token.
 \bgroup
@@ -11,7 +34,7 @@
 \egroup
 
 % Save catcode of @ to restore it later.
-\edef\kDAct{\catcode`@=\the\catcode`@\relax}
+\kDStoreCatcodeOf @
 \catcode`@=11\relax
 
 % The next two macros both implement token gobbling.
@@ -39,7 +62,9 @@
 \def\kDINC{\ifx\kDINCTok\kDINCToken\let\kDINCFalse\kDINCTrue\fi\kDINCFalse}
 
 % Restore catcode of @.
-\kDAct
+\kDRestoreCatcodeOf @
+
+%==[ token lists parsing and manipulation ]=====================================
 
 % This macro appends token list #1 to token list #2.
 \def\kDAppend#1#2{\edef\kDAct{\noexpand#2={\the#2\the#1}}\kDAct}
@@ -113,7 +138,16 @@
 
 \def\kDGSOtherThen#1#2{#1#2}
 
-%===============================================================================
+%==[ environment checks ]=======================================================
+
+\newif\ifConTeXt
+% Trick stolen from iftex. The second line is expanded inside the group so
+% the global scope isn't polluted by \csname defining the token.
+\begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
+  \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
+% \ifConTeXt\catcode`|=12 \fi% NOTE: why was the space necessary again?
+
+%==[ dumping, debugging and testing ]===========================================
 
 % macros for dumping, debugging and testing
 % TODO: not sure I want to depend on these being in the sourcecode instead of
@@ -133,37 +167,3 @@
 
 \def\kDDumpClose%
 {\ifkDDumping\closeout\kDDumpFile\fi}
-
-
-
-
-
-% catcode manipulation
-
-\newcount\kDEscapecharCounter
-
-\def\csarg#1#2{\expandafter#1\csname#2\endcsname}
-
-\def\kDEscapecharDisable{\kDEscapecharCounter\escapechar \escapechar=-1}
-\def\kDEscapecharEnable{\escapechar\kDEscapecharCounter}
-
-\def\kDStoreCatcodeOf#1%
-  {\kDEscapecharDisable
-   \csarg\edef{kDRestoreCatcodeOf\string#1}{\catcode`\string#1=\the\catcode\expandafter`\string#1}%
-   % \catcode\expandafter`\string#1=12\relax
-   \kDEscapecharEnable}
-
-\def\kDRestoreCatcodeOf#1%
-  {\kDEscapecharDisable
-   \csname kDRestoreCatcodeOf\string#1\endcsname
-   \kDEscapecharEnable}
-
-
-%==[ notes ]====================================================================
-
-\newif\ifConTeXt
-% Trick stolen from iftex. The second line is expanded inside the group so
-% the global scope isn't polluted by \csname defining the token.
-\begingroup\expandafter\expandafter\expandafter\endgroup\expandafter
-  \ifx\csname starttext\endcsname\relax\ConTeXtfalse\else\ConTeXttrue\fi
-% \ifConTeXt\catcode`|=12 \fi% NOTE: why was the space necessary again?
