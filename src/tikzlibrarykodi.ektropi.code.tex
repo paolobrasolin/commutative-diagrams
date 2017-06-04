@@ -7,9 +7,10 @@
 % It allows the addition of maximum priority paths in the key finding algorithm.
 % The diversions are globally scoped, cumulative and removable.
 
-% Save catcode of @ to restore it at EOF.
-\edef\kDAct{\catcode`@=\the\catcode`@\relax}
-\catcode`@=11\relax
+\usetikzlibrary{kodi.koinos}
+
+\kDStoreCatcodeOf @
+\catcode`@=11
 
 %==[ handler restoring procedure ]==============================================
 
@@ -54,5 +55,4 @@
   }
 }
 
-% Restore catcode of @.
-\kDAct
+\kDRestoreCatcodeOf @

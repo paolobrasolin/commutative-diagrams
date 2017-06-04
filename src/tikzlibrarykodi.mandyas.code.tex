@@ -287,3 +287,30 @@
     %            ╰ ╰ ┗━━━━━━┷━━━━━━┛                   y < 0
   }%
 }%
+
+
+% TRAINING WHEELS
+
+\tikzset{
+  mylabel/.style={
+    inner sep=0sp,
+    font=\ttfamily\bfseries\tiny,
+    line width=1pt,
+    draw=violet,
+    fill=violet,
+    text=white,
+    overlay,
+    /tikz/label anchor/.style={tikz@label@post/.append style={anchor=##1}},
+    label anchor=north east,
+    label position=south east
+  },
+}
+
+\pgfqkeys{/kD}{
+  pinner/.style={
+    /tikz/draw=violet,
+    /tikz/line width=1sp,
+    /tikz/label={[mylabel]:#1},
+  },
+  training wheels/.style={/bapto/output/.forward to=/kD/pinner}
+}
