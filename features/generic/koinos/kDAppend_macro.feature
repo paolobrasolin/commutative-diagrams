@@ -18,5 +18,8 @@ Feature: kDAppend macro
     And the log includes the concatenation: [<concatenation>]
 
     Examples:
-      | foo | bar | concatenation |
-      | foo | bar | foobar        |
+      | foo  | bar  | concatenation |
+      | foo  | bar  | «foobar»      |
+      | \foo | bar  | «\foo bar»    |
+      | foo  | \bar | «foo\bar »    |
+      | \foo | \bar | «\foo \bar »  |

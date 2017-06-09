@@ -1,12 +1,12 @@
 # features/katharizo/replacement.feature
-Feature: katharizo replaces arbitrary characters
+Feature: katharizo replacement behaviour is configurable
 
-  Background: testing katharizo
+  Background: testing katharizo in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
 
-  Scenario Outline: using default replacements
+  Scenario Outline: default behaviour (characters (),.:\ are removed)
     Given the body is
     """
     \pgfqkeys{/katharizo}{
@@ -29,7 +29,7 @@ Feature: katharizo replaces arbitrary characters
     | «\foo» | «foo»  |
     | «_»    | «_»    |
 
-  Scenario Outline: using custom replacements
+  Scenario Outline: custom replacements
     Given the body is
     """
     \pgfqkeys{/katharizo}{
@@ -62,7 +62,7 @@ Feature: katharizo replaces arbitrary characters
     | «\foo» | «7foo» |
     | «_»    | «8»    |
 
-  Scenario Outline: using custom replacements
+  Scenario Outline: custom removals
     Given the body is
     """
     \pgfqkeys{/katharizo}{

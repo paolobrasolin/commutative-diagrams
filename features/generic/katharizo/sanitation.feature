@@ -1,12 +1,12 @@
 # features/katharizo/sanitation.feature
-Feature: katharizo can sanitize tokens to safe strings
+Feature: katharizo sanitizes token lists to safe strings
 
   Background: testing katharizo in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
 
-  Scenario Outline: using default replacements
+  Scenario Outline: default behaviour
     Given the body is
     """
     \pgfqkeys{/katharizo}{

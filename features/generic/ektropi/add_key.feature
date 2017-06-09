@@ -1,5 +1,5 @@
-# features/ektropi/add.feature
-Feature: ektropi can add deviations
+# features/ektropi/add_key.feature
+Feature: ektropi add key adds deviations to handler
 
   Background: testing ektropi in a generic context
     Given I'm using any TeX flavour

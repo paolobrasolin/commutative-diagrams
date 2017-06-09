@@ -8,11 +8,17 @@ Feature: kDIfNextHardCh macro performs "hard" token comparison
 
   Scenario Outline: verifying comparison does ignore whitespace
     Given I code \kDIfNextHardCh<token>{<true>}{<false>}<code>
-    Then compilation <outcome>
+    Then compilation succeeds
 
-    Examples:
-      | token         | true   | false | code | outcome  |
-      | *             | \relax | \HALT | «*»  | succeeds |
-      | *             | \relax | \HALT | « *» | succeeds |
-      | \kDBlankSpace | \relax | \HALT | «*»  | fails    |
-      | \kDBlankSpace | \relax | \HALT | « *» | fails    |
+    Examples: peeping a character stream
+      | token         | true   | false  | code |
+      | *             | \relax | \HALT  | «*»  |
+      | *             | \relax | \HALT  | « *» |
+
+    Examples: peeping for a terminator
+      | token      | true             | false            | code   |
+      | \relax     | \HALT            | \kDGobbleHardTok | «\kD»  |
+      | \relax     | \HALT            | \kDGobbleHardTok | « \kD» |
+      | \UNDEFINED | \kDGobbleHardTok | \HALT            | «\kD»  |
+      | \UNDEFINED | \kDGobbleHardTok | \HALT            | « \kD» |
+      # NOTE: Comparison uses \ifx, so ANY undefined will match an undefined.

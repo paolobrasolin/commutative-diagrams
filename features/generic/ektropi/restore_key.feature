@@ -1,5 +1,5 @@
-# features/ektropi/restore.feature
-Feature: ektropi can restore the original handler
+# features/ektropi/restore_key.feature
+Feature: ektropi restore key restores the original handler
 
   Background: testing ektropi in a generic context
     Given I'm using any TeX flavour

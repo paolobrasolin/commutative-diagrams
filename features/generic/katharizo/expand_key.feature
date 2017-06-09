@@ -1,12 +1,12 @@
-# features/katharizo/expansion.feature
-Feature: katharizo controls macro expansion
+# features/katharizo/expand_key.feature
+Feature: katharizo expansion behaviour is configurable
 
-  Background: testing katharizo
+  Background: testing katharizo in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
     And I use the "kodi.katharizo" TikZ library
 
-  Scenario: using default expansion behaviour
+  Scenario: default behaviour (no expansion)
     Given the body is
     """
     \def\NOTEXPANDED{\EXPANDED}
@@ -19,14 +19,14 @@ Feature: katharizo controls macro expansion
     Then compilation succeeds
     And the log includes the output: NOTEXPANDED
 
-  Scenario Outline: using custom expansion behaviour
+  Scenario Outline: explicitly configured behaviour
     Given the body is
     """
     \def\EXPANDEDONCE{FULLYEXPANDED}
     \def\NOTEXPANDED{\EXPANDEDONCE}
     \pgfqkeys{/katharizo}{
       output/.store in=\OUTPUT,
-      expand=<expand>,
+      <behaviour>,
       input=\NOTEXPANDED,
     }
     \message{the output: \OUTPUT}
@@ -35,7 +35,7 @@ Feature: katharizo controls macro expansion
     And the log includes the output: <output>
 
   Examples:
-    | expand | output        |
-    | none   | NOTEXPANDED   |
-    | once   | EXPANDEDONCE  |
-    | full   | FULLYEXPANDED |
+    | behaviour   | output        |
+    | expand=none | NOTEXPANDED   |
+    | expand=once | EXPANDEDONCE  |
+    | expand=full | FULLYEXPANDED |
