@@ -1,3 +1,5 @@
+require 'digest'
+
 module TeXWorld
   class Job
     attr_accessor :document

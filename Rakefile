@@ -5,6 +5,7 @@ require 'open3'
 require 'rake/clean'
 require 'yaml'
 require 'colorize'
+require 'digest'
 
 @meta = YAML.load(File.read('metadata.yaml'))
 
