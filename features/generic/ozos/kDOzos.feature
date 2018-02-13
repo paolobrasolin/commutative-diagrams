@@ -13,8 +13,8 @@ Feature: kDOzos macro
     \tikz\kDOzos<code>;
     """
     Then compilation succeeds
-    And the dumped "options" is "<options>"
-    And the dumped "content" is "<content>"
+    And the dumped «options» is <options>
+    And the dumped «content» is <content>
 
     Examples:
       | code         | options | content |

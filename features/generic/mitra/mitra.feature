@@ -23,7 +23,7 @@ Feature: mitra
     };
     """
     Then compilation succeeds
-    And the dump gives "<options>" and "<content>" for cells
+    And the dump gives <options> and <content> for cells
       | row | col |
       | 1   | 1   |
       | 2   | 2   |
@@ -58,7 +58,7 @@ Feature: mitra
     # };
     # """
     # Then compilation succeeds
-    # And the dump gives "<options>" and "<content>" for cells
+    # And the dump gives <options> and <content> for cells
       # | row | col |
       # | 1   | 1   |
       # | 2   | 2   |

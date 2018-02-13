@@ -37,11 +37,11 @@ When(/^the (preamble|body) is empty$/) do |part|
   @job.document.content[part] = ''
 end
 
-When(/^the (preamble|body) contains$/) do |part, sourcecode|
-  # MEMO: the replacement is useful when interpolating
-  #   from tables using trailing/leading spaces.
-  @job.document.append_to(part, sourcecode.gsub(/«(.*?)»/, '\1'))
-end
+# When(/^the (preamble|body) contains$/) do |part, sourcecode|
+#   # MEMO: the replacement is useful when interpolating
+#   #   from tables using trailing/leading spaces.
+#   @job.document.append_to(part, sourcecode.gsub(/«(.*?)»/, '\1'))
+# end
 
 When(/^I code ([^\"]*)$/) do |sourcecode|
   sourcecode.gsub!(/«(.*?)»/, '\1')
@@ -79,32 +79,32 @@ Given(/^I dump "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
 CODE
 end
 
-Given(/^I dump the "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
-  @job.document.append_to 'body', <<CODE
-\\kDDump{'#{field}': '\\the#{macro}'}
-CODE
-end
+# Given(/^I dump the "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
+#   @job.document.append_to 'body', <<CODE
+# \\kDDump{'#{field}': '\\the#{macro}'}
+# CODE
+# end
 
-Given(/^I dump the meaning of "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
-  @job.document.append_to 'body', <<CODE
-\\kDDump{'#{field}': '\\meaning#{macro}'}
-CODE
-end
+# Given(/^I dump the meaning of "([^\"]*)" as "([^\"]*)"$/) do |macro, field|
+#   @job.document.append_to 'body', <<CODE
+# \\kDDump{'#{field}': '\\meaning#{macro}'}
+# CODE
+# end
 
 # Given(/^the dumped value of "([^\"]*)" is "([^\"]*)"$/) do |field, value|
 #   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
 #   expect(dump[field]).to eq(value)
 # end
 
-Given(/^the dumped "([^\"]*)" is "([^\"]*)"$/) do |field, value|
+Given(/^the dumped «(.*)» is «(.*)»$/) do |field, value|
   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
   expect(dump[field]).to eq(value)
 end
 
-Given(/^the dumped "([^\"]*)" of "([^\"]*)" is "([^\"]*)"$/) do |field, item, value|
-  dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
-  expect(dump[item][field]).to eq(value)
-end
+# Given(/^the dumped "([^\"]*)" of "([^\"]*)" is "([^\"]*)"$/) do |field, item, value|
+#   dump = YAML.load_file(".tex-test/#{@job.jobname}.yml")
+#   expect(dump[item][field]).to eq(value)
+# end
 
 # TODO: there is a bug here: kdDumpOpen eats the first token and uses it
 #   as filename; the escaped \  is just a quick hack.
@@ -143,6 +143,6 @@ end
 
 ParameterType(
   name: 'quoted',
-  regexp: /^«(.*)»$/,
+  regexp: /«(.*)»/,
   transformer: -> (unquoted) { unquoted }
 )
