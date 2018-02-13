@@ -141,6 +141,8 @@ Given(/^I expect a node labeled "([^\"]*)" to not exist$/) do |label|
 CODE
 end
 
-Transform(/^«(.*)»$/) do |unquoted|
-  unquoted
-end
+ParameterType(
+  name: 'quoted',
+  regexp: /^«(.*)»$/,
+  transformer: -> (unquoted) { unquoted }
+)
