@@ -8,7 +8,7 @@ env:
 install:
   # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
   - source travis/texlive/install
-  - bundle install
+  # - bundle install
 script: 
   - bundle exec rake install
   - parallel_cucumber --serialize-stdout -- features
