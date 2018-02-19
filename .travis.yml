@@ -1,13 +1,16 @@
 language: ruby
 rvm:
-- 2.4.2
+  - 2.4.2
+env:
+  - DIALECT=tex PIPELINE=tex
+  - DIALECT=latex PIPELINE=latex
 install:
   # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
   - source travis/texlive/install
   - bundle install
 script: 
   - bundle exec rake install
-  - bundle exec rake features
+  - parallel_cucumber --serialize-stdout -- features
 branches:
   only:
   - master

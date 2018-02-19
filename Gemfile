@@ -9,4 +9,5 @@ group :development do
   gem 'guard-shell', '~> 0.7.1'
   gem 'rake', '~> 12.3.0'
   gem 'rspec', '~> 3.7.0'
+  gem 'parallel_tests', '~> 2.21.1'
 end
