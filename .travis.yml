@@ -3,8 +3,15 @@ cache: bundler
 rvm:
   - 2.4.2
 env:
-  - DIALECT=tex PIPELINE=tex
-  - DIALECT=latex PIPELINE=latex
+  - DIALECT=context  PIPELINE=$DIALECT
+  - DIALECT=latex    PIPELINE=$DIALECT
+  - DIALECT=luatex   PIPELINE=$DIALECT
+  - DIALECT=pdflatex PIPELINE=$DIALECT
+  - DIALECT=pdftex   PIPELINE=$DIALECT
+  - DIALECT=tex      PIPELINE=$DIALECT
+  - DIALECT=xelatex  PIPELINE=$DIALECT
+  - DIALECT=xelatex  PIPELINE=lualatex
+  - DIALECT=xetex    PIPELINE=$DIALECT
 install:
   # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
   - source travis/texlive/install

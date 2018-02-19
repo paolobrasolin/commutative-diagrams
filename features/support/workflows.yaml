@@ -2,33 +2,33 @@ tex:
   dialect: tex
   pipeline: tex
 
-# pdftex:
-#   dialect: pdftex
-#   pipeline: pdftex
+pdftex:
+  dialect: pdftex
+  pipeline: pdftex
 
-# xetex:
-#   dialect: xetex
-#   pipeline: xetex
+xetex:
+  dialect: xetex
+  pipeline: xetex
 
-# luatex:
-#   dialect: luatex
-#   pipeline: luatex
+luatex:
+  dialect: luatex
+  pipeline: luatex
 
 latex:
   dialect: latex
   pipeline: latex
 
-# pdflatex:
-#   dialect: pdflatex
-#   pipeline: pdflatex
+pdflatex:
+  dialect: pdflatex
+  pipeline: pdflatex
 
-# xelatex:
-#   dialect: xelatex
-#   pipeline: xelatex
+xelatex:
+  dialect: xelatex
+  pipeline: xelatex
 
-# lualatex:
-#   dialect: xelatex
-#   pipeline: lualatex
+lualatex:
+  dialect: xelatex
+  pipeline: lualatex
 
 context:
   dialect: context
