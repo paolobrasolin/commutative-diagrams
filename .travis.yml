@@ -10,8 +10,10 @@ env:
     - ONLY_GROUP=1,2
   matrix:
     # ConTeXt run is split because of long runtime
-    - FLAVOUR=context N=2 ONLY_GROUP=1,2
-    - FLAVOUR=context N=2 ONLY_GROUP=3,4
+    - FLAVOUR=context N=4 ONLY_GROUP=1,2
+    - FLAVOUR=context N=4 ONLY_GROUP=3,4
+    - FLAVOUR=context N=4 ONLY_GROUP=5,6
+    - FLAVOUR=context N=4 ONLY_GROUP=7,8
     - FLAVOUR=latex
     - FLAVOUR=xelatex
     - FLAVOUR=pdflatex
