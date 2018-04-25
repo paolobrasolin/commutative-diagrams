@@ -20,9 +20,8 @@
 % This work consists of the following files, typically distributed in either
 % a flat directory structure or the tree directory structure described below:
 %
-<%@meta['filemap'].each do |path, globs|
-    relative_globs = Array[globs].flatten.map { |f| "build/#{f}" }
-    filelist = Dir[*relative_globs].map { |f| File.basename(f) }
+<%@filemap.each do |path, globs|
+    filelist = globs.map { |f| File.basename(f) }
     next if filelist.empty? -%>
 %   <%= path %>
 <%  filelist[0..-2].each do |filename| -%>

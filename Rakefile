@@ -7,261 +7,207 @@ require 'yaml'
 require 'colorize'
 require 'digest'
 
-@meta = YAML.load(File.read('metadata.yaml'))
+@meta = YAML.load_file('metadata.yaml')
 
-def print_title(title)
-  puts ("#==[ #{title} ]" + '=' * 80)[0, 80].white.on_black
+def print_task_title(task)
+  title = "#{task.name} | #{task.comment}"
+  puts ("#==[ #{title} ]" + '=' * 80)[0, 80].light_green
 end
 
-#==[ doc: build documents ]=====================================================
+# ################################################################################
 
-desc 'build documents'
-task :doc do
-  print_title 'build documents'
-  target_dir = 'doc/build'
-  mkdir_p target_dir
+# # desc 'Prepare package'
+# # task :ctanify do
+# #   `ctanify --pkgname mypkg dummy.tex`
+# # end
 
-  print "Copying auxiliary doc...\n"
-  cp_r(Dir['doc/README'], target_dir)
-  print "Done.\n"
+# desc 'Upload'
+# task :ctanupload do
+#   # puts Open3.capture3(@meta['ctan'], 'ctanupload')
+# end
 
-  print 'Flattening main doc sourcecode... '
-  _stdout, stderr, status = Open3.capture3(
-    # NOTE: this is suboptimal, given the bugs of latexpand. But... meh.
-    'latexpand', '--output=build/kodi-doc.tex', '--keep-comments', 'main.tex',
-    chdir: 'doc'
-  )
-  raise StandardError, stderr.red unless status.success?
-  print "Done.\n"
+# ################################################################################
 
-  Dir.chdir target_dir do
-    print 'Compiling main doc sourcecode to PDF... '
-    _stdout, stderr, status = Open3.capture3(
-      'latexmk', '-gg', 'kodi-doc.tex'
-    )
-    raise StandardError, stderr.red unless status.success?
-    _stdout, stderr, status = Open3.capture3(
-      'dvips', 'kodi-doc.dvi'
-    )
-    raise StandardError, stderr.red unless status.success?
-    _stdout, stderr, status = Open3.capture3(
-      'ps2pdf', 'kodi-doc.ps'
-    )
-    raise StandardError, stderr.red unless status.success?
-    print "Done.\n"
-  end
-end
+# #==[ features ]=================================================================
 
-#==[ src: build sourcecode ]====================================================
+# task :features, :features_regexp, :tex_envs_regexp do |_task, args|
+#   features_regexp = args[:features_regexp] || '.*'
+#   tex_envs_regexp = args[:tex_envs_regexp] || '.*'
 
-desc 'build sourcecode'
-task :src do
-  print_title 'build sourcecode'
-  target_dir = 'src/build'
-  mkdir_p target_dir
+#   cucumber_options = [
+#     '--format pretty',
+#     '--no-source'
+#   ]
 
-  print "Preparing files...\n"
-  cp_r(Dir['src/*.{tex,sty}'], target_dir)
-  print "Done.\n"
-end
+#   tex_envs = YAML.safe_load File.read('features/support/texworld/cfg.yml')
+#   tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
+#   message = 'The provided TeX environment regexp has no matches.'
+#   raise ArgumentError, message.red if tex_envs.empty?
 
-#==[ build: build all ]=========================================================
+#   features = Dir.glob('features/**/*.feature')
+#   features.select! { |f| f[/#{features_regexp}/] }
+#   message = 'The provided feature regexp has no matches.'
+#   raise ArgumentError, message.red if features.empty?
 
-desc 'build all'
-task build: [:src] do # TODO: should :doc be a prerequisite or not?
-  print_title 'build all'
-  target_dir = 'build'
-  mkdir_p target_dir
+#   filtered_features_tasks = []
 
-  print "Gathering partially built files...\n"
-  cp_r Dir[*@meta['filemap'].values.flatten
-                            .map { |f| "src/build/#{f}" }], target_dir
-  cp_r Dir[*@meta['filemap'].values.flatten
-                            .map { |f| "doc/build/#{f}" }], target_dir
-  print "Done.\n"
+#   generic_features = features.group_by { |f| f.include? 'generic' }
 
-  print 'Loading header template... '
-  code_template = File.read('HEADER.erb')
-  code_renderer = ERB.new(code_template, 0, '-')
-  print "Done.\n"
+#   if generic_features.key? true
+#     generic_features_filenames = generic_features[true].join ' '
+#     tex_envs.each do |k, v|
+#       hash = Digest::MD5.hexdigest(k + generic_features_filenames).to_sym
+#       filtered_features_tasks <<= hash
+#       Cucumber::Rake::Task.new(hash) do |task|
+#         task.cucumber_opts = cucumber_options + [
+#           "DIALECT=#{v['dialect']}",
+#           "PIPELINE=#{v['pipeline']}"
+#         ] + [generic_features_filenames]
+#       end
+#     end
+#   end
 
-  print 'Applying header template to sourcecode files... '
-  Dir["#{target_dir}/*.{tex,sty}"].each do |filename|
-    @filename = File.basename(filename)
-    @source = File.read(filename)
-    File.write(filename, code_renderer.result)
-  end
-  print "Done.\n"
-end
+#   if generic_features.key? false
+#     non_generic_features_filenames = generic_features[false].join ' '
+#     hash = Digest::MD5.hexdigest(non_generic_features_filenames).to_sym
+#     filtered_features_tasks <<= hash
+#     Cucumber::Rake::Task.new(hash) do |task|
+#       task.cucumber_opts = cucumber_options + [non_generic_features_filenames]
+#     end
+#   end
 
-#==[ pkg: prepare files for PKG distribution ]==================================
+#   unless filtered_features_tasks.empty?
+#     task filtered_features: filtered_features_tasks
+#     Rake::Task[:filtered_features].invoke
+#   end
+# end
 
-desc 'prepare files for PKG distribution'
-task pkg: [:build] do
-  print_title 'prepare files for PKG distribution'
-  target_folder = 'dist/pkg/kodi'
-  mkdir_p target_folder
 
-  print "Copying built files...\n"
-  cp_r Dir[*@meta['filemap'].values.flatten
-                            .map { |f| "build/#{f}" }], target_folder
-  print "Done.\n"
-end
-
-#==[ tds: prepare files for TDS distribution ]==================================
-
-desc 'prepare files for TDS distribution'
-task tds: [:build] do
-  print_title 'prepare files for TDS distribution'
-  source_dir = 'build'
-  target_dir = 'dist/tds'
-
-  print "Copying built files...\n"
-  @meta['filemap'].each do |target_subdir, source_globs|
-    target_fulldir = "#{target_dir}/#{target_subdir}"
-    mkdir_p target_fulldir
-    glob_list = Array[source_globs].flatten.map { |f| "#{source_dir}/#{f}" }
-    cp_r Dir[*glob_list], target_fulldir
-  end
-  print "Done.\n"
-end
-
-#==[ zip: prepare archives for distribution ]===================================
-
-desc 'prepare archives for distribution'
-task zip: [:pkg, :tds] do
-  print_title 'prepare archives for distribution'
-
-  print "Zipping TDS tree...\n"
-  Dir.chdir('dist/tds') do
-    system('zip', '--recurse-paths', '../pkg/kodi.tds.zip', '.')
-  end
-  print "Done.\n"
-
-  print "Zipping PKG folder...\n"
-  Dir.chdir('dist/pkg') do
-    system('zip', '--recurse-paths', '../kodi.zip', '.')
-  end
-  print "Done.\n"
-end
-
-#==[ cleanup ]==================================================================
+# NOTE: need to print titles
+Rake::TaskManager.record_task_metadata = true
 
 CLEAN.include '**/dist/'
 CLOBBER.include '**/dist/', '**/build/'
 
-################################################################################
-
-# desc 'Prepare package'
-# task :ctanify do
-#   `ctanify --pkgname mypkg dummy.tex`
-# end
-
-desc 'Upload'
-task :ctanupload do
-  # puts Open3.capture3(@meta['ctan'], 'ctanupload')
-end
-
-################################################################################
-
-#==[ features ]=================================================================
-
-task :features, :features_regexp, :tex_envs_regexp do |_task, args|
-  features_regexp = args[:features_regexp] || '.*'
-  tex_envs_regexp = args[:tex_envs_regexp] || '.*'
-
-  cucumber_options = [
-    '--format pretty',
-    '--no-source'
-  ]
-
-  tex_envs = YAML.safe_load File.read('features/support/texworld/cfg.yml')
-  tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
-  message = 'The provided TeX environment regexp has no matches.'
-  raise ArgumentError, message.red if tex_envs.empty?
-
-  features = Dir.glob('features/**/*.feature')
-  features.select! { |f| f[/#{features_regexp}/] }
-  message = 'The provided feature regexp has no matches.'
-  raise ArgumentError, message.red if features.empty?
-
-  filtered_features_tasks = []
-
-  generic_features = features.group_by { |f| f.include? 'generic' }
-
-  if generic_features.key? true
-    generic_features_filenames = generic_features[true].join ' '
-    tex_envs.each do |k, v|
-      hash = Digest::MD5.hexdigest(k + generic_features_filenames).to_sym
-      filtered_features_tasks <<= hash
-      Cucumber::Rake::Task.new(hash) do |task|
-        task.cucumber_opts = cucumber_options + [
-          "DIALECT=#{v['dialect']}",
-          "PIPELINE=#{v['pipeline']}"
-        ] + [generic_features_filenames]
-      end
-    end
-  end
-
-  if generic_features.key? false
-    non_generic_features_filenames = generic_features[false].join ' '
-    hash = Digest::MD5.hexdigest(non_generic_features_filenames).to_sym
-    filtered_features_tasks <<= hash
-    Cucumber::Rake::Task.new(hash) do |task|
-      task.cucumber_opts = cucumber_options + [non_generic_features_filenames]
-    end
-  end
-
-  unless filtered_features_tasks.empty?
-    task filtered_features: filtered_features_tasks
-    Rake::Task[:filtered_features].invoke
-  end
-end
-
-#==[ install ]==================================================================
-
-desc 'install'
-task install: [:tds] do
-  print_title 'install locally'
-
-  print "Moving files from the built TDS...\n"
-  basedir = `kpsexpand '$TEXMFHOME'`.chomp
+desc "Install package in your personal tree"
+task install: %i{dist:tds uninstall} do |task|
+  print_task_title(task)
+  basedir = `kpsewhich -var-value TEXMFHOME`.chomp
   cp_r 'dist/tds/.', basedir
-  print "Done.\n"
 end
 
-#==[ uninstall ]================================================================
+desc "Uninstall package from your personal tree"
+task :uninstall do |task|
+  print_task_title(task)
+  basedir = `kpsewhich -var-value TEXMFHOME`.chomp
+  subdirs = @meta['filemap'].keys
+  subdirs.each { |subdir| rm_rf "#{basedir}/#{subdir}" }
+end
 
-desc 'uninstall'
-task :uninstall do
-  print_title 'uninstall'
-
-  print "Removing files from the $TEXMFHOME...\n"
-  basedir = `kpsexpand '$TEXMFHOME'`.chomp
-
-  @meta['filemap'].keys.each do |subfolder|
-    rm_rf "#{basedir}/#{subfolder}"
+namespace :build do
+  desc "Build library into src/build/"
+  task :src do |task|
+    print_task_title(task)
+    target_dir = 'src/build'
+    mkdir_p(target_dir)
+    cp_r(Dir['src/*.{tex,sty}'], target_dir)
   end
-  print "Done.\n"
+
+  desc "Build manual into doc/build/ (to skip pdf use SKIP_PDF=true)"
+  task :doc do |task|
+    print_task_title(task)
+    target_dir = 'doc/build'
+    mkdir_p target_dir
+
+    cp_r(Dir['doc/README'], target_dir)
+
+    print 'Flattening sourcecode... '
+    # NOTE: this is suboptimal, given the bugs of latexpand, but... meh.
+    cmd = ['latexpand', '--output=build/kodi-doc.tex', '--keep-comments', 'main.tex']
+    _stdout, stderr, status = Open3.capture3(*cmd, chdir: 'doc')
+    raise StandardError, stderr.red unless status.success?
+    print "Done.\n"
+
+    print 'Compiling... '
+    if ENV['SKIP_PDF'] == 'true'
+      puts "Skipped!"
+    else
+      Dir.chdir target_dir do
+        _stdout, stderr, status = Open3.capture3('latexmk', '-gg', 'kodi-doc.tex')
+        raise StandardError, stderr.red unless status.success?
+        _stdout, stderr, status = Open3.capture3('dvips', 'kodi-doc.dvi')
+        raise StandardError, stderr.red unless status.success?
+        _stdout, stderr, status = Open3.capture3('ps2pdf', 'kodi-doc.ps')
+        raise StandardError, stderr.red unless status.success?
+      end
+      puts "Done!"
+    end
+  end
 end
 
-#==[ reinstall ]================================================================
+namespace :dist do
+  desc "Prepare flat package structure into dist/pkg/"
+  task pkg: %i{dist:tds dist:tds_zip} do |task|
+    print_task_title(task)
+    source_dir = 'dist/tds'
+    target_dir = 'dist/pkg/kodi'
+    mkdir_p target_dir
 
-desc 'reinstall'
-task reinstall: [:uninstall, :install]
+    # NOTE: we're just flattening the TDS
+    cp_r Dir["#{source_dir}/**/*"].select { |f| File.file?(f) }, target_dir
+    cp_r 'dist/kodi.tds.zip', 'dist/pkg'
+  end
 
-#==[ dump minimal koDi/standalone format ]======================================
+  desc "Prepare tree package structure into dist/tds/"
+  task tds: %i{build:src build:doc} do |task|
+    print_task_title(task)
+    target_dir = 'dist/tds'
 
-desc 'dump minimal koDi/standalone format'
-task format: :install do
-  mkdir_p 'dist'
-  stdout, stderr, _status = Open3.capture3(
-    'pdftex',
-    '-ini',
-    '&latex kodi-livedemo.tex\dump',
-    '--output-directory dist'
-  )
-  puts stdout, stderr
-  rm('kodi-livedemo.log')
-  mv('kodi-livedemo.fmt', 'dist')
+    filemap = @meta['filemap'].map do |target_subdir, source_globs|
+      [target_subdir, Dir[*source_globs.map { |f| ["src/build/#{f}", "doc/build/#{f}"] }.flatten]]
+    end
+
+    filemap.each do |target_subdir, source_globs|
+      target_fulldir = "#{target_dir}/#{target_subdir}"
+      mkdir_p target_fulldir
+      cp_r source_globs, target_fulldir
+    end
+
+    print 'Prepending headers... '
+    code_renderer = ERB.new(File.read('HEADER.erb'), 0, '-')
+    Dir["#{target_dir}/**/*.{tex,sty}"].each do |filename|
+      @filename = File.basename(filename)
+      @source = File.read(filename)
+      @filemap = filemap
+      File.write(filename, code_renderer.result)
+    end
+    puts "Done!"
+  end
+
+  desc "Archive tree package structure into dist/kodi.tds.zip"
+  task tds_zip: %i{dist:tds} do |task|
+    print_task_title(task)
+    Dir.chdir('dist/tds') do
+      system('zip', '--recurse-paths', '../kodi.tds.zip', '.')
+    end
+  end
+
+  desc "Archive flat package structure into dist/kodi.zip"
+  task pkg_zip: %i{dist:pkg} do |task|
+    print_task_title(task)
+    Dir.chdir('dist/pkg') do
+      system('zip', '--recurse-paths', '../kodi.zip', '.')
+    end
+  end
+
+  desc "Prepare minimal koDi/standalone fmt into dist/kodi.fmt"
+  task fmt: [:install] do |task|
+    print_task_title(task)
+    mkdir_p 'dist'
+    cmd = ['pdftex', '-ini', '&latex kodi-livedemo.tex\dump', '--output-directory dist']
+    _stdout, stderr, status = Open3.capture3(*cmd)
+    raise StandardError, stderr.red unless status.success?
+    rm('kodi-livedemo.log')
+    mv('kodi-livedemo.fmt', 'dist/kodi.fmt')
+  end
 end

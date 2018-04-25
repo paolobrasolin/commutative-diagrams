@@ -6,11 +6,11 @@ author: &author Paolo Brasolin
 email: &email paolo.brasolin@gmail.com
 
 filemap: # TDS subfolder to PKG glob list
-  tex/plain/kodi/: kodi.tex
-  tex/latex/kodi/: kodi.sty
-  tex/context/third/kodi/: t-kodi.tex
-  tex/generic/kodi/: tikzlibrarykodi*
-  doc/generic/kodi/: ["kodi-doc.{tex,pdf}", "README"]
+  tex/plain/kodi/: [kodi.tex]
+  tex/latex/kodi/: [kodi.sty]
+  tex/context/third/kodi/: [t-kodi.tex]
+  tex/generic/kodi/: [tikzlibrarykodi*.code.tex]
+  doc/generic/kodi/: [kodi-doc.pdf, kodi-doc.tex, README]
 
 ctanupload:
   CONTRIBUTION: *plain_name
