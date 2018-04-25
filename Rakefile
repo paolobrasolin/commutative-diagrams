@@ -86,8 +86,8 @@ end
 # NOTE: need to print titles
 Rake::TaskManager.record_task_metadata = true
 
-CLEAN.include '**/dist/'
-CLOBBER.include '**/dist/', '**/build/'
+CLEAN.include '**/build/'
+CLOBBER.include '**/build/', '**/dist/'
 
 desc "Install package in your personal tree"
 task install: %i{dist:tds uninstall} do |task|
