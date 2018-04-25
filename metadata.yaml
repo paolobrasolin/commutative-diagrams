@@ -1,6 +1,7 @@
 name: &name koDi
 plain_name: &plain_name kodi
-version: &version v0.0.0
+# NOTE: keep version in sync w/ doc/main.tex and src/kodi.sty
+version: &version v1.0.0.pre
 status: maintained
 author: &author Paolo Brasolin
 email: &email paolo.brasolin@gmail.com
