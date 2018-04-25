@@ -1,0 +1,74 @@
+tex:
+  pipeline:
+    - [tex, <%= jobname %>.tex]
+  template: &tex_template
+    content:
+      preamble: ''
+      head: ''
+      body: Hello world.
+      tail: \bye
+    idioms:
+      use: \input <%= name %>
+      enclose:
+        before: \<%= name %><%= options %>
+        after: \end<%= name %>
+
+pdftex:
+  pipeline:
+    - [pdftex, <%= jobname %>.tex]
+  template: *tex_template
+
+xetex:
+  pipeline:
+    - [xetex, <%= jobname %>.tex]
+  template: *tex_template
+
+luatex:
+  pipeline:
+    - [luatex, <%= jobname %>.tex]
+  template: *tex_template
+
+latex:
+  pipeline:
+    - [latex, <%= jobname %>.tex]
+  template: &latex_template
+    content:
+      preamble: \documentclass{article}
+      head: \begin{document}
+      body: Hello world.
+      tail: \end{document}
+    idioms:
+      use: \usepackage{<%= name %>}
+      enclose:
+        before: \begin{<%= name %>}<%= options %>
+        after: \end{<%= name %>}
+
+pdflatex:
+  pipeline:
+    - [pdflatex, <%= jobname %>.tex]
+  template: *latex_template
+
+xelatex:
+  pipeline:
+    - [xelatex, <%= jobname %>.tex]
+  template: *latex_template
+
+lualatex:
+  pipeline:
+    - [lualatex, <%= jobname %>.tex]
+  template: *latex_template
+
+context:
+  pipeline:
+    - [context, <%= jobname %>.tex]
+  template: &context_template
+    content:
+      preamble: ''
+      head: \starttext
+      body: Hello world.
+      tail: \stoptext
+    idioms:
+      use: \usemodule[<%= name %>]
+      enclose:
+        before: \start<%= name %><%= options %>
+        after: \stop<%= name %>

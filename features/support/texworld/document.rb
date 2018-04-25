@@ -1,14 +1,10 @@
+require 'erb'
+
 module TeXWorld
   class Document
-    attr_reader :idioms
-    attr_accessor :content
-
-    def load(name)
-      template = YAML.load_file(
-        File.expand_path('../templates.yaml', __FILE__)
-      )[name]
-      @content = template['content']
-      @idioms  = template['idioms']
+    def initialize(cfg)
+      @content = cfg.fetch('content')
+      @idioms  = cfg.fetch('idioms')
     end
 
     def append_to(part, stuff)
@@ -23,17 +19,28 @@ module TeXWorld
       @content['tail'].prepend(after.strip + "\n")
     end
 
-    def write(filename)
-      sourcecode = <<TEXCODE
-#{@content['preamble'].strip}
-#{@content['head'].strip}
-#{@content['body'].strip}
-#{@content['tail'].strip}
-TEXCODE
-      # puts sourcecode
-      File.open(filename, 'w') do |file|
-        file.write sourcecode
-      end
+    def idiom_inside(binding)
+      before = ERB.new(@idioms.fetch('enclose').fetch('before')).result(binding)
+      after = ERB.new(@idioms.fetch('enclose').fetch('after')).result(binding)
+      wrap_body(before, after)
+    end
+
+    def idiom_use(binding)
+      macro = ERB.new(@idioms.fetch('use')).result(binding)
+      append_to('preamble', macro)
+    end
+
+    def set_content(part, text)
+      @content[part] = text
+    end
+
+    def sourcecode
+      <<~TEXCODE
+        #{@content['preamble'].strip}
+        #{@content['head'].strip}
+        #{@content['body'].strip}
+        #{@content['tail'].strip}
+      TEXCODE
     end
   end
 end

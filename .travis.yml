@@ -9,18 +9,17 @@ env:
     - N=1
     - ONLY_GROUP=1,2
   matrix:
-    - DIALECT=latex    PIPELINE=$DIALECT
-    - DIALECT=luatex   PIPELINE=$DIALECT
-    - DIALECT=pdflatex PIPELINE=$DIALECT
-    - DIALECT=pdftex   PIPELINE=$DIALECT
-    - DIALECT=tex      PIPELINE=$DIALECT
-    - DIALECT=xelatex  PIPELINE=$DIALECT
-    - DIALECT=xelatex  PIPELINE=lualatex
-    - DIALECT=xetex    PIPELINE=$DIALECT
     # ConTeXt run is split because of long runtime
-    - DIALECT=context  PIPELINE=$DIALECT N=3 ONLY_GROUP=1,2
-    - DIALECT=context  PIPELINE=$DIALECT N=3 ONLY_GROUP=3,4
-    - DIALECT=context  PIPELINE=$DIALECT N=3 ONLY_GROUP=5,6
+    - FLAVOUR=context N=2 ONLY_GROUP=1,2
+    - FLAVOUR=context N=2 ONLY_GROUP=3,4
+    - FLAVOUR=latex
+    - FLAVOUR=xelatex
+    - FLAVOUR=pdflatex
+    - FLAVOUR=lualatex
+    - FLAVOUR=tex
+    - FLAVOUR=xetex
+    - FLAVOUR=pdftex
+    - FLAVOUR=luatex
 install:
   # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
   - source travis/texlive/install

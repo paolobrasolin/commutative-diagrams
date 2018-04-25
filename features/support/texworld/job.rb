@@ -1,22 +1,28 @@
 require 'digest'
 
 module TeXWorld
+  FLAVOURS = YAML.load_file(
+    File.expand_path('../../flavours.yml', __FILE__)
+  )
+
   class Job
     attr_accessor :document
     attr_accessor :pipeline
+    attr_accessor :path
 
-    def initialize
-      @document = TeXWorld::Document.new
-      @pipeline = TeXWorld::Pipeline.new
+    def load(flavour)
+      cfg = Marshal.load(Marshal.dump(FLAVOURS.fetch(flavour)))
+      @document = TeXWorld::Document.new(cfg.fetch('template'))
+      @pipeline = TeXWorld::Pipeline.new(cfg.fetch('pipeline'))
     end
 
     def jobname
-      Digest::MD5.hexdigest(@document.content.to_s)
+      path.basename.sub_ext('').to_s
     end
 
     def run
-      @document.write(".tex-test/#{jobname}.tex")
-      @pipeline.run(binding)
+      path.write(@document.sourcecode)
+      @pipeline.run(binding, chdir: path.dirname.to_s)
     end
   end
 end

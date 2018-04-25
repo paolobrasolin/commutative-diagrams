@@ -175,7 +175,7 @@ task :features, :features_regexp, :tex_envs_regexp do |_task, args|
     '--no-source'
   ]
 
-  tex_envs = YAML.safe_load File.read('features/support/workflows.yaml')
+  tex_envs = YAML.safe_load File.read('features/support/texworld/cfg.yml')
   tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
   message = 'The provided TeX environment regexp has no matches.'
   raise ArgumentError, message.red if tex_envs.empty?
