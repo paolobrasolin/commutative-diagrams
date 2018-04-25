@@ -1,4 +1,5 @@
 # features/texworld_dialects_and_pipelines.feature
+@texworld
 Feature: TeXWorld dialects and pipelines
 
   Scenario Outline: compiling the MWEs

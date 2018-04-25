@@ -1,0 +1,1 @@
+report: DIALECT=tex PIPELINE=tex --tags 'not @texworld' --format progress --format html --out=features/generic/report.html
