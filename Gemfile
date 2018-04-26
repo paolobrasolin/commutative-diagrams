@@ -10,4 +10,5 @@ group :development do
   gem 'rake', '~> 12.3.0'
   gem 'rspec', '~> 3.7.0'
   gem 'parallel_tests', '~> 2.21.1'
+  gem 'github_api', '~> 0.18.2'
 end

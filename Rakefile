@@ -7,7 +7,10 @@ require 'yaml'
 require 'colorize'
 require 'digest'
 
-@meta = YAML.load_file('metadata.yaml')
+require 'github_api'
+require 'io/console'
+
+METADATA = YAML.load_file('metadata.yaml')
 
 def print_task_title(task)
   title = "#{task.name} | #{task.comment}"
@@ -23,7 +26,7 @@ end
 
 # desc 'Upload'
 # task :ctanupload do
-#   # puts Open3.capture3(@meta['ctan'], 'ctanupload')
+#   # puts Open3.capture3(METADATA['ctan'], 'ctanupload')
 # end
 
 # ################################################################################
@@ -100,7 +103,7 @@ desc "Uninstall package from your personal tree"
 task :uninstall do |task|
   print_task_title(task)
   basedir = `kpsewhich -var-value TEXMFHOME`.chomp
-  subdirs = @meta['filemap'].keys
+  subdirs = METADATA['filemap'].keys
   subdirs.each { |subdir| rm_rf "#{basedir}/#{subdir}" }
 end
 
@@ -163,7 +166,7 @@ namespace :dist do
     print_task_title(task)
     target_dir = 'dist/tds'
 
-    filemap = @meta['filemap'].map do |target_subdir, source_globs|
+    filemap = METADATA.fetch('filemap').map do |target_subdir, source_globs|
       [target_subdir, Dir[*source_globs.map { |f| ["src/build/#{f}", "doc/build/#{f}"] }.flatten]]
     end
 
@@ -179,6 +182,7 @@ namespace :dist do
       @filename = File.basename(filename)
       @source = File.read(filename)
       @filemap = filemap
+      @meta = METADATA
       File.write(filename, code_renderer.result)
     end
     puts "Done!"
@@ -209,5 +213,50 @@ namespace :dist do
     raise StandardError, stderr.red unless status.success?
     rm('kodi-livedemo.log')
     mv('kodi-livedemo.fmt', 'dist/kodi.fmt')
+  end
+end
+
+namespace :release do
+  desc "Create release on Github"
+  task github: %i{dist:pkg_zip} do |task|
+    print_task_title(task)
+
+    print "GH login: "
+    login = STDIN.noecho(&:gets).chomp
+    puts
+
+    print "GH password: "
+    password = STDIN.noecho(&:gets).chomp
+    puts
+
+    begin
+      github = Github.new basic_auth: "#{login}:#{password}"
+
+      version = METADATA.fetch('version')
+
+      print "Creating release... "
+      response = github.repos.releases.create(
+        'paolobrasolin', 'kodi',
+        tag_name: version,
+        target_commitish: 'development',
+        name: version,
+        body: "Release of version #{version}",
+        draft: false,
+        prerelease: version.end_with?('.pre')
+      )
+      puts "done: #{response.body.html_url}"
+
+      release_id = response.body.id
+
+      print "Uploading assets... "
+      response = github.repos.releases.assets.upload(
+        'paolobrasolin', 'kodi', release_id, 'dist/kodi.zip',
+        name: "kodi-#{version}.zip",
+        content_type: "application/zip"
+      )
+      puts "done."
+    rescue Github::Error::GithubError => error
+      puts error.message.red
+    end
   end
 end
