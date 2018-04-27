@@ -238,7 +238,7 @@ namespace :release do
       response = github.repos.releases.create(
         'paolobrasolin', 'kodi',
         tag_name: version,
-        target_commitish: 'development',
+        target_commitish: 'master',
         name: version,
         body: "Release of version #{version}",
         draft: false,
