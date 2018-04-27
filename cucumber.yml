@@ -1,1 +1,3 @@
-report: DIALECT=tex PIPELINE=tex --tags 'not @flavours' --format progress --format html --out=features/generic/report.html
+report: FLAVOUR=tex --tags 'not @flavours' --format progress --format html --out=features/generic/report.html
+guard: FLAVOUR=tex --format progress
+default: FLAVOUR=tex --format pretty

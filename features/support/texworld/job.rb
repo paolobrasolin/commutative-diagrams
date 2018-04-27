@@ -1,5 +1,8 @@
 require 'digest'
 
+require_relative 'document'
+require_relative 'pipeline'
+
 module TeXWorld
   FLAVOURS = YAML.load_file(
     File.expand_path('../../flavours.yml', __FILE__)
