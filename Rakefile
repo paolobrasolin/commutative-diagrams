@@ -11,6 +11,7 @@ require 'github_api'
 require 'io/console'
 
 METADATA = YAML.load_file('metadata.yaml')
+METADATA['today'] = Date.today.strftime('%Y/%m/%d')
 
 def print_task_title(task)
   title = "#{task.name} | #{task.comment}"
@@ -114,6 +115,12 @@ namespace :build do
     target_dir = 'src/build'
     mkdir_p(target_dir)
     cp_r(Dir['src/*.{tex,sty}'], target_dir)
+    Dir["#{target_dir}/*.{tex,sty}"].each do |filename|
+      source = File.read(filename)
+      source.gsub!('<VERSION>', METADATA.fetch('version'))
+      source.gsub!('<TODAY>', METADATA.fetch('today'))
+      File.write(filename, source)
+    end
   end
 
   desc "Build manual into doc/build/ (to skip pdf use SKIP_PDF=true)"
