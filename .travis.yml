@@ -27,7 +27,7 @@ install:
   - source travis/texlive/install
   - bundle install
 script: 
-  - bundle exec rake install
+  - SKIP_PDF=true bundle exec rake install
   - parallel_cucumber --serialize-stdout --multiply-processes $MULTIPLY_PROCESSES -n $N --only-group $ONLY_GROUP -- features
 branches:
   only:
