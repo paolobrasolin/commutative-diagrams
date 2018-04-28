@@ -3,7 +3,7 @@ It is polymorphic and can draw both single objects and layouts.
 
 \begin{lstlisting}
 \obj@opt@ <object options> @/opt@{<math>};(@
-  \marginpar{\scriptsize Orange denotes optional fragments.}@)
+  \marginpar{\scriptsize {\color{orange!80!black}Orange fragments} are optional.}@)
 \obj@opt@ <layout options> @/opt@{<layout>};
 \end{lstlisting}
 
@@ -11,7 +11,7 @@ Layouts are described using the customary \TeX\ tabular syntax.
 
 \begin{lstlisting}
 <layout>         := (@\itshape\underbar{<row> <row separator>}@)(@
-  \marginpar{\scriptsize Underlined fragments are repeated one or more times.}@)
+  \marginpar{\scriptsize \underbar{Underlined fragments} can repeat one or more times.}@)
 <row>            := <cell> (@\itshape\color{orange!80!black}\underbar{<cell separator> <cell>}@)
 <row separator>  := \\ @opt@[<length>]@/opt@
 <cell>           := @opt@|<object options>| @/opt@<math>
