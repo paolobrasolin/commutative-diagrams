@@ -136,16 +136,11 @@
 
 %==[ alternatives to koDi ]=====================================================
 
-\usepackage[all]{xy}
+% So, yeah, I got *really* tired...
+\usepackage{filecontents}
 
-\usepackage{pstricks}
-\usepackage{auto-pst-pdf} % TODO: switch to \usepackage[pdf]{pstricks}
-\usepackage{pst-node}
-
-% TODO: DANGER! tikz-cd is writing global styles!!
-%   I think it's only arrows.meta though. Investigate!
-% \usetikzlibrary{arrows.meta}
-\usetikzlibrary{cd}
+% Copied from Xy sourcecode
+\def\Xy{\hbox{\kern-.1em X\kern-.3em\lower.4ex\hbox{Y\kern-.15em}}}
 
 %==[ utilities and custom macros ]==============================================
 
@@ -319,6 +314,15 @@
     sidebyside gap=\marginparsep,
     smash and center,
     listing options={}
+  },
+  commented snippet/.style={
+    snippet,
+    comment={}, % avoids text compilation (possible tcb bug?)
+    if odd page={
+      listing side comment,
+    }{
+      comment side listing,
+    },
   },
   gallery/.style={
     size=tight,

@@ -1,0 +1,53 @@
+% I got really, really tired of pstricks subtle limitations.
+% auto-pst-pdf doesnt really work on externalized listings.
+% Ordinary compilation gotta pass through PS so it's tricky.
+% Furthermore it just breaks TikZ opacity unless you use PS.
+% Ain't nobody got time for that.
+
+\begin{filecontents*}{alternatives-pstnode-pic.tex}
+\documentclass[12pt]{standalone}
+\usepackage{libertine}
+\usepackage{libertinust1math}
+\usepackage{pstricks}
+\usepackage{pst-node}
+\begin{document}
+$ \psset{colsep=2.5em, rowsep=2em}
+ \begin{psmatrix}
+  U \\
+ & X\times_Z Y & X \\
+ & Y & Z
+ \psset{arrows=->, nodesep=3pt}
+ \everypsbox{\scriptstyle}
+ \ncline{1,1}{2,2}
+ \ncarc[arcangle=-10]{1,1}{3,2}_{y}
+ \ncarc[arcangle=10]{1,1}{2,3}^{x}
+ \ncline{2,2}{3,2}>{q}
+ \ncline{2,2}{2,3}_{p}
+ \ncline{2,3}{3,3}<{f}
+ \ncline{3,2}{3,3}^{g}
+ \end{psmatrix}$
+\end{document}
+\end{filecontents*}
+
+\IfFileExists{alternatives-pstnode-pic.pdf}{}{\immediate\write18{latex alternatives-pstnode-pic.tex && dvips alternatives-pstnode-pic.dvi && ps2pdf alternatives-pstnode-pic.ps}}
+
+\begin{tcblisting}{
+  commented snippet,
+  image comment={}{alternatives-pstnode-pic.pdf}
+}
+$ \psset{colsep=2.5em, rowsep=2em}
+ \begin{psmatrix}
+  U \\
+ & X\times_Z Y & X \\
+ & Y & Z
+ \psset{arrows=->, nodesep=3pt}
+ \everypsbox{\scriptstyle}
+ \ncline{1,1}{2,2}
+ \ncarc[arcangle=-10]{1,1}{3,2}_{y}
+ \ncarc[arcangle=10]{1,1}{2,3}^{x}
+ \ncline{2,2}{3,2}>{q}
+ \ncline{2,2}{2,3}_{p}
+ \ncline{2,3}{3,3}<{f}
+ \ncline{3,2}{3,3}^{g}
+ \end{psmatrix}$
+\end{tcblisting}

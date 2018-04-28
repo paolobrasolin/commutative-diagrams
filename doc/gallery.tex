@@ -117,8 +117,10 @@ The remainder of the text is just commented examples.
 
 \subsection{Braid}
 
+% TODO: there's a bug here. If one does \begin{kodi}[ l/.style={bend left}
+% TODO: (note the space before l) then it's not recognized. Investigate.
 \begin{tcblisting}{gallery}
-\begin{kodi}[ l/.style={bend left}, r/.style={bend right} ]
+\begin{kodi}[l/.style={bend left}, r/.style={bend right} ]
   \obj [ comb=step 6em angle 45, remove characters=H_\{q+\} ] {
     H_{q+2}(X)   & H_{q+2}(X,Y) & H_{q+1}(Y,Z) & H_{q}(Z)     \\
     H_{q+2}(Y)   & H_{q+2}(X,Z) & H_{q+1}(Y)   & H_{q+1}(X,Z) \\

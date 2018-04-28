@@ -1,0 +1,29 @@
+% Well, I got to admit that among the three alternatives
+% Xy-pics was by far the best citizen. Mad props.
+
+\begin{filecontents*}{alternatives-xypic-pic.tex}
+\documentclass[12pt]{standalone}
+\usepackage{libertine}
+\usepackage{libertinust1math}
+\usepackage[all]{xy}
+\begin{document}
+\xymatrix{
+ U \ar@/_/[ddr]_y \ar[dr] \ar@/^/[drr]^x \\
+  & X \times_Z Y \ar[d]^q \ar[r]_p
+                 & X \ar[d]_f            \\
+  & Y \ar[r]^g & Z                       }
+\end{document}
+\end{filecontents*}
+
+\IfFileExists{alternatives-xypic-pic.pdf}{}{\immediate\write18{pdflatex alternatives-xypic-pic.tex}}
+
+\begin{tcblisting}{
+  commented snippet,
+  image comment={}{alternatives-xypic-pic.pdf},
+}
+\xymatrix{
+ U \ar@/_/[ddr]_y \ar[dr] \ar@/^/[drr]^x \\
+  & X \times_Z Y \ar[d]^q \ar[r]_p
+                 & X \ar[d]_f            \\
+  & Y \ar[r]^g & Z                       }
+\end{tcblisting}

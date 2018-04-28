@@ -1,0 +1,41 @@
+% It seems that tikz-cd is overwriting some arrows.meta
+% global keys. I have no intention of investigating
+% so let's just isolate the problem.
+
+\begin{filecontents*}{alternatives-tikzcd-pic.tex}
+\documentclass[12pt]{standalone}
+\usepackage{libertine}
+\usepackage{libertinust1math}
+\usepackage{tikz}
+\usetikzlibrary{cd}
+\begin{document}
+\begin{tikzcd}[column sep=scriptsize, row sep=scriptsize]
+  U
+  \arrow[drr, bend left=10, "x"]
+  \arrow[ddr, bend right=10, swap, "y"]
+  \arrow[dr] & & \\
+    & X \times_Z Y \arrow[r, swap, "p"] \arrow[d, "q"]
+      & X \arrow[d, swap, "f"] \\
+    & Y \arrow[r, "g"]
+      & Z
+\end{tikzcd}
+\end{document}
+\end{filecontents*}
+
+\IfFileExists{alternatives-tikzcd-pic.pdf}{}{\immediate\write18{pdflatex alternatives-tikzcd-pic.tex}}
+
+\begin{tcblisting}{
+  commented snippet,
+  image comment={}{alternatives-tikzcd-pic.pdf},
+}
+\begin{tikzcd}[column sep=scriptsize, row sep=scriptsize]
+  U
+  \arrow[drr, bend left=10, "x"]
+  \arrow[ddr, bend right=10, swap, "y"]
+  \arrow[dr] & & \\
+    & X \times_Z Y \arrow[r, swap, "p"] \arrow[d, "q"]
+      & X \arrow[d, swap, "f"] \\
+    & Y \arrow[r, "g"]
+      & Z
+\end{tikzcd}
+\end{tcblisting}
