@@ -138,6 +138,12 @@ namespace :build do
     raise StandardError, stderr.red unless status.success?
     print "Done.\n"
 
+    filename = 'doc/build/kodi-doc.tex'
+    source = File.read(filename)
+    source.gsub!('<VERSION>', METADATA.fetch('version'))
+    source.gsub!('<TODAY>', METADATA.fetch('today'))
+    File.write(filename, source)
+
     print 'Compiling... '
     if ENV['SKIP_PDF'] == 'true'
       puts "Skipped!"
