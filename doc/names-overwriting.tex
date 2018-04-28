@@ -20,10 +20,8 @@ A side by side comparison completely illustrates their meanings.
 
 \hfill$\therefore$\hfill\null
 
-The default behaviour is the ideal for manually solving automatic names
-conflicts.
-
-TODO: Why is false useful? conflict solving.
+The default behaviour avoids overwriting explicit labels in order
+to give you a simple means of naming conflict resolution.
 
 \begin{tcblisting}{snippet, trim}
 \begin{kodi}[golden]
@@ -34,7 +32,8 @@ TODO: Why is false useful? conflict solving.
 \end{kodi}
 \end{tcblisting}
 
-TODO: Why is alias useful? semantic aliasing
+Sometimes you might want an object to have both a literal and a
+semantic alias.
 
 \begin{tcblisting}{snippet, trim}
 \begin{kodi}
@@ -44,4 +43,5 @@ TODO: Why is alias useful? semantic aliasing
 \end{kodi}
 \end{tcblisting}
 
-TODO: Why is true useful? \ldots completeness?
+The hard overwriting behaviour ignores any label except generated
+ones; it exists for completeness and debugging purposes.
