@@ -32,28 +32,30 @@ The remainder of the text is just commented examples.
 
 \clearpage
 
-% \begin{tcblisting}{gallery}
-% \begin{kodi}
-% % From the LaTeX preamble:
-% %   \usepackage{newunicodechar}
-% %   \newunicodechar{ı}{\mathbf 1}
-% %   \newunicodechar{×}{\otimes}
+\subsection{The fourth associahedron}
 
-%   \foreach [count=\n] \o in {
-%       ((w×x)×y)×x,
-%       (w×(x×y))×x,
-%       w×((x×y)×x),
-%       w×(x×(y×x)),
-%       (w×x)×(y×x)
-%     } \obj (\n) at (72*\n:7em) {\o};
+\begin{tcblisting}{gallery}
+\begin{kodi}
+% From the LaTeX preamble:
+%   \usepackage{newunicodechar}
+%   \newunicodechar{ı}{\mathbf 1}
+%   \newunicodechar{×}{\otimes}
 
-%   \mor 1 "a_{w,x,y}×ı_z": -> 2
-%            "a_{w,x×y,z}": -> 3
-%          "ı_w×a_{x,y,z}": -> 4;
-%   \mor *   "a_{w×x,y,z}": -> 5
-%            "a_{w,x,y×z}": -> *;
-% \end{kodi}
-% \end{tcblisting}
+  \foreach [count=\n] \o in {
+      ((w×x)×y)×x,
+      (w×(x×y))×x,
+      w×((x×y)×x),
+      w×(x×(y×x)),
+      (w×x)×(y×x)
+    } \obj (\n) at (72*\n:7em) {\o};
+
+  \mor 1 "a_{w,x,y}×ı_z": -> 2
+           "a_{w,x×y,z}": -> 3
+         "ı_w×a_{x,y,z}": -> 4;
+  \mor *   "a_{w×x,y,z}": -> 5
+           "a_{w,x,y×z}": -> *;
+\end{kodi}
+\end{tcblisting}
 
 \clearpage
 

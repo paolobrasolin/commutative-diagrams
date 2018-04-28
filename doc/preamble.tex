@@ -113,6 +113,7 @@
 % \DeclareUnicodeCharacter{00D7}{{\otimes}}
 % \catcode`ı=\active \letı\id
 % \catcode`×=\active \let×\otimes
+% NOTE: needed just for the associahedron example
 \usepackage{newunicodechar}
 \newunicodechar{ı}{\mathbf 1}
 \newunicodechar{×}{\otimes}
@@ -249,13 +250,14 @@
   commentstyle=\itshape\color{black!60},
   frame=none,
   % extendedchars=false,
-  % inputencoding=utf8,
+  inputencoding=utf8,
   escapeinside={(@}{@)},
   moredelim=**[is][\color{orange!80!black}]{@opt@}{@/opt@},
   moredelim=**[is][\color{blue!80!black}]{@nws@}{@/nws@},
   % moredelim=**[is][\color\underbar]{@rep@}{@/rep@},
   moredelim=**[s][\itshape]{<}{>},
-  literate={~}{{\textvisiblespace}}1 {XOR}{{$\vert$}}1 {:}{{\textbf{:}}}1 {:=}{{$\equiv$}}1 ,
+  % NOTE: × and ı are needed just for the associahedron example
+  literate={~}{{\textvisiblespace}}1 {XOR}{{$\vert$}}1 {:}{{\textbf{:}}}1 {:=}{{$\equiv$}}1 {×}{{\texttimes}}1 {ı}{{\i}}1,
 }
 
 \lstset{style=TeX}
