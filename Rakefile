@@ -130,6 +130,7 @@ namespace :build do
     mkdir_p target_dir
 
     cp_r(Dir['doc/README'], target_dir)
+    cp_r(Dir['doc/latexmkrc'], target_dir)
 
     print 'Flattening sourcecode... '
     # NOTE: this is suboptimal, given the bugs of latexpand, but... meh.
@@ -148,14 +149,8 @@ namespace :build do
     if ENV['SKIP_PDF'] == 'true'
       puts "Skipped!"
     else
-      Dir.chdir target_dir do
-        _stdout, stderr, status = Open3.capture3('latexmk', '-gg', 'kodi-doc.tex')
-        raise StandardError, stderr.red unless status.success?
-        _stdout, stderr, status = Open3.capture3('dvips', 'kodi-doc.dvi')
-        raise StandardError, stderr.red unless status.success?
-        _stdout, stderr, status = Open3.capture3('ps2pdf', 'kodi-doc.ps')
-        raise StandardError, stderr.red unless status.success?
-      end
+      _stdout, stderr, status = Open3.capture3('latexmk', '-gg', chdir: target_dir)
+      raise StandardError, stderr.red unless status.success?
       puts "Done!"
     end
   end
