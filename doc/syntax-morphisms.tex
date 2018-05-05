@@ -59,13 +59,15 @@ The same holds for arrow syntax.
 \end{kodi}
 \end{tcblisting}
 
-Blah.
+Global options can be used to minimize local ones
+and keep the code terse and readable.
 
 \begin{tcblisting}{snippet, trim}
 \begin{kodi}
 \obj { A & B & C \\ F & E & D \\ };
-\mor A -> B;
-\mor [swap]:[bend left] B f:-> C g:>-> D h:>- E;
+\mor [swap]:[bend left] B f:-> C g:>-> D h:>- E i:- B;
+\mor :[bend right] E x:-> F y:>-> A z:>- B;
+\mor [mid] B m:-> D;
 \end{kodi}
 \end{tcblisting}
 

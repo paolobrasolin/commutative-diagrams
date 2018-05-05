@@ -5,10 +5,19 @@ The process happens in three steps:
   \item expand tokens;
   \item replace characters;
   \item apply name, overwriting if necessary.
-  \end{itemize}
+\end{itemize}
 
 Each one can be configured in any \koDi\ scope with the keys.
 
-You can control the degree of expansion; the default behaviour (no expansion)
-shields you from problems with unsafe macros.
+While you're getting acquainted with the process
+you can use the \lstinline|/kD/training wheels| key to visibly
+label any object with its generated name.
 
+\begin{tcblisting}{snippet}
+\begin{kodi}[training wheels]
+  \obj{
+    A & \lim A \\
+    \alpha\beta & \gamma \delta \\
+  };
+\end{kodi}
+\end{tcblisting}

@@ -1,0 +1,165 @@
+\tikzset{
+  versor/.style={ultra thick, black, ->, >=latex, line cap=round},
+  checkers/.style={fill=teal!15},
+  measure/.style={decorate, decoration={brace, amplitude=4pt, aspect=#1}},
+  measure/.default=0.5,
+  label/.style={font=\scriptsize, outer sep=.5em, inner sep=0sp},
+  dots/.style={fill=teal!50},
+  label style/.style={label, outer sep=.2em, font={\ttfamily\tiny}},
+  anchor style/.style={inner sep=0sp, outer sep=0sp, anchor=center},
+  pin style/.style={pin distance=.75em, pin edge={thin, black, shorten <=3pt}, label style}
+}
+
+\begin{marginfigure}[0cm]
+  \begin{subfigure}{\marginparwidth}
+    \begin{tikzpicture}[kodi, rectangular={0.2\marginparwidth}{0.2*1.618\marginparwidth}]
+      % drawing area
+      \clip (-2.5,-2.5) rectangle (2.5,2.5);
+      % checkers and dots
+      \foreach \i in {-3, ..., 2} \foreach \j in {-3, ..., 2} {
+        \pgfmathparse{int(1+abs(\i)+abs(\j))}
+        \ifodd\pgfmathresult \fill [checkers] (\i,\j) rectangle +(1,1);\fi
+        \pgfmathparse{ \i == sign(\i) && \j == sign(\j) && abs(\i) != -abs(\j) }
+        \fill [fill/.expanded={\ifnum\pgfmathresult=1 red\else teal!50\fi}]
+          (\i,\j) circle (2pt);
+      }
+      % base circle  
+      \fill [red, opacity=0.1] (1,1) -- (-1,1) -- (-1,-1) -- (1,-1) -- cycle;
+      % width marker
+      \draw
+        [measure, decoration=mirror, yshift=-3pt]
+        (0,0) -- (1,0)
+        node [label style, midway, below, yshift=-3pt] {base};
+      % height marker
+      \draw
+        [measure=0.7, xshift=-3pt]
+        (0,0) -- (0,1)
+        node [label style, pos=0.7, left, xshift=-3pt] {height};
+      % origin
+      \coordinate (O) at (0,0);
+      \node at (O) [anchor style, pin={[pin style]-135:{O}}] {};
+      % neighbours
+      \node [anchor style, pin={[pin style]-45:{above=of O}}, above=of O] {};
+      \node [anchor style, pin={[pin style]60:{above left=of O}}, above left=of O] {};
+      \node [anchor style, pin={[pin style]90:{left=1 of O}}, left=1 of O] {};
+      \node [anchor style, pin={[pin style]120:{below right=2 of O}}, below right=2 of O] {};
+      \node [anchor style, pin={[pin style]-45:{below left=1 and 2 of O}}, below left=1 and 2 of O] {};
+      % versors
+      \draw [versor] (0,0) -- (1,0);
+      \draw [versor] (0,0) -- (0,1);
+    \end{tikzpicture}
+    \subcaption*{Tetragonal}\bigskip
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \begin{tikzpicture}[kodi, comb=horizontal step {0.4*\marginparwidth} angle 60]
+      % drawing area
+      \clip (-2.5,-2.5) rectangle (2.5,2.5);
+      % checkers and dots
+      \foreach \i in {-4, ..., 2} \foreach \j in {-3, ..., 2} {
+        \pgfmathparse{int(abs(\i)+abs(\j))}
+        \ifodd\pgfmathresult\else \fill [checkers] (\i,\j) -- +(1,1) -- +(2,0);\fi
+        \pgfmathsetmacro\dotsize{isodd(\pgfmathresult)?1:2}
+        \fill [fill/.expanded={\ifnum\pgfmathresult=2 red\else teal!50\fi}]
+          (\i,\j) circle (\dotsize pt);
+      }
+      % base circle  
+      \fill [red, opacity=0.1]
+        (2,0) -- (0,2) -- (-2,0) -- (0,-2) -- cycle;
+      % step marker
+      \draw [measure, decoration=mirror, yshift=-3pt]
+        (0,0) -- (2,0)
+        node [label style, midway, below, yshift=-3pt] {step};
+      % angle marker
+      \draw (0.66*1.7cm, 0)
+        arc (0:30:0.66*1.7cm)
+        node [label style, above right] {angle}
+        arc (30:60:0.66*1.7cm);
+      % origin
+      \coordinate (O) at (0,0);
+      \node at (O) [anchor style, pin={[pin style]-135:{O}}] {};
+      % neighbours
+      \node [anchor style, pin={[pin style]-45:{above=of O}}, above=of O] {};
+      \node [anchor style, pin={[pin style]60:{above left=of O}}, above left=of O] {};
+      \node [anchor style, pin={[pin style]90:{left=1 of O}}, left=1 of O] {};
+      \node [anchor style, pin={[pin style]120:{below right=2 of O}}, below right=2 of O] {};
+      \node [anchor style, pin={[pin style]-45:{below left=1 and 2 of O}}, below left=1 and 2 of O] {};
+      % versors
+      \draw [versor] (0,0) -- (1,0);
+      \draw [versor] (0,0) -- (0,1);
+    \end{tikzpicture}
+    \subcaption*{Hexagonal (horizontal)}\bigskip
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \begin{tikzpicture}[kodi, comb=vertical step {0.2*\marginparwidth*2/sqrt(3)} angle 60]
+      % drawing area
+      \clip (-2.5,-2.5) rectangle (2.5,2.5);
+      % checkers and dots
+      \foreach \i in {-3, ..., 2} \foreach \j in {-4, ..., 3} {
+        \pgfmathparse{int(1+abs(\i)+abs(\j))}
+        \ifodd\pgfmathresult \fill [checkers] (\i,\j) -- +(1,1) -- +(0,2);\fi
+        \pgfmathsetmacro\dotsize{isodd(\pgfmathresult)?2:1}
+        \fill [fill/.expanded={\ifnum\pgfmathresult=3 red\else teal!50\fi}]
+          (\i,\j) circle (\dotsize pt);
+      }
+      % base circle  
+      \fill [red, opacity=0.1] (2,0) -- (0,2) -- (-2,0) -- (0,-2) -- cycle;
+      % step marker
+      \draw [measure=0.3, xshift=-3pt]
+        (0,0) -- (0,2) node [label style, pos=0.3, left, xshift=-3pt]  {step};
+      % angle marker
+      \draw 
+        ([shift=(30:0.66*0.982cm)]0,0)
+        arc (30:60:0.66*0.982cm)
+        node [label style, above right] {angle}
+        arc (60:90:0.66*0.982cm);
+      % origin
+      \coordinate (O) at (0,0);
+      % neighbours
+      % versors
+      \draw [versor] (0,0) -- (1,0);
+      \draw [versor] (0,0) -- (0,1);
+    \end{tikzpicture}
+    \subcaption*{Hexagonal (vertical)}\bigskip
+  \end{subfigure}
+  %% \caption*{Diagram grid examples}
+\end{marginfigure}
+
+Diagrams can be laid over regular grids:
+
+\begin{lstlisting}
+/kD/diagrams/tetragonal=base <length> height <length>
+  (@\hfill@) (default: step 4.5em angle 60)
+\end{lstlisting}
+
+\begin{lstlisting}
+/kD/diagrams/hexagonal=<direction> side <length> angle <angle>
+  (@\hfill@) (default: horizontal side 4.5em angle 60)
+\end{lstlisting}
+
+When one of these keys is used
+\begin{itemize}[noitemsep]
+  \item the versors of the \NiceURL{coordinate system}{http://texdoc.net/texmf-dist/doc/generic/pgf/pgfmanual.pdf\#page=357} are changed,
+  \item the \NiceURL{node positioning}{http://texdoc.net/texmf-dist/doc/generic/pgf/pgfmanual.pdf\#page=229} is set up to lay them on grid,
+  \item and the corresponding key will be applied to all layouts.
+\end{itemize}
+
+The pictures show the key parameters, versors, and a unitary grid.
+
+This setup allows you to mix coordinates and
+relative positioning keys to arrange objects.
+
+As usual, relative positioning keys can accept two components, a radius,
+or nothing at all (which defaults to a certain radius).
+
+When using a radius (or defaulting to $1$)
+the tetragonal grid uses Manhattan distance to
+lay objects along concentric rectangles.
+
+When using a radius (or defaulting to $2$)
+the hexagonal grid%
+\footnote{which in truth is built upon a tetragonal grid}
+uses Chebyshev distance to
+lay objects along concentric rhombi.
+
+To clarify, a few relative positioning keys are drawn along
+with red zones displaying the default radii around the origins.

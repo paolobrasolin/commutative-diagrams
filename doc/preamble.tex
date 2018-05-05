@@ -25,7 +25,7 @@
   portrait,
   marginparwidth=4.25cm,
   marginparsep=.75cm,
-  % showframe,
+  %% showframe,
   width=11cm,
   hmarginratio=10:25,
   height=23cm,
@@ -46,6 +46,7 @@
 
 %\usepackage{multicol}
 %\usepackage{tabularx}
+\usepackage{booktabs}
 %\usepackage{verbatimbox}
 %\usepackage{wrapfig}
 
@@ -87,14 +88,14 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
-\captionsetup[marginfigure]{
-  textfont=bf,
-  justification=centering
+\DeclareCaptionStyle{marginfigure}{
+  font=footnotesize,
+  justification=centering,
 }
 
 \captionsetup[subfigure]{
-  textfont=normalfont,
-  singlelinecheck=off,
+  textfont=footnotesize,
+  %% singlelinecheck=off,
   justification=centering
 }
 
@@ -163,6 +164,9 @@
 \SmashandCenterRaise=\dimexpr-.5\ht\SmashAndCenterBox+.5\dp\SmashAndCenterBox\relax%
 \hfill\smash{\raisebox{\the\SmashandCenterRaise}{\usebox\SmashAndCenterBox}}\hfill\null%
 }
+
+\def\eg{e.\,g.}
+%% \deg\ie{i.\,e.}
 
 %==[ sourcecode and examples ]==================================================
 
