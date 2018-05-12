@@ -9,7 +9,7 @@ The remainder of the text is just commented examples.
 \subsection{Snake}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}[golden]
+\begin{kodi}[tetragonal]
   \obj{          & \ker a   & \ker b   & \ker c   &   \\
                  & A        & B        & C        & 0 \\
         |(0')| 0 & A'       & B'       & C'       &   \\
@@ -62,7 +62,7 @@ The remainder of the text is just commented examples.
 \subsection{Pullback \& pushout}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}[comb]
+\begin{kodi}[hexagonal]
   \obj{ |(pb)| A \times_Z B & B \\
                A            & Z \\ };
   \obj[above left=of pb] {Q};
@@ -77,7 +77,7 @@ The remainder of the text is just commented examples.
 \end{tcblisting}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}[comb]
+\begin{kodi}[hexagonal]
   \obj{ Z &                   B \\
         A & |(po)| A \sqcup_Z B \\ };
   \obj[below right=of po] {Q};
@@ -121,7 +121,7 @@ The remainder of the text is just commented examples.
 % TODO: (note the space before l) then it's not recognized. Investigate.
 \begin{tcblisting}{gallery}
 \begin{kodi}[l/.style={bend left}, r/.style={bend right} ]
-  \obj [ comb=step 6em angle 45, remove characters=H_\{q+\} ] {
+  \obj [ hexagonal=horizontal side 6em angle 45, remove characters=H_\{q+\} ] {
     H_{q+2}(X)   & H_{q+2}(X,Y) & H_{q+1}(Y,Z) & H_{q}(Z)     \\
     H_{q+2}(Y)   & H_{q+2}(X,Z) & H_{q+1}(Y)   & H_{q+1}(X,Z) \\
     H_{q+2}(Y,Z) & H_{q+1}(Z)   & H_{q+1}(X)   &              \\

@@ -12,7 +12,7 @@
 
 \begin{marginfigure}[0cm]
   \begin{subfigure}{\marginparwidth}
-    \begin{tikzpicture}[kodi, rectangular={0.2\marginparwidth}{0.2*1.618\marginparwidth}]
+    \begin{tikzpicture}[kodi, tetragonal=base {0.2\marginparwidth} height {0.2*1.618\marginparwidth}]
       % drawing area
       \clip (-2.5,-2.5) rectangle (2.5,2.5);
       % checkers and dots
@@ -51,7 +51,7 @@
     \subcaption*{Tetragonal}\bigskip
   \end{subfigure}
   \begin{subfigure}{\linewidth}
-    \begin{tikzpicture}[kodi, comb=horizontal step {0.4*\marginparwidth} angle 60]
+    \begin{tikzpicture}[kodi, hexagonal=horizontal side {0.4*\marginparwidth} angle 60]
       % drawing area
       \clip (-2.5,-2.5) rectangle (2.5,2.5);
       % checkers and dots
@@ -65,10 +65,10 @@
       % base circle  
       \fill [red, opacity=0.1]
         (2,0) -- (0,2) -- (-2,0) -- (0,-2) -- cycle;
-      % step marker
+      % side marker
       \draw [measure, decoration=mirror, yshift=-3pt]
         (0,0) -- (2,0)
-        node [label style, midway, below, yshift=-3pt] {step};
+        node [label style, midway, below, yshift=-3pt] {side};
       % angle marker
       \draw (0.66*1.7cm, 0)
         arc (0:30:0.66*1.7cm)
@@ -90,7 +90,7 @@
     \subcaption*{Hexagonal (horizontal)}\bigskip
   \end{subfigure}
   \begin{subfigure}{\linewidth}
-    \begin{tikzpicture}[kodi, comb=vertical step {0.2*\marginparwidth*2/sqrt(3)} angle 60]
+    \begin{tikzpicture}[kodi, hexagonal=vertical side {0.2*\marginparwidth*2/sqrt(3)} angle 60]
       % drawing area
       \clip (-2.5,-2.5) rectangle (2.5,2.5);
       % checkers and dots
@@ -103,9 +103,9 @@
       }
       % base circle  
       \fill [red, opacity=0.1] (2,0) -- (0,2) -- (-2,0) -- (0,-2) -- cycle;
-      % step marker
+      % side marker
       \draw [measure=0.3, xshift=-3pt]
-        (0,0) -- (0,2) node [label style, pos=0.3, left, xshift=-3pt]  {step};
+        (0,0) -- (0,2) node [label style, pos=0.3, left, xshift=-3pt]  {side};
       % angle marker
       \draw 
         ([shift=(30:0.66*0.982cm)]0,0)
@@ -128,7 +128,7 @@ Diagrams can be laid over regular grids:
 
 \begin{lstlisting}
 /kD/diagrams/tetragonal=base <length> height <length>
-  (@\hfill@) (default: step 4.5em angle 60)
+  (@\hfill@) (default: base 4.5em height 2.8em)
 \end{lstlisting}
 
 \begin{lstlisting}

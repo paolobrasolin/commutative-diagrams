@@ -61,7 +61,7 @@
 %=[ objects styles ]============================================================
   /kD/objects/.cd,
     % TODO: reflect on these styles
-    % rectangular/.style 2 args={
+    % tetragonal/.style 2 args={
     %   /tikz/node distance=#2 and #1
     % },
     % square/.style={
@@ -78,32 +78,31 @@
     % golden/.default=4em,
 %=[ lattice styles ]============================================================
   /kD/layouts/.cd,
-    rectangular/.style 2 args={
-      /tikz/column sep={#1,between origins},
-      /tikz/row sep={#2,between origins},
+    hexagonal/.code args={#1side #2 angle #3}{
+      \pgfkeys{/kD/layouts/#1hexagonal=side {#2} angle {#3}},
     },
+    horizontal hexagonal/.style args={side #1 angle #2}{
+      /kD/layouts/tetragonal=base {#1} height {tan(#2)*#1*0.5},
+      /tikz/every odd row/.append style={/tikz/xshift=(#1)*0.5},
+    },
+    vertical hexagonal/.style args={side #1 angle #2}{
+      /kD/layouts/tetragonal=base {tan(#2)*#1*0.5} height {#1},
+      /tikz/every odd column/.append style={/tikz/yshift=-1*(#1)*0.5},
+    },
+    hexagonal/.default=horizontal side 4.5em angle 60,
+    %
+    tetragonal/.style args={base #1 height #2}{
+      /tikz/column sep={{#1},between origins},
+      /tikz/row sep={{#2},between origins},
+    },
+    tetragonal/.default=base 4.5em height 2.8em,
+    %
     square/.style={
-      /kD/layouts/rectangular={#1}{#1}
+      /kD/layouts/tetragonal=base {#1} height {#1},
     },
     golden/.style={
-      /kD/layouts/rectangular={#1}{0.618*#1}
+      /kD/layouts/tetragonal=base {#1} height {0.618*#1},
     },
-    comb/.code args={#1step #2 angle #3}{
-      % TODO: write better option parser
-      \if\relax#1\pgfkeys{/kD/layouts/horizontal comb=step #2 angle #3}
-      \else\pgfkeys{/kD/layouts/#1comb=step #2 angle #3}\fi
-    },
-    horizontal comb/.style args={step #1 angle #2}{
-      /kD/layouts/rectangular={#1}{tan(#2)*#1*0.5},
-      /tikz/every odd row/.append style={/tikz/xshift=(#1)*0.5}
-    },
-    vertical comb/.style args={step #1 angle #2}{
-      /kD/layouts/rectangular={tan(#2)*#1*0.5}{#1},
-      /tikz/every odd column/.append style={/tikz/yshift=-1*(#1)*0.5}
-    },
-    comb/.default=step 4.5em angle 60,
-    horizontal comb/.default=step 4.5em angle 60,
-    vertical comb/.default=step 4.5em angle 60,
     square/.default=4.5em,
     golden/.default=4.5em,
 %=[ diagram styles ]============================================================
@@ -111,7 +110,7 @@
     grid/.style 2 args={
       /tikz/x={#1},
       /tikz/y={#2},
-      /tikz/on grid
+      /tikz/on grid,
     },
     metric/.style 2 args={
       % NOTE: {1 and 1}{1} is infty-norm, unit circle is unit square
@@ -121,41 +120,39 @@
       /tikz/above left/.code={\tikz@lib@place@handle@{##1}{south east}{-1}{1}{north west}{#2}},
       /tikz/above right/.code={\tikz@lib@place@handle@{##1}{south west}{1}{1}{north east}{#2}},
       /tikz/below left/.code={\tikz@lib@place@handle@{##1}{north east}{-1}{-1}{south west}{#2}},
-      /tikz/below right/.code={\tikz@lib@place@handle@{##1}{north west}{1}{-1}{south east}{#2}}
+      /tikz/below right/.code={\tikz@lib@place@handle@{##1}{north west}{1}{-1}{south east}{#2}},
     },
-    rectangular/.style 2 args={
-      /kD/every layout/.append style={/kD/layouts/rectangular={#1}{#2}},
-      % TODO: how much of the following is necessary in layouts?
+    %
+    hexagonal/.code args={#1side #2 angle #3}{
+      \pgfkeys{/kD/diagrams/#1hexagonal=side #2 angle #3}
+    },
+    horizontal hexagonal/.style args={side #1 angle #2}{
+      /kD/every layout/.append style={/kD/layouts/hexagonal=horizontal side {#1} angle {#2}},
+      /kD/diagrams/grid={#1*0.5}{#1*tan(#2)*0.5},
+      /kD/diagrams/metric={2}{0.5},
+    },
+    vertical hexagonal/.style args={side #1 angle #2}{
+      /kD/every layout/.append style={/kD/layouts/hexagonal=vertical side {#1} angle {#2}},
+      /kD/diagrams/grid={#1*tan(#2)*0.5}{#1*0.5},
+      /kD/diagrams/metric={2}{0.5},
+    },
+    hexagonal/.default=horizontal side 4.5em angle 60,
+    %
+    tetragonal/.style args={base #1 height #2}{
+      /kD/every layout/.append style={/kD/layouts/tetragonal=base {#1} height {#2}},
       /kD/diagrams/grid={#1}{#2},
-      /kD/diagrams/metric={1 and 1}{1}
+      /kD/diagrams/metric={1 and 1}{1},
     },
+    tetragonal/.default=base 4.5em height 2.8em,
+    %
     square/.style={
-      /kD/every layout/.append style={/kD/layouts/square={#1}},
-      /kD/diagrams/grid={#1}{#1},
-      /kD/diagrams/metric={1 and 1}{1}
+      /kD/every layout/.append style={/kD/layouts/square=#1},
+      /kD/diagrams/tetragonal=base {#1} height {#1},
     },
     golden/.style={
-      /kD/every layout/.append style={/kD/layouts/golden={#1}},
-      /kD/diagrams/grid={#1}{0.618*#1},
-      /kD/diagrams/metric={1 and 1}{1}
+      /kD/every layout/.append style={/kD/layouts/golden=#1},
+      /kD/diagrams/tetragonal=base {#1} height {0.618*#1},
     },
-    comb/.code args={#1step #2 angle #3}{
-      % TODO: write better option parser
-      \if\relax#1\pgfkeys{/kD/diagrams/horizontal comb=step #2 angle #3}
-      \else\pgfkeys{/kD/diagrams/#1comb=step #2 angle #3}\fi
-    },
-    horizontal comb/.style args={step #1 angle #2}{
-      /kD/every layout/.append style={/kD/layouts/horizontal comb=step #1 angle #2},
-      /kD/diagrams/grid={#1*0.5}{#1*tan(#2)*0.5},
-      /kD/diagrams/metric={2}{0.5}
-    },
-    vertical comb/.style args={step #1 angle #2}{
-      /kD/every layout/.append style={/kD/layouts/vertical comb=step #1 angle #2},
-      /kD/diagrams/grid={#1*tan(#2)*0.5}{#1*0.5},
-      /kD/diagrams/metric={2}{0.5}
-    },
-    comb/.default=step 4.5em angle 60,
-    rectangular/.default={6em}{4em},
     square/.default=4.5em,
     golden/.default=4.5em,
 }

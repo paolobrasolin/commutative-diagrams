@@ -13,7 +13,7 @@ You can set up a replacement for any character, using the character code for
 the hardest to type, like {\ttfamily \textvisiblespace} or {\ttfamily \textbackslash}.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[golden]
+\begin{kodi}[tetragonal]
 \obj{ |[replace character=F with G]| \lim F &     % name: lim G
       |[remove character=F]|         \lim F \\    % name: lim
       |[replace charcode=92 with /]| \lim F &     % name: /lim F
@@ -35,7 +35,7 @@ Another egregiously bad idea is replacing characters with spaces.
 It's tempting because it solves a somewhat common edge case.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[golden]
+\begin{kodi}[tetragonal]
 \obj{ \beta & F & b\eta \\ };
 \mor F -> beta;
 \end{kodi}
@@ -45,7 +45,7 @@ Since characters in names are literal, this causes whitespace
 duplication and names become inaccessible by ordinary means.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[golden]
+\begin{kodi}[tetragonal]
 \obj [replace charcode=92 with \space]
   { \beta & b\eta & \beta \eta \\ };
 \mor beta -> (b eta) -> (beta \space eta);
@@ -55,7 +55,7 @@ duplication and names become inaccessible by ordinary means.
 The wise solution is writing better code.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[golden]
+\begin{kodi}[tetragonal]
 \obj{ \beta & F & b \eta \\ };
 \mor F -> beta;
 \end{kodi}
