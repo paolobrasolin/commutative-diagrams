@@ -284,12 +284,12 @@
   }%
 }%
 
-%==[ training wheels ]==========================================================
+%==[ prompter ]=================================================================
 
 % This key is meant for visual assistance with the node labeling automation.
 
 \pgfqkeys{/kD}{
-  training wheels label/.style={
+  prompter label/.style={
     /tikz/.cd,
     inner sep=0sp,
     font=\ttfamily\bfseries\tiny,
@@ -302,10 +302,10 @@
     label anchor=north east,
     label position=south east
   },
-  training wheels pinner/.style={
+  prompter pinner/.style={
     /tikz/draw=violet,
     /tikz/line width=1sp,
-    /tikz/label={[/kD/training wheels label]:#1},
+    /tikz/label={[/kD/prompter label]:#1},
   },
-  training wheels/.style={/bapto/output/.forward to=/kD/training wheels pinner}
+  prompter/.style={/bapto/output/.forward to=/kD/prompter pinner}
 }
