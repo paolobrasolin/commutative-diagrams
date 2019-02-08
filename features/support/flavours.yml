@@ -3,7 +3,8 @@ tex:
     - [tex, <%= jobname %>.tex]
   template: &tex_template
     content:
-      preamble: ''
+      # FIXME: remove this shim once pgf > 3.1.1 is released
+      preamble: '\long\def\scantokens#1{#1}'
       head: ''
       body: Hello world.
       tail: \bye
