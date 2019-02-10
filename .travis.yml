@@ -1,9 +1,9 @@
+dist: xenial
 language: ruby
-cache: bundler
-rvm:
-  - 2.5.1
 env:
   global:
+    - TEXLIVE_PATH=$TRAVIS_BUILD_DIR/vendor/texlive
+    - PATH=$TEXLIVE_PATH/bin/x86_64-linux:$PATH
     # We should have ~2 cores on a vm
     - MULTIPLY_PROCESSES=2
     - N=1
@@ -22,13 +22,18 @@ env:
     - FLAVOUR=xetex
     - FLAVOUR=pdftex
     - FLAVOUR=luatex
+cache:
+  bundler: true
+  directories:
+    - $TEXLIVE_PATH
 install:
+  # NOTE: this is the default `bundle install` command
+  - bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-vendor/bundle}
   # texlive.packages: oberdiek -> atbegshi, ms -> everyshi, graphics -> graphicx
-  - source travis/texlive/install
-  - bundle install
+  - TEXLIVE_INSTALL_PREFIX=$TEXLIVE_PATH ./travis/texlive.install
 script: 
   - SKIP_PDF=true bundle exec rake install
-  - parallel_cucumber --serialize-stdout --multiply-processes $MULTIPLY_PROCESSES -n $N --only-group $ONLY_GROUP -- features
+  - bundle exec parallel_cucumber --serialize-stdout --multiply-processes $MULTIPLY_PROCESSES -n $N --only-group $ONLY_GROUP -- features
 branches:
   only:
   - master
