@@ -1,0 +1,14 @@
+scheme-minimal
+standalone
+etex
+pgf
+xcolor
+atbegshi
+infwarerr
+ltxcmds
+pdftexcmds
+epstopdf-pkg
+ms
+graphics
+latex-bin
+context
