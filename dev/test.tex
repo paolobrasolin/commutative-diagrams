@@ -1,0 +1,33 @@
+\documentclass{standalone}
+% \usepackage{tikz}
+\usepackage{kodi}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+\begin{document}
+
+% \begin{tikzpicture}
+%   \node (A) {A};
+%   \node[red][blue] [green] (B) at (1in,0sp) {B};
+%   \path[draw] (A) edge [->] [green] (B);
+
+%   \draw (0,0) -- (1,1)
+% [rounded corners] -- (2,0) -- (3,1) -- (3,0) -- (2,1);
+% \end{tikzpicture}
+
+
+% \mor A f:->  <>
+%        [shove=.5em, ->] <>
+%        [shove=-.5em,->]    B;
+
+
+\tikzset{2>/.style={-Implies, shorten >=2pt, shorten <=3pt, double equal sign distance}}
+
+\begin{kodi}
+  \obj { A & B \\ };
+  % \mor[below]:[bend right] A h:-> B;
+  % \mor[above]:[bend left]  A k:-> B;
+  % \mor h \sigma:2> k;
+  \path (A) edge [->,bend left] edge [->,bend right] (B);
+\end{kodi}
+\end{document}
