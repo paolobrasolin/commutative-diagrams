@@ -175,7 +175,7 @@
 % http://tex.stackexchange.com/a/336331/82186
 \makeatletter
 \lst@Key{lastline}\relax{\ifnumcomp{#1}{<}{0}{%
-  \let\mylst@file\lst@intname\sbox0{\lstinputlisting{\mylst@file}}%
+  \let\mylst@file\kvtcb@listingfile\sbox0{\lstinputlisting{\mylst@file}}%
   \def\lst@lastline{\the\numexpr#1+\value{lstnumber}-1\relax}}%
   {\def\lst@lastline{#1\relax}}}
 \makeatother
