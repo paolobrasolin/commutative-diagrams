@@ -1,0 +1,59 @@
+# require 'cucumber/rake/task'
+# require 'fileutils'
+# require 'open3'
+
+# ################################################################################
+
+# #==[ features ]=================================================================
+
+# task :features, :features_regexp, :tex_envs_regexp do |_task, args|
+#   features_regexp = args[:features_regexp] || '.*'
+#   tex_envs_regexp = args[:tex_envs_regexp] || '.*'
+
+#   cucumber_options = [
+#     '--format pretty',
+#     '--no-source'
+#   ]
+
+#   tex_envs = YAML.safe_load File.read('features/support/texworld/cfg.yml')
+#   tex_envs.select! { |k| k[/^#{tex_envs_regexp}$/] }
+#   message = 'The provided TeX environment regexp has no matches.'
+#   raise ArgumentError, message.red if tex_envs.empty?
+
+#   features = Dir.glob('features/**/*.feature')
+#   features.select! { |f| f[/#{features_regexp}/] }
+#   message = 'The provided feature regexp has no matches.'
+#   raise ArgumentError, message.red if features.empty?
+
+#   filtered_features_tasks = []
+
+#   generic_features = features.group_by { |f| f.include? 'generic' }
+
+#   if generic_features.key? true
+#     generic_features_filenames = generic_features[true].join ' '
+#     tex_envs.each do |k, v|
+#       hash = Digest::MD5.hexdigest(k + generic_features_filenames).to_sym
+#       filtered_features_tasks <<= hash
+#       Cucumber::Rake::Task.new(hash) do |task|
+#         task.cucumber_opts = cucumber_options + [
+#           "DIALECT=#{v['dialect']}",
+#           "PIPELINE=#{v['pipeline']}"
+#         ] + [generic_features_filenames]
+#       end
+#     end
+#   end
+
+#   if generic_features.key? false
+#     non_generic_features_filenames = generic_features[false].join ' '
+#     hash = Digest::MD5.hexdigest(non_generic_features_filenames).to_sym
+#     filtered_features_tasks <<= hash
+#     Cucumber::Rake::Task.new(hash) do |task|
+#       task.cucumber_opts = cucumber_options + [non_generic_features_filenames]
+#     end
+#   end
+
+#   unless filtered_features_tasks.empty?
+#     task filtered_features: filtered_features_tasks
+#     Rake::Task[:filtered_features].invoke
+#   end
+# end

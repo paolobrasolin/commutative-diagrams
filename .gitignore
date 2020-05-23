@@ -1,7 +1,7 @@
 !.gitignore
 
-**/dist/
-**/build/
+dist/
+build/
 
 #===[ *TeX* ]===================================================================
 
@@ -31,5 +31,4 @@
 # Used by dotenv library to load environment variables.
 # .env
 
-# build/
 Gemfile.lock
