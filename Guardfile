@@ -19,13 +19,6 @@ def core_dependants_of(name)
   dependants
 end
 
-guard 'rake', task: 'install' do
-  watch(%r{^src/tikzlibrarykodi..+.code.tex$})
-  watch('kodi.tex')
-  watch('kodi.sty')
-  watch('t-kodi.tex')
-end
-
 guard 'cucumber', cli: '--profile guard', all_on_start: false, notification: false do
   watch(%r{^features/.+\.feature$})
   watch(%r{^src/tikzlibrarykodi\.(.+)\.code\.tex$}) do |m|
@@ -33,8 +26,4 @@ guard 'cucumber', cli: '--profile guard', all_on_start: false, notification: fal
       map { |n| "features/generic/#{n}" }.
       select { |f| File.exist? f }
   end
-end
-
-guard 'rake', task: 'build:doc' do
-  watch(%r{^doc/(?!build/).+\.tex})
 end
