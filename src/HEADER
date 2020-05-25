@@ -1,65 +1,8 @@
-%% <<FILE>>
-%% Copyright 2015-<<YEAR>> Paolo Brasolin <paolo.brasolin@gmail.com>
 %
-% This file is part of 'koDi', hereafter referred as 'this work'.
-% This file belongs to version <<VERSION>> of this work (released on <<DATE>>).
+% koDi - A TeX package to draw commutative diagrams
+% Copyright (c) 2015-<<YEAR>> Paolo Brasolin <paolo.brasolin@gmail.com>
+% SPDX-License-Identifier: MIT
 %
-% This work may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License, either version 1.3
-% of this license or (at your option) any later version.
-% The latest version of this license is in
-%   <http://www.latex-project.org/lppl.txt>
-% and version 1.3 or later is part of all distributions of LaTeX
-% version 2005/12/01 or later.
+% This file is part of koDi <<VERSION>>, released on <<DATE>> under MIT license.
 %
-% This work has the LPPL maintenance status 'maintained'.
-%
-% The Current Maintainer of this work is Paolo Brasolin
-% who can be contacted at <paolo.brasolin@gmail.com>.
-%
-% This work consists of the following files, typically distributed in either
-% a flat directory structure or the tree directory structure described below:
-%
-%   .
-%   ├── doc
-%   │   └── generic
-%   │       └── kodi
-%   │           ├── README
-%   │           ├── kodi-doc.pdf
-%   │           └── kodi-doc.tex
-%   └── tex
-%       ├── context
-%       │   └── third
-%       │       └── kodi
-%       │           └── t-kodi.tex
-%       ├── generic
-%       │   └── kodi
-%       │       ├── tikzlibrarykodi.bapto.code.tex
-%       │       ├── tikzlibrarykodi.code.tex
-%       │       ├── tikzlibrarykodi.diorthono.code.tex
-%       │       ├── tikzlibrarykodi.ektropi.code.tex
-%       │       ├── tikzlibrarykodi.katharizo.code.tex
-%       │       ├── tikzlibrarykodi.koinos.code.tex
-%       │       ├── tikzlibrarykodi.mandyas.code.tex
-%       │       ├── tikzlibrarykodi.mitra.code.tex
-%       │       ├── tikzlibrarykodi.ozos.code.tex
-%       │       ├── tikzlibrarykodi.ramma.code.tex
-%       │       └── tikzlibrarykodi.velos.code.tex
-%       ├── latex
-%       │   └── kodi
-%       │       └── kodi.sty
-%       └── plain
-%           └── kodi
-%               └── kodi.tex
-%
-% Further informations about this work can be found at the following links:
-%
-%   https://ctan.org/pkg/kodi
-%   └── download, read generalities
-%   http://mirror.ctan.org/graphics/pgf/contrib/kodi
-%   └── download, browse the files
-%   https://paolobrasolin.github.io/kodi
-%   └── homepage
-%   https://github.com/paolobrasolin/kodi
-%   └── Github repository
-%
+
