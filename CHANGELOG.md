@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2020-05-29
+## [1.0.0] - 2020-05-30
+### Added
+- The outcome of the languid gestation which lasted a lustrum.
 
 [Unreleased]: https://github.com/paolobrasolin/topiclongtable/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/paolobrasolin/topiclongtable/releases/tag/v1.0.0
