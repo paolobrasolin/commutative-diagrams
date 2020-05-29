@@ -11,7 +11,12 @@
 
 # koDi
 
-koDi (**ko**mmutative **Di**agramme) is a [TeX](https://en.wikipedia.org/wiki/TeX) package to draw [commutative diagrams](https://en.wikipedia.org/wiki/Commutative_diagram).
+koDi is a [TikZ] library. Its aim is making [commutative diagrams] easy to design, parse and tweak.
+
+[TikZ]: https://en.wikipedia.org/wiki/PGF/TikZ
+[commutative diagrams]: https://en.wikipedia.org/wiki/Commutative_diagram
+
+koDi is short for _**ko**mmutative **Di**agramme_.
 
 ## License
 
