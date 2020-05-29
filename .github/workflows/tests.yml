@@ -30,8 +30,9 @@ jobs:
           - { flavour: context, extra_flags: "--multiply-processes=8 --only-group=7,15,23,31,39,47,55,63" }
           - { flavour: context, extra_flags: "--multiply-processes=8 --only-group=8,16,24,32,40,48,56,64" }
     steps:
+
     - name: Checkout koDi repo
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Install TeXLive
       env:
