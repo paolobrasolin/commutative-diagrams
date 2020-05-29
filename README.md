@@ -1,6 +1,13 @@
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/paolobrasolin/kodi/Tests?label=Tests&logo=github)](https://github.com/paolobrasolin/kodi/actions?query=workflow%3ATests)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/paolobrasolin/kodi?label=Release&logo=github&sort=semver)](https://github.com/paolobrasolin/kodi/releases)
-[![CTAN](https://img.shields.io/ctan/v/kodi?label=CTAN)](https://ctan.org/pkg/kodi)
+[![GitHub Workflow Status][tests-shield]](tests-link)
+[![GitHub release (latest SemVer)][release-shield]](release-link)
+[![CTAN][ctan-shield]](ctan-link)
+
+[tests-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/kodi/Tests?label=Tests&logo=github
+[tests-link]: https://github.com/paolobrasolin/kodi/actions?query=workflow%3ATests
+[release-shield]: https://img.shields.io/github/v/release/paolobrasolin/kodi?label=Release&logo=github&sort=semver
+[release-link]: https://github.com/paolobrasolin/kodi/releases
+[ctan-shield]: https://img.shields.io/ctan/v/kodi?label=CTAN
+[ctan-link]: https://ctan.org/pkg/kodi
 
 # koDi
 
@@ -8,4 +15,6 @@ koDi (**ko**mmutative **Di**agramme) is a [TeX](https://en.wikipedia.org/wiki/Te
 
 ## License
 
-koDi is released under the [MIT License](https://opensource.org/licenses/MIT).
+koDi is released under the [MIT License].
+
+[MIT License]: https://opensource.org/licenses/MIT
