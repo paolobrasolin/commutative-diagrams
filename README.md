@@ -2,9 +2,9 @@
 [![GitHub release (latest SemVer)][release-shield]][release-link]
 [![CTAN][ctan-shield]][ctan-link]
 
-[tests-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/kodi/Tests?label=Tests&logo=github
-[tests-link]: https://github.com/paolobrasolin/kodi/actions?query=workflow%3ATests
-[release-shield]: https://img.shields.io/github/v/release/paolobrasolin/kodi?label=Release&logo=github&sort=semver
+[tests-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/kodi/Tests?label=Nightly%20tests&logo=github
+[tests-link]: https://github.com/paolobrasolin/kodi/actions?query=workflow%3ATests+event%3Aschedule+branch%3Amaster
+[release-shield]: https://img.shields.io/github/v/release/paolobrasolin/kodi?label=Latest%20release&logo=github&sort=semver
 [release-link]: https://github.com/paolobrasolin/kodi/releases
 [ctan-shield]: https://img.shields.io/ctan/v/kodi?label=CTAN
 [ctan-link]: https://ctan.org/pkg/kodi
