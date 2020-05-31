@@ -1,10 +1,23 @@
+# Util to streamline compilation
 latexmk
+
+# Engine used to compile (pdflatex)
+latex-bin
+
+# Direct dependencies
+pgf
+
+# Indirect dependencies
+infwarerr
+
+# Documentation dependencies
 koma-script
 libertine
 libertinust1math
 amsmath
 anonymouspro
 kvoptions
+ltxcmds
 kvsetkeys
 geometry
 booktabs
@@ -18,7 +31,9 @@ parskip
 etoolbox
 mathtools
 tools
+amsfonts
 newunicodechar
+xcolor
 soul
 filecontents
 listings
@@ -35,4 +50,10 @@ hologo
 kvdefinekeys
 hyperref
 microtype
+epstopdf-pkg
 bookmark
+standalone
+xypic
+tikz-cd
+collection-pstricks
+babel-english

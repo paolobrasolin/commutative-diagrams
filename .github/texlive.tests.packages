@@ -1,0 +1,18 @@
+# Tested flavours
+tex
+etex
+xetex
+pdftex
+luatex
+latex-bin
+context
+
+# Direct dependencies
+pgf
+
+# Indirect dependencies
+atbegshi
+infwarerr
+ltxcmds
+iftex
+epstopdf-pkg
