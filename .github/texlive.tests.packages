@@ -17,3 +17,4 @@ ltxcmds
 iftex
 epstopdf-pkg
 xcolor
+pdftexcmds
