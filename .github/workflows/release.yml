@@ -58,7 +58,7 @@ jobs:
       if: ${{ steps.get_tag.outputs.version == '1.0.0' }}
       uses: paolobrasolin/ctan-submit-action@v1
       with:
-        action: validate
+        action: upload
         file_path: dist/kodi-${{ steps.get_tag.outputs.version }}.zip
         fields: |
           update: "false"
@@ -84,8 +84,8 @@ jobs:
       if: ${{ steps.get_tag.outputs.version != '1.0.0' }}
       uses: paolobrasolin/ctan-submit-action@v1
       with:
-        action: validate
-        file_path: dist/pkg/kodi-${{ steps.get_tag.outputs.version }}.zip
+        action: upload
+        file_path: dist/kodi-${{ steps.get_tag.outputs.version }}.zip
         fields: |
           update: "true"
           pkg: kodi
