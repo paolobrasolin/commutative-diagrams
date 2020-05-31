@@ -1,6 +1,6 @@
-[![GitHub Workflow Status][tests-shield]](tests-link)
-[![GitHub release (latest SemVer)][release-shield]](release-link)
-[![CTAN][ctan-shield]](ctan-link)
+[![GitHub Workflow Status][tests-shield]][tests-link]
+[![GitHub release (latest SemVer)][release-shield]][release-link]
+[![CTAN][ctan-shield]][ctan-link]
 
 [tests-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/kodi/Tests?label=Tests&logo=github
 [tests-link]: https://github.com/paolobrasolin/kodi/actions?query=workflow%3ATests
