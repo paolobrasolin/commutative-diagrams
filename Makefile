@@ -137,7 +137,7 @@ dist/pkg/kodi: dist/kodi.tds.zip
 
 ##[ DIST | Flat file structure ZIP ]############################################
 
-dist/pkg/kodi.zip: dist/pkg/kodi
+dist/kodi.zip: dist/pkg/kodi
 	pushd dist/pkg; zip --recurse-paths ../kodi.zip .
 
 ##[ Format ]####################################################################
