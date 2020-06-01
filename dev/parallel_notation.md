@@ -1,6 +1,3 @@
-
-
-
 if next is [
   absorb [...]
 
