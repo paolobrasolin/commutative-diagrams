@@ -20,10 +20,6 @@ sub my_get_time_size {
 
 $pdflatex = 'pdflatex -interaction=nonstopmode -shell-escape';
 
-# Set main file too since we're already here.
-
-@default_files = ('kodi-doc.tex');
-
 # Run in -pdf mode
 
 $pdf_mode = 1;  # tex -> pdf
