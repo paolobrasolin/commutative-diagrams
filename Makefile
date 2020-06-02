@@ -59,7 +59,7 @@ build/$(PKG)-doc.tex: doc/main.tex src/HEADER $(wildcard doc/*.tex)
 build/latexmkrc: doc/latexmkrc
 	$(safe-cp)
 
-build/$(PKG)-doc.pdf: build/latexmkrc build/$(PKG)-doc.tex \
+build/$(PKG)-doc.pdf: build/$(PKG)-doc.tex build/latexmkrc \
 	build/tikzlibrary$(PKG).bapto.code.tex \
 	build/tikzlibrary$(PKG).code.tex \
 	build/tikzlibrary$(PKG).diorthono.code.tex \
@@ -72,7 +72,7 @@ build/$(PKG)-doc.pdf: build/latexmkrc build/$(PKG)-doc.tex \
 	build/tikzlibrary$(PKG).ramma.code.tex \
 	build/tikzlibrary$(PKG).velos.code.tex \
 	build/$(PKG).sty
-	pushd $(@D); latexmk -gg
+	pushd $(<D); latexmk -gg $(<F)
 
 ##[ DIST | Tree file structure ]################################################
 
