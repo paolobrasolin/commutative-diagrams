@@ -4,7 +4,7 @@ Feature: kDIfNextHardCh macro performs "hard" token comparison
   Background: testing koinos in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.koinos" TikZ library
+    And I use the "commutative-diagrams.koinos" TikZ library
 
   Scenario Outline: verifying comparison does ignore whitespace
     Given I code \kDIfNextHardCh<token>{<true>}{<false>}<code>

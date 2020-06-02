@@ -5,9 +5,9 @@ Feature: bapto's self naming key
     Given I'm using any TeX flavour
     And I use "tikz"
     # TODO: fix the broken dependencies
-    And I use the "kodi.katharizo" TikZ library
-    And I use the "kodi.bapto" TikZ library
-    And I use the "kodi.ramma" TikZ library
+    And I use the "commutative-diagrams.katharizo" TikZ library
+    And I use the "commutative-diagrams.bapto" TikZ library
+    And I use the "commutative-diagrams.ramma" TikZ library
 
   Scenario Outline: using a self naming node
     Given I code \tikz\node[/kD/self naming, node contents=<contents>];

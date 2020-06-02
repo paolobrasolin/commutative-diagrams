@@ -4,7 +4,7 @@ Feature: velos
   Background: testing ozos in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.velos" TikZ library
+    And I use the "commutative-diagrams.velos" TikZ library
 
   Scenario Outline: foobar
     Given I want a debugging dump

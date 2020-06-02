@@ -5,7 +5,7 @@ require 'tmpdir'
 
 Around do |scenario, block|
   @job = TeXWorld::Job.new
-  dir = Pathname.new(Dir.mktmpdir('kodi-'))
+  dir = Pathname.new(Dir.mktmpdir('commutative-diagrams-'))
   @job.path = dir.join('main.tex')
   block.call
   dir.rmtree

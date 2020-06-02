@@ -4,7 +4,7 @@ Feature: kDTrimTrailingSpace trims trailing spaces from a token list
   Background: testing koinos in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.koinos" TikZ library
+    And I use the "commutative-diagrams.koinos" TikZ library
 
   Scenario Outline: using (un)defined macros in token list
     Given the body is

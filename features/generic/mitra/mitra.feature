@@ -4,7 +4,7 @@ Feature: mitra
   Background: testing mitra in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.mitra" TikZ library
+    And I use the "commutative-diagrams.mitra" TikZ library
     And I want a debugging dump
 
   # Scenario Outline: using a cell with an unknown TikZ key

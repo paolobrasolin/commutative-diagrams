@@ -4,7 +4,7 @@ Feature: katharizo expansion behaviour is configurable
   Background: testing katharizo in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.katharizo" TikZ library
+    And I use the "commutative-diagrams.katharizo" TikZ library
 
   Scenario: default behaviour (no expansion)
     Given the body is

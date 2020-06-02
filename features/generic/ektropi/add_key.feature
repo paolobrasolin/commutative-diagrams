@@ -4,7 +4,7 @@ Feature: ektropi add key adds deviations to handler
   Background: testing ektropi in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.ektropi" TikZ library
+    And I use the "commutative-diagrams.ektropi" TikZ library
 
   Scenario Outline: adding a simple deviation
     Given the body is

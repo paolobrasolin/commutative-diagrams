@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Checkout koDi repo
+    - name: Checkout repo
       uses: actions/checkout@v2
 
     - name: Get the tag
@@ -36,10 +36,10 @@ jobs:
         readarray -t TEXLIVE_PACKAGES < <(grep -v '^#' "$TEXLIVE_PACKAGES_PATH")
         tlmgr install "${TEXLIVE_PACKAGES[@]}"
 
-    - name: Build koDi
+    - name: Build
       run: |
-        make VERSION=${{ steps.get_tag.outputs.version }} dist/kodi.zip
-        cp dist/kodi.zip dist/kodi-${{ steps.get_tag.outputs.version }}.zip
+        make VERSION=${{ steps.get_tag.outputs.version }} dist/commutative-diagrams.zip
+        cp dist/commutative-diagrams.zip dist/commutative-diagrams-${{ steps.get_tag.outputs.version }}.zip
 
     - name: Release on Github
       uses: docker://antonyurchenko/git-release:v3
@@ -49,34 +49,34 @@ jobs:
         CHANGELOG_FILE: "CHANGELOG.md"
         ALLOW_EMPTY_CHANGELOG: "false"
         ALLOW_TAG_PREFIX: "true"
-        RELEASE_NAME: "koDi ${{ steps.get_tag.outputs.version }}"
+        RELEASE_NAME: "CoDi ${{ steps.get_tag.outputs.version }}"
       with:
         args: |
-          dist/kodi-${{ steps.get_tag.outputs.version }}.zip
+          dist/commutative-diagrams-${{ steps.get_tag.outputs.version }}.zip
 
     - name: Submit to CTAN (first release)
       if: ${{ steps.get_tag.outputs.version == '1.0.0' }}
       uses: paolobrasolin/ctan-submit-action@v1
       with:
         action: upload
-        file_path: dist/kodi-${{ steps.get_tag.outputs.version }}.zip
+        file_path: dist/commutative-diagrams-${{ steps.get_tag.outputs.version }}.zip
         fields: |
           update: "false"
-          pkg: kodi
+          pkg: commutative-diagrams
           version: ${{ steps.get_tag.outputs.version }}
           uploader: Paolo Brasolin
           email: paolo.brasolin@gmail.com 
           author: Paolo Brasolin
           license: mit
-          ctanPath: /graphics/pgf/contrib/kodi
+          ctanPath: /graphics/pgf/contrib/commutative-diagrams
           topic: diagram-comm
-          home: https://paolobrasolin.github.io/kodi/
-          bugs: https://github.com/paolobrasolin/kodi/issues
-          repository: https://github.com/paolobrasolin/kodi
+          home: https://paolobrasolin.github.io/commutative-diagrams/
+          bugs: https://github.com/paolobrasolin/commutative-diagrams/issues
+          repository: https://github.com/paolobrasolin/commutative-diagrams
           summary: >
-            Draw commutative diagrams
+            Commutative Diagrams for TeX
           description: >
-            koDi is a TikZ library. Its aim is making commutative diagrams easy to design, parse and tweak.
+            CoDi is a TikZ library. Its aim is making commutative diagrams easy to design, parse and tweak.
           note: >
             Extra relevant topics are: diagram-maths diagram maths pgf-tikz
 
@@ -85,10 +85,10 @@ jobs:
       uses: paolobrasolin/ctan-submit-action@v1
       with:
         action: upload
-        file_path: dist/kodi-${{ steps.get_tag.outputs.version }}.zip
+        file_path: dist/commutative-diagrams-${{ steps.get_tag.outputs.version }}.zip
         fields: |
           update: "true"
-          pkg: kodi
+          pkg: commutative-diagrams
           version: ${{ steps.get_tag.outputs.version }}
           uploader: Paolo Brasolin
           email: paolo.brasolin@gmail.com 

@@ -1,9 +1,9 @@
 def core_dependants_of(name)
   dependencies = {}
-  Dir['src/tikzlibrarykodi.*.code.tex'].each do |filename|
+  Dir['src/tikzlibrarycommutative-diagrams.*.code.tex'].each do |filename|
     code = File.read filename
-    sublibrary_name = filename[/kodi\.(.*)\.code/, 1]
-    usetikzlibrary = /\\usetikzlibrary[\[{]kodi\.(\w+)[\]}]/
+    sublibrary_name = filename[/commutative-diagrams\.(.*)\.code/, 1]
+    usetikzlibrary = /\\usetikzlibrary[\[{]commutative-diagrams\.(\w+)[\]}]/
     dependencies[sublibrary_name] = code.scan(usetikzlibrary).map(&:first)
   end
   dependants = []
@@ -21,7 +21,7 @@ end
 
 guard 'cucumber', cli: '--profile guard', all_on_start: false, notification: false do
   watch(%r{^features/.+\.feature$})
-  watch(%r{^src/tikzlibrarykodi\.(.+)\.code\.tex$}) do |m|
+  watch(%r{^src/tikzlibrarycommutative-diagrams\.(.+)\.code\.tex$}) do |m|
     core_dependants_of(m[1]).
       map { |n| "features/generic/#{n}" }.
       select { |f| File.exist? f }
