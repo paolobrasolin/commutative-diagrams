@@ -1,0 +1,39 @@
+%==[ dependencies graph ]=======================================================
+
+% NOTE: arrow notation means targets require sources.
+% TODO: does mandyas depend upon ramma?
+
+%====[ TikZ/pgf standard libraries ]===============%
+%                                                  %
+%      calc ------------------------------------.  %
+%      matrix -------------------------------.  |  %
+%                                            |  |  %
+%====[ Volatile layer: TikZ bugfixes ]=======|==|==%
+%                                            |  |  % 
+%      commutative-diagrams.diorthono        |  |  %
+%                                            |  |  %
+%====[ Inner layer: base infrastructure ]====|==|==%
+%                                            |  |  %
+%  ,-> commutative-diagrams.ektropi ------.  |  |  %
+%  |   commutative-diagrams.bapto --------|  |  |  %
+%  |   commutative-diagrams.katharizo ----|  |  |  %
+%  `-- commutative-diagrams.koinos ----.  |  |  |  %
+%  ,---'                               |  |  |  |  %
+%==|=[ Middle layer: custom parsers ]==|==|==|==|==%
+%  |                                   |  |  |  |  %
+%  |-- commutative-diagrams.mitra <----+--|--'  |  %
+%  |-- commutative-diagrams.ozos <-----|  |     |  %
+%  |-- commutative-diagrams.velos <----'  |     |  %
+%  |                                      |     |  %
+%==|=[ Outer layer: user interface ]======|=====|==%
+%  |                                      |     |  %
+%  `-> commutative-diagrams.ramma <-------'     |  %
+%      commutative-diagrams.mandyas <-----------'  %
+%                                                  %
+%==================================================%
+
+% Given the graph above, these suffice to encompass the whole library:
+
+\usetikzlibrary[commutative-diagrams.diorthono]
+\usetikzlibrary[commutative-diagrams.ramma]
+\usetikzlibrary[commutative-diagrams.mandyas]

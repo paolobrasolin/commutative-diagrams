@@ -4,7 +4,7 @@ Feature: ektropi restore key restores the original handler
   Background: testing ektropi in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.ektropi" TikZ library
+    And I use the "commutative-diagrams.ektropi" TikZ library
 
   Scenario Outline: undoing a single deviation
     Given the body is

@@ -6,13 +6,13 @@ Feature: koDi environment
 
   Scenario: using koDi as a TikZ library
     Given I use "tikz"
-    And I use the "kodi" TikZ library
+    And I use the "commutative-diagrams" TikZ library
     And I'm inside a "tikzpicture" with options "[kodi]"
     When the body is empty
     Then compilation succeeds
 
   Scenario: using koDi as standalone
-    Given I use "kodi"
+    Given I use "commutative-diagrams"
     And I'm inside a "kodi"
     When the body is empty
     Then compilation succeeds

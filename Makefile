@@ -1,4 +1,4 @@
-PKG     = kodi
+PKG     = commutative-diagrams
 SHELL   = bash
 UTREE   = $(shell kpsewhich --var-value TEXMFHOME)
 YEAR    = $(shell date +"%Y")

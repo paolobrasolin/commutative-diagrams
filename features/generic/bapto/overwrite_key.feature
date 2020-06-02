@@ -4,7 +4,7 @@ Feature: bapto overwriting behaviour is configurable
   Background: testing bapto in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.bapto" TikZ library
+    And I use the "commutative-diagrams.bapto" TikZ library
 
   Scenario Outline: default behaviour (no overwriting, no expansion)
     Given I code \pgfkeys{/bapto/trigger/.forward to=/bapto/dispatcher}

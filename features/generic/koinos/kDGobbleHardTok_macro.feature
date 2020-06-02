@@ -4,7 +4,7 @@ Feature: kDGobbleHardTok macro gobbles a token from the stream, ignoring spaces
   Background: testing koinos in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.koinos" TikZ library
+    And I use the "commutative-diagrams.koinos" TikZ library
 
   Scenario Outline: verifying the macro does gobble spaces
     Given the body is

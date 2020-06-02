@@ -4,7 +4,7 @@ Feature: kD*storeCatcodeOf macros (re)store the catcode of a character
   Background: testing koinos in a generic context
     Given I'm using any TeX flavour
     And I use "tikz"
-    And I use the "kodi.koinos" TikZ library
+    And I use the "commutative-diagrams.koinos" TikZ library
 
   Scenario: storing, changing and restoring the catcode of a character
     Given the body is

@@ -1,8 +1,8 @@
 %
-% koDi - A TeX package to draw commutative diagrams
+% CoDi - Commutative Diagrams for TeX
 % Copyright (c) 2015-<<YEAR>> Paolo Brasolin <paolo.brasolin@gmail.com>
 % SPDX-License-Identifier: MIT
 %
-% This file is part of koDi <<VERSION>>, released on <<DATE>> under MIT license.
+% This file is part of CoDi <<VERSION>>, released on <<DATE>> under MIT license.
 %
 
