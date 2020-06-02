@@ -13,11 +13,11 @@
 % \usetikzlibrary[decorations.markings]
 % \usetikzlibrary[arrows.meta]
 
-\pgfqkeys{/kD}{
+\pgfqkeys{/codi}{
 %==[ universal styles ]=========================================================
   every diagram/.append style={},
   every layout/.append style={
-    /kD/every object/.append style={shape=kD baseline centered rectangle},
+    /codi/every object/.append style={shape=codi baseline centered rectangle},
     square,
   },
   every object/.append style={},
@@ -30,14 +30,14 @@
     font=\everymath\expandafter{\the\everymath\scriptstyle}
   },
 %==[ arrow styles ]=============================================================
-  /kD/arrows/.cd,
+  /codi/arrows/.cd,
     crossing over/clearance/.initial=0.5ex,
     crossing over/color/.initial=white,
     crossing over/.style={
       /tikz/preaction={
         -,
-        draw=\pgfkeysvalueof{/kD/arrows/crossing over/color},
-        line width=\pgfkeysvalueof{/kD/arrows/crossing over/clearance},
+        draw=\pgfkeysvalueof{/codi/arrows/crossing over/color},
+        line width=\pgfkeysvalueof{/codi/arrows/crossing over/clearance},
       },
     },
     shove/.style={
@@ -51,7 +51,7 @@
       }
     },
 %==[ label styles ]=============================================================
-  /kD/labels/.cd,
+  /codi/labels/.cd,
     mid/.style={
       /tikz/fill=white,
       /tikz/shape=circle,
@@ -59,34 +59,34 @@
       /tikz/inner sep=.25ex
     },
 %=[ objects styles ]============================================================
-  /kD/objects/.cd,
+  /codi/objects/.cd,
     % TODO: reflect on these styles
     % tetragonal/.style 2 args={
     %   /tikz/node distance=#2 and #1
     % },
     % square/.style={
-    %   /kD/objects/rectangular={#1}{#1}
+    %   /codi/objects/rectangular={#1}{#1}
     % },
     % golden/.style={
-    %   /kD/objects/rectangular={#1}{0.618*#1}
+    %   /codi/objects/rectangular={#1}{0.618*#1}
     % },
     % % comb/.style={
-    % %   /kD/objects/rectangular={#1}{sqrt(3/4)*#1},
+    % %   /codi/objects/rectangular={#1}{sqrt(3/4)*#1},
     % % },
     % % comb/.default=4em,
     % square/.default=4em,
     % golden/.default=4em,
 %=[ lattice styles ]============================================================
-  /kD/layouts/.cd,
+  /codi/layouts/.cd,
     hexagonal/.code args={#1side #2 angle #3}{
-      \pgfkeys{/kD/layouts/#1hexagonal=side {#2} angle {#3}},
+      \pgfkeys{/codi/layouts/#1hexagonal=side {#2} angle {#3}},
     },
     horizontal hexagonal/.style args={side #1 angle #2}{
-      /kD/layouts/tetragonal=base {#1} height {tan(#2)*#1*0.5},
+      /codi/layouts/tetragonal=base {#1} height {tan(#2)*#1*0.5},
       /tikz/every odd row/.append style={/tikz/xshift=(#1)*0.5},
     },
     vertical hexagonal/.style args={side #1 angle #2}{
-      /kD/layouts/tetragonal=base {tan(#2)*#1*0.5} height {#1},
+      /codi/layouts/tetragonal=base {tan(#2)*#1*0.5} height {#1},
       /tikz/every odd column/.append style={/tikz/yshift=-1*(#1)*0.5},
     },
     hexagonal/.default=horizontal side 4.5em angle 60,
@@ -98,15 +98,15 @@
     tetragonal/.default=base 4.5em height 2.8em,
     %
     square/.style={
-      /kD/layouts/tetragonal=base {#1} height {#1},
+      /codi/layouts/tetragonal=base {#1} height {#1},
     },
     golden/.style={
-      /kD/layouts/tetragonal=base {#1} height {0.618*#1},
+      /codi/layouts/tetragonal=base {#1} height {0.618*#1},
     },
     square/.default=4.5em,
     golden/.default=4.5em,
 %=[ diagram styles ]============================================================
-  /kD/diagrams/.cd,
+  /codi/diagrams/.cd,
     grid/.style 2 args={
       /tikz/x={#1},
       /tikz/y={#2},
@@ -124,34 +124,34 @@
     },
     %
     hexagonal/.code args={#1side #2 angle #3}{
-      \pgfkeys{/kD/diagrams/#1hexagonal=side #2 angle #3}
+      \pgfkeys{/codi/diagrams/#1hexagonal=side #2 angle #3}
     },
     horizontal hexagonal/.style args={side #1 angle #2}{
-      /kD/every layout/.append style={/kD/layouts/hexagonal=horizontal side {#1} angle {#2}},
-      /kD/diagrams/grid={#1*0.5}{#1*tan(#2)*0.5},
-      /kD/diagrams/metric={2}{0.5},
+      /codi/every layout/.append style={/codi/layouts/hexagonal=horizontal side {#1} angle {#2}},
+      /codi/diagrams/grid={#1*0.5}{#1*tan(#2)*0.5},
+      /codi/diagrams/metric={2}{0.5},
     },
     vertical hexagonal/.style args={side #1 angle #2}{
-      /kD/every layout/.append style={/kD/layouts/hexagonal=vertical side {#1} angle {#2}},
-      /kD/diagrams/grid={#1*tan(#2)*0.5}{#1*0.5},
-      /kD/diagrams/metric={2}{0.5},
+      /codi/every layout/.append style={/codi/layouts/hexagonal=vertical side {#1} angle {#2}},
+      /codi/diagrams/grid={#1*tan(#2)*0.5}{#1*0.5},
+      /codi/diagrams/metric={2}{0.5},
     },
     hexagonal/.default=horizontal side 4.5em angle 60,
     %
     tetragonal/.style args={base #1 height #2}{
-      /kD/every layout/.append style={/kD/layouts/tetragonal=base {#1} height {#2}},
-      /kD/diagrams/grid={#1}{#2},
-      /kD/diagrams/metric={1 and 1}{1},
+      /codi/every layout/.append style={/codi/layouts/tetragonal=base {#1} height {#2}},
+      /codi/diagrams/grid={#1}{#2},
+      /codi/diagrams/metric={1 and 1}{1},
     },
     tetragonal/.default=base 4.5em height 2.8em,
     %
     square/.style={
-      /kD/every layout/.append style={/kD/layouts/square=#1},
-      /kD/diagrams/tetragonal=base {#1} height {#1},
+      /codi/every layout/.append style={/codi/layouts/square=#1},
+      /codi/diagrams/tetragonal=base {#1} height {#1},
     },
     golden/.style={
-      /kD/every layout/.append style={/kD/layouts/golden=#1},
-      /kD/diagrams/tetragonal=base {#1} height {0.618*#1},
+      /codi/every layout/.append style={/codi/layouts/golden=#1},
+      /codi/diagrams/tetragonal=base {#1} height {0.618*#1},
     },
     square/.default=4.5em,
     golden/.default=4.5em,
@@ -179,13 +179,13 @@
     \endgroup}
 \fi
 
-\pgfqkeys{/kD/baseline centered rectangle}{
+\pgfqkeys{/codi/baseline centered rectangle}{
   center raise/.initial=kD_math_formula_axis_height
 }
 
 % Then the shape is defined by inheritance.
 
-\pgfdeclareshape{kD baseline centered rectangle} {
+\pgfdeclareshape{codi baseline centered rectangle} {
   % Inherit the rectangle shape.
   \inheritsavedanchors[from={rectangle}]
   \inheritanchor[from={rectangle}]{base}
@@ -204,11 +204,11 @@
   % Redefine west, center and east anchors
   % setting their y coordinates to center raise.
   \anchor{center}{\pgf@anchor@rectangle@center\pgfmathsetlength\pgf@y%
-    {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}}
+    {\pgfkeysvalueof{/codi/baseline centered rectangle/center raise}}}
   \anchor{west}{\pgf@anchor@rectangle@west\pgfmathsetlength\pgf@y%
-    {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}}
+    {\pgfkeysvalueof{/codi/baseline centered rectangle/center raise}}}
   \anchor{east}{\pgf@anchor@rectangle@east\pgfmathsetlength\pgf@y%
-    {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}}
+    {\pgfkeysvalueof{/codi/baseline centered rectangle/center raise}}}
   % Save the original anchors as alternate "real" versions.
   \anchor{real center}{\pgf@anchor@rectangle@center}
   \anchor{real west}{\pgf@anchor@rectangle@west}
@@ -218,7 +218,7 @@
     % (x,y) = target
     % let tempdima = center raise
     \pgfmathsetlength\pgfutil@tempdima%
-      {\pgfkeysvalueof{/kD/baseline centered rectangle/center raise}}%
+      {\pgfkeysvalueof{/codi/baseline centered rectangle/center raise}}%
     % let b = (x,y) = target
     \pgf@xb=\pgf@x%
     \pgf@yb=\pgf@y%
@@ -288,7 +288,7 @@
 
 % This key is meant for visual assistance with the node labeling automation.
 
-\pgfqkeys{/kD}{
+\pgfqkeys{/codi}{
   prompter label/.style={
     /tikz/.cd,
     inner sep=0sp,
@@ -305,7 +305,7 @@
   prompter pinner/.style={
     /tikz/draw=violet,
     /tikz/line width=1sp,
-    /tikz/label={[/kD/prompter label]:#1},
+    /tikz/label={[/codi/prompter label]:#1},
   },
-  prompter/.style={/bapto/output/.forward to=/kD/prompter pinner}
+  prompter/.style={/bapto/output/.forward to=/codi/prompter pinner}
 }

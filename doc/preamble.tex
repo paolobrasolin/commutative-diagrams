@@ -129,13 +129,13 @@
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathreplacing}
 
-%==[ koDi ]=====================================================================
+%==[ CoDi ]=====================================================================
 
 % \usetikzlibrary{commutative-diagrams}
 \usepackage{commutative-diagrams}
 \usetikzlibrary{positioning}
 
-%==[ alternatives to koDi ]=====================================================
+%==[ alternatives to CoDi ]=====================================================
 
 % So, yeah, I got *really* tired...
 \usepackage{filecontents}
@@ -235,8 +235,8 @@
     \tikzexternalize,
     \starttikzpicture,\stoptikzpicture,
     \usetikzlibrary,
-    \kodi,\endkodi,
-    \startkodi,\stopkodi,
+    \codi,\endcodi,
+    \startcodi,\stopcodi,
     \lay,\obj,\mor,
     \bye,
     \draw,\foreach,
@@ -276,7 +276,7 @@
 %   width=\marginparwidth,
 %   hsep=\marginparsep,
 %   rframe={},
-%   preset={\centering\tikzpicture[kodi]},
+%   preset={\centering\tikzpicture[codi]},
 %   postset={\endtikzpicture}
 % }}
 
@@ -351,7 +351,7 @@
   }
 }
 
-% \tcbset{kodi snippet/.style={snippet, trim, smash and center}}
+% \tcbset{codi snippet/.style={snippet, trim, smash and center}}
 
 \def\nilstrut{\rule{0sp}{0sp}}
 
@@ -363,7 +363,7 @@
 
 \usepackage{hologo}
 \def\ConTeXt{\hologo{ConTeXt}}
-\def\koDi{{\scshape koDi}}
+\def\CoDi{{\scshape CoDi}}
 \def\TikZ{{\scshape TikZ}}
 
 % \usepackage[lastpage,user]{zref}

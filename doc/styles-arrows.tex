@@ -1,50 +1,50 @@
 \begin{lstlisting}
-/kD/arrows/crossing over
-/kD/arrows/crossing over/clearance=<length> (@\hfill@) (default: 0.5ex)
-/kD/arrows/crossing over/color=<color> (@\hfill@) (default: white)
+/codi/arrows/crossing over
+/codi/arrows/crossing over/clearance=<length> (@\hfill@) (default: 0.5ex)
+/codi/arrows/crossing over/color=<color> (@\hfill@) (default: white)
 \end{lstlisting}
 
 This key a provides the configurable illusion of an arrow passing
 over a \emph{previously drawn} one.
 
 \begin{tcblisting}{snippet, trim={3 and -1}}
-\begin{kodi}[tetragonal=base 4.5em height 1em]
+\begin{codi}[tetragonal=base 4.5em height 1em]
 \obj { A & B \\ D & C \\};
 \mor A -> C;
 \mor :[crossing over] D -> B;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{lstlisting}
-/kD/arrows/slide=<length>
+/codi/arrows/slide=<length>
 \end{lstlisting}
 
 This key slides an arrow backward (negative) and forward (positive) along its direction of the given length.
 
 \begin{tcblisting}{snippet, trim={3 and -1}}
-\begin{kodi}[tetragonal=base 4.5em height 1em]
+\begin{codi}[tetragonal=base 4.5em height 1em]
 \obj { A & B \\ C & D \\ E & F \\ };
 \mor :[slide=-.3em, red] A -> B;
 \mor C -> D;
 \mor :[slide=+.3em, blue] E -> F;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{lstlisting}
-/kD/arrows/shove=<length>
+/codi/arrows/shove=<length>
 \end{lstlisting}
 
 This key shoves an arrow to the left (negative) and to the right (positive) with respect to its direction of the given length.
 
 \begin{tcblisting}{snippet, trim={3 and -1}}
-\begin{kodi}
+\begin{codi}
 \obj { A & B \\ };
 \mor :[shove=-.3em, red] A -> B;
 \mor A -> B;
 \mor :[shove=+.3em, blue] A -> B;
-\end{kodi}
+\end{codi}
 \end{tcblisting}

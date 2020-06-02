@@ -1,4 +1,4 @@
-The first of the two macros that \koDi\ offers is \lstinline|\obj|.
+The first of the two macros that \CoDi\ offers is \lstinline|\obj|.
 It is polymorphic and can draw both single objects and layouts.
 
 \begin{lstlisting}
@@ -28,7 +28,7 @@ matrices, respectively.
 
 \hfill$\therefore$\hfill\null
 
-Nothing of the given syntax is specific to \koDi.
+Nothing of the given syntax is specific to \CoDi.
 In fact, \lstinline|\obj| can draw both single objects and layouts
 by behaving like the standard \TikZ\ macros
 \lstinline|\node| and \lstinline|\matrix| respectively.
@@ -40,23 +40,23 @@ The only catch is that row and column separators are always mandatory.
 Here is a kitchen sink that includes custom spacing:
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[square=3em]
+\begin{codi}[square=3em]
 \obj {
   A & B &[1em] C \\
   D & E &      F \\[-1em]
   G & H &      I \\
 };
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 Here is another one that includes custom options:
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[square=3em]
+\begin{codi}[square=3em]
 \obj [red] {
   A & |[blue]| B & C \\
 };
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 A standard feature inherited from \TikZ\ worth a mention
@@ -64,9 +64,9 @@ is the ability to name a layout and refer to cells
 by their row/column index pairs.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[square=3em]
+\begin{codi}[square=3em]
 \obj (M) { A & A \\ A & A \\ };
 \node [draw=red,  shape=circle, minimum size=2em] at (M-1-2) {};
 \node [draw=blue, shape=circle, minimum size=2em] at (M-2-1) {};
-\end{kodi}
+\end{codi}
 \end{tcblisting}

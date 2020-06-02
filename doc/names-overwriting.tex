@@ -1,21 +1,21 @@
 The name overwriting behaviour of the naming routine can be configured
-inside any \koDi\ scope using the \lstinline!overwrite! key.
+inside any \CoDi\ scope using the \lstinline!overwrite! key.
 
 \begin{lstlisting}
-/kD/overwrite = false | alias | true
+/codi/overwrite = false | alias | true
 \end{lstlisting}
 
 The three available settings correspond to different naming priorities.
 A side by side comparison completely illustrates their meanings.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj{ |[overwrite=false] (A')| A &     % names: A'    (default)
       |[overwrite=alias] (B')| B &     % names: B', B
       |[overwrite=true]  (C')| C \\ }; % names:     C
 \mor A' -> B';
 \mor B  -> C;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \hfill$\therefore$\hfill\null
@@ -24,23 +24,23 @@ The default behaviour avoids overwriting explicit labels in order
 to give you a simple means of naming conflict resolution.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[tetragonal]
+\begin{codi}[tetragonal]
 \obj {        A & |(A')| A \\
        |(Z')| Z &        Z \\ };
 \mor A -> A';
 \mor Z -> Z';
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 Sometimes you might want an object to have both a literal and a
 semantic alias.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj [overwrite=alias] { A & |(center)| B & |(right)| C \\ };
 \mor A -> B;
 \mor center -> right;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 The hard overwriting behaviour ignores any label except generated

@@ -1,9 +1,9 @@
-\koDi\ structures diagrams into five layers implemented with \TikZ.
+\CoDi\ structures diagrams into five layers implemented with \TikZ.
 
 \begin{center}
 \begin{tabular}{ccc}
   \toprule
-  \koDi's & represents an & using \TikZ's \\
+  \CoDi's & represents an & using \TikZ's \\
   \midrule
   \lstinline|diagram| & (commutative) diagram   & \lstinline|tikzpicture| \\
   \lstinline|layout|  & arrangement of vertices & \lstinline|matrix| \\
@@ -18,42 +18,42 @@ Each layer can be styled using \TikZ\ keys.
 
 Each layer possesses a default style:
 \begin{lstlisting}
-/kD/every diagram
-/kD/every layout
-/kD/every object
-/kD/every arrow
-/kD/every label
+/codi/every diagram
+/codi/every layout
+/codi/every object
+/codi/every arrow
+/codi/every label
 \end{lstlisting}
 
 You can customize them using \TikZ\ key handlers, \eg
 \begin{lstlisting}
-/kD/every label/.append style={red}
+/codi/every label/.append style={red}
 \end{lstlisting}
 
 Each layer possesses a library of commonplace styles:
 \begin{lstlisting}
-/kD/diagrams/
-/kD/layouts/
-/kD/objects/
-/kD/arrows/
-/kD/labels/
+/codi/diagrams/
+/codi/layouts/
+/codi/objects/
+/codi/arrows/
+/codi/labels/
 \end{lstlisting}
 
 They are the proper place to find styles and define you own:
 \begin{lstlisting}
-/kD/arrows/fat/.style={ultra thick}
+/codi/arrows/fat/.style={ultra thick}
 \end{lstlisting}
 
-Fully scoping keys is usually unnecessary, as \koDi\ searches for keys
+Fully scoping keys is usually unnecessary, as \CoDi\ searches for keys
 in the library of the layer it's in before falling back to \TikZ\ default
 search algorithm. Here's some meta code demonstrating this:
 
 \begin{lstlisting}
-\begin{kodi}[<diagram keylist>]
+\begin{codi}[<diagram keylist>]
   \obj [<layout keylist>] { |[<object keylist>]| a & b \\ };
   \obj [<object keylist>] {x};
   \mor [<label keylist>]:[<arrow keylist>]
      a [<label keylist>]:[<arrow keylist>] b;
-\end{kodi}
+\end{codi}
 \end{lstlisting}
   
