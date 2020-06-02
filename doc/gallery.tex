@@ -9,7 +9,7 @@ The remainder of the text is just commented examples.
 \subsection{Snake}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}[tetragonal]
+\begin{codi}[tetragonal]
   \obj{          & \ker a   & \ker b   & \ker c   &   \\
                  & A        & B        & C        & 0 \\
         |(0')| 0 & A'       & B'       & C'       &   \\
@@ -24,10 +24,10 @@ The remainder of the text is just commented examples.
   \mor[near start] (ker b) -> B b:-> B' -> (coker b);
   \mor[near start] (ker c) -> C c:-> C' -> (coker c);
 
-  \draw[/kD/arrows/crossing over, ->, rounded corners, >=stealth]
+  \draw[/codi/arrows/crossing over, ->, rounded corners, >=stealth]
     (ker c) -- ++( 0.6,0) -- ++(0,-1.55)
             -- ++(-3.2,0) -- ++(0,-1.45) -- (coker a);
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \clearpage
@@ -35,7 +35,7 @@ The remainder of the text is just commented examples.
 \subsection{The fourth associahedron}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}
+\begin{codi}
 % From the LaTeX preamble:
 %   \usepackage{newunicodechar}
 %   \newunicodechar{ı}{\mathbf 1}
@@ -54,7 +54,7 @@ The remainder of the text is just commented examples.
          "ı_w×a_{x,y,z}": -> 4;
   \mor *   "a_{w×x,y,z}": -> 5
            "a_{w,x,y×z}": -> *;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \clearpage
@@ -62,7 +62,7 @@ The remainder of the text is just commented examples.
 \subsection{Pullback \& pushout}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}[hexagonal]
+\begin{codi}[hexagonal]
   \obj{ |(pb)| A \times_Z B & B \\
                A            & Z \\ };
   \obj[above left=of pb] {Q};
@@ -73,11 +73,11 @@ The remainder of the text is just commented examples.
   \mor[swap]:[bend right] Q q_1:-> A;
   \mor      :[bend left]  * q_2:-> B;
   \mor [mid]:[dashed]     *   u:-> pb;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}[hexagonal]
+\begin{codi}[hexagonal]
   \obj{ Z &                   B \\
         A & |(po)| A \sqcup_Z B \\ };
   \obj[below right=of po] {Q};
@@ -88,7 +88,7 @@ The remainder of the text is just commented examples.
   \mor[swap]:[bend right]  A j_1:-> Q;
   \mor      :[bend left]   B j_2:-> *;
   \mor [mid]:[dashed]     po   u:-> *;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \clearpage
@@ -96,7 +96,7 @@ The remainder of the text is just commented examples.
 \subsection{Complexes sequence}
 
 \begin{tcblisting}{gallery}
-\begin{kodi}
+\begin{codi}
   \obj (M) {   & \vdots  & \vdots  & \vdots  &   \\
              0 & A_{n+1} & B_{n+1} & C_{n+1} & 0 \\
              0 & A_{n}   & B_{n}   & C_{n}   & 0 \\
@@ -110,17 +110,17 @@ The remainder of the text is just commented examples.
   \foreach \l/\col/\q in {A/2/, B/3/', C/4/''}
     \mor (M-1-\col) -> (\l_{n+1}) "\partial\q_{n+1}":-> (\l_{n})
                                   "\partial\q_{n}"  :-> (\l_{n-1}) -> (M-5-\col);
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \clearpage
 
 \subsection{Braid}
 
-% TODO: there's a bug here. If one does \begin{kodi}[ l/.style={bend left}
+% TODO: there's a bug here. If one does \begin{codi}[ l/.style={bend left}
 % TODO: (note the space before l) then it's not recognized. Investigate.
 \begin{tcblisting}{gallery}
-\begin{kodi}[l/.style={bend left}, r/.style={bend right} ]
+\begin{codi}[l/.style={bend left}, r/.style={bend right} ]
   \obj [ hexagonal=horizontal side 6em angle 45, remove characters=H_\{q+\} ] {
     H_{q+2}(X)   & H_{q+2}(X,Y) & H_{q+1}(Y,Z) & H_{q}(Z)     \\
     H_{q+2}(Y)   & H_{q+2}(X,Z) & H_{q+1}(Y)   & H_{q+1}(X,Z) \\
@@ -131,7 +131,7 @@ The remainder of the text is just commented examples.
   \mor :[green] 2Y  -> 2YZ r,-> 1Z    -> 1Y  -> 1YZ l,-> Z;
   \mor :[cyan]  2X  -> 2XZ   -> 1Z  r,-> 1X  -> 1XZ   -> Z;
   \mor :[red]   2YZ -> 2XZ   -> 2XY l,-> 1YZ -> 1XZ;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \clearpage
@@ -140,7 +140,7 @@ The remainder of the text is just commented examples.
 
 \begingroup\catcode`~=12
 \begin{tcblisting}{gallery}
-\begin{kodi}[x=4em, y=-3em, node distance=1 and 1,
+\begin{codi}[x=4em, y=-3em, node distance=1 and 1,
     sim/.style={sloped, auto,
       edge node={node[every edge quotes][/velos/install quote
         handler,"\sim", anchor=south, outer sep=-.15em]}
@@ -166,7 +166,7 @@ The remainder of the text is just commented examples.
     \mor (\row1) -> (\row2) <~ (\row3) .. (\row n);
     \mor X <~ + -> Y;
   }
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 \endgroup
 

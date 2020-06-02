@@ -1,25 +1,25 @@
 The character replacement behaviour of the naming routine can be configured
-inside any \koDi\ scope using various keys.
+inside any \CoDi\ scope using various keys.
 
 \begin{lstlisting}
-/kD/replace character = <character> with <character>
-/kD/replace charcode = <charcode> with <character>
-/kD/remove characters = <characters>
-/kD/remove character = <character>
-/kD/remove charcode = <charcode>
+/codi/replace character = <character> with <character>
+/codi/replace charcode = <charcode> with <character>
+/codi/remove characters = <characters>
+/codi/remove character = <character>
+/codi/remove charcode = <charcode>
 \end{lstlisting}
 
 You can set up a replacement for any character, using the character code for
 the hardest to type, like {\ttfamily \textvisiblespace} or {\ttfamily \textbackslash}.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[tetragonal]
+\begin{codi}[tetragonal]
 \obj{ |[replace character=F with G]| \lim F &     % name: lim G
       |[remove character=F]|         \lim F \\    % name: lim
       |[replace charcode=92 with /]| \lim F &     % name: /lim F
       |[remove charcode=32]|         \lim F \\ }; % name: limF
 \mor (lim G) -> (lim) -> (/lim F) -> (limF);
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 \hfill$\therefore$\hfill\null
@@ -35,29 +35,29 @@ Another egregiously bad idea is replacing characters with spaces.
 It's tempting because it solves a somewhat common edge case.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[tetragonal]
+\begin{codi}[tetragonal]
 \obj{ \beta & F & b\eta \\ };
 \mor F -> beta;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 Since characters in names are literal, this causes whitespace
 duplication and names become inaccessible by ordinary means.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[tetragonal]
+\begin{codi}[tetragonal]
 \obj [replace charcode=92 with \space]
   { \beta & b\eta & \beta \eta \\ };
 \mor beta -> (b eta) -> (beta \space eta);
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 The wise solution is writing better code.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}[tetragonal]
+\begin{codi}[tetragonal]
 \obj{ \beta & F & b \eta \\ };
 \mor F -> beta;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 

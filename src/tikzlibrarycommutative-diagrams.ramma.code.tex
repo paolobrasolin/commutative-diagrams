@@ -16,7 +16,7 @@
 
 %==[ core concept ]=============================================================
 
-\pgfqkeys{/kD}{% TODO: is this the best scope to put the key into?
+\pgfqkeys{/codi}{% TODO: is this the best scope to put the key into?
   self naming/.style={
     /tikz/node contents/.forward to=/bapto/input,
     /bapto/trigger/.forward to=/katharizo/input,
@@ -28,52 +28,52 @@
 
 % Some mischief with handlers and baseline math/labeling functionality.
 
-\pgfqkeys{/kD}{
+\pgfqkeys{/codi}{
   .search also=/bapto,
   .search also=/katharizo,
   every thing/.style={
     /ektropi/restore,
-    /ektropi/add=/kD,
+    /ektropi/add=/codi,
     /ektropi/add=/bapto,
     /ektropi/add=/katharizo
   },
   every diagram/.style={% NOTE: restore hopefully unnecessary
-    /kD/every thing,
-    /ektropi/add=/kD/diagrams
+    /codi/every thing,
+    /ektropi/add=/codi/diagrams
   },
   every layout/.style={% NOTE: restore actually unnecessary
-    /kD/every thing,
-    /ektropi/add=/kD/layouts,
-    /mitra/every node/.append style={/kD/every object}
+    /codi/every thing,
+    /ektropi/add=/codi/layouts,
+    /mitra/every node/.append style={/codi/every object}
   },
   every object/.style={% NOTE: needed when inside matrices
-    /kD/every thing,
-    /ektropi/add=/kD/objects,
+    /codi/every thing,
+    /ektropi/add=/codi/objects,
     execute at begin node=$,%
     execute at end node=$,%
-    /kD/self naming
+    /codi/self naming
   },
   every arrow/.style={% NOTE: restore unnecessary
-    /kD/every thing,
-    /ektropi/add=/kD/arrows
+    /codi/every thing,
+    /ektropi/add=/codi/arrows
   },
   every label/.style={% NOTE: restore needed because inside edge
-    /kD/every thing,
-    /ektropi/add=/kD/labels,
+    /codi/every thing,
+    /ektropi/add=/codi/labels,
     execute at begin node=$,%
     execute at end node=$,%
-    /kD/self naming
+    /codi/self naming
   }
 }
 
 % The user level keys are bound to the underlying parsers.
 
 \pgfkeys{
-  /mitra/every matrix/.append style=/kD/every layout,
-  /ozos/every node/.append style=/kD/every object,
+  /mitra/every matrix/.append style=/codi/every layout,
+  /ozos/every node/.append style=/codi/every object,
   /velos/every path/.append style={
-    /tikz/every edge/.append style=/kD/every arrow,
-    /tikz/every edge quotes/.append style=/kD/every label
+    /tikz/every edge/.append style=/codi/every arrow,
+    /tikz/every edge quotes/.append style=/codi/every label
   }
 }
 
@@ -110,12 +110,12 @@
 % I envelope the CoDi main macros in a simple key for maximal flexibility.
 
 \tikzset{
-  kodi/.code={%
+  codi/.code={%
     \ifConTeXt\catcode`\|=12\fi% TODO: is it sufficient? investigate
     \let\obj\kDRammaObj
     \let\mor\kDRammaMor
   },
-  kodi/.append style={/kD/every diagram}
+  codi/.append style={/codi/every diagram}
 }
 
 %==[ main macro ]===============================================================
@@ -145,6 +145,6 @@
 \def\kDRammaOutput{%
   \edef\kDAct{%
     \noexpand\kDRammaTmpTok={%
-      \noexpand\tikzpicture[kodi, \the\kDRammaOptTok]}}%
+      \noexpand\tikzpicture[codi, \the\kDRammaOptTok]}}%
   \kDAct
   \the\kDRammaTmpTok}

@@ -1,5 +1,5 @@
-\TikZ\ is the only dependency of \koDi.
-This ensures compatibility with most\footnote{\koDi\ builds upon \TikZ, which builds upon  {\ttfamily\small pgf}, which after version 3.1 requires at least \hologo{eTeX} version 2. This is inconsequential except in the unlikely event you're using Knuth's original {\ttfamily\small tex} format.} \TeX\ flavours.
+\TikZ\ is the only dependency of \CoDi.
+This ensures compatibility with most\footnote{\CoDi\ builds upon \TikZ, which builds upon  {\ttfamily\small pgf}, which after version 3.1 requires at least \hologo{eTeX} version 2. This is inconsequential except in the unlikely event you're using Knuth's original {\ttfamily\small tex} format.} \TeX\ flavours.
 Furthermore, it can be invoked both as a standalone and as a \TikZ\ library.
 Below are minimal working examples for the main dialects.
 
@@ -9,11 +9,12 @@ Below are minimal working examples for the main dialects.
       \caption*{\TeX\ package}
       \begin{lstlisting}[gobble=8]
 
-        \input kodi
+        \input
+          {commutative-diagrams}
 
-        \kodi
+        \codi
           % diagram here
-        \endkodi
+        \endcodi
         \bye
       \end{lstlisting}
     \end{subfigure}
@@ -22,11 +23,12 @@ Below are minimal working examples for the main dialects.
       \caption*{\ConTeXt\ module}
       \begin{lstlisting}[gobble=8]
 
-        \usemodule[kodi]
+        \usemodule
+          [commutative-diagrams]
         \starttext
-        \startkodi
+        \startcodi
           % diagram here
-        \stopkodi
+        \stopcodi
         \stoptext
       \end{lstlisting}
     \end{subfigure}
@@ -35,11 +37,12 @@ Below are minimal working examples for the main dialects.
       \caption*{\LaTeX\ package}
       \begin{lstlisting}[gobble=8]
         \documentclass{article}
-        \usepackage{kodi}
+        \usepackage
+          {commutative-diagrams}
         \begin{document}
-        \begin{kodi}
+        \begin{codi}
           % diagram here
-        \end{kodi}
+        \end{codi}
         \end{document}
       \end{lstlisting}
     \end{subfigure}
@@ -48,10 +51,11 @@ Below are minimal working examples for the main dialects.
       \caption*{\TeX\ (\TikZ\ library)}
       \begin{lstlisting}[gobble=8]
 
-        \input tikz
-        \usetikzlibrary kodi
+        \input{tikz}
+        \usetikzlibrary
+          [commutative-diagrams]
 
-        \tikzpicture[kodi]
+        \tikzpicture[codi]
           % diagram here
         \endtikzpicture
         \bye
@@ -63,9 +67,10 @@ Below are minimal working examples for the main dialects.
       \begin{lstlisting}[gobble=8]
 
         \usemodule[tikz]
-        \usetikzlibrary[kodi]
+        \usetikzlibrary
+          [commutative-diagrams]
         \starttext
-        \starttikzpicture[kodi]
+        \starttikzpicture[codi]
           % diagram here
         \stoptikzpicture
         \stoptext
@@ -77,9 +82,10 @@ Below are minimal working examples for the main dialects.
       \begin{lstlisting}[gobble=8]
         \documentclass{article}
         \usepackage{tikz}
-        \usetikzlibrary{kodi}
+        \usetikzlibrary
+          {commutative-diagrams}
         \begin{document}
-        \begin{tikzpicture}[kodi]
+        \begin{tikzpicture}[codi]
           % diagram here
         \end{tikzpicture}
         \end{document}
@@ -93,17 +99,19 @@ Below are minimal working examples for the main dialects.
   \begin{lstlisting}[gobble=4]
     \documentclass{article}
   
-    \usepackage{kodi}
+    \usepackage
+      {commutative-diagrams}
     % Or, equivalently:
     %\usepackage{tikz}
-    %\usetikzlibrary{kodi}
+    %\usetikzlibrary
+    %  {commutative-diagrams}
     
     \usetikzlibrary{external}
     \tikzexternalize
       [prefix=tikzpics/]
       
     \begin{document}
-    \begin{tikzpicture}[kodi]
+    \begin{tikzpicture}[codi]
       % diagram here
     \end{tikzpicture}
     \end{document}
@@ -117,8 +125,8 @@ A useful \TikZ\ feature exclusive to \LaTeX\ is
 It is an effective way to boost processing times by (re)\-compiling figures as
 external files only when strictly necessary.
 
-A small expedient is necessary to use it with \koDi: diagrams must be wrapped in
-\lstinline|tikzpicture| environments endowed with the \lstinline|kodi| key.
+A small expedient is necessary to use it with \CoDi: diagrams must be wrapped in
+\lstinline|tikzpicture| environments endowed with the \lstinline|/tikz/codi| key.
 
 On the side is an example saving the pictures in the \lstinline|./tikzpics/| folder
 to keep things tidy.
@@ -129,4 +137,4 @@ Basic knowledge of \TikZ\ is assumed. A plethora of excellent
 resources exist, so no crash course on the matter will be improvised
 here.
 Higher proficiency is not necessary, though recommended:
-it will make \koDi\ a pliable framework instead of a black box.
+it will make \CoDi\ a pliable framework instead of a black box.

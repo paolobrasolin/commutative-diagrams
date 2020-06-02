@@ -1,54 +1,54 @@
 Objects are typeset using the \lstinline|\obj| macro.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj {X};
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 Almost every diagram is laid along a regular grid,
 so the customary tabular syntax of \TeX\ is recognized.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj {
   A & B \\
   C & D \\
 };
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
-\koDi\ objects are self-aware and clever enough to name themselves
+\CoDi\ objects are self-aware and clever enough to name themselves
 so you can comfortably refer to them.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj {\lim F};
 \draw (lim F) circle (4ex);
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 Morphisms are typeset using the \lstinline!\mor! macro.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj { A & B \\ };
 \mor A f:-> B;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
 Commutative diagrams exist to illustrate composition and commutation,
-so \koDi\ allows arrow chaining and chain gluing.
+so \CoDi\ allows arrow chaining and chain gluing.
 
 \begin{tcblisting}{snippet, trim}
-\begin{kodi}
+\begin{codi}
 \obj { A & B \\ C & D \\ };
 \mor A -> B -> D;
 \mor * -> C -> *;
-\end{kodi}
+\end{codi}
 \end{tcblisting}
 
-These are the only two macros defined by \koDi.
+These are the only two macros defined by \CoDi.
 
 There are more features, though.\\
 Read on if this caught your attention.

@@ -1,6 +1,6 @@
-  koDi:  kommutative Diagramme
-================================
+CoDi: Commutative Diagrams for TeX
+==================================
 
-koDi is a TikZ library.  Its aim
-is making  commutative  diagrams 
+CoDi is  a TikZ library.   Its aim
+is  making   commutative  diagrams 
 easy to design, parse and tweak.

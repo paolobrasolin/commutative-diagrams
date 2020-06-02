@@ -9,7 +9,7 @@
 [ctan-shield]: https://img.shields.io/ctan/v/commutative-diagrams?label=CTAN
 [ctan-link]: https://ctan.org/pkg/commutative-diagrams
 
-# CoDi -- Commutative Diagrams for TeX
+# CoDi: Commutative Diagrams for TeX
 
 CoDi is a [TikZ] library. Its aim is making [commutative diagrams] easy to design, parse and tweak.
 
