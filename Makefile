@@ -1,3 +1,4 @@
+PKG     = kodi
 SHELL   = bash
 UTREE   = $(shell kpsewhich --var-value TEXMFHOME)
 YEAR    = $(shell date +"%Y")
@@ -17,7 +18,7 @@ endef
 
 ##[ Default ]###################################################################
 
-all: dist/kodi.zip
+all: dist/$(PKG).zip
 
 ##[ hygiene ]###################################################################
 
@@ -41,7 +42,7 @@ build/%.sty: src/HEADER src/%.sty
 build/README: doc/README
 	$(safe-cp)
 
-build/kodi-doc.tex: doc/main.tex src/HEADER $(wildcard doc/*.tex)
+build/$(PKG)-doc.tex: doc/main.tex src/HEADER $(wildcard doc/*.tex)
 	mkdir -p build
 	cat src/HEADER $< \
 	| awk -F '[{}]' '/^\\input{.*}$$/{system("cat $(<D)/"$$2".tex"); next}1' \
@@ -58,64 +59,64 @@ build/kodi-doc.tex: doc/main.tex src/HEADER $(wildcard doc/*.tex)
 build/latexmkrc: doc/latexmkrc
 	$(safe-cp)
 
-build/kodi-doc.pdf: build/latexmkrc build/kodi-doc.tex \
-	build/tikzlibrarykodi.bapto.code.tex \
-	build/tikzlibrarykodi.code.tex \
-	build/tikzlibrarykodi.diorthono.code.tex \
-	build/tikzlibrarykodi.ektropi.code.tex \
-	build/tikzlibrarykodi.katharizo.code.tex \
-	build/tikzlibrarykodi.koinos.code.tex \
-	build/tikzlibrarykodi.mandyas.code.tex \
-	build/tikzlibrarykodi.mitra.code.tex \
-	build/tikzlibrarykodi.ozos.code.tex \
-	build/tikzlibrarykodi.ramma.code.tex \
-	build/tikzlibrarykodi.velos.code.tex \
-	build/kodi.sty
+build/$(PKG)-doc.pdf: build/latexmkrc build/$(PKG)-doc.tex \
+	build/tikzlibrary$(PKG).bapto.code.tex \
+	build/tikzlibrary$(PKG).code.tex \
+	build/tikzlibrary$(PKG).diorthono.code.tex \
+	build/tikzlibrary$(PKG).ektropi.code.tex \
+	build/tikzlibrary$(PKG).katharizo.code.tex \
+	build/tikzlibrary$(PKG).koinos.code.tex \
+	build/tikzlibrary$(PKG).mandyas.code.tex \
+	build/tikzlibrary$(PKG).mitra.code.tex \
+	build/tikzlibrary$(PKG).ozos.code.tex \
+	build/tikzlibrary$(PKG).ramma.code.tex \
+	build/tikzlibrary$(PKG).velos.code.tex \
+	build/$(PKG).sty
 	pushd $(@D); latexmk -gg
 
 ##[ DIST | Tree file structure ]################################################
 
-dist/tds/doc/generic/kodi/kodi-doc.pdf: build/kodi-doc.pdf
+dist/tds/doc/generic/$(PKG)/$(PKG)-doc.pdf: build/$(PKG)-doc.pdf
 	$(safe-cp)
 
-dist/tds/doc/generic/kodi/kodi-doc.tex: build/kodi-doc.tex
+dist/tds/doc/generic/$(PKG)/$(PKG)-doc.tex: build/$(PKG)-doc.tex
 	$(safe-cp)
 
-dist/tds/doc/generic/kodi/README: build/README
+dist/tds/doc/generic/$(PKG)/README: build/README
 	$(safe-cp)
 
 dist/tds/doc: \
-	dist/tds/doc/generic/kodi/kodi-doc.pdf \
-	dist/tds/doc/generic/kodi/kodi-doc.tex \
-	dist/tds/doc/generic/kodi/README
+	dist/tds/doc/generic/$(PKG)/$(PKG)-doc.pdf \
+	dist/tds/doc/generic/$(PKG)/$(PKG)-doc.tex \
+	dist/tds/doc/generic/$(PKG)/README
 
-dist/tds/tex/context/third/kodi/t-kodi.tex: build/t-kodi.tex
+dist/tds/tex/context/third/$(PKG)/t-$(PKG).tex: build/t-$(PKG).tex
 	$(safe-cp)
 
-dist/tds/tex/generic/kodi/tikzlibrarykodi.%.tex: build/tikzlibrarykodi.%.tex
+dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).%.tex: build/tikzlibrary$(PKG).%.tex
 	$(safe-cp)
 
-dist/tds/tex/latex/kodi/kodi.sty: build/kodi.sty
+dist/tds/tex/latex/$(PKG)/$(PKG).sty: build/$(PKG).sty
 	$(safe-cp)
 
-dist/tds/tex/plain/kodi/kodi.tex: build/kodi.tex
+dist/tds/tex/plain/$(PKG)/$(PKG).tex: build/$(PKG).tex
 	$(safe-cp)
 
 dist/tds/tex: \
-	dist/tds/tex/context/third/kodi/t-kodi.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.bapto.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.diorthono.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.ektropi.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.katharizo.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.koinos.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.mandyas.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.mitra.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.ozos.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.ramma.code.tex \
-	dist/tds/tex/generic/kodi/tikzlibrarykodi.velos.code.tex \
-	dist/tds/tex/latex/kodi/kodi.sty \
-	dist/tds/tex/plain/kodi/kodi.tex
+	dist/tds/tex/context/third/$(PKG)/t-$(PKG).tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).bapto.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).diorthono.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).ektropi.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).katharizo.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).koinos.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).mandyas.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).mitra.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).ozos.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).ramma.code.tex \
+	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).velos.code.tex \
+	dist/tds/tex/latex/$(PKG)/$(PKG).sty \
+	dist/tds/tex/plain/$(PKG)/$(PKG).tex
 
 ifeq ($(SKIP_DOC),1)
 dist/tds: dist/tds/tex
@@ -125,29 +126,29 @@ endif
 
 ##[ DIST | Tree file structure ZIP ]############################################
 
-dist/kodi.tds.zip: dist/tds
-	pushd dist/tds; zip --recurse-paths ../kodi.tds.zip .
+dist/$(PKG).tds.zip: dist/tds
+	pushd dist/tds; zip --recurse-paths ../$(PKG).tds.zip .
 
 ##[ DIST | Flat file structure ]################################################
 
-dist/pkg/kodi: dist/kodi.tds.zip
+dist/pkg/$(PKG): dist/$(PKG).tds.zip
 	mkdir -p $@
 	unzip -j $< -d $@
 	cp $< $(@D)
 
 ##[ DIST | Flat file structure ZIP ]############################################
 
-dist/kodi.zip: dist/pkg/kodi
-	pushd dist/pkg; zip --recurse-paths ../kodi.zip .
+dist/$(PKG).zip: dist/pkg/$(PKG)
+	pushd dist/pkg; zip --recurse-paths ../$(PKG).zip .
 
 ##[ Format ]####################################################################
 
-build/kodi-livedemo.fmt: kodi-livedemo.tex install 
+build/$(PKG)-livedemo.fmt: $(PKG)-livedemo.tex install 
 	mkdir -p $(@D)
 	cp $@ $<
 	pushd $(@F); pdftex -ini "&latex $<\dump"
 
-dist/kodi-livedemo.fmt: build/kodi-livedemo.fmt
+dist/$(PKG)-livedemo.fmt: build/$(PKG)-livedemo.fmt
 	$(safe-cp)
 
 ##[ Local (un)installation ]####################################################
@@ -156,10 +157,10 @@ install: dist/tds
 	pushd $<; cp -vR . $(UTREE)/
 
 uninstall:
-	find $(UTREE) -type d -name kodi -prune -exec rm -vrf {} \;
+	find $(UTREE) -type d -name $(PKG) -prune -exec rm -vrf {} \;
 
 ##[ Development ]###############################################################
 
 # NOTE: this is useful when writing the manual
 watch:
-	ls doc/*.tex | entr -n -s 'make clean build/kodi-doc.pdf'
+	ls doc/*.tex | entr -n -s 'make clean build/$(PKG)-doc.pdf'
