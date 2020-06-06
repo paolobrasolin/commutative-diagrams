@@ -99,6 +99,9 @@ dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).%.tex: build/tikzlibrary$(PKG).%.t
 dist/tds/tex/latex/$(PKG)/$(PKG).sty: build/$(PKG).sty
 	$(safe-cp)
 
+dist/tds/tex/latex/$(PKG)/kodi.sty: build/kodi.sty
+	$(safe-cp)
+
 dist/tds/tex/plain/$(PKG)/$(PKG).tex: build/$(PKG).tex
 	$(safe-cp)
 
@@ -116,6 +119,7 @@ dist/tds/tex: \
 	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).ramma.code.tex \
 	dist/tds/tex/generic/$(PKG)/tikzlibrary$(PKG).velos.code.tex \
 	dist/tds/tex/latex/$(PKG)/$(PKG).sty \
+	dist/tds/tex/latex/$(PKG)/kodi.sty \
 	dist/tds/tex/plain/$(PKG)/$(PKG).tex
 
 ifeq ($(SKIP_DOC),1)
