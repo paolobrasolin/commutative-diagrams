@@ -74,7 +74,7 @@ jobs:
           bugs: https://github.com/paolobrasolin/commutative-diagrams/issues
           repository: https://github.com/paolobrasolin/commutative-diagrams
           summary: >
-            Commutative Diagrams for TeX
+            CoDi: Commutative Diagrams for TeX
           description: >
             CoDi is a TikZ library. Its aim is making commutative diagrams easy to design, parse and tweak.
           note: >
