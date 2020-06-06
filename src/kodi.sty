@@ -1,0 +1,52 @@
+\RequirePackage{commutative-diagrams}
+
+\PackageWarningNoLine{kodi}{this package is only a compatibility layer
+to help you migrate from 'kodi' to 'commutative-diagrams'. It is NOT
+intended for production use. Please solve all other warnings and then
+switch to 'commutative-diagrams'}
+
+% TikZ keys: /kodi/**/* -> /codi/**/*
+
+\pgfkeys{
+  /handlers/.unknown/.code={%
+    \def\pgfkeysisdescendantof@impl/##1/##2\pgf@@eov{%
+      \def\wot{##1}%
+      \def\asd{kD}%
+      \ifx\wot\asd
+        \def\tmp{/codi/##2}%
+        \PackageWarning{kodi}{automatically remapped key '\pgfkeyscurrentkey'
+        to key '\tmp'. Please switch to the latter}
+        \ifx\pgfkeyscurrentvalue\pgfkeysnovalue
+          \expandafter\pgfkeysalso\expandafter{\tmp}%
+        \else
+          \expandafter\expandafter\expandafter\pgfkeysalso\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\tmp\expandafter=\pgfkeyscurrentvalue}%
+        \fi
+      \else
+        % NOTE: this is the default /handlers/.unknown/.code
+        \def\pgf@marshal{\pgfkeysvalueof{/errors/unknown key/.@cmd}}%
+        {\expandafter\expandafter\expandafter\pgf@marshal\expandafter\expandafter\expandafter{\expandafter\pgfkeyscurrentkey\expandafter}\expandafter{\pgfkeyscurrentvalue}\pgfeov}%
+      \fi
+    }%
+    \expandafter\pgfkeysisdescendantof@impl\pgfkeyscurrentkey\pgf@@eov
+  }
+}
+
+% TikZ key: /tikz/kodi -> /tikz/codi
+
+\pgfkeys{
+  /tikz/kodi/.code={%
+    \PackageWarning{kodi}{automatically remapped key '/tikz/kodi'
+    to key '/tikz/codi'. Please switch to the latter}%
+    \pgfkeysalso{/tikz/codi}%
+  }
+}
+
+% Environment: kodi -> codi
+
+\def\kodi{%
+  \PackageWarning{kodi}{automatically remapped environment 'kodi'
+  to environment 'codi'. Please switch to the latter}%
+  \codi}
+\let\endkodi\endcodi
+
+\endinput
