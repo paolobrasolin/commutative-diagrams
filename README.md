@@ -17,7 +17,7 @@ CoDi is a [TikZ] library. Its aim is making [commutative diagrams] easy to desig
 [commutative diagrams]: https://en.wikipedia.org/wiki/Commutative_diagram
 
 
-:warning: **Were you looking for `koDi: commutative Diagramme für TeX`?**
+:warning: **Were you looking for `koDi: kommutative Diagramme für TeX`?**
 You're in the right place: it's the same library.
 It had to be renamed due to CTAN naming restrictions.
 We got your back: `\usepackage{kodi}` is still supported and will produce warning messages to help you migrating. :heart:
