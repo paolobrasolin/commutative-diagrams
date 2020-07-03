@@ -172,6 +172,10 @@
 
 \usepackage{listings}
 
+% Use straight quotes in code listings. https://tex.stackexchange.com/a/145417/82186
+\usepackage{textcomp}
+\lstset{upquote=true}
+
 % http://tex.stackexchange.com/a/336331/82186
 \makeatletter
 \lst@Key{lastline}\relax{\ifnumcomp{#1}{<}{0}{%
