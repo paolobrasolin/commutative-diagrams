@@ -1,11 +1,11 @@
 //=[ Editors ]==================================================================
 
 var editor = ace.edit("editor");
-editor.setValue(document.getElementById("example").text.trim(), 0);
+editor.setValue(document.getElementById("example").text.trim(), -1);
 editor.setTheme("ace/theme/chrome");
 editor.getSession().setMode("ace/mode/latex");
 editor.setOptions({
-  fontSize: 16,
+  fontSize: "1rem",
   maxLines: 20,
   minLines: 5
 });
@@ -17,9 +17,9 @@ var logger = ace.edit("logger");
 // logger.setTheme("ace/theme/chrome");
 // logger.getSession().setMode("ace/mode/latex");
 logger.setOptions({
+  fontSize: "1rem",
   readOnly: true,
   showGutter: false,
-  fontSize: 16,
   maxLines: Infinity,
 });
 
@@ -44,10 +44,11 @@ function fadeOutLogger() {
 function fadeInDiagram(data) {
   const diagram = document.getElementById('diagram')
 
-  const ptPerEx = 4.3
+  const zoom = 1.5
+  const ptPerEm = 9.96264 // just render a \rule{1em}{1em} to get this
   var svg = data.querySelector('svg')
-  var exHeight = parseFloat(svg.getAttribute('height')) / ptPerEx + "ex";
-  var exWidth = parseFloat(svg.getAttribute('width')) / ptPerEx + "ex";
+  var exHeight = parseFloat(svg.getAttribute('height')) / ptPerEm * zoom + "rem";
+  var exWidth = parseFloat(svg.getAttribute('width')) / ptPerEm * zoom + "rem";
   svg.setAttribute('height', exHeight);
   svg.setAttribute('width', exWidth);
 

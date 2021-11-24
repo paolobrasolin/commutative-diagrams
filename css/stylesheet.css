@@ -9,8 +9,8 @@ body {
   font-family: "Computer Modern", sans-serif;
   width: 70vw;
   max-width: 40rem;
-  margin: 10vh auto;
   text-align: center;
+  margin: auto;
 }
 
 /*=[ Header ]=================================================================*/
@@ -19,7 +19,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem auto;
+  margin: 10vh auto;
 }
 
 header .title {
@@ -37,6 +37,7 @@ header.small {
   align-items: baseline;
   justify-content: space-between;
   border-bottom: 1px solid black;
+  margin: 1rem auto;
 }
 
 header.small .title, header.small .subtitle {
