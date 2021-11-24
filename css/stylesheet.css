@@ -58,13 +58,6 @@ header .title {
   line-height: 100px;
 }
 
-header .title .d {
-/*
-  margin-left: -0.06em;
-  margin-right: -0.02em;
-*/
-}
-
 .tex sub {
   text-transform: uppercase;
   position: relative;
