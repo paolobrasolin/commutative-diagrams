@@ -15,6 +15,26 @@
   <link rel="stylesheet" href="css/stylesheet.css">
   <script src="js/jquery.hypher.js"></script>
   <script src="js/en-gb.js"></script>
+  <script id="example" type="application/x-latex">
+\begin{kodi}
+
+\obj [comb] {
+  |(P)| A \times_Z B & B \\
+        A            & Z \\
+};
+
+\obj at ($(Z)!2!(P)$) {Q};
+
+\mor[swap] P p_1:-> A f:-> Z;
+\mor       * P_2:-> B g:-> *;
+
+\mor[swap]:[bend right] Q q_1:-> A;
+\mor      :[bend left]  * q_2:-> B;
+\mor [mid]:[dashed]     *   u:-> P;
+
+\end{kodi}
+  </script>
+
 </head>
 
 <body>
@@ -39,23 +59,7 @@
 
   <button id="compile">Compile!</button>
 
-  <div id="editor">\begin{kodi}
-
-  \obj [comb] {
-    |(P)| A \times_Z B & B \\
-          A            & Z \\
-  };
-
-  \obj at ($(Z)!2!(P)$) {Q};
-
-  \mor[swap] P p_1:-> A f:-> Z;
-  \mor       * P_2:-> B g:-> *;
-
-  \mor[swap]:[bend right] Q q_1:-> A;
-  \mor      :[bend left]  * q_2:-> B;
-  \mor [mid]:[dashed]     *   u:-> P;
-
-  \end{kodi}</div>
+  <div id="editor"></div>
 
   <script type="text/javascript" src="./js/live-demo.js">
   </script>

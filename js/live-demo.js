@@ -1,16 +1,16 @@
-function getNaturalWidth(obj, text){
-    var clone = obj.clone();
-    clone.css("visibility","hidden").css('width', 'auto').html(text);
-    $('body').append(clone);
-    var width = clone.css('width');
-    clone.remove();
-    return width;
+function getNaturalWidth(obj, text) {
+  var clone = obj.clone();
+  clone.css("visibility", "hidden").css('width', 'auto').html(text);
+  $('body').append(clone);
+  var width = clone.css('width');
+  clone.remove();
+  return width;
 }
 
 function fadeOut(element) {
   $(element).transition({ opacity: 0 });
   setTimeout(function () {
-      $(element).css('visibility', 'hidden');
+    $(element).css('visibility', 'hidden');
   }, 300);
 }
 
@@ -22,6 +22,7 @@ function fadeIn(element) {
 // $('p').hyphenate('en-gb');
 
 var editor = ace.edit("editor");
+editor.setValue(document.getElementById("example").text.trim(), 0);
 editor.setTheme("ace/theme/chrome");
 editor.getSession().setMode("ace/mode/latex");
 editor.setOptions({
@@ -29,7 +30,7 @@ editor.setOptions({
   maxLines: 20,
   minLines: 5
 });
-editor.on('change', function() {
+editor.on('change', function () {
   $('#compile')
     .attr('disabled', false)
     .html("Compile!");
@@ -46,14 +47,14 @@ logger.setOptions({
   // minLines: 2
 });
 
-$('#compile').click(function() {
+$('#compile').click(function () {
 
   fadeOut('#diagram-wrapper');
   fadeOut('#logger-wrapper');
   fadeIn('#loader-wrapper');
 
   $('#display')
-      .transition({ 'min-height': $('#loader-wrapper').css('height') }, 150 );
+    .transition({ 'min-height': $('#loader-wrapper').css('height') }, 150);
 
   $('#compile')
     .attr('disabled', true)
@@ -77,7 +78,7 @@ $('#compile').click(function() {
       'format': 'kodi-livedemo'
     }
 
-  }).done(function(data) {
+  }).done(function (data) {
 
     fadeOut('#loader-wrapper');
 
@@ -86,17 +87,17 @@ $('#compile').click(function() {
 
     var svg = $(data).find("svg");
 
-    var exHeight = parseFloat(svg.attr('height'))/4.3+"ex";
-    var exWidth  = parseFloat(svg.attr('width' ))/4.3+"ex";
+    var exHeight = parseFloat(svg.attr('height')) / 4.3 + "ex";
+    var exWidth = parseFloat(svg.attr('width')) / 4.3 + "ex";
     svg.attr('height', exHeight);
-    svg.attr('width',  exWidth );
+    svg.attr('width', exWidth);
     $('#display')
-      .transition({ height: exHeight }, 150 );
+      .transition({ height: exHeight }, 150);
 
     $('#diagram-wrapper').html(svg);
     fadeIn('#diagram-wrapper');
 
-  }).fail(function(jqXHR, textStatus, errorThrown) {
+  }).fail(function (jqXHR, textStatus, errorThrown) {
 
     fadeOut('#loader-wrapper');
     $('#compile').html("You goofed up.");
@@ -108,7 +109,7 @@ $('#compile').click(function() {
     setTimeout(function () {
       var h = $('#logger-wrapper').css('height');
       $('#display')
-        .transition({ height: h }, 140 );
+        .transition({ height: h }, 140);
     }, 10);
 
   });
