@@ -1,9 +1,10 @@
 //=[ Editors ]==================================================================
 
 var editor = ace.edit("editor");
-editor.setValue(document.getElementById("example").text.trim(), -1);
+editor.setValue(document.getElementById("example").text.trim() + "\n", -1);
 editor.setTheme("ace/theme/chrome");
 editor.getSession().setMode("ace/mode/latex");
+editor.setShowFoldWidgets(false);
 editor.setOptions({
   fontSize: "1rem",
   maxLines: 20,

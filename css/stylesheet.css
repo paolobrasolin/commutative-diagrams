@@ -7,7 +7,7 @@
 
 body {
   font-family: "Computer Modern", sans-serif;
-  width: 70vw;
+  width: calc(100vw - 2rem);
   max-width: 40rem;
   text-align: center;
   margin: auto;
@@ -19,17 +19,20 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10vh auto;
+  margin: 3rem auto 1rem auto;
 }
 
 header .title {
-  font-size: 10rem;
-  line-height: 8rem;
+  font-size: 9rem;
+  line-height: 7rem;
   font-weight: bold;
+  white-space: nowrap;
+  margin: 0 0.3rem 0 -0.3rem;
 }
 
 header .subtitle {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  white-space: nowrap;
 }
 
 header.small {
@@ -43,6 +46,7 @@ header.small {
 header.small .title, header.small .subtitle {
   font-size: 1rem;
   line-height: 1.5rem;
+  margin: 0;
 }
 
 header, header .title, header .subtitle {
@@ -67,8 +71,10 @@ header, header .title, header .subtitle {
 }
 
 #logger {
-  color: darkred;
-  border: 2px dotted red;
+  color: #500;
+  border: 2px dashed #F00;
+  background: #FEE;
+  margin: calc(1rem - 1px) auto;
 }
 
 #diagram svg {
@@ -96,8 +102,8 @@ header, header .title, header .subtitle {
   padding: .5rem .5rem;
   height: 2.5rem;
   font-weight: bold;
-  margin: 2rem;
-  display: inline-flex;
+  margin: 1rem auto;
+  display: flex;
   align-items: center;
 }
 
