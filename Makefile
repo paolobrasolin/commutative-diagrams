@@ -149,8 +149,8 @@ dist/$(PKG).zip: dist/pkg/$(PKG)
 
 build/$(PKG)-livedemo.fmt: $(PKG)-livedemo.tex install 
 	mkdir -p $(@D)
-	cp $@ $<
-	pushd $(@F); pdftex -ini "&latex $<\dump"
+	cp $< $(@D)
+	pushd $(@D); pdftex -ini "&latex $<\dump"
 
 dist/$(PKG)-livedemo.fmt: build/$(PKG)-livedemo.fmt
 	$(safe-cp)
