@@ -44,20 +44,14 @@
     <div class="subtitle">Commutative Diagrams for <span class="tex">T<sub>e</sub>X</span></div>
   </header>
 
-  <div id="display">
-    <div id="diagram-wrapper"></div>
-    <div id="loader-wrapper">
-      <div id="loader-throbber"></div>
-      <div id="loader-message"></div>
-    </div>
-    <div id="logger-wrapper">
-      <div id="logger"></div>
-    </div>
-  </div>
-
-  <button id="compile">Compile!</button>
-
+  <div id="diagram" class="collapsed"><svg></svg></div>
   <div id="editor"></div>
+  <div id="logger" class="collapsed"></div>
+
+  <button id="actuator">
+    <span id="actuator-throbber"></span>
+    <span id="actuator-label"></span>
+  </button>
 
   <script type="text/javascript" src="./js/live-demo.js">
   </script>

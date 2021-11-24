@@ -1,5 +1,4 @@
-html {
-}
+/*=[ Basics ]=================================================================*/
 
 @font-face {
   font-family: "Computer Modern";
@@ -9,53 +8,45 @@ html {
 body {
   font-family: "Computer Modern", sans-serif;
   width: 70vw;
-  max-width: 40em;
+  max-width: 40rem;
   margin: 10vh auto;
   text-align: center;
 }
 
-p {
-  text-align: justify;
-}
-
-#display {
-  height: 0;
-  min-height: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  right: 50%;
-}
-
-#diagram-wrapper,
-#logger-wrapper,
-#loader-wrapper {
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
-}
-
-#logger-wrapper {
-  width: 70vw;
-  max-width: 40em;
-  box-sizing: border-box;
-  border: 2px dotted red;
-}
-
-#logger {
-  color: darkred;
-}
+/*=[ Header ]=================================================================*/
 
 header {
   display: flex;
   flex-direction: column;
-  align-items:center;
-  margin: 1em;
+  align-items: center;
+  margin: 1rem auto;
 }
 
 header .title {
-  font-size: 125px;
-  line-height: 100px;
+  font-size: 10rem;
+  line-height: 8rem;
+  font-weight: bold;
+}
+
+header .subtitle {
+  font-size: 1.5rem;
+}
+
+header.small {
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+header.small .title, header.small .subtitle {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+header, header .title, header .subtitle {
+  transition-property: all;
+  transition-duration: .5s;
 }
 
 .tex sub {
@@ -68,19 +59,66 @@ header .title {
   font-size: 1em;
 }
 
-#diagram-wrapper svg {
+/*=[ Contents ]===============================================================*/
+
+#diagram {
+  margin: 1.2rem auto;
+}
+
+#logger {
+  color: darkred;
+  border: 2px dotted red;
+}
+
+#diagram svg {
   overflow: visible;
 }
 
-#loader-throbber {
-  margin: .5em auto;
-  position: relative;
-  border: 1ex solid #CCC;
-  border-top: 1ex solid black;
+.collapsed {
+  height: 1px !important; /* not 0 to avoid bug w/ margin overlap */
+  opacity: 0 !important;
+}
+
+#diagram, #logger {
+  transition-property: height, opacity;
+  transition-duration: .3s;
+}
+
+/*=[ Actuator ]===============================================================*/
+
+#actuator {
+  font-weight: bold;
+  color: white;
+  background-color: black;
+  border-radius: 1rem;
+  border: none;
+  padding: .5rem .5rem;
+  height: 2.5rem;
+  font-weight: bold;
+  margin: 2rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+#actuator[disabled] {
+  background-color: #888;
+}
+
+#actuator:not([disabled]):hover {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+}
+
+#actuator-throbber {
+  display: inline-block;
+  border: .5rem solid #FFF;
+  border-top-color: #AAA0;
   animation: throb 1s infinite linear;
   border-radius: 50%;
-  width: 3em;
-  height: 3em;
+  width: 1.5rem;
+  height: 1.5rem;
+  box-sizing: border-box;
 }
 
 @keyframes throb {
@@ -88,27 +126,10 @@ header .title {
   100% { transform: rotate(360deg); }
 }
 
-#loader-message {
-  height: 0;
-  overflow: visible;
+#actuator-throbber[hidden] {
+  display: none;
 }
 
-#compile {
-  color: white;
-  background-color: black;
-  border-radius:10em;
-  border: none;
-  padding: 1ex 2ex;
-  font-weight: bold;
-  margin: 1em;
-  display: inline-block;
-  transition-duration: 0.3s;
-  transition-property: background-color, width;
-  /* to stay above display */
-  position: relative;
-  z-index: 1000;
-}
-
-#compile[disabled] {
-  background-color: #AAA;
+#actuator-label {
+  margin: auto .5rem;
 }

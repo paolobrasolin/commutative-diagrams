@@ -1,25 +1,4 @@
-function getNaturalWidth(obj, text) {
-  var clone = obj.clone();
-  clone.css("visibility", "hidden").css('width', 'auto').html(text);
-  $('body').append(clone);
-  var width = clone.css('width');
-  clone.remove();
-  return width;
-}
-
-function fadeOut(element) {
-  $(element).transition({ opacity: 0 });
-  setTimeout(function () {
-    $(element).css('visibility', 'hidden');
-  }, 300);
-}
-
-function fadeIn(element) {
-  $(element)
-    .css('visibility', 'visible')
-    .transition({ opacity: 1 });
-}
-// $('p').hyphenate('en-gb');
+//=[ Editors ]==================================================================
 
 var editor = ace.edit("editor");
 editor.setValue(document.getElementById("example").text.trim(), 0);
@@ -31,9 +10,7 @@ editor.setOptions({
   minLines: 5
 });
 editor.on('change', function () {
-  $('#compile')
-    .attr('disabled', false)
-    .html("Compile!");
+  setCTA({ message: "Compile!", active: true, waiting: false });
 });
 
 var logger = ace.edit("logger");
@@ -44,74 +21,87 @@ logger.setOptions({
   showGutter: false,
   fontSize: 16,
   maxLines: Infinity,
-  // minLines: 2
 });
 
-$('#compile').click(function () {
+//=[ UI helpers ]===============================================================
 
-  fadeOut('#diagram-wrapper');
-  fadeOut('#logger-wrapper');
-  fadeIn('#loader-wrapper');
+function setCTA({ message, active, waiting } = {}) {
+  document.getElementById('actuator').disabled = !active
+  document.getElementById('actuator-throbber').hidden = !waiting
+  document.getElementById('actuator-label').textContent = message
+}
 
-  $('#display')
-    .transition({ 'min-height': $('#loader-wrapper').css('height') }, 150);
+function fadeInLogger(message) {
+  logger.setValue(message, -1);
+  logger.container.classList.remove('collapsed')
+}
 
-  $('#compile')
-    .attr('disabled', true)
-    .html("Compiling&hellip;");
+function fadeOutLogger() {
+  logger.setValue('', -1);
+  logger.container.classList.add('collapsed')
+}
 
-  var longWaitTimerId = setTimeout(function () {
-    $('#loader-message')
-      .html("Server asleep: waking up the poor thing.");
-  }, 2400);
+function fadeInDiagram(data) {
+  const diagram = document.getElementById('diagram')
 
-  $('#loader-message').html('');
+  const ptPerEx = 4.3
+  var svg = data.querySelector('svg')
+  var exHeight = parseFloat(svg.getAttribute('height')) / ptPerEx + "ex";
+  var exWidth = parseFloat(svg.getAttribute('width')) / ptPerEx + "ex";
+  svg.setAttribute('height', exHeight);
+  svg.setAttribute('width', exWidth);
 
+  diagram.firstChild.replaceWith(svg)
+  diagram.style.height = exHeight;
+
+  diagram.classList.remove('collapsed')
+}
+
+function fadeOutDiagram() {
+  const diagram = document.getElementById('diagram')
+
+  var svg = document.createElement('svg')
+
+  diagram.firstChild.replaceWith(svg)
+
+  diagram.classList.add('collapsed')
+}
+
+//=[ Application loop ]=========================================================
+
+setCTA({ message: "Spinning up server...", active: false, waiting: true });
+$.ajax({
+  method: 'GET',
+  url: 'https://texrhobot.herokuapp.com/',
+  timeout: 10000,
+  cache: false,
+}).done(function () {
+  setCTA({ message: "Compile!", active: true, waiting: false });
+}).fail(function () {
+  setCTA({ message: "Oh noes! Server unreachable! :(", active: false, waiting: false });
+});
+
+$('#actuator').click(function () {
+  setCTA({ message: "Compiling...", active: false, waiting: true })
+  document.querySelector('header').classList.add('small')
+  fadeOutDiagram()
+  fadeOutLogger();
   $.ajax({
-
     method: 'POST',
     url: 'https://texrhobot.herokuapp.com/crank',
-    // url: 'http://0.0.0.0:5000/crank',
     data: {
       "document": editor.getValue(),
       'template': 'latex-minimal',
-      'format': 'kodi-livedemo'
-    }
-
+      'format': 'commutative-diagrams-livedemo',
+    },
   }).done(function (data) {
-
-    fadeOut('#loader-wrapper');
-
-    $('#compile').html("Tweak the code!");
-    clearTimeout(longWaitTimerId);
-
-    var svg = $(data).find("svg");
-
-    var exHeight = parseFloat(svg.attr('height')) / 4.3 + "ex";
-    var exWidth = parseFloat(svg.attr('width')) / 4.3 + "ex";
-    svg.attr('height', exHeight);
-    svg.attr('width', exWidth);
-    $('#display')
-      .transition({ height: exHeight }, 150);
-
-    $('#diagram-wrapper').html(svg);
-    fadeIn('#diagram-wrapper');
-
+    setCTA({ message: "Tweak the code!", active: false, waiting: false })
+    fadeInDiagram(data)
+    fadeOutLogger()
   }).fail(function (jqXHR, textStatus, errorThrown) {
-
-    fadeOut('#loader-wrapper');
-    $('#compile').html("You goofed up.");
-
-    fadeIn('#logger-wrapper');
-    logger.setValue(jqXHR.responseText, -1);
-
-    /* TODO: this is ridiculous, dammit... */
-    setTimeout(function () {
-      var h = $('#logger-wrapper').css('height');
-      $('#display')
-        .transition({ height: h }, 140);
-    }, 10);
-
+    setCTA({ message: "Fix the code!", active: false, waiting: false })
+    fadeInLogger(jqXHR.responseText.trim())
+    fadeOutDiagram()
   });
 
 });
