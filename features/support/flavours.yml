@@ -68,7 +68,7 @@ context:
     - [context, <%= jobname %>.tex]
   template: &context_template
     content:
-      preamble: ''
+      preamble: '%' # context chokes if the first line is empty
       head: \starttext
       body: Hello world.
       tail: \stoptext
