@@ -17,24 +17,12 @@ jobs:
         echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
         echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}
 
-    - name: Install TeXLive
-      env:
-        TEXLIVE_INSTALL_PREFIX: ${{ runner.tool_cache }}/texlive
-        TEXLIVE_PROFILE_PATH: ${{ github.workspace }}/.github/texlive.profile
-      run: |
-        cd ${{ runner.temp }}
-        wget -q http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-        tar -xzf install-tl-unx.tar.gz
-        cd install-tl-20* || exit 1
-        ./install-tl --portable --profile="$TEXLIVE_PROFILE_PATH"
-        echo "::add-path::$TEXLIVE_INSTALL_PREFIX/bin/x86_64-linux"
-
-    - name: Install TeXLive packages
-      env:
-        TEXLIVE_PACKAGES_PATH: ${{ github.workspace }}/.github/texlive.release.packages
-      run: |
-        readarray -t TEXLIVE_PACKAGES < <(grep -v '^#' "$TEXLIVE_PACKAGES_PATH")
-        tlmgr install "${TEXLIVE_PACKAGES[@]}"
+    - name: Setup TeX Live
+      uses: paolobrasolin/setup-texlive-action@main
+      with:
+        cache-key: texlive-${{ matrix.os }}
+        packages-path: ${{ github.workspace }}/.github/texlive.release.packages
+        profile-path: ${{ github.workspace }}/.github/texlive.profile
 
     - name: Build
       run: |
