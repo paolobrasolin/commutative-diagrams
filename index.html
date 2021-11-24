@@ -16,23 +16,18 @@
   <script src="js/jquery.hypher.js"></script>
   <script src="js/en-gb.js"></script>
   <script id="example" type="application/x-latex">
-\begin{kodi}
+\begin{codi}[hexagonal]
+  \obj{ |(pb)| A \times_Z B & B \\
+               A            & Z \\ };
+  \obj[above left=of pb] {Q};
 
-\obj [comb] {
-  |(P)| A \times_Z B & B \\
-        A            & Z \\
-};
+  \mor[swap] pb p_1:-> A f:-> Z;
+  \mor        * p_2:-> B g:-> *;
 
-\obj at ($(Z)!2!(P)$) {Q};
-
-\mor[swap] P p_1:-> A f:-> Z;
-\mor       * P_2:-> B g:-> *;
-
-\mor[swap]:[bend right] Q q_1:-> A;
-\mor      :[bend left]  * q_2:-> B;
-\mor [mid]:[dashed]     *   u:-> P;
-
-\end{kodi}
+  \mor[swap]:[bend right] Q q_1:-> A;
+  \mor      :[bend left]  * q_2:-> B;
+  \mor [mid]:[dashed]     *   u:-> pb;
+\end{codi}
   </script>
 
 </head>
