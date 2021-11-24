@@ -1,61 +1,66 @@
 <!DOCTYPE HTML>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"></script>
-    <title>koDi</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/stylesheet.css">
-    <script src="js/jquery.hypher.js"></script>
-    <script src="js/en-gb.js"></script>
-  </head>
-  <body>
-      
-<header>
-  <div class="title">ko<span class="d">D</span>i</div>
-  <div class="subtitle">kommutative Diagramme für
-    *<span class="tex">T<sub>e</sub>X</span>*
+
+<head>
+  <meta charset="utf-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"></script>
+  <title>koDi</title>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/stylesheet.css">
+  <script src="js/jquery.hypher.js"></script>
+  <script src="js/en-gb.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <div class="title">ko<span class="d">D</span>i</div>
+    <div class="subtitle">kommutative Diagramme für
+      *<span class="tex">T<sub>e</sub>X</span>*
+    </div>
+  </header>
+
+  <div id="display">
+    <div id="diagram-wrapper"></div>
+    <div id="loader-wrapper">
+      <div id="loader-throbber"></div>
+      <div id="loader-message"></div>
+    </div>
+    <div id="logger-wrapper">
+      <div id="logger"></div>
+    </div>
   </div>
-</header>
 
-<div id="display">
-  <div id="diagram-wrapper"></div>
-  <div id="loader-wrapper">
-    <div id="loader-throbber"></div>
-    <div id="loader-message"></div>
-  </div>
-  <div id="logger-wrapper">
-    <div id="logger"></div>
-  </div>
-</div>
+  <button id="compile">Compile!</button>
 
-<button id="compile">Compile!</button>
+  <div id="editor">\begin{kodi}
 
-<div id="editor">\begin{kodi}
+  \obj [comb] {
+    |(P)| A \times_Z B & B \\
+          A            & Z \\
+  };
 
-\obj [comb] {
-  |(P)| A \times_Z B & B \\
-        A            & Z \\
-};
+  \obj at ($(Z)!2!(P)$) {Q};
 
-\obj at ($(Z)!2!(P)$) {Q};
+  \mor[swap] P p_1:-> A f:-> Z;
+  \mor       * P_2:-> B g:-> *;
 
-\mor[swap] P p_1:-> A f:-> Z;
-\mor       * P_2:-> B g:-> *;
+  \mor[swap]:[bend right] Q q_1:-> A;
+  \mor      :[bend left]  * q_2:-> B;
+  \mor [mid]:[dashed]     *   u:-> P;
 
-\mor[swap]:[bend right] Q q_1:-> A;
-\mor      :[bend left]  * q_2:-> B;
-\mor [mid]:[dashed]     *   u:-> P;
+  \end{kodi}</div>
 
-\end{kodi}</div>
-
-<script type="text/javascript" src="./js/live-demo.js">
-</script>
+  <script type="text/javascript" src="./js/live-demo.js">
+  </script>
 
 
-  </body>
+</body>
+
 </html>
