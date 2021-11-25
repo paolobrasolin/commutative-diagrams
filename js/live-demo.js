@@ -75,7 +75,7 @@ setCTA({ message: "Spinning up server...", active: false, waiting: true });
 $.ajax({
   method: 'GET',
   url: 'https://texrhobot.herokuapp.com/',
-  timeout: 10000,
+  timeout: 30000,
   cache: false,
 }).done(function () {
   setCTA({ message: "Compile!", active: true, waiting: false });
