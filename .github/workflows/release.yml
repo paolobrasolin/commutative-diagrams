@@ -15,8 +15,12 @@ jobs:
       - name: Run labeller
         id: labeller
         run: |
-          echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-          echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_OUTPUT
+          # echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+          # echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_OUTPUT
+          GIT_DESCRIPTOR=$(git describe --tags --always)
+          echo Detected descriptor ${GIT_DESCRIPTOR}
+          echo "TAG=${GIT_DESCRIPTOR}" >> $GITHUB_OUTPUT
+          echo "VERSION=${GIT_DESCRIPTOR#v}" >> $GITHUB_OUTPUT
 
       - name: Setup TeX Live
         uses: paolobrasolin/setup-texlive-action@main
