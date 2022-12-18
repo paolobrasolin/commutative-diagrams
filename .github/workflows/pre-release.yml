@@ -21,6 +21,12 @@ jobs:
           echo "TAG=${GIT_DESCRIPTOR}" >> $GITHUB_OUTPUT
           echo "VERSION=${GIT_DESCRIPTOR#v}" >> $GITHUB_OUTPUT
 
+      - name: Install system dependencies
+        run: |
+          # ghostscript -> ps2pdf
+          sudo apt-get update
+          sudo apt-get install -y ghostscript
+
       - name: Setup TeX Live
         uses: paolobrasolin/setup-texlive-action@main
         with:
