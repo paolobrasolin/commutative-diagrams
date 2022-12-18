@@ -1,6 +1,8 @@
 name: Release
 on:
   push:
+    branches:
+      - development
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 jobs:
@@ -29,7 +31,8 @@ jobs:
           cp dist/commutative-diagrams.zip dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
       - name: Release on Github
-        uses: docker://antonyurchenko/git-release:v3
+        if: ${{ github.ref_type == 'tag' }}
+        uses: docker://antonyurchenko/git-release:v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRAFT_RELEASE: "false"
@@ -42,7 +45,7 @@ jobs:
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
       - name: Submit to CTAN (first release)
-        if: ${{ steps.labeller.outputs.version == '1.0.0' }}
+        if: ${{ github.ref_type == 'tag' && steps.labeller.outputs.version == '1.0.0' }}
         uses: paolobrasolin/ctan-submit-action@v1
         with:
           action: upload
@@ -68,7 +71,7 @@ jobs:
               Extra relevant topics are: diagram-maths diagram maths pgf-tikz
 
       - name: Submit to CTAN (update)
-        if: ${{ steps.labeller.outputs.version != '1.0.0' }}
+        if: ${{ github.ref_type == 'tag' && steps.labeller.outputs.version != '1.0.0' }}
         uses: paolobrasolin/ctan-submit-action@v1
         with:
           action: upload
