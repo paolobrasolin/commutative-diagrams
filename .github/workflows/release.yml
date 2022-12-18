@@ -1,8 +1,6 @@
 name: Release
 on:
   push:
-    branches:
-      - development
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 jobs:
@@ -15,12 +13,8 @@ jobs:
       - name: Run labeller
         id: labeller
         run: |
-          # echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-          # echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_OUTPUT
-          GIT_DESCRIPTOR=$(git describe --tags --always)
-          echo Detected descriptor ${GIT_DESCRIPTOR}
-          echo "TAG=${GIT_DESCRIPTOR}" >> $GITHUB_OUTPUT
-          echo "VERSION=${GIT_DESCRIPTOR#v}" >> $GITHUB_OUTPUT
+          echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+          echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_OUTPUT
 
       - name: Setup TeX Live
         uses: paolobrasolin/setup-texlive-action@main
@@ -34,19 +28,8 @@ jobs:
           make VERSION=${{ steps.labeller.outputs.version }} dist/commutative-diagrams.zip
           cp dist/commutative-diagrams.zip dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
-      - name: Pre-release on Github
-        if: ${{ github.ref_type == 'branch' }}
-        uses: docker://antonyurchenko/git-release:v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          UNRELEASED: "update"
-        with:
-          args: |
-            dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
-
       - name: Release on Github
-        if: ${{ github.ref_type == 'tag' }}
-        uses: docker://antonyurchenko/git-release:v5
+        uses: docker://antonyurchenko/git-release:v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRAFT_RELEASE: "false"
@@ -59,7 +42,7 @@ jobs:
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
       - name: Submit to CTAN (first release)
-        if: ${{ github.ref_type == 'tag' && steps.labeller.outputs.version == '1.0.0' }}
+        if: ${{ steps.labeller.outputs.version == '1.0.0' }}
         uses: paolobrasolin/ctan-submit-action@v1
         with:
           action: upload
@@ -85,7 +68,7 @@ jobs:
               Extra relevant topics are: diagram-maths diagram maths pgf-tikz
 
       - name: Submit to CTAN (update)
-        if: ${{ github.ref_type == 'tag' && steps.labeller.outputs.version != '1.0.0' }}
+        if: ${{ steps.labeller.outputs.version != '1.0.0' }}
         uses: paolobrasolin/ctan-submit-action@v1
         with:
           action: upload
