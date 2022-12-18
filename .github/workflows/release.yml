@@ -30,6 +30,16 @@ jobs:
           make VERSION=${{ steps.labeller.outputs.version }} dist/commutative-diagrams.zip
           cp dist/commutative-diagrams.zip dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
+      - name: Pre-release on Github
+        if: ${{ github.ref_type == 'branch' }}
+        uses: docker://antonyurchenko/git-release:v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UNRELEASED: "update"
+        with:
+          args: |
+            dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
+
       - name: Release on Github
         if: ${{ github.ref_type == 'tag' }}
         uses: docker://antonyurchenko/git-release:v5
