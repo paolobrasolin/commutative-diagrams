@@ -2,7 +2,7 @@
 [![GitHub release (latest SemVer)][release-shield]][release-link]
 [![CTAN][ctan-shield]][ctan-link]
 
-[tests-shield]: https://img.shields.io/github/workflow/status/paolobrasolin/commutative-diagrams/Tests?label=Nightly%20tests&logo=github
+[tests-shield]: https://img.shields.io/github/actions/workflow/status/paolobrasolin/commutative-diagrams/tests.yml?branch=development&label=Nightly%20tests&logo=github
 [tests-link]: https://github.com/paolobrasolin/commutative-diagrams/actions?query=workflow%3ATests+event%3Aschedule+branch%3Amaster
 [release-shield]: https://img.shields.io/github/v/release/paolobrasolin/commutative-diagrams?label=Latest%20release&logo=github&sort=semver
 [release-link]: https://github.com/paolobrasolin/commutative-diagrams/releases
