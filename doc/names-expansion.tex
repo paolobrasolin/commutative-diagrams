@@ -44,9 +44,7 @@ yields unpractical results when parametrizing macros.
 \begin{codi}
 \foreach [count=\c] \m in {\lim,\prod}
   \obj [expand=full] at (4em*\c,0) {\m F};
-\mor (protect mathop {relax kern z@ mathgroup
-                        symoperators lim}nmlimits@ F)
-  -> (DOTSI prodop slimits@ F);
+\mor (lim F) -> (DOTSI prodop slimits@ F);
 \end{codi}
 \end{tcblisting}
 
