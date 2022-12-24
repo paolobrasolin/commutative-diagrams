@@ -1,11 +1,11 @@
 [![CTAN release][ctan-shield]][ctan-link]
-[![GitHub latest release][latest-shield]][latest-link]
+[![GitHub release][release-shield]][release-link]
 [![GitHub nightly tests][tests-shield]][tests-link]
 
 [ctan-shield]: https://img.shields.io/ctan/v/commutative-diagrams?label=CTAN
 [ctan-link]: https://ctan.org/pkg/commutative-diagrams
-[latest-shield]: https://img.shields.io/github/v/release/paolobrasolin/commutative-diagrams?label=latest&display_name=release&include_prereleases
-[latest-link]: https://github.com/paolobrasolin/commutative-diagrams/releases/tag/latest
+[release-shield]: https://img.shields.io/github/v/release/paolobrasolin/commutative-diagrams?display_name=release&include_prereleases
+[release-link]: https://github.com/paolobrasolin/commutative-diagrams/releases/
 [tests-shield]: https://img.shields.io/github/actions/workflow/status/paolobrasolin/commutative-diagrams/tests.yml?branch=main&event=schedule&label=nightly%20tests
 [tests-link]: https://github.com/paolobrasolin/commutative-diagrams/actions/workflows/tests.yml?query=event%3Aschedule+branch%3Amain
 
