@@ -18,7 +18,7 @@ jobs:
         id: labeller
         run: |
           git fetch --unshallow --tags
-          GIT_DESCRIPTOR=$(git describe --tags --always)
+          GIT_DESCRIPTOR=$(git describe --tags --always --exclude latest)
           echo Detected descriptor: ${GIT_DESCRIPTOR}
           echo "VERSION=${GIT_DESCRIPTOR#v}" >> $GITHUB_OUTPUT
 
