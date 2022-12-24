@@ -47,6 +47,7 @@ jobs:
         uses: docker://antonyurchenko/git-release:v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_NAME: "${{ steps.labeller.outputs.version }}"
           UNRELEASED: "update"
         with:
           args: |
@@ -69,7 +70,7 @@ jobs:
         uses: docker://antonyurchenko/git-release:v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NAME: "CoDi ${{ steps.labeller.outputs.version }}"
+          RELEASE_NAME: "${{ steps.labeller.outputs.version }}"
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
