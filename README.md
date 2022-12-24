@@ -1,13 +1,13 @@
-[![GitHub Workflow Status][tests-shield]][tests-link]
-[![GitHub release (latest SemVer)][release-shield]][release-link]
-[![CTAN][ctan-shield]][ctan-link]
+[![CTAN release][ctan-shield]][ctan-link]
+[![GitHub latest release][latest-shield]][latest-link]
+[![GitHub nightly tests][tests-shield]][tests-link]
 
-[tests-shield]: https://img.shields.io/github/actions/workflow/status/paolobrasolin/commutative-diagrams/tests.yml?branch=development&label=Nightly%20tests&logo=github
-[tests-link]: https://github.com/paolobrasolin/commutative-diagrams/actions?query=workflow%3ATests+event%3Aschedule+branch%3Amaster
-[release-shield]: https://img.shields.io/github/v/release/paolobrasolin/commutative-diagrams?label=Latest%20release&logo=github&sort=semver
-[release-link]: https://github.com/paolobrasolin/commutative-diagrams/releases
 [ctan-shield]: https://img.shields.io/ctan/v/commutative-diagrams?label=CTAN
 [ctan-link]: https://ctan.org/pkg/commutative-diagrams
+[latest-shield]: https://img.shields.io/github/v/release/paolobrasolin/commutative-diagrams?label=latest&display_name=release&include_prereleases
+[latest-link]: https://github.com/paolobrasolin/commutative-diagrams/releases/tag/latest
+[tests-shield]: https://img.shields.io/github/actions/workflow/status/paolobrasolin/commutative-diagrams/tests.yml?branch=main&label=nightly%20tests
+[tests-link]: https://github.com/paolobrasolin/commutative-diagrams/actions/workflows/tests.yml?query=event%3Aschedule+branch%3Amain
 
 # CoDi: Commutative Diagrams for TeX
 
