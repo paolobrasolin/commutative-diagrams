@@ -49,6 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_NAME: "${{ steps.labeller.outputs.version }}"
           UNRELEASED: "update"
+          UNRELEASED_TAG: unreleased
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
@@ -61,6 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UNRELEASED: "delete"
+          UNRELEASED_TAG: unreleased
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
