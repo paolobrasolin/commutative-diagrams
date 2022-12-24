@@ -1,25 +1,37 @@
 name: Release
 on:
   push:
+    branches:
+      - main
     tags:
       - v[0-9]+.[0-9]+.[0-9]+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      #==[ Shared ]=============================================================
+
       - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Run labeller
         id: labeller
         run: |
-          echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
-          echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_OUTPUT
+          git fetch --unshallow --tags
+          GIT_DESCRIPTOR=$(git describe --tags --always)
+          echo Detected descriptor: ${GIT_DESCRIPTOR}
+          echo "VERSION=${GIT_DESCRIPTOR#v}" >> $GITHUB_OUTPUT
+
+      - name: Install system dependencies
+        run: |
+          # ghostscript -> ps2pdf
+          sudo apt-get update
+          sudo apt-get install -y ghostscript
 
       - name: Setup TeX Live
         uses: paolobrasolin/setup-texlive-action@main
         with:
-          cache-key: texlive-${{ matrix.os }}
+          cache-key: texlive-release
           packages-path: ${{ github.workspace }}/.github/texlive.release.packages
           profile-path: ${{ github.workspace }}/.github/texlive.profile
 
@@ -28,21 +40,42 @@ jobs:
           make VERSION=${{ steps.labeller.outputs.version }} dist/commutative-diagrams.zip
           cp dist/commutative-diagrams.zip dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
-      - name: Release on Github
-        uses: docker://antonyurchenko/git-release:v3
+      #==[ Pre-release ]========================================================
+
+      - if: startsWith(github.ref, 'refs/heads/')
+        name: "GitHub: update pre-release"
+        uses: docker://antonyurchenko/git-release:v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRAFT_RELEASE: "false"
-          CHANGELOG_FILE: "CHANGELOG.md"
-          ALLOW_EMPTY_CHANGELOG: "false"
-          ALLOW_TAG_PREFIX: "true"
+          UNRELEASED: "update"
+        with:
+          args: |
+            dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
+
+      #==[ Release ]============================================================
+
+      - if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        name: "GitHub: delete pre-release"
+        uses: docker://antonyurchenko/git-release:v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UNRELEASED: "delete"
+        with:
+          args: |
+            dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
+
+      - if: ${{ startsWith(github.ref, 'refs/tags/') }}
+        name: "GitHub: release"
+        uses: docker://antonyurchenko/git-release:v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_NAME: "CoDi ${{ steps.labeller.outputs.version }}"
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
 
-      - name: Submit to CTAN (first release)
-        if: ${{ steps.labeller.outputs.version == '1.0.0' }}
+      - if: ${{ startsWith(github.ref, 'refs/tags/') && steps.labeller.outputs.version == '1.0.0' }}
+        name: "CTAN: submit first release"
         uses: paolobrasolin/ctan-submit-action@v1
         with:
           action: upload
@@ -67,8 +100,8 @@ jobs:
             note: >
               Extra relevant topics are: diagram-maths diagram maths pgf-tikz
 
-      - name: Submit to CTAN (update)
-        if: ${{ steps.labeller.outputs.version != '1.0.0' }}
+      - if: ${{ startsWith(github.ref, 'refs/tags/') && steps.labeller.outputs.version != '1.0.0' }}
+        name: "CTAN: submit update"
         uses: paolobrasolin/ctan-submit-action@v1
         with:
           action: upload
