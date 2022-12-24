@@ -13,9 +13,8 @@
 
 CoDi is a [TikZ] library. Its aim is making [commutative diagrams] easy to design, parse and tweak.
 
-[TikZ]: https://en.wikipedia.org/wiki/PGF/TikZ
+[tikz]: https://en.wikipedia.org/wiki/PGF/TikZ
 [commutative diagrams]: https://en.wikipedia.org/wiki/Commutative_diagram
-
 
 :warning: **Were you looking for `koDi: kommutative Diagramme für TeX`?**
 You're in the right place: it's the same library.
@@ -26,4 +25,4 @@ We got your back: `\usepackage{kodi}` is still supported and will produce warnin
 
 CoDi is released under the [MIT License].
 
-[MIT License]: https://opensource.org/licenses/MIT
+[mit license]: https://opensource.org/licenses/MIT
