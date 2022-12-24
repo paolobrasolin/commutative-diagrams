@@ -6,7 +6,7 @@
 [ctan-link]: https://ctan.org/pkg/commutative-diagrams
 [latest-shield]: https://img.shields.io/github/v/release/paolobrasolin/commutative-diagrams?label=latest&display_name=release&include_prereleases
 [latest-link]: https://github.com/paolobrasolin/commutative-diagrams/releases/tag/latest
-[tests-shield]: https://img.shields.io/github/actions/workflow/status/paolobrasolin/commutative-diagrams/tests.yml?branch=main&label=nightly%20tests
+[tests-shield]: https://img.shields.io/github/actions/workflow/status/paolobrasolin/commutative-diagrams/tests.yml?branch=main&event=schedule&label=nightly%20tests
 [tests-link]: https://github.com/paolobrasolin/commutative-diagrams/actions/workflows/tests.yml?query=event%3Aschedule+branch%3Amain
 
 # CoDi: Commutative Diagrams for TeX
