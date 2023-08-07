@@ -1,0 +1,47 @@
+\input generic-regression-test.tex\relax
+
+\input tikzlibrarycommutative-diagrams.koinos.code.tex\relax
+
+\newtoks\FOO
+\newtoks\BAR
+\newtoks\RESULT
+
+\START
+
+\TEST{TODO}{
+    \FOO={foo}
+    \BAR={bar}
+    \RESULT={foobar}
+    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
+    \kDAppend\BAR\FOO
+    \ASSERT{\the\FOO}{\the\RESULT}
+}
+
+\TEST{TODO}{
+    \FOO={\foo}
+    \BAR={bar}
+    \RESULT={\foo bar}
+    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
+    \kDAppend\BAR\FOO
+    \ASSERT{\the\FOO}{\the\RESULT}
+}
+
+\TEST{TODO}{
+    \FOO={foo}
+    \BAR={\bar}
+    \RESULT={foo\bar}
+    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
+    \kDAppend\BAR\FOO
+    \ASSERT{\the\FOO}{\the\RESULT}
+}
+
+\TEST{TODO}{
+    \FOO={\foo}
+    \BAR={\bar}
+    \RESULT={\foo\bar}
+    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
+    \kDAppend\BAR\FOO
+    \ASSERT{\the\FOO}{\the\RESULT}
+}
+
+\END

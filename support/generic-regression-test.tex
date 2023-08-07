@@ -1,0 +1,16 @@
+\input regression-test.tex\relax
+
+\def\latexfmtname{LaTeX2e}
+\ifx\fmtname\latexfmtname
+    \let\oldSTART\START
+    \def\START{%
+        \documentclass{minimal}%
+        \begin{document}%
+        \oldSTART
+    }
+\fi
+
+\ifdefined\contextversion
+    \let\oldSTART\START
+    \def\START{\starttext\oldSTART}
+\fi
