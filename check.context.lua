@@ -1,3 +1,6 @@
+-- NOTE: you might need to run this:
+-- mtxrun --generate && context --luatex --generate
+
 checkengines = { "luametatex", "luatex" }
 checkformat  = "context"
 
