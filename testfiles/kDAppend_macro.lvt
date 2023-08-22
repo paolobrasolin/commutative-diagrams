@@ -2,46 +2,19 @@
 
 \input tikzlibrarycommutative-diagrams.koinos.code.tex\relax
 
-\newtoks\FOO
-\newtoks\BAR
-\newtoks\RESULT
-
 \START
 
-\TEST{TODO}{
-    \FOO={foo}
-    \BAR={bar}
-    \RESULT={foobar}
-    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
-    \kDAppend\BAR\FOO
-    \ASSERT{\the\FOO}{\the\RESULT}
-}
-
-\TEST{TODO}{
-    \FOO={\foo}
-    \BAR={bar}
-    \RESULT={\foo bar}
-    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
-    \kDAppend\BAR\FOO
-    \ASSERT{\the\FOO}{\the\RESULT}
-}
-
-\TEST{TODO}{
-    \FOO={foo}
-    \BAR={\bar}
-    \RESULT={foo\bar}
-    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
-    \kDAppend\BAR\FOO
-    \ASSERT{\the\FOO}{\the\RESULT}
-}
-
-\TEST{TODO}{
-    \FOO={\foo}
-    \BAR={\bar}
-    \RESULT={\foo\bar}
-    \message{[\the\FOO] + [\the\BAR] = [\the\RESULT]}
-    \kDAppend\BAR\FOO
-    \ASSERT{\the\FOO}{\the\RESULT}
+\TESTEACH{%
+    append {\the\SRC} to {\the\TGT} getting {\the\EXPECTED}
+}{
+    {TGT}   {SRC}   {EXPECTED}  \\
+    {foo}   {bar}   {foobar}    \\
+    {\foo}  {bar}   {\foo bar}  \\
+    {foo}   {\bar}  {foo\bar}   \\
+    {\foo}  {\bar}  {\foo\bar}  \\
+}{
+    \kDAppend\SRC\TGT
+    \ASSERT{\the\TGT}{\the\EXPECTED}
 }
 
 \END

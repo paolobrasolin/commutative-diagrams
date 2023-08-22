@@ -14,3 +14,34 @@
     \let\oldSTART\START
     \def\START{\starttext\oldSTART}
 \fi
+
+
+\ifdefined\contextversion
+\usemodule[pgfplotstable]
+\else
+\input pgfplotstable.tex\relax
+\fi
+
+\long\def\TESTEACH#1#2#3{
+    % NOTE: `col sep=braces` is easily compatible with ConTeXt (as opposed to &)
+    \pgfplotstableread[col sep=braces,row sep=\\]{#2}\examples
+    \OMIT
+    \pgfplotstableforeachcolumn\examples\as\col{%
+        % NOTE: instead of
+        % \expandafter\newtoks\csname\col\endcsname
+        % we need to circumvent limitations of \newtoks in Plain TeX with
+        \edef\tempa{\noexpand\csname newtoks\noexpand\endcsname\expandafter\csname\col\endcsname}\tempa
+        % For details see https://tex.stackexchange.com/a/387405/82186
+    }
+    \TIMO
+    \pgfplotstablegetrowsof\examples
+    \pgfmathtruncatemacro\rowsindex{\pgfplotsretval - 1}
+    \foreach \i in {0, ..., \rowsindex} {
+       \pgfplotstableforeachcolumn\examples\as\col {
+           \pgfplotstablegetelem{\i}{\col}\of\examples
+           \expandafter\csname\col\endcsname\expandafter{\pgfplotsretval}
+       }
+       \edef\tempa{#1}
+       \expandafter\TEST\expandafter{\tempa}{#3}
+    }
+}
