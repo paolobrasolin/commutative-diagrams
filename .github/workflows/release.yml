@@ -50,8 +50,8 @@ jobs:
           RELEASE_NAME: "${{ steps.labeller.outputs.version }}"
           UNRELEASED: "update"
           UNRELEASED_TAG: unreleased
-          PRE_RELEASE: true
-          DRAFT_RELEASE: false
+          PRE_RELEASE: "true"
+          DRAFT_RELEASE: "false"
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
