@@ -1,4 +1,14 @@
 As you'll have guessed by now, objects name themselves.
+This also applies to the nodes labeling the morphisms.
+
+\begin{tcblisting}{snippet}
+\begin{codi}
+  \obj{ A & B \\ };
+  \mor A f:-> B;
+  \draw [red] (A) circle (1em);
+  \draw [blue] (f) circle (1em);
+\end{codi}
+\end{tcblisting}
 
 The process happens in three steps:
 \begin{itemize}[nosep]

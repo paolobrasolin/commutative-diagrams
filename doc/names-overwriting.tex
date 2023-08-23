@@ -45,3 +45,14 @@ semantic alias.
 
 The hard overwriting behaviour ignores any label except generated
 ones; it exists for completeness and debugging purposes.
+
+All of the above applies to morphisms too.
+The only difference is that the name of the node labelling the arrow is changed using the standard \lstinline|/tikz/name| key:
+
+\begin{tcblisting}{snippet}
+\begin{codi}
+  \obj{ A & B \\ };
+  \mor A [name=foo, "f"]:-> B;
+  \draw [red] (foo) circle (1em);
+\end{codi}
+\end{tcblisting}
