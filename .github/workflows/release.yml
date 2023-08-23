@@ -52,6 +52,7 @@ jobs:
           UNRELEASED_TAG: unreleased
           PRE_RELEASE: "true"
           DRAFT_RELEASE: "false"
+          ALLOW_EMPTY_CHANGELOG: "true"
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
