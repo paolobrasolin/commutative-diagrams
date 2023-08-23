@@ -243,7 +243,7 @@
     \startcodi,\stopcodi,
     \lay,\obj,\mor,
     \bye,
-    \draw,\foreach,
+    \draw,\foreach,\pgfqkeys,
     \ar,
     \psset,\everypsbox,\ncline,\ncarc,
     \xymatrix,
@@ -254,13 +254,15 @@
   frame=none,
   % extendedchars=false,
   inputencoding=utf8,
+}
+
+\lstdefinestyle{metacode}{
   escapeinside={(@}{@)},
   moredelim=**[is][\color{orange!80!black}]{@opt@}{@/opt@},
   moredelim=**[is][\color{blue!80!black}]{@nws@}{@/nws@},
   % moredelim=**[is][\color\underbar]{@rep@}{@/rep@},
   moredelim=**[s][\itshape]{<}{>},
-  % NOTE: × and ı are needed just for the associahedron example
-  literate={~}{{\textvisiblespace}}1 {XOR}{{$\vert$}}1 {:}{{\textbf{:}}}1 {:=}{{$\equiv$}}1 {×}{{\texttimes}}1 {ı}{{\i}}1,
+  literate={XOR}{{$\vert$}}1 {:}{{\textbf{:}}}1 {:=}{{$\equiv$}}1,
 }
 
 \lstset{style=TeX}

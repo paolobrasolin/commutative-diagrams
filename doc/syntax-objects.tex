@@ -1,7 +1,7 @@
 The first of the two macros that \CoDi\ offers is \lstinline|\obj|.
 It is polymorphic and can draw both single objects and layouts.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 \obj@opt@ <object options> @/opt@{<math>};(@
   \marginpar{\scriptsize {\color{orange!80!black}Orange fragments} are optional.}@)
 \obj@opt@ <layout options> @/opt@{<layout>};
@@ -9,7 +9,7 @@ It is polymorphic and can draw both single objects and layouts.
 
 Layouts are described using the customary \TeX\ tabular syntax.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 <layout>         := (@\itshape\underbar{<row> <row separator>}@)(@
   \marginpar{\scriptsize \underbar{Underlined fragments} can repeat one or more times.}@)
 <row>            := <cell> (@\itshape\color{orange!80!black}\underbar{<cell separator> <cell>}@)
@@ -21,7 +21,7 @@ Layouts are described using the customary \TeX\ tabular syntax.
 The discretionary options syntax is analogous to standard \TikZ\ nodes and
 matrices, respectively.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 <object options> := (@\itshape\color{orange!80!black}\underbar{[object keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
 <layout options> := (@\itshape\color{orange!80!black}\underbar{[layout keylist]}@) @opt@(<name>) at (<coordinate>)@/opt@
 \end{lstlisting}

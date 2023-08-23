@@ -3,7 +3,7 @@
 The second and last macro that \CoDi\ offers is \lstinline|\mor|.
 It can draw single or chained morphisms.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 \mor@opt@ <chain options> @/opt@<object>(@
   \itshape\underbar{\textvisiblespace<morphism>\textvisiblespace<object>}@);(@
   \marginpar{\scriptsize Whitespace marked as \textvisiblespace\ is mandatory.}@)
@@ -11,14 +11,14 @@ It can draw single or chained morphisms.
 
 Source and target objects are referred to by their name.
   
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 <object>   := @nws@(<name>)@/nws@ (@
   \marginpar{\scriptsize {\color{blue!80!black}Blue fragments} can be either enclosed in the shown delimiters, or a \TeX\ group (not idiomatic), or simply devoid of whitespace.}@)
 \end{lstlisting}
 
 Morphisms consist of one or more optional labels and an arrow.
   
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 <morphism> := @opt@<labels> : @/opt@<arrow>
 <labels>   := @nws@"<math>"@/nws@ XOR (@\underbar{[{\itshape "<math>", <label keylist>}]}@) (@
   \marginpar{\scriptsize Alternatives are separated by $\vert$s.}@)
@@ -28,7 +28,7 @@ Morphisms consist of one or more optional labels and an arrow.
 
 Global options can be given to both labels and arrows.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=metacode]
 <chain options> := [<label keylist>] @opt@: [<arrow keylist>]@/opt@
 \end{lstlisting}
 
