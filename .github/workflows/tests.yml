@@ -69,5 +69,6 @@ jobs:
         bundle exec parallel_cucumber
         --serialize-stdout
         ${{ matrix.extra_flags }}
+        --cucumber-options '--tags ~@flavours'
         --
         features
