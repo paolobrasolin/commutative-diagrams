@@ -66,6 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UNRELEASED: "delete"
           UNRELEASED_TAG: unreleased
+          ALLOW_EMPTY_CHANGELOG: "true"
         with:
           args: |
             dist/commutative-diagrams-${{ steps.labeller.outputs.version }}.zip
