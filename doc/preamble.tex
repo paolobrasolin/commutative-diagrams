@@ -382,6 +382,11 @@
 
 \def\NiceURL#1#2{\href{#2}{\color{blue}\ul{#1}}}
 
+%==[ Import tikz-cd arrow styles ]=============================================?
+
+\usepackage{tikz-cd}
+\pgfqkeys{/codi}{every arrow/.append style={/ektropi/add=/tikz/commutative diagrams}}
+
 %==[ microtype ]================================================================
 
 \usepackage{microtype}

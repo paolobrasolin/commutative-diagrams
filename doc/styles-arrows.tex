@@ -48,3 +48,33 @@ This key shoves an arrow to the left (negative) and to the right (positive) with
 \mor :[shove=+.3em, blue] A -> B;
 \end{codi}
 \end{tcblisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hfill$\therefore$\hfill\null
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\CoDi\ is currently missing a base arrow style library.
+
+You can define your own styles adding them to \lstinline|/codi/arrows/|.
+
+If you're familiar with {\ttfamily\small tikz-cd}, you can import its arrow styles to use them with \CoDi\ as follows in you preamble:
+\begin{lstlisting}
+\usepackage{tikz-cd}
+\pgfqkeys{/codi}{
+    every arrow/.append style={
+        /ektropi/add=/tikz/commutative diagrams
+    }
+}
+\end{lstlisting}
+
+Then, you can use them seamlessly:
+
+\begin{tcblisting}{snippet, trim={2 and -1}}
+\begin{codi}
+\obj{ X & Y \\ & Z \\ };
+\mor X f:->,hook Y g:-> Z;
+\mor X f:dashrightarrow Z;
+\end{codi}
+\end{tcblisting}
