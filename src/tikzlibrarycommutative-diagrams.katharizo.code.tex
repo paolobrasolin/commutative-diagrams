@@ -90,7 +90,8 @@
 \def\kDKatharizoStringify#1\kD{
   \def\kDFoo{#1}
   \edef\kDFoo{\meaning\kDFoo}
-  \def\kDAct##1:->##2\kD{##2}
+  % NOTE: in recent versions of ConTeXt \macro does not output an arrow
+  \ifdefined\contextversion\def\kDAct##1:##2\kD{##2}\else\def\kDAct##1:->##2\kD{##2}\fi
   \edef\kDFoo{\expandafter\kDAct\kDFoo\kD}
   \kDKatharizoStringified\expandafter{\kDFoo}
 }

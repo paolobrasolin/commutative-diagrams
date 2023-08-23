@@ -21,7 +21,7 @@ Feature: ektropi add key adds deviations to handler
     Examples: test key work as expected
       | keylist      | outcome  | regexp                                |
       | [bar=\relax] | succeeds |                                       |
-      | [bar=\HALT]  | fails    | Undefined control sequence.*\n.*\HALT |
+      | [bar=\HALT]  | fails    | (Undefined control sequence\|Control sequence expected instead of undefined) |
 
   Scenario Outline: using deviations in a series of keylists
     Given the body is

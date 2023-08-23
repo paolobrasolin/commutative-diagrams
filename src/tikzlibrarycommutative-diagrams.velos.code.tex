@@ -15,7 +15,9 @@
   %   and avoid any conflict a priori.
   /velos/install quote handler/.style={
     /handlers/first char syntax=true,
-    /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler
+    /handlers/first char syntax/the character "/.initial=\kDVelosQuoteHandler,
+    % NOTE: next line is required by recent versions of ConTeXt
+    /handlers/first char syntax/the character U+0022 'quotation mark'/.initial=\kDVelosQuoteHandler,
     % node quotes mean={node contents={#1}},
     % edge quotes mean={node contents={#1}}
   },

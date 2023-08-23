@@ -115,6 +115,11 @@ end
 
 Then(%r%^the log includes (.*)$%) do |string|
   string.gsub!(/«(.*?)»/, '\1')
+  # NOTE: recent versions of ConTeXt changed the output of \meaning, and this horrible hack is the simplest way to keep tests generic
+  if ENV.fetch('FLAVOUR') == "context"
+    string.gsub!("macro:->", 'macro:')
+    string.gsub!("blank space  ", "blank space character U+0020 'space'")
+  end
   log = @job.path.sub_ext('.log').read
   expect(log).to include(string)
 end
