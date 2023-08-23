@@ -6,6 +6,29 @@ The remainder of the text is just commented examples.
 
 \clearpage
 
+\subsection{2-cells}
+
+\begin{tcblisting}{gallery}
+% From the LaTeX preamble:
+%   \usepackage{tikz-cd}
+
+% We use tikz-cd keys to quickly whip up an arrow style for a 2-morphism.
+\pgfqkeys{/codi/arrows}{
+  -2>/.style={
+      /tikz/commutative diagrams/Rightarrow,
+      /tikz/commutative diagrams/shorten=2pt,
+  }
+}
+
+\begin{codi}
+  \obj{ X & Y & Z \\ };
+  \mor[swap]:[bend right] X f:-> Y m:-> Z;
+  \mor      :[bend left]  X g:-> Y n:-> Z;
+  \mor       f \alpha:-2> g;
+  \mor[swap] m  \beta:-2> n;
+\end{codi}
+\end{tcblisting}
+
 \subsection{Snake}
 
 \begin{tcblisting}{gallery}
