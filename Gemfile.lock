@@ -71,7 +71,7 @@ GEM
       rspec-support (~> 3.9.0)
     rspec-support (3.9.3)
     shellany (0.0.1)
-    thor (1.0.1)
+    thor (1.4.0)
 
 PLATFORMS
   ruby
